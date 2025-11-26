@@ -1,7 +1,7 @@
 import { api } from './api';
 
 export const fetchUserMedicinesGet = async (userId: string) => {
-    const response = await api.get('/UserMedicine', { params: { googleUserId: userId } });
+    const response = await api.get('UserMedicine', { params: { googleUserId: userId } });
     return response.data;
 };
 

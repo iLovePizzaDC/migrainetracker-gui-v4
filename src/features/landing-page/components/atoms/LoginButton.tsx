@@ -2,7 +2,8 @@ import { fetchOAuthAccessToken } from "../../../../shared/api/google.api";
 
 export default function LoginButton() {
     const redirectToLogin = () => {
-        window.location.href = fetchOAuthAccessToken();
+        const autoLogin = !!document.cookie.match(/MT_session=/);
+        window.location.href = fetchOAuthAccessToken(autoLogin);
     };
 
     return(
