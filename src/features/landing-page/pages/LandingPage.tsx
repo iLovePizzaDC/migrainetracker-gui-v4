@@ -1,5 +1,3 @@
-import './styles/App.css'
-
 function LandingPage() {
   const handleLogin = () => {
 
