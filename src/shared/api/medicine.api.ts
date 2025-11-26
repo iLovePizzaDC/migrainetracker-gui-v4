@@ -1,48 +1,23 @@
-const BASE_URL = import.meta.env.VITE_ENDPOINT_BASE_URL;
-const API_URL_SUFFIX = import.meta.env.VITE_API_URL_SUFFIX;
+import { api } from './api';
 
 export const fetchUserMedicinesGet = async (userId: string) => {
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}UserMedicine?googleUserId=${userId}`;
-
-    const response = await fetch(url, {
-        method: 'GET',
-    })
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch user medicine');
-    }
-
-    return response;
-}
+    const response = await api.get('/UserMedicine', { params: { googleUserId: userId } });
+    return response.data;
+};
 
 export const fetchUserMedicinesPost = async (name: string, abbreviation: string, type: string, userId: string) => {
-    const url = `${BASE_URL}${API_URL_SUFFIX}UserMedicine?name=${encodeURIComponent(name)}&abbreviation=${encodeURIComponent(abbreviation.toLowerCase())}&type=${encodeURIComponent(type)}`;
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ googleUserId: userId }),
-    });
-
-    return response;
+    const response = await api.post(
+        'UserMedicine',
+        { googleUserId: userId },
+        { params: { name, abbreviation: abbreviation.toLowerCase(), type } }
+    );
+    return response.data;
 };
 
 export const fetchUserMedicinesDelete = async (name: string, abbreviation: string, userId: string) => {
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}UserMedicine?name=${name}&abbreviation=${abbreviation}`;
-
-    const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ googleUserId: userId }),
-    })
-
-    if (!response.ok) {
-        throw new Error('Failed to fetch user medicine');
-    }
-
-    return response;
-}
+    const response = await api.delete('UserMedicine', {
+        params: { name, abbreviation },
+        data: { googleUserId: userId },
+    });
+    return response.data;
+};
