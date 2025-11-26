@@ -1,14 +1,17 @@
-function LandingPage() {
-  const handleLogin = () => {
+import { useAuthCheck } from "../../../shared/auth/use-auth-check";
+import { useUser } from "../../../shared/hooks/user/use-user";
+import LoginButton from "../components/atoms/LoginButton"
 
-  }
+function LandingPage() {
+  const { setUser } = useUser();
+  useAuthCheck(setUser, true);
 
   return (
     <>
       login page
-      <button onClick={handleLogin}>Login</button>
+      <LoginButton />
     </>
   )
 }
 
-export default LandingPage
+export default LandingPage;
