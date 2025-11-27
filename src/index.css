@@ -23,6 +23,10 @@ body {
   min-height: 100vh;
 }
 
+*:focus {
+  @apply outline-none ring-0;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
