@@ -2,7 +2,7 @@ import type { NavigationLink } from "../../../app/types/navigation/navigation";
 
 export const NAV_LINK_STATES = {
   HOME: "Home",
-  APPEND: "Append",
+  CALENDAR: "Calendar",
 } as const;
 
 export type NAV_LINK = typeof NAV_LINK_STATES[keyof typeof NAV_LINK_STATES];
