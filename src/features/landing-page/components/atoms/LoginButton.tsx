@@ -7,7 +7,17 @@ function LoginButton() {
     };
 
     return(
-        <button onClick={redirectToLogin} className='fixed border border-white p-4 m-7 right-0 bottom-0 rounded-xl z-30'>Login</button>
+        <button
+            onClick={redirectToLogin}
+            className="fixed right-0 bottom-0 m-7 p-4 z-30
+                        rounded-xl border border-white/30
+                        hover:opacity-80 transition-opacity
+                        bg-white/10 backdrop-blur-md
+                        shadow-lg shadow-black/20
+                        text-white"
+        >
+            Login
+        </button>
     );
 }
 

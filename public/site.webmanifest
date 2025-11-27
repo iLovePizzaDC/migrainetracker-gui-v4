@@ -1,0 +1,23 @@
+{
+    "name": "Tracker",
+    "short_name": "Tracker",
+    "description": "Analyze your migraine",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0c1b0e",
+    "theme_color": "#0c1b0e",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        }
+    ]
+}
