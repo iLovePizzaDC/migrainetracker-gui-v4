@@ -6,6 +6,7 @@ import OverviewPage from '../features/home/pages/OverviewPage';
 import Navigation from './components/organisms/Navigation';
 import { getSeasonBackground } from './utils/date';
 import Footer from './components/organisms/Footer';
+import CalendarPage from '../features/calendar/pages/CalendarPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/home" element={<OverviewPage />} />
+              <Route path="/calendar" element={<CalendarPage />} />
             </Routes>
           </main>
           <Footer />
