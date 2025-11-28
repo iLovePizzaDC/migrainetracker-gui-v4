@@ -61,68 +61,66 @@ function AppendCard({ nextIndex, appendCardSetup }: IAppendCard) {
                 )}
             </div>
 
-            <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'h-80' : 'h-0'}`}>
+            <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'h-96' : 'h-0'}`}>
                 {expanded && (
-                    <div className="px-6 pb-6 mt-4 space-y-4">
-                        <form onSubmit={onSubmit}>
-                            <Input
-                                id="appendTitle"
-                                label="Title"
-                                type={INPUT_TYPES.TEXT}
-                                value={title}
-                                onChange={(event) => setTitle(event.target.value)}
-                                placeholder="Enter a title"
-                                required
-                            />
-                            <DropdownInput
-                                id="appendCardType"
-                                label="Card Type"
-                                value={cardType}
-                                options={CARD_OPTIONS}
-                                onChange={(event) => setCardType(event.target.value as CardType)}
-                                required
-                            />
+                    <form className="px-6 pb-6 mt-4 space-y-4" onSubmit={onSubmit}>
+                        <Input
+                            id="appendTitle"
+                            label="Title"
+                            type={INPUT_TYPES.TEXT}
+                            value={title}
+                            onChange={(event) => setTitle(event.target.value)}
+                            placeholder="Enter a title"
+                            required
+                        />
+                        <DropdownInput
+                            id="appendCardType"
+                            label="Card Type"
+                            value={cardType}
+                            options={CARD_OPTIONS}
+                            onChange={(event) => setCardType(event.target.value as CardType)}
+                            required
+                        />
 
-                            <DropdownInput
-                                id="appendChartType"
-                                label="Chart Type"
-                                value={chartType}
-                                options={CHART_OPTIONS}
-                                onChange={(event) => setChartType(event.target.value as ChartType)}
-                                required
-                            />
+                        <DropdownInput
+                            id="appendChartType"
+                            label="Chart Type"
+                            value={chartType}
+                            options={CHART_OPTIONS}
+                            onChange={(event) => setChartType(event.target.value as ChartType)}
+                            required
+                        />
 
-                            <div className="flex items-center space-x-2">
-                                <div className="flex-1 w-1/2">
-                                    <Input
-                                        id="appendValue"
-                                        label="Value"
-                                        type={INPUT_TYPES.NUMBER}
-                                        value={count.toString()}
-                                        onChange={(event) => setCount(Number(event.target.value))}
-                                        placeholder="Enter number"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="w-1/2">
-                                    <DropdownInput
-                                        id="appendUnit"
-                                        label="Unit"
-                                        value={unit}
-                                        options={TIME_FRAME_UNIT_OPTIONS}
-                                        onChange={(event) => setUnit(event.target.value as TimeFrameUnit)}
-                                        required
-                                    />
-                                </div>
+                        <div className="flex items-center space-x-2">
+                            <div className="flex-1 w-1/2">
+                                <Input
+                                    id="appendValue"
+                                    label="Value"
+                                    type={INPUT_TYPES.NUMBER}
+                                    value={count.toString()}
+                                    onChange={(event) => setCount(Number(event.target.value))}
+                                    placeholder="Enter number"
+                                    required
+                                />
                             </div>
 
-                            <Button
-                                type={BUTTON_TYPES.SUBMIT}
-                                title="Add"
-                            />
-                        </form>
-                    </div>
+                            <div className="w-1/2">
+                                <DropdownInput
+                                    id="appendUnit"
+                                    label="Unit"
+                                    value={unit}
+                                    options={TIME_FRAME_UNIT_OPTIONS}
+                                    onChange={(event) => setUnit(event.target.value as TimeFrameUnit)}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <Button
+                            type={BUTTON_TYPES.SUBMIT}
+                            title="Add"
+                        />
+                    </form>
                 )}
             </div>
         </div>
