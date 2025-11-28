@@ -5,6 +5,7 @@ import { CHART_TYPES } from "../../../constants/card/chart";
 import type { CardSetup } from "../../../types/card/chart";
 import AppendCard from "../../molecules/card/AppendCard";
 import ChartCard from "../../molecules/card/ChartCard";
+import MidasCard from "../../molecules/card/MidasCard";
 
 const tmp_cards: CardSetup[] = [
     {
@@ -51,6 +52,8 @@ function CardSection() {
                     timeframeUnit={cardSetup.timeframe.unit}
                 />
             ))}
+
+            <MidasCard />
 
             <AppendCard
                 nextIndex={cardSetups.length}
