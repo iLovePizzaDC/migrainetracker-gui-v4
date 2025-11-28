@@ -48,7 +48,7 @@ export async function fetchPieData(
             const med = await fetchMedicineAmount(startDate, endDate);
             return [
                 { name: "Medicine", value: med },
-                { name: "No Medicine", value: 20 - med },
+                { name: "No Medicine", value: 20 - med }, // TODO 20 is only for one month, adapt dynamically
             ];
         }
 
@@ -58,7 +58,7 @@ export async function fetchPieData(
 
             return [
                 { name: "Med-Days", value: medDays },
-                { name: "No Med-Days", value: Math.max(10 - medDays, 0) },
+                { name: "No Med-Days", value: Math.max(10 - medDays, 0) }, // TODO 10 is only for one month, adapt dynamically
             ];
         }
 
