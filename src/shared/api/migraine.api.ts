@@ -1,13 +1,14 @@
-import axios from 'axios';
 import type { AppendDuration, AppendMedicine, AppendMidas, Filter } from '../types';
-import type { SVG } from '../constants/cards/svg';
 import type { TimeFrameUnit } from '../constants/cards/time-frame';
 import { formatEffectiveness, formatMedicine } from '../utils/formatter/event-parser';
 import { parseTimeToDecimal } from '../utils/date/date';
+import { api } from './api';
+import type { CardType } from '../../features/home/constants/card/card';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+const ENDPOINT_BASE_URL = import.meta.env.VITE_ENDPOINT_BASE_URL;
 const API_URL_SUFFIX = import.meta.env.VITE_API_URL_SUFFIX;
 
+// TODO refactor
 export const fetchMigraineEvents = async (
     start: string,
     end: string,
@@ -24,11 +25,10 @@ export const fetchMigraineEvents = async (
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const token: string = localStorage.getItem('token') || '';
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}/MigraineEvents?accessToken=${token}&filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvents?filter=${filterString}`;
 
     try {
-        const response = await axios.get(url);
+        const response = await api.get(url);
 
         return response.data;
     } catch {
@@ -55,11 +55,10 @@ export const fetchMigraineAmount = async (
     }
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const token: string = localStorage.getItem('token') || '';
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}/MigraineAmount?accessToken=${token}&filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineAmount?filter=${filterString}`;
 
     try {
-        const response = await axios.get(url);
+        const response = await api.get(url);
 
         return response.data;
     } catch {
@@ -83,11 +82,10 @@ export const fetchDurationAmount = async (
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const token: string = localStorage.getItem('token') || '';
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}/DurationAmount?accessToken=${token}&filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}DurationAmount?filter=${filterString}`;
 
     try {
-        const response = await axios.get(url);
+        const response = await api.get(url);
 
         return response.data;
     } catch {
@@ -111,11 +109,10 @@ export const fetchMedicineAmount = async (
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const token: string = localStorage.getItem('token') || '';
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}/MedicineAmount?accessToken=${token}&filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MedicineAmount?filter=${filterString}`;
 
     try {
-        const response = await axios.get(url);
+        const response = await api.get(url);
 
         return response.data;
     } catch {
@@ -124,7 +121,7 @@ export const fetchMedicineAmount = async (
 };
 
 export const fetchAreaChart = async (
-    type: SVG,
+    type: CardType,
     end: string,
     timeFrameCount: number,
     timeFrameUnit: TimeFrameUnit,
@@ -138,11 +135,10 @@ export const fetchAreaChart = async (
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const token: string = localStorage.getItem('token') || '';
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}/AreaChart?accessToken=${token}&type=${type}&end=${end}&timeFrameCount=${timeFrameCount}&timeFrameUnit=${timeFrameUnit}&filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}AreaChart?type=${type}&end=${end}&timeFrameCount=${timeFrameCount}&timeFrameUnit=${timeFrameUnit}&filter=${filterString}`;
 
     try {
-        const response = await axios.get(url);
+        const response = await api.get(url);
 
         return response.data;
     } catch {
@@ -150,10 +146,8 @@ export const fetchAreaChart = async (
     }
 };
 
-// TODO use axios
+// TODO use axios api
 export const fetchNewEntry = async (date: string, durations: AppendDuration[], intensity: string, symptoms: string[], medicines: AppendMedicine[], midas: AppendMidas) => {
-    const token: string = localStorage.getItem('token') || '';
-
     const medicineString: string = formatMedicine(medicines);
     const effectivenessString: string = formatEffectiveness(medicines);
 
@@ -171,7 +165,7 @@ export const fetchNewEntry = async (date: string, durations: AppendDuration[], i
         midas: midas
     };
 
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}/MigraineEvent?date=${date}&accessToken=${token}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvent?date=${date}`;
 
     const response: Response = await fetch(url, {
         method: 'POST',
@@ -189,11 +183,10 @@ export const fetchNewEntry = async (date: string, durations: AppendDuration[], i
 };
 
 export const fetchMidasScore = async () => {
-    const token: string = localStorage.getItem('token') || '';
-    const url: string = `${BASE_URL}${API_URL_SUFFIX}/MidasScore?accessToken=${token}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MidasScore`;
 
     try {
-        const response = await axios.get(url);
+        const response = await api.get(url);
 
         return response.data;
     } catch {

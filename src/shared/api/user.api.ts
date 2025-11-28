@@ -23,7 +23,7 @@ export const fetchUserInformation = async () => {
 export const fetchNewUser = async (user: User) => {
     const response = await api.post(
         'User',
-        { googleUserId: user.sub },
+        { googleUserId: user.id },
         {
             params: {
                 email: user.email,
