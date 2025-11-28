@@ -46,19 +46,21 @@ export async function fetchPieData(
 
         case CARD_TYPES.MEDICINE: {
             const med = await fetchMedicineAmount(startDate, endDate);
+            const noMed = Math.max(totalDays - med, 0);
             return [
                 { name: "Medicine", value: med },
-                { name: "No Medicine", value: 20 - med }, // TODO 20 is only for one month, adapt dynamically
+                { name: "No Medicine", value: noMed },
             ];
         }
 
         case CARD_TYPES.MOH: {
             const mohMedFilter = await getMohMedicineFilter(userId);
             const medDays = await fetchMigraineAmount(startDate, endDate, { medicines: mohMedFilter });
+            const noMedDays = Math.max(totalDays - medDays, 0);
 
             return [
                 { name: "Med-Days", value: medDays },
-                { name: "No Med-Days", value: Math.max(10 - medDays, 0) }, // TODO 10 is only for one month, adapt dynamically
+                { name: "No Med-Days", value: noMedDays },
             ];
         }
 
