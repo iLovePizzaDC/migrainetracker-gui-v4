@@ -30,27 +30,36 @@ export async function fetchPieData(
     switch (cardType) {
         case CARD_TYPES.MIGRAINE: {
             const migraineDays = await fetchMigraineAmount(startDate, endDate);
-            return [
-                { name: "Migraine", value: migraineDays },
-                { name: "No Migraine", value: totalDays - migraineDays },
-            ];
+            return {
+                data: [
+                    { name: "Migraine", value: migraineDays },
+                    { name: "No Migraine", value: totalDays - migraineDays },
+                ],
+                value: migraineDays,
+            };
         }
 
         case CARD_TYPES.DURATION: {
             const duration = await fetchDurationAmount(startDate, endDate);
-            return [
-                { name: "Migraine Duration", value: duration },
-                { name: "No Migraine", value: (totalDays * 24) - duration },
-            ];
+            return {
+                data: [
+                    { name: "Migraine Duration", value: duration },
+                    { name: "No Migraine", value: (totalDays * 24) - duration },
+                ],
+                value: duration,
+            };
         }
 
         case CARD_TYPES.MEDICINE: {
             const med = await fetchMedicineAmount(startDate, endDate);
             const noMed = Math.max(totalDays - med, 0);
-            return [
-                { name: "Medicine", value: med },
-                { name: "No Medicine", value: noMed },
-            ];
+            return {
+                data: [
+                    { name: "Medicine", value: med },
+                    { name: "No Medicine", value: noMed },
+                ],
+                value: med,
+            };
         }
 
         case CARD_TYPES.MOH: {
@@ -58,14 +67,20 @@ export async function fetchPieData(
             const medDays = await fetchMigraineAmount(startDate, endDate, { medicines: mohMedFilter });
             const noMedDays = Math.max(totalDays - medDays, 0);
 
-            return [
-                { name: "Med-Days", value: medDays },
-                { name: "No Med-Days", value: noMedDays },
-            ];
+            return {
+                data: [
+                    { name: "Med-Days", value: medDays },
+                    { name: "No Med-Days", value: noMedDays },
+                ],
+                value: medDays,
+            };
         }
 
         default:
-            return [];
+            return {
+                data: [],
+                value: 0,
+            };
     }
 }
 

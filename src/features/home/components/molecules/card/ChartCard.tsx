@@ -17,7 +17,7 @@ interface IChartCard {
 }
 
 function ChartCard({ title, cardType, chartType, timeframeCount, timeframeUnit }: IChartCard) {
-    const { areaData, pieData } = useChartData(cardType, chartType, timeframeCount, timeframeUnit);
+    const { areaData, pieData, currentPieValue, totalPieValue } = useChartData(cardType, chartType, timeframeCount, timeframeUnit);
 
     const [contextOpen, setContextOpen] = useState(false);
 
@@ -31,7 +31,9 @@ function ChartCard({ title, cardType, chartType, timeframeCount, timeframeUnit }
                 transition hover:shadow-xl
             "
         >
-            <div className="flex items-center w-full mb-4 relative">
+            <div className="flex items-center w-full mb-2 relative">
+                <div className="w-7 h-7 p-1 opacity-0 pointer-events-none" />
+
                 <h2 className="flex-1 text-lg font-semibold text-center">{title}</h2>
 
                 <button
@@ -54,6 +56,14 @@ function ChartCard({ title, cardType, chartType, timeframeCount, timeframeUnit }
                 {chartType === CHART_TYPES.AREA && <AreaChart data={areaData} />}
                 {chartType === CHART_TYPES.PIE && <PieChart data={pieData} />}
             </div>
+
+            {(chartType === CHART_TYPES.PIE && totalPieValue > 0) &&
+                <div className="mt-2 text-center">
+                    <p className="text-lg font-medium">
+                        {currentPieValue}/{totalPieValue}
+                    </p>
+                </div>
+            }
         </div>
     );
 }
