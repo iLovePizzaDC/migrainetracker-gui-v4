@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import type { ChartData } from "../../../types/card/chart";
 import PieChart from "../../atoms/card/PieChart";
 import { fetchMidasPieData } from "../../../utils/card/fetch-helper";
+import { useUser } from "../../../../../shared/hooks/user/use-user";
 
 function MidasCard() {
+    const { user } = useUser();
+
     const [midasScore, setMidasScore] = useState<number>(0);
     const [pieData, setPieData] = useState<ChartData>([]);
 
@@ -15,6 +18,8 @@ function MidasCard() {
     };
 
     useEffect(() => {
+        if (!user) return;
+
         const collectChartData = async () => {
             const pie = await fetchMidasPieData();
             setMidasScore(pie.midasScore);
@@ -22,7 +27,7 @@ function MidasCard() {
         };
 
         collectChartData();
-    }, []);
+    }, [user]);
 
     const { color, label } = getColorIndicator();
 
