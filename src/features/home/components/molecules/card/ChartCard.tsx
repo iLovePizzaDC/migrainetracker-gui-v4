@@ -7,8 +7,10 @@ import { CHART_TYPES, type ChartType } from "../../../constants/card/chart";
 import { type TimeFrameUnit } from "../../../../../shared/constants/cards/time-frame";
 import { CARD_TYPES, type CardType } from "../../../constants/card/card";
 import ContextMenu from "../../atoms/context-menu/ContextMenu";
+import CardForm from "./CardForm";
 
 interface IChartCard {
+    index: number;
     title: string;
     cardType: CardType;
     chartType: ChartType;
@@ -16,10 +18,11 @@ interface IChartCard {
     timeframeUnit: TimeFrameUnit;
 }
 
-function ChartCard({ title, cardType, chartType, timeframeCount, timeframeUnit }: IChartCard) {
+function ChartCard({ index, title, cardType, chartType, timeframeCount, timeframeUnit }: IChartCard) {
     const { areaData, pieData, currentPieValue, totalPieValue } = useChartData(cardType, chartType, timeframeCount, timeframeUnit);
 
     const [contextOpen, setContextOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     return (
         <div
@@ -49,21 +52,37 @@ function ChartCard({ title, cardType, chartType, timeframeCount, timeframeUnit }
                 <ContextMenu
                     open={contextOpen}
                     setOpen={setContextOpen}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
                 />
             </div>
 
-            <div className="flex items-center justify-center">
-                {chartType === CHART_TYPES.AREA && <AreaChart data={areaData} />}
-                {chartType === CHART_TYPES.PIE && <PieChart data={pieData} />}
-            </div>
+            {isEditing ? (
+                <CardForm
+                    nextIndex={index}
+                    defaultTitle={title}
+                    defaultCardType={cardType}
+                    defaultChartType={chartType}
+                    defaultCount={timeframeCount}
+                    defaultUnit={timeframeUnit}
+                    onButtonClick={() => setIsEditing(false)}
+                />
+            ) : (
+                <>
+                    <div className="h-72">
+                        {chartType === CHART_TYPES.AREA && <AreaChart data={areaData} />}
+                        {chartType === CHART_TYPES.PIE && <PieChart data={pieData} />}
+                    </div>
 
-            {(chartType === CHART_TYPES.PIE && totalPieValue > 0) &&
-                <div className="mt-2 text-center">
-                    <p className="text-lg font-medium">
-                        {currentPieValue.toLocaleString('en-US')}/{totalPieValue.toLocaleString('en-US')} {cardType === CARD_TYPES.DURATION ? 'hours' : 'days'}
-                    </p>
-                </div>
-            }
+                    {(chartType === CHART_TYPES.PIE && totalPieValue > 0) &&
+                        <div className="mt-2 text-center">
+                            <p className="text-lg font-medium">
+                                {currentPieValue.toLocaleString('en-US')}/{totalPieValue.toLocaleString('en-US')} {cardType === CARD_TYPES.DURATION ? 'hours' : 'days'}
+                            </p>
+                        </div>
+                    }
+                </>
+            )}
         </div>
     );
 }

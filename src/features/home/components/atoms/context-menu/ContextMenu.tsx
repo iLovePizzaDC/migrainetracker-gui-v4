@@ -4,10 +4,17 @@ import MenuItem from "./MenuItem";
 interface IContextOpen {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isEditing: boolean;
+    setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function ContextMenu({ open, setOpen }: IContextOpen) {
+function ContextMenu({ open, setOpen, isEditing, setIsEditing }: IContextOpen) {
     const menuRef = useRef<HTMLDivElement | null>(null);
+
+    const onEdit = () => {
+        setOpen(false);
+        setIsEditing(!isEditing);
+    };
 
     useEffect(() => {
         function handleClick(e: MouseEvent) {
@@ -33,7 +40,8 @@ function ContextMenu({ open, setOpen }: IContextOpen) {
                 sm:w-48
             "
         >
-            <MenuItem label="Edit" onClick={() => console.log("edit")} />
+            <MenuItem label={isEditing ? 'Cancel' : 'Edit'} onClick={onEdit}
+            />
             <MenuItem label="Remove" onClick={() => console.log("remove")} />
         </div>
     );
