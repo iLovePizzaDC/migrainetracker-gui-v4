@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../../../../shared/hooks/user/use-user";
 import type { ChartData } from "../../types/card/chart";
-import { TIME_FRAME_UNITS, type TimeFrameUnit } from "../../../../shared/constants/cards/time-frame";
+import { type TimeFrameUnit } from "../../../../shared/constants/cards/time-frame";
 import { fetchAreaData, fetchPieData } from "../../utils/card/fetch-helper";
 import { mapAreaResponse } from "../../utils/card/map-chart-response";
-import type { CardType } from "../../constants/card/card";
+import { CARD_TYPES, type CardType } from "../../constants/card/card";
 import { type ChartType, CHART_TYPES } from "../../constants/card/chart";
 import { getDateRange } from "../../utils/card/get-date-range";
 
@@ -35,7 +35,7 @@ export function useChartData(
                 const { data, value } = await fetchPieData(cardType, startDate, endDate, totalDays, user.id);
                 setPieData(data);
                 setCurrentPieValue(value);
-                setTotalPieValue(timeframeUnit === TIME_FRAME_UNITS.DAYS ? (totalDays * 24) : totalDays);
+                setTotalPieValue(cardType === CARD_TYPES.DURATION ? (totalDays * 24) : totalDays);
                 return;
             }
         };
