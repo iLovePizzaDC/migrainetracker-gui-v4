@@ -5,7 +5,7 @@ import PieChart from "../../atoms/card/PieChart";
 import { useState } from "react";
 import { CHART_TYPES, type ChartType } from "../../../constants/card/chart";
 import { type TimeFrameUnit } from "../../../../../shared/constants/cards/time-frame";
-import { type CardType } from "../../../constants/card/card";
+import { CARD_TYPES, type CardType } from "../../../constants/card/card";
 import ContextMenu from "../../atoms/context-menu/ContextMenu";
 
 interface IChartCard {
@@ -52,7 +52,7 @@ function ChartCard({ title, cardType, chartType, timeframeCount, timeframeUnit }
                 />
             </div>
 
-            <div className="h-72">
+            <div className="flex items-center justify-center">
                 {chartType === CHART_TYPES.AREA && <AreaChart data={areaData} />}
                 {chartType === CHART_TYPES.PIE && <PieChart data={pieData} />}
             </div>
@@ -60,7 +60,7 @@ function ChartCard({ title, cardType, chartType, timeframeCount, timeframeUnit }
             {(chartType === CHART_TYPES.PIE && totalPieValue > 0) &&
                 <div className="mt-2 text-center">
                     <p className="text-lg font-medium">
-                        {currentPieValue}/{totalPieValue}
+                        {currentPieValue.toLocaleString('en-US')}/{totalPieValue.toLocaleString('en-US')} {cardType === CARD_TYPES.DURATION ? 'hours' : 'days'}
                     </p>
                 </div>
             }
