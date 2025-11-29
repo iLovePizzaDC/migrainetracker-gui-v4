@@ -10,7 +10,6 @@ export const fetchUserLogin = async (code: string) => {
 
 export const fetchUserLogout = async () => {
     await api.post('auth/logout');
-    localStorage.clear();
     sessionStorage.clear();
     window.location.href = BASE_URL;
 };
