@@ -32,6 +32,7 @@ function ContextMenu({ open, setOpen, isEditing, setIsEditing, onRemoveClick }: 
         function handleClick(e: MouseEvent) {
             if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
                 setOpen(false);
+                setRemovalVerified(false);
             }
         }
         document.addEventListener("click", handleClick);
