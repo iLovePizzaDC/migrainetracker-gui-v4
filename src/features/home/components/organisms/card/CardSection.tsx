@@ -1,44 +1,18 @@
-import { useState } from "react";
-import { TIME_FRAME_UNITS } from "../../../../../shared/constants/cards/time-frame";
-import { CARD_TYPES } from "../../../constants/card/card";
-import { CHART_TYPES } from "../../../constants/card/chart";
 import type { CardSetup } from "../../../types/card/chart";
 import AppendCard from "../../molecules/card/AppendCard";
 import ChartCard from "../../molecules/card/ChartCard";
 import MidasCard from "../../molecules/card/MidasCard";
-
-const tmp_cards: CardSetup[] = [
-    {
-        index: 0,
-        title: 'abc',
-        cardType: CARD_TYPES.MIGRAINE,
-        chartType: CHART_TYPES.AREA,
-        timeframe: {
-            count: 12,
-            unit: TIME_FRAME_UNITS.MONTHS,
-        },
-    },
-    {
-        index: 1,
-        title: 'defg',
-        cardType: CARD_TYPES.MIGRAINE,
-        chartType: CHART_TYPES.PIE,
-        timeframe: {
-            count: 16,
-            unit: TIME_FRAME_UNITS.DAYS,
-        },
-    },
-];
+import { useCardSetups } from "../../../hooks/card/use-card-setups";
 
 function CardSection() {
-    const [cardSetups, setCardSetups] = useState<CardSetup[]>(tmp_cards);
+    const { cardSetups, setCardSetups } = useCardSetups();
 
     const appendCardSetup = (setup: CardSetup) => {
         setCardSetups((prev) => [
             ...prev,
             setup,
         ]);
-    }; // TODO save and load from localstorage key is MT_CS
+    };
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
