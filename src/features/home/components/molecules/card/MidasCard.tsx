@@ -50,7 +50,7 @@ function MidasCard() {
                     MIDAS Score
                 </h2>
 
-                <p className={`w-20 text-sm font-medium text-right ${color}`}>
+                <p className={`w-20 px-1 text-sm font-medium text-right ${color}`}>
                     {label}
                 </p>
             </div>
