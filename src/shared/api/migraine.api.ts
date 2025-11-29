@@ -4,6 +4,7 @@ import { formatEffectiveness, formatMedicine } from '../utils/formatter/event-pa
 import { parseTimeToDecimal } from '../utils/date/date';
 import { api } from './api';
 import type { CardType } from '../../features/home/constants/card/card';
+import axios from 'axios';
 
 const ENDPOINT_BASE_URL = import.meta.env.VITE_ENDPOINT_BASE_URL;
 const API_URL_SUFFIX = import.meta.env.VITE_API_URL_SUFFIX;
@@ -12,27 +13,37 @@ const API_URL_SUFFIX = import.meta.env.VITE_API_URL_SUFFIX;
 export const fetchMigraineEvents = async (
     start: string,
     end: string,
-    filter?: Filter
+    filter?: Filter,
+    signal?: AbortSignal
 ) => {
     const filterObject: { [key: string]: string } = {
         startDate: start,
         endDate: end,
     };
 
-    if (filter?.duration !== undefined && filter.duration !== 'all') filterObject.duration = filter.duration;
-    if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
-    if (filter?.symptoms !== undefined && filter.symptoms !== 'all') filterObject.symptoms = filter.symptoms;
-    if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
+    if (filter?.duration !== undefined && filter.duration !== 'all')
+        filterObject.duration = filter.duration;
+
+    if (filter?.intensity !== undefined && filter.intensity !== 'all')
+        filterObject.intensity = filter.intensity;
+
+    if (filter?.symptoms !== undefined && filter.symptoms !== 'all')
+        filterObject.symptoms = filter.symptoms;
+
+    if (filter?.medicines !== undefined && filter.medicines !== 'all')
+        filterObject.medicines = filter.medicines;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvents?filter=${filterString}`;
+    const url = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvents?filter=${filterString}`;
 
     try {
-        const response = await api.get(url);
-
+        const response = await api.get(url, { signal });
         return response.data;
-    } catch {
-        throw new Error('Failed to fetch migraine events');
+    } catch (err) {
+        if (axios.isCancel?.(err)) return;
+        if (err instanceof DOMException && err.name === "AbortError") return;
+
+        throw new Error("Failed to fetch migraine events");
     }
 };
 
