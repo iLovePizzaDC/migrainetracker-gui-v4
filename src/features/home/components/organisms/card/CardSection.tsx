@@ -22,7 +22,7 @@ function CardSection() {
 
             <MidasCard />
 
-            <AppendCard nextIndex={cardSetups.length} />
+            <AppendCard />
         </div>
     );
 }

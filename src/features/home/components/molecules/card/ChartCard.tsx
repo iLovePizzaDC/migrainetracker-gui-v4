@@ -8,6 +8,8 @@ import { type TimeFrameUnit } from "../../../../../shared/constants/cards/time-f
 import { CARD_TYPES, type CardType } from "../../../constants/card/card";
 import ContextMenu from "../../atoms/context-menu/ContextMenu";
 import CardForm from "./CardForm";
+import { useCardSetups } from "../../../hooks/card/use-card-setups";
+import type { CardSetup } from "../../../types/card/chart";
 
 interface IChartCard {
     index: number;
@@ -19,10 +21,20 @@ interface IChartCard {
 }
 
 function ChartCard({ index, title, cardType, chartType, timeframeCount, timeframeUnit }: IChartCard) {
+    const { removeSetupByIndex, updateSetupByIndex } = useCardSetups();
     const { areaData, pieData, currentPieValue, totalPieValue } = useChartData(cardType, chartType, timeframeCount, timeframeUnit);
 
     const [contextOpen, setContextOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+
+    const onEdit = (setup: CardSetup) => {
+        updateSetupByIndex(setup);
+        setIsEditing(false);
+    };
+
+    const onRemove = () => {
+        removeSetupByIndex(index);
+    };
 
     return (
         <div
@@ -54,18 +66,19 @@ function ChartCard({ index, title, cardType, chartType, timeframeCount, timefram
                     setOpen={setContextOpen}
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}
+                    onRemoveClick={onRemove}
                 />
             </div>
 
             {isEditing ? (
                 <CardForm
-                    nextIndex={index}
+                    onButtonClick={onEdit}
+                    defaultIndex={index}
                     defaultTitle={title}
                     defaultCardType={cardType}
                     defaultChartType={chartType}
                     defaultCount={timeframeCount}
                     defaultUnit={timeframeUnit}
-                    onButtonClick={() => setIsEditing(false)}
                 />
             ) : (
                 <>
