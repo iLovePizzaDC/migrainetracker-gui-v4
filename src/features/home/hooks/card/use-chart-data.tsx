@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "../../../../shared/hooks/user/use-user";
 import type { ChartData } from "../../types/card/chart";
-import { type TimeFrameUnit } from "../../../../shared/constants/cards/time-frame";
+import { TIME_FRAME_UNITS, type TimeFrameUnit } from "../../../../shared/constants/cards/time-frame";
 import { fetchAreaData, fetchPieData } from "../../utils/card/fetch-helper";
 import { mapAreaResponse } from "../../utils/card/map-chart-response";
 import type { CardType } from "../../constants/card/card";
@@ -18,6 +18,8 @@ export function useChartData(
 
     const [areaData, setAreaData] = useState<ChartData>([]);
     const [pieData, setPieData] = useState<ChartData>([]);
+    const [currentPieValue, setCurrentPieValue] = useState(0);
+    const [totalPieValue, setTotalPieValue] = useState(0);
 
     useEffect(() => {
         const collectChartData = async () => {
@@ -30,8 +32,10 @@ export function useChartData(
             }
 
             if (chartType === CHART_TYPES.PIE && user) {
-                const pie = await fetchPieData(cardType, startDate, endDate, totalDays, user.id);
-                setPieData(pie);
+                const { data, value } = await fetchPieData(cardType, startDate, endDate, totalDays, user.id);
+                setPieData(data);
+                setCurrentPieValue(value);
+                setTotalPieValue(timeframeUnit === TIME_FRAME_UNITS.DAYS ? (totalDays * 24) : totalDays);
                 return;
             }
         };
@@ -42,5 +46,7 @@ export function useChartData(
     return {
         areaData,
         pieData,
+        currentPieValue,
+        totalPieValue,
     };
 }
