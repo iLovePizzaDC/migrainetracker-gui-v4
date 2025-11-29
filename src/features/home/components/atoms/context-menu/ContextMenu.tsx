@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import MenuItem from "./MenuItem";
 
 interface IContextOpen {
@@ -6,15 +6,27 @@ interface IContextOpen {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     isEditing: boolean;
     setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+    onRemoveClick: () => void;
 }
 
-function ContextMenu({ open, setOpen, isEditing, setIsEditing }: IContextOpen) {
+function ContextMenu({ open, setOpen, isEditing, setIsEditing, onRemoveClick }: IContextOpen) {
     const menuRef = useRef<HTMLDivElement | null>(null);
+    const [removalVerified, setRemovalVerified] = useState(false);
 
     const onEdit = () => {
         setOpen(false);
         setIsEditing(!isEditing);
     };
+
+    const onRemove = () => {
+        if (removalVerified) {
+            onRemoveClick();
+            setOpen(false);
+            setRemovalVerified(false);
+        }
+
+        setRemovalVerified(true);
+    }
 
     useEffect(() => {
         function handleClick(e: MouseEvent) {
@@ -42,7 +54,7 @@ function ContextMenu({ open, setOpen, isEditing, setIsEditing }: IContextOpen) {
         >
             <MenuItem label={isEditing ? 'Cancel' : 'Edit'} onClick={onEdit}
             />
-            <MenuItem label="Remove" onClick={() => console.log("remove")} />
+            <MenuItem label={removalVerified ? 'Are you sure?' : 'Remove'} onClick={onRemove} />
         </div>
     );
 }

@@ -7,28 +7,29 @@ import { CHART_OPTIONS, CHART_TYPES, type ChartType } from "../../../constants/c
 import Button from "../../atoms/card/Button";
 import DropdownInput from "../../atoms/card/DropdownInput";
 import Input from "../../atoms/card/Input";
+import type { CardSetup } from "../../../types/card/chart";
 import { useCardSetups } from "../../../hooks/card/use-card-setups";
 
 interface ICardForm {
-    nextIndex: number;
+    onButtonClick: (setup: CardSetup) => void;
+    defaultIndex?: number;
     defaultTitle?: string;
     defaultCardType?: CardType;
     defaultChartType?: ChartType;
     defaultCount?: number;
     defaultUnit?: TimeFrameUnit;
-    onButtonClick?: () => void;
 }
 
 function CardForm({
-    nextIndex,
+    onButtonClick,
+    defaultIndex,
     defaultTitle = '',
     defaultCardType = CARD_TYPES.MIGRAINE,
     defaultChartType = CHART_TYPES.AREA,
     defaultCount = 12,
     defaultUnit = TIME_FRAME_UNITS.MONTHS,
-    onButtonClick,
 }: ICardForm) {
-    const { setCardSetups, cardSetups } = useCardSetups();
+    const { cardSetups } = useCardSetups();
 
     const [title, setTitle] = useState(defaultTitle);
     const [cardType, setCardType] = useState<CardType>(defaultCardType);
@@ -39,42 +40,24 @@ function CardForm({
     const onSubmit = (event: React.FormEvent) => {
         event.preventDefault();
 
-        const foundSetup = cardSetups.find(setup => setup.index === nextIndex);
+        const cardSetup: CardSetup = {
+            index: defaultIndex ?? cardSetups.length,
+            title,
+            cardType,
+            chartType,
+            timeframe: {
+                count,
+                unit,
+            }
+        };
 
-        if (foundSetup) {
-             setCardSetups((prev) =>
-                prev.map((setup) =>
-                    setup.index === nextIndex
-                        ? {
-                            ...setup,
-                            title,
-                            cardType,
-                            chartType,
-                            timeframe: {
-                                count,
-                                unit,
-                            },
-                        }
-                        : setup
-                )
-            );
-        } else {
-            setCardSetups((prev) => [
-                ...prev,
-                {
-                    index: nextIndex,
-                    title,
-                    cardType,
-                    chartType,
-                    timeframe: {
-                        count,
-                        unit
-                    }
-                },
-            ]);
-        }
+        setTitle(defaultTitle);
+        setCardType(defaultCardType);
+        setChartType(defaultChartType);
+        setCount(defaultCount);
+        setUnit(defaultUnit);
 
-        onButtonClick?.();
+        onButtonClick(cardSetup);
     };
 
     return (

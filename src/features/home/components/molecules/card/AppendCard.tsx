@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import CardForm from "./CardForm";
+import { useCardSetups } from "../../../hooks/card/use-card-setups";
 
-interface IAppendCard {
-    nextIndex: number;
-}
+function AppendCard() {
+    const { appendSetup } = useCardSetups();
 
-function AppendCard({ nextIndex }: IAppendCard) {
     const [expanded, setExpanded] = useState(false);
 
     return (
@@ -34,7 +33,7 @@ function AppendCard({ nextIndex }: IAppendCard) {
 
             <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'h-96' : 'h-0'}`}>
                 {expanded && (
-                    <CardForm nextIndex={nextIndex} />
+                    <CardForm onButtonClick={appendSetup} />
                 )}
             </div>
         </div>

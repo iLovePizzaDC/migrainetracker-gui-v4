@@ -17,8 +17,33 @@ export const CardSetupsProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem(SETUP_STORAGE_KEY, JSON.stringify(cardSetups));
     }, [cardSetups]);
 
+    const normalizeIndexes = (setups: CardSetup[]): CardSetup[] => {
+        return setups
+            .map((setup, index) => ({ ...setup, index: index }));
+    };
+
+    const removeSetupByIndex = (index: number) => {
+        setCardSetups(prev =>
+            normalizeIndexes(prev.filter(setup => setup.index !== index))
+        );
+    };
+
+    const updateSetupByIndex = (updatedSetup: CardSetup) => {
+        setCardSetups(prev =>
+            normalizeIndexes(
+                prev.map(setup =>
+                    setup.index === updatedSetup.index ? { ...updatedSetup } : setup
+                )
+            )
+        );
+    };
+
+    const appendSetup = (setup: CardSetup) => {
+        setCardSetups(prev => normalizeIndexes([...prev, setup]));
+    };
+
     return (
-        <CardSetupsContext.Provider value={{ cardSetups, setCardSetups }}>
+        <CardSetupsContext.Provider value={{ cardSetups, setCardSetups, removeSetupByIndex, updateSetupByIndex, appendSetup }}>
             {children}
         </CardSetupsContext.Provider>
     );
