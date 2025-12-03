@@ -31,9 +31,9 @@ export default function NavigationLink({
     return(
         <Link
             to={to}
-            className={`${
+            className={`rounded-xl p-2 bg-transparent backdrop-blur-md ${
                 isActive
-                    ? 'opacity-80'
+                    ? 'opacity-80 border border-white/20 shadow-sm shadow-black/20'
                     : 'hover:opacity-80 transition-opacity'
                 }`}
             onClick={onClick}
