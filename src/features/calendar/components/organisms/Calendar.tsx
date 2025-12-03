@@ -10,7 +10,7 @@ import type { StoredEntry } from "../../../../shared/types/calendar/calendar";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 function Calendar() {
-    const { isLoading, date, events, setMonth } = useCalendar();
+    const { isLoading, date, events, setMonth, userMedicineOptions } = useCalendar();
 
     const [openDay, setOpenDay] = useState<number | null>(null);
     const [entry, setEntry] = useState<Entry | null>(null);
@@ -21,12 +21,35 @@ function Calendar() {
         const selected = new Date(date);
         selected.setDate(day);
 
-        const foundEvent = events.find(
-            (event) => {
-                return normalizeDate(event.date).getTime() === normalizeDate(selected).getTime()
-            }
+        const foundEvent = events.find((event) =>
+            normalizeDate(event.date).getTime() === normalizeDate(selected).getTime()
         );
+
         const entry = foundEvent ? createEntry(foundEvent) : null;
+
+        if (entry) {
+            entry.medicines = entry.medicines.map((med) => {
+                const { abbreviation, label } = med.medicine;
+
+                if (abbreviation.toLowerCase() === label.toLowerCase()) {
+                    const match = userMedicineOptions.find(
+                        (option) => option.value.toLowerCase() === abbreviation.toLowerCase()
+                    );
+
+                    if (match) {
+                        return {
+                            ...med,
+                            medicine: {
+                                abbreviation,
+                                label: match.label
+                            }
+                        };
+                    }
+                }
+
+                return med;
+            });
+        }
 
         setIsStoredEntryDisplaying(false);
         setEntry(entry);
