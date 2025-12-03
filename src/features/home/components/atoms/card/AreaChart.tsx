@@ -9,7 +9,10 @@ interface IAreaChart {
 function AreaChart({ data }: IAreaChart) {
     return (
         <ResponsiveContainer width="100%" height="100%">
-            <RAreaChart data={data}>
+            <RAreaChart
+                data={data}
+                margin={{ top: 20, right: 10, left: -35, bottom: 0 }}
+            >
                 <defs>
                     <linearGradient id="colorArea" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#ffffff" stopOpacity={0.35} />
