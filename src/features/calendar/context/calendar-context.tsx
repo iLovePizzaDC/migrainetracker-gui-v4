@@ -10,6 +10,7 @@ interface ICalendarContext {
     setMonth: (date: Date) => void;
     prevMonth: () => void;
     nextMonth: () => void;
+    refetchEvents: () => Promise<void>;
     events: Event[];
     userMedicineOptions: DropdownOption[];
 }
@@ -23,6 +24,7 @@ export const CalendarContext = createContext<ICalendarContext>({
     setMonth: () => {},
     prevMonth: () => {},
     nextMonth: () => {},
+    refetchEvents: async () => {},
     events: [],
     userMedicineOptions: []
 });
