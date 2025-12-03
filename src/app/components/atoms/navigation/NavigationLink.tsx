@@ -33,7 +33,7 @@ export default function NavigationLink({
             to={to}
             className={`rounded-xl p-2 bg-transparent backdrop-blur-md ${
                 isActive
-                    ? 'opacity-80 border border-white/20 shadow-sm shadow-black/20'
+                    ? 'opacity-80 border border-white/20 shadow-sm shadow-black/20 cursor-default'
                     : 'hover:opacity-80 transition-opacity'
                 }`}
             onClick={onClick}
