@@ -43,7 +43,16 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     }, [firstWeekday, daysInMonth]);
 
     const setMonth = (date: Date) => {
-        setCurrentDate(new Date(date.getFullYear(), date.getMonth(), 1));
+        setCurrentDate((current) => {
+            if (
+                current.getMonth() === date.getMonth() &&
+                current.getFullYear() === date.getFullYear()
+            ) {
+                return current;
+            }
+
+            return new Date(date.getFullYear(), date.getMonth(), 1);
+        });
     };
 
     const prevMonth = () => {
