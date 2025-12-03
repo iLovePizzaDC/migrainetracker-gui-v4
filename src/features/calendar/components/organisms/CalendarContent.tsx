@@ -5,7 +5,7 @@ interface ICalendarContent {
 }
 
 function CalendarContent({ onDayClick }: ICalendarContent) {
-    const { daysArray, events } = useCalendar();
+    const { isLoading, daysArray, events } = useCalendar();
 
     const getEventForDay = (day: number | null) => {
         if (!day) return null;
@@ -15,8 +15,18 @@ function CalendarContent({ onDayClick }: ICalendarContent) {
     return (
         <div className="space-y-4">
             <div className="grid grid-cols-7 text-center gap-1">
-                {daysArray.map((day, index) => {
+                {isLoading ? (
+                    Array.from({ length: 35 }).map((_, index) => (
+                        <div
+                            key={index}
+                            className="h-10 flex flex-col items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm animate-pulse"
+                        >
+                            <div className="w-4 h-4 rounded-full bg-white/20 mt-1" />
+                        </div>
+                    ))
+                ) : daysArray.map((day, index) => {
                     const event = getEventForDay(day);
+
                     return (
                         <div
                             key={index}

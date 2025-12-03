@@ -20,14 +20,18 @@ export function useChartData(
     const [pieData, setPieData] = useState<ChartData>([]);
     const [currentPieValue, setCurrentPieValue] = useState(0);
     const [totalPieValue, setTotalPieValue] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const collectChartData = async () => {
+            setIsLoading(true);
+
             const { startDate, endDate, totalDays } = getDateRange(timeframeCount, timeframeUnit);
 
             if (chartType === CHART_TYPES.AREA && user) {
                 const response = await fetchAreaData(cardType, endDate, timeframeCount, timeframeUnit, user.id);
                 setAreaData(mapAreaResponse(response));
+                setIsLoading(false);
                 return;
             }
 
@@ -36,6 +40,7 @@ export function useChartData(
                 setPieData(data);
                 setCurrentPieValue(value);
                 setTotalPieValue(cardType === CARD_TYPES.DURATION ? (totalDays * 24) : totalDays);
+                setIsLoading(false);
                 return;
             }
         };
@@ -44,6 +49,7 @@ export function useChartData(
     }, [cardType, chartType, timeframeCount, timeframeUnit, user]);
 
     return {
+        isLoading,
         areaData,
         pieData,
         currentPieValue,

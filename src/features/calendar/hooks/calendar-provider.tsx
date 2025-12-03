@@ -1,14 +1,21 @@
 import { useEffect, useState, useMemo, type ReactNode, useRef } from "react";
 import { CalendarContext } from "../context/calendar-context";
-import type { Event, EventDescription, RawEventResponse } from "../../../shared/types";
+import type { DropdownOption, Event, EventDescription, RawEventResponse } from "../../../shared/types";
 import { fetchMigraineEvents } from "../../../shared/api/migraine.api";
 import { formatDateToUs } from "../../../shared/utils/date/date";
 import { parseEventDescription } from "../../../shared/utils/formatter/event-parser";
 import { determineStrength } from "../utils/event-highlight";
+import { fetchUserMedicinesGet } from "../../../shared/api/medicine.api";
+import { useUser } from "../../../shared/hooks/user/use-user";
+import type { Medicine } from "../../../shared/types/user/medicine";
 
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
+    const { user } = useUser();
+
     const [currentDate, setCurrentDate] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
+    const [userMedicineOptions, setUserMedicineOptions] = useState<DropdownOption[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchIdRef = useRef(0);
 
@@ -55,6 +62,8 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 
         const loadEvents = async () => {
             try {
+                setIsLoading(true);
+
                 const raw = await fetchMigraineEvents(
                     formatDateToUs(firstDayOfMonth),
                     formatDateToUs(lastDayOfMonth),
@@ -79,6 +88,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                     .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
 
                 setEvents(parsed);
+                setIsLoading(false);
             } catch (error) {
                 if (error instanceof DOMException && error.name === "AbortError") {
                     return;
@@ -94,9 +104,25 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
         };
     }, [firstDayOfMonth, lastDayOfMonth]);
 
+    useEffect(() => {
+        const load = async () => {
+            if (!user) return;
+            const meds: Medicine[] = await fetchUserMedicinesGet(user.id);
+            setUserMedicineOptions(
+                meds.map(m => ({
+                    label: m.name,
+                    value: m.abbreviation
+                }))
+            );
+        };
+
+        load();
+    }, [user]);
+
     return (
         <CalendarContext.Provider
             value={{
+                isLoading,
                 date: currentDate,
                 daysArray,
                 month,
@@ -105,6 +131,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 prevMonth,
                 nextMonth,
                 events,
+                userMedicineOptions,
             }}
         >
             {children}

@@ -9,6 +9,7 @@ function MidasCard() {
 
     const [midasScore, setMidasScore] = useState<number>(0);
     const [pieData, setPieData] = useState<ChartData>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const getColorIndicator = () => {
         if (midasScore >= 21) return { color: "bg-gradient-to-r from-red-500/0 to to-red-500/70", label: "severe" };
@@ -21,9 +22,11 @@ function MidasCard() {
         if (!user) return;
 
         const collectChartData = async () => {
+            setIsLoading(true);
             const pie = await fetchMidasPieData();
             setMidasScore(pie.midasScore);
             setPieData(pie.data);
+            setIsLoading(false);
         };
 
         collectChartData();
@@ -55,14 +58,20 @@ function MidasCard() {
                 </p>
             </div>
 
-            <div className="h-72">
-                <PieChart data={pieData} />
+            <div className="h-72 flex items-center justify-center">
+                {isLoading ? (
+                    <div className="w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse" />
+                ) : (
+                    <PieChart data={pieData} />
+                )}
             </div>
 
             <div className="mt-4 text-center">
-                <p className="text-lg font-medium">
-                    {midasScore}/270
-                </p>
+                {isLoading ? (
+                    <div className="h-6 w-20 mx-auto bg-white/10 backdrop-blur-sm rounded-md animate-pulse" />
+                ) : (
+                    <p className="text-lg font-medium">{midasScore}/270</p>
+                )}
             </div>
     </div>
     );
