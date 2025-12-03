@@ -1,4 +1,4 @@
-import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 interface IMobileNavigationOptions {
@@ -14,7 +14,7 @@ export default function MobileNavigationOptions({ toggleMenu, isOpen }: IMobileN
             className="text-white hover:text-gray-200 pl-6"
             data-testid="mobile-nav-toggle"
         >
-            {isOpen ? <XMarkIcon /> : <AdjustmentsHorizontalIcon />}
+            {isOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
         </button>
     );
 }

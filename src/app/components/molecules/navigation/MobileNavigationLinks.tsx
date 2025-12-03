@@ -8,7 +8,7 @@ interface IMobileNavigationLinks {
 export default function MobileNavigationLinks({ toggleMenu }: IMobileNavigationLinks) {
 
     return (
-        <>
+        <div className="space-y-3">
             {NAVIGATION_LINKS.map((navigationLink) => (
                 <div key={`mobilenavigationlink-${navigationLink.to}`}>
                     <NavigationLink
@@ -19,6 +19,6 @@ export default function MobileNavigationLinks({ toggleMenu }: IMobileNavigationL
                     />
                 </div>
             ))}
-        </>
+        </div>
     );
 }
