@@ -9,7 +9,7 @@ function CalendarPage() {
 
   return (
     <div className="w-full">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
           <CalendarProvider>
             <Calendar />
           </CalendarProvider>
