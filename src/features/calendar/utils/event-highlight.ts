@@ -33,3 +33,31 @@ export function determineStrength(description: EventDescription): Event["strengt
 
     return STRENGTH_MAP[closestStrength] ?? "bg-purple-200";
 }
+
+export function calculateMigrenosusFlags(events: Event[], daysInMonth: number, minDays = 4): boolean[] {
+    const flags = Array(daysInMonth).fill(false);
+
+    const hasEvent = Array(daysInMonth).fill(false);
+    events.forEach(e => {
+        const day = e.date.getDate();
+        hasEvent[day - 1] = true;
+    });
+
+    let streakStart = -1;
+    for (let dayIndex = 0; dayIndex < daysInMonth; dayIndex++) {
+        if (hasEvent[dayIndex]) {
+            if (streakStart === -1) streakStart = dayIndex;
+        } else {
+            if (streakStart !== -1 && dayIndex - streakStart >= minDays) {
+                for (let streakDayIndex = streakStart; streakDayIndex < dayIndex; streakDayIndex++) flags[streakDayIndex] = true;
+            }
+            streakStart = -1;
+        }
+    }
+
+    if (streakStart !== -1 && daysInMonth - streakStart >= minDays) {
+        for (let j = streakStart; j < daysInMonth; j++) flags[j] = true;
+    }
+
+    return flags;
+};
