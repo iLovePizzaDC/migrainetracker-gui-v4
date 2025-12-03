@@ -44,7 +44,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
             {medicines.map((medicine, index) => (
                 <div
                     key={index}
-                    className="p-3 rounded-lg bg-black/20 border border-white/10 space-y-3"
+                    className="p-3 rounded-lg bg-transparent border border-white/25 space-y-3"
                 >
                     <p className="text-sm font-medium">{medicine.medicine.label}</p>
 
