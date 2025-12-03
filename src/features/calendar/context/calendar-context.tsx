@@ -1,7 +1,8 @@
 import { createContext } from 'react';
-import type { Event } from '../../../shared/types';
+import type { DropdownOption, Event } from '../../../shared/types';
 
 interface ICalendarContext {
+    isLoading: boolean;
     date: Date;
     daysArray: (number | null)[];
     month: string;
@@ -10,9 +11,11 @@ interface ICalendarContext {
     prevMonth: () => void;
     nextMonth: () => void;
     events: Event[];
+    userMedicineOptions: DropdownOption[];
 }
 
 export const CalendarContext = createContext<ICalendarContext>({
+    isLoading: true,
     date: new Date(),
     daysArray: [],
     month: new Date().toLocaleString("de-DE", { month: "long" }),
@@ -21,4 +24,5 @@ export const CalendarContext = createContext<ICalendarContext>({
     prevMonth: () => {},
     nextMonth: () => {},
     events: [],
+    userMedicineOptions: []
 });

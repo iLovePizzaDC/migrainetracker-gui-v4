@@ -10,7 +10,7 @@ import type { StoredEntry } from "../../../../shared/types/calendar/calendar";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 function Calendar() {
-    const { date, events, setMonth } = useCalendar();
+    const { isLoading, date, events, setMonth } = useCalendar();
 
     const [openDay, setOpenDay] = useState<number | null>(null);
     const [entry, setEntry] = useState<Entry | null>(null);
@@ -58,7 +58,11 @@ function Calendar() {
                 </div>
 
                 <div className="mt-2 flex justify-end">
-                    <button onClick={onLoadEntryClick} className="flex items-center justify-center">
+                    <button
+                        onClick={onLoadEntryClick}
+                        className="flex items-center justify-center disabled:opacity-80 transition-opacity"
+                        disabled={isLoading}
+                    >
                         <ArrowDownTrayIcon className="h-5 w-5" />
                     </button>
                 </div>

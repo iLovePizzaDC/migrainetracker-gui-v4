@@ -22,7 +22,7 @@ interface IChartCard {
 
 function ChartCard({ index, title, cardType, chartType, timeframeCount, timeframeUnit }: IChartCard) {
     const { removeSetupByIndex, updateSetupByIndex } = useCardSetups();
-    const { areaData, pieData, currentPieValue, totalPieValue } = useChartData(cardType, chartType, timeframeCount, timeframeUnit);
+    const { isLoading, areaData, pieData, currentPieValue, totalPieValue } = useChartData(cardType, chartType, timeframeCount, timeframeUnit);
 
     const [contextOpen, setContextOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -82,18 +82,23 @@ function ChartCard({ index, title, cardType, chartType, timeframeCount, timefram
                 />
             ) : (
                 <>
-                    <div className="h-72">
-                        {chartType === CHART_TYPES.AREA && <AreaChart data={areaData} />}
-                        {chartType === CHART_TYPES.PIE && <PieChart data={pieData} />}
+                    <div className="h-72 flex items-center justify-center">
+                        {isLoading ? (
+                            <div className="w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse" />
+                        ) : chartType === CHART_TYPES.AREA ? (
+                            <AreaChart data={areaData} />
+                        ) : (
+                            <PieChart data={pieData} />
+                        )}
                     </div>
 
-                    {(chartType === CHART_TYPES.PIE && totalPieValue > 0) &&
+                    {!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 && (
                         <div className="mt-2 text-center">
                             <p className="text-lg font-medium">
                                 {currentPieValue.toLocaleString('en-US')}/{totalPieValue.toLocaleString('en-US')} {cardType === CARD_TYPES.DURATION ? 'hours' : 'days'}
                             </p>
                         </div>
-                    }
+                    )}
                 </>
             )}
         </div>

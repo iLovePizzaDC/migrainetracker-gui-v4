@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
-import type { AppendMedicine, DropdownOption } from "../../../../shared/types";
-import type { Medicine as MedicineType } from "../../../../shared/types/user/medicine";
+import type { AppendMedicine } from "../../../../shared/types";
 import Combobox from "../atoms/Combobox";
 import Slider from "../atoms/Slider";
-import { fetchUserMedicinesGet } from "../../../../shared/api/medicine.api";
-import { useUser } from "../../../../shared/hooks/user/use-user";
+import { useCalendar } from "../../hooks/use-calendar";
 
 interface IMedicine {
     medicines: AppendMedicine[];
@@ -12,26 +9,8 @@ interface IMedicine {
     disabled?: boolean;
 }
 
-// TODO WARNING! usermedicines are fetched on every day click!!!
 function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
-    const { user } = useUser();
-
-    const [userMedicineOptions, setUserMedicineOptions] = useState<DropdownOption[]>([]);
-
-    useEffect(() => {
-        const load = async () => {
-            if (!user) return;
-            const meds: MedicineType[] = await fetchUserMedicinesGet(user.id);
-            setUserMedicineOptions(
-                meds.map(m => ({
-                    label: m.name,
-                    value: m.abbreviation
-                }))
-            );
-        };
-
-        load();
-    }, [user]);
+    const { userMedicineOptions } = useCalendar();
 
     return (
         <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
