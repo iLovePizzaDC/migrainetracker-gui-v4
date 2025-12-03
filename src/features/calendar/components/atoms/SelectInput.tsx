@@ -50,7 +50,7 @@ function SelectInput({
                             className="h-4 w-4"
                             disabled={disabled}
                         />
-                        <label htmlFor={inputId} className="text-sm">
+                        <label htmlFor={inputId} className="text-sm w-full text-left">
                             {option.label}
                         </label>
                     </div>

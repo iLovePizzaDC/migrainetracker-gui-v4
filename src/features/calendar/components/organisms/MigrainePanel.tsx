@@ -67,6 +67,11 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
         }
     );
 
+    const showMedicine =
+        !prefilled ||
+        !areInputsDisabled ||
+        medicines.length > 0;
+
     const saveNewEntry = async () => {
         try {
             setIsLoading(true);
@@ -135,7 +140,9 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
 
             <Symptoms symptoms={symptoms} setSymptoms={setSymptoms} disabled={areInputsDisabled || isLoading} />
 
-            <Medicine medicines={medicines} setMedicines={setMedicines} disabled={areInputsDisabled || isLoading} />
+            {showMedicine &&
+                <Medicine medicines={medicines} setMedicines={setMedicines} disabled={areInputsDisabled || isLoading} />
+            }
 
             <Midas midas={midas} setMidas={setMidas} disabled={areInputsDisabled || isLoading} />
 
