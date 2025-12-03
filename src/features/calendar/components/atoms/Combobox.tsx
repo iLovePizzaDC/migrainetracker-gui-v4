@@ -89,7 +89,7 @@ function Combobox({
                     <ComboboxInput
                         id={id}
                         required={required}
-                        className="w-full p-2 rounded-lg bg-transparent backdrop-blur-sm border border-white/25"
+                        className="w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/5"
                         onChange={(event) => setQuery(event.target.value)}
                         displayValue={() => query}
                         placeholder="Add medicine..."
@@ -97,7 +97,7 @@ function Combobox({
                     />
 
 
-                    <ComboboxOptions className="absolute z-50 mt-1 w-full max-h-48 overflow-auto rounded-lg bg-black/10 backdrop-blur-sm border border-white/25 text-white shadow-lg">
+                    <ComboboxOptions className="absolute z-50 mt-1 w-full max-h-48 overflow-auto rounded-lg bg-black/30 backdrop-blur-md border border-white/20 text-white shadow-lg">
                         {filtered.length === 0 && (
                             <div className="px-3 py-2 text-gray-400">No results</div>
                         )}
