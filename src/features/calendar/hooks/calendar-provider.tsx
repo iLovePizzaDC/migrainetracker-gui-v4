@@ -25,23 +25,27 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
         [currentDate]
     );
 
-    const firstWeekday = firstDayOfMonth.getDay();
+    const firstWeekday = (firstDayOfMonth.getDay() + 6) % 7;
     const daysInMonth = lastDayOfMonth.getDate();
 
     const daysArray = useMemo(() => {
-        const arr: (number | null)[] = [];
-        for (let i = 0; i < firstWeekday; i++) arr.push(null);
-        for (let i = 1; i <= daysInMonth; i++) arr.push(i);
-        return arr;
+        const array: (number | null)[] = [];
+        for (let index = 0; index < firstWeekday; index++) array.push(null);
+        for (let index = 1; index <= daysInMonth; index++) array.push(index);
+        return array;
     }, [firstWeekday, daysInMonth]);
 
+    const setMonth = (date: Date) => {
+        setCurrentDate(new Date(date.getFullYear(), date.getMonth(), 1));
+    };
+
     const prevMonth = () => {
-        setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
+        setCurrentDate((date) => new Date(date.getFullYear(), date.getMonth() - 1, 1));
         setEvents([]);
     };
 
     const nextMonth = () => {
-        setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
+        setCurrentDate((date) => new Date(date.getFullYear(), date.getMonth() + 1, 1));
         setEvents([]);
     };
 
@@ -93,9 +97,11 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     return (
         <CalendarContext.Provider
             value={{
+                date: currentDate,
                 daysArray,
                 month,
                 year,
+                setMonth,
                 prevMonth,
                 nextMonth,
                 events,

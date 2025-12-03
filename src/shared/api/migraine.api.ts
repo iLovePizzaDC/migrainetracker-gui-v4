@@ -5,6 +5,7 @@ import { parseTimeToDecimal } from '../utils/date/date';
 import { api } from './api';
 import type { CardType } from '../../features/home/constants/card/card';
 import axios from 'axios';
+import type { IntensityType, SymptomType } from '../../features/calendar/constants/calendar';
 
 const ENDPOINT_BASE_URL = import.meta.env.VITE_ENDPOINT_BASE_URL;
 const API_URL_SUFFIX = import.meta.env.VITE_API_URL_SUFFIX;
@@ -157,8 +158,7 @@ export const fetchAreaChart = async (
     }
 };
 
-// TODO use axios api
-export const fetchNewEntry = async (date: string, durations: AppendDuration[], intensity: string, symptoms: string[], medicines: AppendMedicine[], midas: AppendMidas) => {
+export const fetchNewEntry = async (date: string, durations: AppendDuration[], intensity: IntensityType, symptoms: SymptomType[], medicines: AppendMedicine[], midas: AppendMidas) => {
     const medicineString: string = formatMedicine(medicines);
     const effectivenessString: string = formatEffectiveness(medicines);
 
@@ -178,19 +178,13 @@ export const fetchNewEntry = async (date: string, durations: AppendDuration[], i
 
     const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvent?date=${date}`;
 
-    const response: Response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newEntry),
-    });
+    try {
+        const response = await api.post(url, newEntry);
 
-    if (!response.ok) {
-        throw new Error('Failed to create new migraine event');
+        return response.data;
+    } catch {
+        throw new Error('Failed to fetch new entry');
     }
-
-    return response;
 };
 
 export const fetchMidasScore = async () => {

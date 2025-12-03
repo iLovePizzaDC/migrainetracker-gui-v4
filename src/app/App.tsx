@@ -26,7 +26,7 @@ function App() {
         <UserProvider>
 
           <Navigation />
-          <main className='mt-10'>
+          <main className='flex-1 mt-10'>
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/home" element={<OverviewPage />} />
