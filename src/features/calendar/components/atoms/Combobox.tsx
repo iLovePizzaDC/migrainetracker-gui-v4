@@ -66,62 +66,63 @@ function Combobox({
                 ))}
             </div>
 
-            <UICombobox
-                value={selected}
-                onChange={(value) => {
-                    const last = value[value.length - 1];
+            {!disabled &&
+                <UICombobox
+                    value={selected}
+                    onChange={(value) => {
+                        const last = value[value.length - 1];
 
-                    const isSelected = value.some((optionValue, index) =>
-                        index !== value.length - 1 && optionValue.value === last.value
-                    );
+                        const isSelected = value.some((optionValue, index) =>
+                            index !== value.length - 1 && optionValue.value === last.value
+                        );
 
-                    const newValue = isSelected
-                        ? value.filter(optionValue => optionValue.value !== last.value)
-                        : value;
+                        const newValue = isSelected
+                            ? value.filter(optionValue => optionValue.value !== last.value)
+                            : value;
 
-                    onChange(newValue);
-                    setQuery("");
-                }}
-                multiple
-                disabled={disabled}
-            >
-                <div className="relative mt-1">
-                    <ComboboxInput
-                        id={id}
-                        required={required}
-                        className="w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/5"
-                        onChange={(event) => setQuery(event.target.value)}
-                        displayValue={() => query}
-                        placeholder="Add medicine..."
-                        disabled={disabled}
-                    />
+                        onChange(newValue);
+                        setQuery("");
+                    }}
+                    multiple
+                >
+                    <div className="relative mt-1">
+                        <ComboboxInput
+                            id={id}
+                            required={required}
+                            className="w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/5"
+                            onChange={(event) => setQuery(event.target.value)}
+                            displayValue={() => query}
+                            placeholder="Add medicine..."
+                            disabled={disabled}
+                        />
 
 
-                    <ComboboxOptions className="absolute z-50 mt-1 w-full max-h-48 overflow-auto rounded-lg bg-black/30 backdrop-blur-md border border-white/20 text-white shadow-lg">
-                        {filtered.length === 0 && (
-                            <div className="px-3 py-2 text-gray-400">No results</div>
-                        )}
+                        <ComboboxOptions className="absolute z-50 mt-1 w-full max-h-48 overflow-auto rounded-lg bg-black/30 backdrop-blur-md border border-white/20 text-white shadow-lg">
+                            {filtered.length === 0 && (
+                                <div className="px-3 py-2 text-gray-400">No results</div>
+                            )}
 
-                        {filtered.map((option) => {
-                            const active = selected.some((v) => v.value === option.value);
-                            return (
-                                <ComboboxOption
-                                    key={option.value}
-                                    value={option}
-                                    className={({ active }) =>
-                                        `px-3 py-2 cursor-pointer flex justify-between ${
-                                            active ? "bg-white/20" : ""
-                                        }`
-                                    }
-                                >
-                                    <span>{option.label}</span>
-                                    {active && <span className="my-auto"><CheckIcon className="h-4 w-4" /> </span>}
-                                </ComboboxOption>
-                            );
-                        })}
-                    </ComboboxOptions>
-                </div>
-            </UICombobox>
+                            {filtered.map((option) => {
+                                const active = selected.some((v) => v.value === option.value);
+                                return (
+                                    <ComboboxOption
+                                        key={option.value}
+                                        value={option}
+                                        className={({ active }) =>
+                                            `px-3 py-2 cursor-pointer flex justify-between ${
+                                                active ? "bg-white/20" : ""
+                                            }`
+                                        }
+                                    >
+                                        <span>{option.label}</span>
+                                        {active && <span className="my-auto"><CheckIcon className="h-4 w-4" /> </span>}
+                                    </ComboboxOption>
+                                );
+                            })}
+                        </ComboboxOptions>
+                    </div>
+                </UICombobox>
+            }
         </div>
     );
 }
