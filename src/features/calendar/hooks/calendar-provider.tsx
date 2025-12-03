@@ -4,7 +4,7 @@ import type { DropdownOption, Event, EventDescription, RawEventResponse } from "
 import { fetchMigraineEvents } from "../../../shared/api/migraine.api";
 import { formatDateToUs } from "../../../shared/utils/date/date";
 import { parseEventDescription } from "../../../shared/utils/formatter/event-parser";
-import { determineStrength } from "../utils/event-highlight";
+import { calculateMigrenosusFlags, determineStrength } from "../utils/event-highlight";
 import { fetchUserMedicinesGet } from "../../../shared/api/medicine.api";
 import { useUser } from "../../../shared/hooks/user/use-user";
 import type { Medicine } from "../../../shared/types/user/medicine";
@@ -14,6 +14,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [events, setEvents] = useState<Event[]>([]);
+    const [migrenosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
     const [userMedicineOptions, setUserMedicineOptions] = useState<DropdownOption[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -92,14 +93,15 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 .filter((event: Event | null): event is Event => event !== null)
                 .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
 
-            setEvents(parsed);
+                setEvents(parsed);
+                const migrenosusFlags = calculateMigrenosusFlags(parsed, daysInMonth, 3);
+                setMigrenosusFlags(migrenosusFlags);
         } catch (err) {
             if (!(err instanceof DOMException && err.name === "AbortError")) {
                 console.error("Failed to refetch events:", err);
             }
-        } finally {
-            setIsLoading(false);
         }
+        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -134,13 +136,15 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                     .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
 
                 setEvents(parsed);
-                setIsLoading(false);
+                const migrenosusFlags = calculateMigrenosusFlags(parsed, daysInMonth, 3);
+                setMigrenosusFlags(migrenosusFlags);
             } catch (error) {
                 if (error instanceof DOMException && error.name === "AbortError") {
                     return;
                 }
                 console.error("Failed to load events:", error);
             }
+            setIsLoading(false);
         };
 
         loadEvents();
@@ -178,6 +182,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 nextMonth,
                 refetchEvents,
                 events,
+                migrenosusFlags,
                 userMedicineOptions,
             }}
         >
