@@ -56,6 +56,43 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
         setEvents([]);
     };
 
+    // TODO refactor
+    const refetchEvents = async () => {
+        const abortController = new AbortController();
+        try {
+            setIsLoading(true);
+
+            const raw = await fetchMigraineEvents(
+                formatDateToUs(firstDayOfMonth),
+                formatDateToUs(lastDayOfMonth),
+                undefined,
+                abortController.signal
+            );
+
+            const parsed = raw
+                .map((event: RawEventResponse) => {
+                    const description = parseEventDescription(event);
+                    if (!description) return null;
+
+                    return {
+                        date: new Date(event.start.date),
+                        description,
+                        strength: determineStrength(description),
+                    } satisfies Event;
+                })
+                .filter((event: Event | null): event is Event => event !== null)
+                .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
+
+            setEvents(parsed);
+        } catch (err) {
+            if (!(err instanceof DOMException && err.name === "AbortError")) {
+                console.error("Failed to refetch events:", err);
+            }
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
         const fetchId = ++fetchIdRef.current;
         const abortController = new AbortController();
@@ -130,6 +167,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 setMonth,
                 prevMonth,
                 nextMonth,
+                refetchEvents,
                 events,
                 userMedicineOptions,
             }}

@@ -19,6 +19,7 @@ import { fetchNewEntry } from "../../../../shared/api/migraine.api";
 import { formatDateToUs } from "../../../../shared/utils/date/date";
 import Medicine from "../molecules/Medicine";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useCalendar } from "../../hooks/use-calendar";
 
 interface IMigrainePanel {
     date: Date;
@@ -28,7 +29,12 @@ interface IMigrainePanel {
 }
 
 function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IMigrainePanel) {
+    const { refetchEvents } = useCalendar();
+
     const [areInputsDisabled, setAreInputsDisabled] = useState(disabled);
+    const [cacheFeedback, setCacheFeedback] = useState<"success" | "error" | null>(null); // TODO outsource into consts
+    const [saveFeedback, setSaveFeedback] = useState<"success" | "error" | null>(null); // TODO outsource into consts
+    const [isLoading, setIsLoading] = useState(false);
 
     const [durations, setDurations] = useState<AppendDuration[]>(prefilled
         ? prefilled.durations
@@ -62,18 +68,32 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
     );
 
     const saveNewEntry = async () => {
-        await fetchNewEntry(formatDateToUs(date), durations, intensity, symptoms, medicines, midas);
+        try {
+            setIsLoading(true);
+            await fetchNewEntry(formatDateToUs(date), durations, intensity, symptoms, medicines, midas);
+            setSaveFeedback("success");
+            await refetchEvents();
+            onClose();
+        } catch (err) {
+            console.error(err);
+            setSaveFeedback("error");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const cacheNewEntry = () => {
-        localStorage.setItem('MT_NE', JSON.stringify({
-            date,
-            durations,
-            intensity,
-            symptoms,
-            medicines,
-            midas,
-        }));
+        try {
+            localStorage.setItem(
+                "MT_NE",
+                JSON.stringify({ date, durations, intensity, symptoms, medicines, midas })
+            );
+            setCacheFeedback("success");
+            setTimeout(() => onClose(), 500);
+        } catch (err) {
+            console.error(err);
+            setCacheFeedback("error");
+        }
     };
 
     return (
@@ -81,7 +101,8 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
             <div className="flex justify-between items-center">
                 <button
                     onClick={onClose}
-                    className="text-sm text-gray-400 hover:opacity-80 transition-opacity"
+                    className="text-sm text-gray-400 hover:opacity-80 disabled:opacity-80 transition-opacity"
+                    disabled={isLoading}
                 >
                     Close
                 </button>
@@ -94,7 +115,8 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
                 {prefilled ? (
                     <button
                         onClick={() => setAreInputsDisabled(!areInputsDisabled)}
-                        className="text-sm text-gray-400 hover:opacity-80 transition-opacity"
+                        className="text-sm text-gray-400 hover:opacity-80 disabled:opacity-80 transition-opacity"
+                        disabled={isLoading}
                     >
                         {areInputsDisabled ? (
                             <PencilIcon className="h-4 w-4" />
@@ -107,29 +129,43 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
                 )}
             </div>
 
-            <Durations durations={durations} setDurations={setDurations} disabled={areInputsDisabled} />
+            <Durations durations={durations} setDurations={setDurations} disabled={areInputsDisabled || isLoading} />
 
-            <Intensity intensity={intensity} setIntensity={setIntensity} disabled={areInputsDisabled} />
+            <Intensity intensity={intensity} setIntensity={setIntensity} disabled={areInputsDisabled || isLoading} />
 
-            <Symptoms symptoms={symptoms} setSymptoms={setSymptoms} disabled={areInputsDisabled} />
+            <Symptoms symptoms={symptoms} setSymptoms={setSymptoms} disabled={areInputsDisabled || isLoading} />
 
-            <Medicine medicines={medicines} setMedicines={setMedicines} disabled={areInputsDisabled} />
+            <Medicine medicines={medicines} setMedicines={setMedicines} disabled={areInputsDisabled || isLoading} />
 
-            <Midas midas={midas} setMidas={setMidas} disabled={areInputsDisabled} />
+            <Midas midas={midas} setMidas={setMidas} disabled={areInputsDisabled || isLoading} />
 
             {!areInputsDisabled &&
                 <div className="flex justify-between pt-2">
                     <button
                         onClick={cacheNewEntry}
-                        className="px-4 py-2 rounded-lg bg-gray-600/50 backdrop-blur-xl border border-gray-700/20 shadow-sm shadow-black/30 hover:opacity-80 text-sm font-medium transition-opacity"
+                        className={`
+                            px-4 py-2 rounded-lg backdrop-blur-xl border shadow-sm shadow-black/30 text-sm font-medium transition-opacity
+                            ${cacheFeedback === "success" ? "border-green-500/50 text-green-800" : ""}
+                            ${cacheFeedback === "error" ? "border-red-500/50 text-red-800" : ""}
+                            ${!cacheFeedback ? "bg-gray-600/50 border-gray-700/20 text-white" : ""}
+                            hover:opacity-80 disabled:opacity-80
+                        `}
                     >
                         Cache
                     </button>
+
                     <button
                         onClick={saveNewEntry}
-                        className="px-4 py-2 rounded-lg bg-purple-600/50 backdrop-blur-xl border border-purple-700/20 shadow-sm shadow-black/30 hover:opacity-80 text-sm font-medium transition-opacity"
+                        disabled={isLoading}
+                        className={`
+                            px-4 py-2 rounded-lg backdrop-blur-xl border shadow-sm shadow-black/30 text-sm font-medium transition-opacity
+                            ${saveFeedback === "success" ? "border-green-500/50 text-green-800" : ""}
+                            ${saveFeedback === "error" ? "border-red-500/50 text-red-800" : ""}
+                            ${!saveFeedback ? "bg-purple-600/50 border-purple-700/20 text-white" : ""}
+                            hover:opacity-80 disabled:opacity-80
+                        `}
                     >
-                        Speichern
+                        {isLoading ? "Saving..." : "Save"}
                     </button>
                 </div>
             }
