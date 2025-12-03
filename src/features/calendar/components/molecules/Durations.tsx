@@ -39,7 +39,7 @@ function Durations({ durations, setDurations, disabled = false }: IDurations) {
 
             {durations.map((duration, index) => (
                 <div key={duration.id} className="space-y-2">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <Datepicker
                             id={`start-${index}`}
                             label="Start"
