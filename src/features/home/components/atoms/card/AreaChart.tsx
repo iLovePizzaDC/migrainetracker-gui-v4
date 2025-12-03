@@ -20,7 +20,9 @@ function AreaChart({ data }: IAreaChart) {
                 <XAxis
                     dataKey="name"
                     tick={{ fill: "#fff", fontFamily: FONT_FAMILY, fontSize: 12, fontWeight: 500 }}
+                    interval={Math.floor(data.length / 5)}
                 />
+
                 <YAxis
                     tick={{ fill: "#fff", fontFamily: FONT_FAMILY, fontSize: 12, fontWeight: 500 }}
                 />

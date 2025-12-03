@@ -82,7 +82,7 @@ function ChartCard({ index, title, cardType, chartType, timeframeCount, timefram
                 />
             ) : (
                 <>
-                    <div className="h-72 flex items-center justify-center">
+                    <div className="h-72 w-full flex items-center justify-center">
                         {isLoading ? (
                             <div className="w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse" />
                         ) : chartType === CHART_TYPES.AREA ? (
