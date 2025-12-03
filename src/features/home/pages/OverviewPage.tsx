@@ -10,7 +10,7 @@ function OverviewPage() {
   return (
     <div className="w-full">
       <CardSetupsProvider>
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
           <CardSection />
         </div>
       </CardSetupsProvider>
