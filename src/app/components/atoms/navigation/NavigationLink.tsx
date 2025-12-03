@@ -31,14 +31,17 @@ export default function NavigationLink({
     return(
         <Link
             to={to}
-            className={`rounded-xl p-2 bg-transparent backdrop-blur-md ${
-                isActive
-                    ? 'opacity-80 border border-white/20 shadow-sm shadow-black/20 cursor-default'
-                    : 'hover:opacity-80 transition-opacity'
-                }`}
+            className={`
+                rounded-xl p-2 bg-transparent backdrop-blur-md
+                w-full border-2 flex items-center
+                ${isActive
+                    ? 'opacity-100 border-white/20 shadow-sm shadow-black/20 cursor-default'
+                    : 'border-transparent hover:border-white/10 hover:opacity-80 transition-all'
+                }
+            `}
             onClick={onClick}
         >
-            {label}
+            <span className="text-left w-full">{label}</span>
         </Link>
     )
 }

@@ -15,7 +15,7 @@ export default function MobileNavigationLinks({ toggleMenu }: IMobileNavigationL
                         label={navigationLink.label}
                         to={navigationLink.to}
                         onClick={toggleMenu}
-                        className='block text-sm pl-4 p-2 rounded-full border-2'
+                        className='block text-sm pl-4 p-2 rounded-full'
                     />
                 </div>
             ))}
