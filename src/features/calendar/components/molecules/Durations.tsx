@@ -40,28 +40,32 @@ function Durations({ durations, setDurations, disabled = false }: IDurations) {
             {durations.map((duration, index) => (
                 <div key={duration.id} className="space-y-2">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <Datepicker
-                            id={`start-${index}`}
-                            label="Start"
-                            value={duration.startTime}
-                            onChange={value => {
-                                const updated = [...durations];
-                                updated[index].startTime = value;
-                                setDurations(updated);
-                            }}
-                            disabled={disabled}
-                        />
-                        <Datepicker
-                            id={`end-${index}`}
-                            label="End"
-                            value={duration.endTime}
-                            onChange={value => {
-                                const updated = [...durations];
-                                updated[index].endTime = value;
-                                setDurations(updated);
-                            }}
-                            disabled={disabled}
-                        />
+                        <div className="min-w-0">
+                            <Datepicker
+                                id={`start-${index}`}
+                                label="Start"
+                                value={duration.startTime}
+                                onChange={value => {
+                                    const updated = [...durations];
+                                    updated[index].startTime = value;
+                                    setDurations(updated);
+                                }}
+                                disabled={disabled}
+                            />
+                        </div>
+                        <div className="min-w-0">
+                            <Datepicker
+                                id={`end-${index}`}
+                                label="End"
+                                value={duration.endTime}
+                                onChange={value => {
+                                    const updated = [...durations];
+                                    updated[index].endTime = value;
+                                    setDurations(updated);
+                                }}
+                                disabled={disabled}
+                            />
+                        </div>
                     </div>
 
                     {(durations.length > 1 && !disabled) && (
