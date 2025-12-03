@@ -1,10 +1,10 @@
+import type { IntensityType, MIDAS_TYPES, SymptomType } from "../../../features/calendar/constants/calendar";
+
 export type AppendDuration = {
     id: number;
     startTime: string;
     endTime: string;
 };
-
-export type AppendDurationField = 'startTime' | 'endTime';
 
 export type InputContent = {
     abbreviation: string;
@@ -18,20 +18,21 @@ export type AppendMedicine = {
 };
 
 export type AppendMidas = {
-    workMissed: boolean;
-    workImpaired: boolean;
-    choresMissed: boolean;
-    choresImpaired: boolean;
-    socialMissed: boolean;
+    [MIDAS_TYPES.WORK_MISSED]: boolean;
+    [MIDAS_TYPES.WORK_IMPAIRED]: boolean;
+    [MIDAS_TYPES.CHORES_MISSED]: boolean;
+    [MIDAS_TYPES.CHORES_IMPAIRED]: boolean;
+    [MIDAS_TYPES.SOCIAL_MISSED]: boolean;
 }
 
 export type Entry = {
-    selectedDate: Date;
     durations: AppendDuration[];
-    intensity: string;
-    symptoms: string[];
-    medicine: AppendMedicine[];
+    intensity: IntensityType;
+    symptoms: SymptomType[];
+    medicines: AppendMedicine[];
     midas: AppendMidas;
 }
 
-export type FormStatus = 'default' | 'success' | 'error';
+export type StoredEntry = Entry & {
+    date: Date;
+}

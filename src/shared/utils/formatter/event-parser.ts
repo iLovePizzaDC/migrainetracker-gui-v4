@@ -65,8 +65,7 @@ export const parseMedicineData = (medicine: string, effectiveness: DescriptionEf
     }));
 };
 
-export const createEntry = (event: Event, selectedDate: Date): Entry => ({
-    selectedDate,
+export const createEntry = (event: Event): Entry => ({
     durations: event.description.duration.map(({ start, end }, index: number) => ({
         id: index,
         startTime: parseDecimalToTime(start),
@@ -74,6 +73,6 @@ export const createEntry = (event: Event, selectedDate: Date): Entry => ({
     })),
     intensity: event.description.intensity,
     symptoms: event.description.symptoms,
-    medicine: parseMedicineData(event.description.medicine, event.description.effectiveness),
+    medicines: parseMedicineData(event.description.medicine, event.description.effectiveness),
     midas: event.description.midas || { workMissed: false, workImpaired: false, choresMissed: false, choresImpaired: false, socialMissed: false },
 });

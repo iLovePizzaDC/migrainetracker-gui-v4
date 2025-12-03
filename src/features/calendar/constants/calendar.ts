@@ -1,32 +1,73 @@
-import type { InputContent } from "../../../shared/types/calendar/calendar";
+import type { DropdownOption } from "../../../shared/types";
 import type { Event } from "../../../shared/types/calendar/event";
 
-export const INTENSITIES: InputContent[] = [
-    { abbreviation: "very-high", label: "Very High" },
-    { abbreviation: "high", label: "High" },
-    { abbreviation: "medium", label: "Medium" },
-    { abbreviation: "low", label: "Low" },
-];
+// --- INTENSITY START ---
 
-export const SYMPTOMS: InputContent[] = [
-    { abbreviation: "noi", label: "Noise Sensitive" },
-    { abbreviation: "lig", label: "Light Sensitive" },
-    { abbreviation: "sme", label: "Smell Sensitive" },
-    { abbreviation: "vis", label: "Vision Problems" },
-    { abbreviation: "diz", label: "Dizzy" },
-    { abbreviation: "nau", label: "Nausea" },
-    { abbreviation: "vom", label: "Vomit" },
-    { abbreviation: "ne", label: "Neck Pain" },
-    { abbreviation: "ja", label: "Jaw Pain" },
-];
+export const INTENSITY_TYPES = {
+    VERY_HIGH: "very-high",
+    HIGH: "high",
+    MEDIUM: "medium",
+    LOW: "low",
+} as const;
 
-export const MIDAS_OPTIONS: InputContent[] = [
-    { abbreviation: "workMissed", label: "I missed work" },
-    { abbreviation: "workImpaired", label: "my work performance was reduced" },
-    { abbreviation: "choresMissed", label: "I missed household chores" },
-    { abbreviation: "choresImpaired", label: "my ability to do household chores was reduced" },
-    { abbreviation: "socialMissed", label: "I missed social activities" },
-];
+export type IntensityType = typeof INTENSITY_TYPES[keyof typeof INTENSITY_TYPES];
+
+export const INTENSITY_OPTIONS: DropdownOption[] = [
+    { label: "Very High", value: INTENSITY_TYPES.VERY_HIGH },
+    { label: "High", value: INTENSITY_TYPES.HIGH },
+    { label: "Medium", value: INTENSITY_TYPES.MEDIUM },
+    { label: "Low", value: INTENSITY_TYPES.LOW },
+]
+
+// --- SYMPTOM START ---
+
+export const SYMPTOM_TYPES = {
+    NOISE: "noi",
+    LIGHT: "lig",
+    SMELL: "sme",
+    VISION: "vis",
+    DIZZY: "diz",
+    NAUSEA: "nau",
+    VOMIT: "vom",
+    NECK: "ne",
+    JAW: "ja",
+} as const;
+
+export type SymptomType = typeof SYMPTOM_TYPES[keyof typeof SYMPTOM_TYPES];
+
+export const SYMPTOM_OPTIONS: DropdownOption[] = [
+    { label: "Noise Sensitive", value: SYMPTOM_TYPES.NOISE },
+    { label: "Light Sensitive", value: SYMPTOM_TYPES.LIGHT },
+    { label: "Smell Sensitive", value: SYMPTOM_TYPES.SMELL },
+    { label: "Vision Problems", value: SYMPTOM_TYPES.VISION },
+    { label: "Dizzy", value: SYMPTOM_TYPES.DIZZY },
+    { label: "Nausea", value: SYMPTOM_TYPES.NAUSEA },
+    { label: "Vomit", value: SYMPTOM_TYPES.VOMIT },
+    { label: "Neck Pain", value: SYMPTOM_TYPES.NECK },
+    { label: "Jaw Pain", value: SYMPTOM_TYPES.JAW },
+]
+
+// --- MIDAS START ---
+
+export const MIDAS_TYPES = {
+    WORK_MISSED: "workMissed",
+    WORK_IMPAIRED: "workImpaired",
+    CHORES_MISSED: "choresMissed",
+    CHORES_IMPAIRED: "choresImpaired",
+    SOCIAL_MISSED: "socialMissed",
+} as const;
+
+export type MidasType = typeof MIDAS_TYPES[keyof typeof MIDAS_TYPES];
+
+export const MIDAS_OPTIONS: DropdownOption[] = [
+    { label: "I missed work", value: MIDAS_TYPES.WORK_MISSED },
+    { label: "my work performance was reduced", value: MIDAS_TYPES.WORK_IMPAIRED },
+    { label: "I missed household chores", value: MIDAS_TYPES.CHORES_MISSED },
+    { label: "my ability to do household chores was reduced", value: MIDAS_TYPES.CHORES_IMPAIRED },
+    { label: "I missed social activities", value: MIDAS_TYPES.SOCIAL_MISSED },
+]
+
+// --- STRENGTH START ---
 
 export const STRENGTH_MAP: Record<number, Event["strength"]> = {
     200: "bg-purple-200",

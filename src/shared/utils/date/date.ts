@@ -48,3 +48,9 @@ export function getDayDifference(start: Date, end: Date): number {
 
     return Math.floor(diffMs / msPerDay) + 1;
 }
+
+export function normalizeDate(date: Date) {
+    const normalized = new Date(date);
+    normalized.setHours(0, 0, 0, 0);
+    return normalized;
+};
