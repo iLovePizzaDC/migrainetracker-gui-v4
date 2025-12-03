@@ -13,7 +13,7 @@ function Navigation() {
     };
 
     return (// TODO style hello title
-        <header className="fixed top-0 left-0 w-full z-30 rounded-lg backdrop-blur-lg bg-transparent shadow-md p-4">
+        <header className="fixed top-0 left-0 w-full z-30 rounded-lg backdrop-blur-lg bg-transparent shadow-md px-4 py-2">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
                 <h3>Sorry to see you{user ? `, ${user.given_name}` : ''}</h3>
 
