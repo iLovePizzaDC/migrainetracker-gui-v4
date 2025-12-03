@@ -11,7 +11,7 @@ function AppendCard() {
     return (
         <div
             className="
-                self-start rounded-2xl
+                w-full self-start rounded-2xl
                 bg-transparent backdrop-blur-md
                 border border-white/20
                 shadow-lg shadow-black/20

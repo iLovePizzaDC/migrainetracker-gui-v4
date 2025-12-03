@@ -8,9 +8,13 @@ function CalendarPage() {
   useAuthCheck(user, setUser);
 
   return (
-    <CalendarProvider>
-      <Calendar />
-    </CalendarProvider>
+    <div className="w-full">
+        <div className="max-w-6xl mx-auto px-4">
+          <CalendarProvider>
+            <Calendar />
+          </CalendarProvider>
+        </div>
+    </div>
   );
 }
 

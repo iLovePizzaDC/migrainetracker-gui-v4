@@ -8,9 +8,11 @@ function OverviewPage() {
   useAuthCheck(user, setUser);
 
   return (
-    <div>
+    <div className="w-full">
       <CardSetupsProvider>
-        <CardSection />
+        <div className="max-w-6xl mx-auto px-4">
+          <CardSection />
+        </div>
       </CardSetupsProvider>
     </div>
   );
