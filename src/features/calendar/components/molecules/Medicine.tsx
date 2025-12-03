@@ -18,28 +18,30 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
                 Medicines
             </h3>
 
-            <Combobox
-                id="meds"
-                label=""
-                options={userMedicineOptions}
-                selected={medicines.map(medicine => ({
-                    label: medicine.medicine.label,
-                    value: medicine.medicine.abbreviation
-                }))}
-                onChange={selectedMedicines => {
-                    setMedicines(
-                        selectedMedicines.map(medicine => ({
-                            medicine: {
-                                label: medicine.label,
-                                abbreviation: medicine.value
-                            },
-                            taken: 1,
-                            effectiveness: 0
-                        }))
-                    );
-                }}
-                disabled={disabled}
-            />
+            {!disabled &&
+                <Combobox
+                    id="meds"
+                    label=""
+                    options={userMedicineOptions}
+                    selected={medicines.map(medicine => ({
+                        label: medicine.medicine.label,
+                        value: medicine.medicine.abbreviation
+                    }))}
+                    onChange={selectedMedicines => {
+                        setMedicines(
+                            selectedMedicines.map(medicine => ({
+                                medicine: {
+                                    label: medicine.label,
+                                    abbreviation: medicine.value
+                                },
+                                taken: 1,
+                                effectiveness: 0
+                            }))
+                        );
+                    }}
+                    disabled={disabled}
+                />
+            }
 
             {medicines.map((medicine, index) => (
                 <div
