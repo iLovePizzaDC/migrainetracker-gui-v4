@@ -39,7 +39,8 @@ function ChartCard({ index, title, cardType, chartType, timeframeCount, timefram
     return (
         <div
             className="
-                self-start rounded-2xl p-6 relative
+                w-full self-start
+                rounded-2xl p-6 relative
                 bg-transparent backdrop-blur-md
                 border border-white/20
                 shadow-lg shadow-black/20
