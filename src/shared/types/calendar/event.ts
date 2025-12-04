@@ -1,4 +1,4 @@
-type DescriptionSymptoms = 'noi' | 'lig' | 'sme' | 'vis' | 'diz' | 'nau' | 'vom';
+import type { SymptomType } from "../../../features/calendar/constants/calendar";
 
 export type DescriptionEffectiveness = 'yes' | 'no' | '';
 
@@ -8,7 +8,7 @@ export type EventDescription = {
         end: number
     }[],
     intensity: 'very-high' | 'high' | 'medium' | 'low',
-    symptoms: DescriptionSymptoms[],
+    symptoms: SymptomType[],
     medicine: string,
     effectiveness: DescriptionEffectiveness[],
     midas: {

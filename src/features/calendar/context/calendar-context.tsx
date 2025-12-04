@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import type { DropdownOption, Event } from '../../../shared/types';
+import type { CalendarFilter } from '../types/calendar';
 
 interface ICalendarContext {
     isLoading: boolean;
@@ -14,6 +15,8 @@ interface ICalendarContext {
     events: Event[];
     migrenosusFlags: boolean[];
     userMedicineOptions: DropdownOption[];
+    filter: CalendarFilter;
+    setFilter: React.Dispatch<React.SetStateAction<CalendarFilter>>;
 }
 
 export const CalendarContext = createContext<ICalendarContext>({
@@ -28,5 +31,7 @@ export const CalendarContext = createContext<ICalendarContext>({
     refetchEvents: async () => {},
     events: [],
     migrenosusFlags: [],
-    userMedicineOptions: []
+    userMedicineOptions: [],
+    filter: { intensity: null, symptom: [], medicine: [], midas:[] },
+    setFilter: () => {},
 });

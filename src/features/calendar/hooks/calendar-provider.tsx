@@ -8,14 +8,19 @@ import { calculateMigrenosusFlags, determineStrength } from "../utils/event-high
 import { fetchUserMedicinesGet } from "../../../shared/api/medicine.api";
 import { useUser } from "../../../shared/hooks/user/use-user";
 import type { Medicine } from "../../../shared/types/user/medicine";
+import type { CalendarFilter } from "../types/calendar";
+import { filterEvents } from "../utils/filter";
 
+// TODO refactor
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     const { user } = useUser();
 
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [rawEvents, setRawEvents] = useState<Event[]>([]);
     const [events, setEvents] = useState<Event[]>([]);
     const [migrenosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
     const [userMedicineOptions, setUserMedicineOptions] = useState<DropdownOption[]>([]);
+    const [filter, setFilter] = useState<CalendarFilter>({ intensity: null, symptom: [], medicine: [], midas:[] });
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchIdRef = useRef(0);
@@ -66,7 +71,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
         setEvents([]);
     };
 
-    // TODO refactor
+    // TODO duplicated code here and in useeffect
     const refetchEvents = async () => {
         const abortController = new AbortController();
         try {
@@ -79,7 +84,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 abortController.signal
             );
 
-            const parsed = raw
+            const parsedEvents: Event[] = raw
                 .map((event: RawEventResponse) => {
                     const description = parseEventDescription(event);
                     if (!description) return null;
@@ -93,8 +98,9 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 .filter((event: Event | null): event is Event => event !== null)
                 .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
 
-                setEvents(parsed);
-                const migrenosusFlags = calculateMigrenosusFlags(parsed, daysInMonth, 3);
+                const filteredEvents = parsedEvents.filter(parsedEvent => filterEvents(parsedEvent, filter));
+                setEvents(filteredEvents);
+                const migrenosusFlags = calculateMigrenosusFlags(filteredEvents, daysInMonth, 3);
                 setMigrenosusFlags(migrenosusFlags);
         } catch (err) {
             if (!(err instanceof DOMException && err.name === "AbortError")) {
@@ -103,6 +109,17 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
         }
         setIsLoading(false);
     };
+
+    useEffect(() => {
+        const runFilter = () => {
+            const filtered = rawEvents.filter(event => filterEvents(event, filter));
+            setEvents(filtered);
+            setMigrenosusFlags(calculateMigrenosusFlags(filtered, daysInMonth, 3));
+        };
+
+        runFilter();
+    }, [rawEvents, filter, daysInMonth]);
+
 
     useEffect(() => {
         const fetchId = ++fetchIdRef.current;
@@ -121,7 +138,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 
                 if (fetchId !== fetchIdRef.current) return;
 
-                const parsed = raw
+                const parsedEvents: Event[] = raw
                     .map((event: RawEventResponse) => {
                         const description: EventDescription | null = parseEventDescription(event);
                         if (!description) return null;
@@ -135,9 +152,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                     .filter((event: Event | null): event is Event => event !== null)
                     .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
 
-                setEvents(parsed);
-                const migrenosusFlags = calculateMigrenosusFlags(parsed, daysInMonth, 3);
-                setMigrenosusFlags(migrenosusFlags);
+                setRawEvents(parsedEvents);
             } catch (error) {
                 if (error instanceof DOMException && error.name === "AbortError") {
                     return;
@@ -184,6 +199,8 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 events,
                 migrenosusFlags,
                 userMedicineOptions,
+                filter,
+                setFilter,
             }}
         >
             {children}

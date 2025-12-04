@@ -14,6 +14,7 @@ interface ICombobox {
     options: DropdownOption[];
     selected: DropdownOption[];
     onChange: (value: DropdownOption[]) => void;
+    placeholder?: string;
     required?: boolean;
     disabled?: boolean;
 }
@@ -24,6 +25,7 @@ function Combobox({
     options,
     selected,
     onChange,
+    placeholder = '',
     required = false,
     disabled = false,
 }: ICombobox) {
@@ -92,7 +94,7 @@ function Combobox({
                             className="w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/5"
                             onChange={(event) => setQuery(event.target.value)}
                             displayValue={() => query}
-                            placeholder="Add medicine..."
+                            placeholder={placeholder}
                             disabled={disabled}
                         />
 
