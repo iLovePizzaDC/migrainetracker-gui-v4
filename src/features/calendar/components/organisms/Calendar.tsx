@@ -8,6 +8,7 @@ import type { Entry } from "../../../../shared/types";
 import { normalizeDate } from "../../../../shared/utils/date/date";
 import type { StoredEntry } from "../../../../shared/types/calendar/calendar";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+import FilterCard from "../molecules/FilterCard";
 
 function Calendar() {
     const { isLoading, date, events, setMonth, userMedicineOptions } = useCalendar();
@@ -90,6 +91,7 @@ function Calendar() {
                     </button>
                 </div>
             </div>
+            <FilterCard />
             {openDay && (
                 <MigrainePanel
                     key={openDay}

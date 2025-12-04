@@ -38,6 +38,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
                         }))
                     );
                 }}
+                placeholder="Add medicine..."
                 disabled={disabled}
             />
 
