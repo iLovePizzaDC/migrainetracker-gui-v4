@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, type ReactNode, useRef } from "react";
 import { CalendarContext } from "../context/calendar-context";
 import type { DropdownOption, Event, EventDescription, RawEventResponse } from "../../../shared/types";
 import { fetchMigraineAmount, fetchMigraineEvents } from "../../../shared/api/migraine.api";
-import { formatDateToUs, getStartOfMonth } from "../../../shared/utils/date/date";
+import { formatDateToUs, getEndOfMonth, getStartOfMonth } from "../../../shared/utils/date/date";
 import { parseEventDescription } from "../../../shared/utils/formatter/event-parser";
 import { calculateMigrenosusFlags, determineStrength } from "../utils/event-highlight";
 import { fetchUserMedicinesGet } from "../../../shared/api/medicine.api";
@@ -192,7 +192,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
             if (!user) return;
 
             const start = formatDateToUs(getStartOfMonth(currentDate));
-            const end = formatDateToUs(new Date());
+            const end = formatDateToUs(getEndOfMonth(currentDate));
 
             const medicines = await getMohMedicineFilter(user.id);
             const medDays = await fetchMigraineAmount(start, end, { medicines });

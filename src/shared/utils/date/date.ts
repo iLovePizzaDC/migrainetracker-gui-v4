@@ -57,3 +57,6 @@ export function normalizeDate(date: Date) {
 
 export const getStartOfMonth = (date: Date): Date =>
   new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
+
+export const getEndOfMonth = (date: Date): Date =>
+  new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999);
