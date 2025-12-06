@@ -84,10 +84,12 @@ function ChartCard({ index, title, cardType, chartType, timeframeCount, timefram
             ) : (
                 <>
                     <div className="h-72 w-full flex items-center justify-center">
+                        {/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
+                        {/* TODO add average line to areachart? */}
                         {isLoading ? (
                             <div className="w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse" />
                         ) : chartType === CHART_TYPES.AREA ? (
-                            <AreaChart data={areaData} />
+                            <AreaChart data={areaData} showThresholdLine={cardType === CARD_TYPES.MOH} thresholdY={cardType === CARD_TYPES.MOH ? 10 : undefined} />
                         ) : (
                             <PieChart data={pieData} />
                         )}
