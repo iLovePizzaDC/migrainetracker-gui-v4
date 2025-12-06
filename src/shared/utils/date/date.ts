@@ -54,3 +54,6 @@ export function normalizeDate(date: Date) {
     normalized.setHours(0, 0, 0, 0);
     return normalized;
 };
+
+export const getStartOfMonth = (date: Date): Date =>
+  new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
