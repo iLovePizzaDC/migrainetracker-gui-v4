@@ -1,12 +1,14 @@
-import { AreaChart as RAreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { AreaChart as RAreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import type { ChartData } from "recharts/types/state/chartDataSlice";
 import { FONT_FAMILY } from "../../../../../shared/constants/style/font";
 
 interface IAreaChart {
     data: ChartData;
+    showThresholdLine?: boolean;
+    thresholdY?: number;
 }
 
-function AreaChart({ data }: IAreaChart) {
+function AreaChart({ data, showThresholdLine, thresholdY }: IAreaChart) {
     return (
         <ResponsiveContainer width="100%" height="100%">
             <RAreaChart
@@ -29,6 +31,15 @@ function AreaChart({ data }: IAreaChart) {
                 <YAxis
                     tick={{ fill: "#fff", fontFamily: FONT_FAMILY, fontSize: 12, fontWeight: 500 }}
                 />
+
+                {(showThresholdLine && thresholdY) && (
+                    <ReferenceLine
+                        y={thresholdY}
+                        stroke="#ff4d4d"
+                        strokeDasharray="4 4"
+                        strokeWidth={1.5}
+                    />
+                )}
 
                 <Tooltip
                     contentStyle={{
