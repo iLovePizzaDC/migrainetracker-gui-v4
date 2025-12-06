@@ -13,6 +13,8 @@ interface ICalendarContext {
     nextMonth: () => void;
     refetchEvents: () => Promise<void>;
     events: Event[];
+    medDaysCount: number;
+    maxMedDaysCount: number;
     migrenosusFlags: boolean[];
     userMedicineOptions: DropdownOption[];
     filter: CalendarFilter;
@@ -30,6 +32,8 @@ export const CalendarContext = createContext<ICalendarContext>({
     nextMonth: () => {},
     refetchEvents: async () => {},
     events: [],
+    medDaysCount: 0,
+    maxMedDaysCount: 10,
     migrenosusFlags: [],
     userMedicineOptions: [],
     filter: { intensity: null, symptom: [], medicine: [], midas:[] },

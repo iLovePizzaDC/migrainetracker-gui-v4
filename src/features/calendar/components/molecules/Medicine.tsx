@@ -2,6 +2,8 @@ import type { AppendMedicine } from "../../../../shared/types";
 import Combobox from "../atoms/Combobox";
 import Slider from "../atoms/Slider";
 import { useCalendar } from "../../hooks/use-calendar";
+import { useEffect, useRef, useState } from "react";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 interface IMedicine {
     medicines: AppendMedicine[];
@@ -10,13 +12,67 @@ interface IMedicine {
 }
 
 function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
-    const { userMedicineOptions } = useCalendar();
+    const { userMedicineOptions, medDaysCount, maxMedDaysCount } = useCalendar();
+
+    const infoRef = useRef<HTMLDivElement>(null);
+
+    const [showInfo, setShowInfo] = useState(false);
+
+    useEffect(() => { // TODO duplicated code, also in FilterCard. refactor into reusable hook
+        function handleClickOutside(event: MouseEvent) {
+            if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
+                setShowInfo(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     return (
         <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
             <h3 className="text-sm font-medium text-purple-300">
                 Medicines
             </h3>
+
+            <div className="relative flex items-center gap-1 group">
+                <p className='text-xs font-medium'>
+                    <span
+                        className={`${medDaysCount === maxMedDaysCount
+                            ? 'text-yellow-500'
+                            : medDaysCount > maxMedDaysCount
+                                ? 'text-red-500'
+                                : 'text-green-500'
+                        }`}
+                    >
+                        {medDaysCount}
+                    </span>
+                    /{maxMedDaysCount} Med-Days this month
+                </p>
+
+                <button
+                    onClick={() => setShowInfo((prev) => !prev)}
+                    className="text-purple-300 hover:opacity-80 transition-opacity"
+                >
+                    <InformationCircleIcon className="w-4 h-4" />
+                </button>
+
+                {showInfo && (
+                    <div
+                        ref={infoRef}
+                        className="absolute left-0 top-6 z-50 w-64 rounded-lg bg-black/60 backdrop-blur border border-white/10 p-3 text-xs text-white shadow-xl animate-fade-in"
+                    >
+                        <p>
+                            A “Med-Day” is any day on which you've taken acute medication (either medication of type
+                            "migraine-painkiller" or "painkiller").
+                            When this occurs on 10 or more days per month (with mixed use), the risk of developing&nbsp;
+                            <a className="underline text-blue-500 hover:opacity-80 transition-opacity" href="https://www.ncbi.nlm.nih.gov/books/NBK538150/" target="_blank">MOH</a>&nbsp;
+                            (Medication Overuse Headache) increases.
+                        </p>
+                    </div>
+                )}
+            </div>
+
 
             <Combobox
                 id="meds"

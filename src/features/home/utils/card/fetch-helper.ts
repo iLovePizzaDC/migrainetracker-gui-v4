@@ -1,7 +1,6 @@
-import { fetchUserMedicinesGet } from "../../../../shared/api/medicine.api";
 import { fetchAreaChart, fetchDurationAmount, fetchMedicineAmount, fetchMidasScore, fetchMigraineAmount } from "../../../../shared/api/migraine.api";
 import type { TimeFrameUnit } from "../../../../shared/constants/cards/time-frame";
-import type { Medicine } from "../../../../shared/types/user/medicine";
+import { getMohMedicineFilter } from "../../../../shared/utils/fetch-helper";
 import { CARD_TYPES, type CardType } from "../../constants/card/card";
 
 export async function fetchAreaData(
@@ -94,13 +93,4 @@ export async function fetchMidasPieData() {
             { name: "Remaining", value: 270 },
         ]
     };
-}
-
-async function getMohMedicineFilter(userId: string) {
-    const medicines: Medicine[] = await fetchUserMedicinesGet(userId);
-
-    return medicines
-        .filter((medicine: Medicine) => medicine.type === "migraine-painkiller" || medicine.type === "painkiller")
-        .map((medicine: Medicine) => medicine.abbreviation)
-        .join(",");
 }

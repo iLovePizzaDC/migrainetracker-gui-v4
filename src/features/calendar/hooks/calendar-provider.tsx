@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo, type ReactNode, useRef } from "react";
 import { CalendarContext } from "../context/calendar-context";
 import type { DropdownOption, Event, EventDescription, RawEventResponse } from "../../../shared/types";
-import { fetchMigraineEvents } from "../../../shared/api/migraine.api";
-import { formatDateToUs } from "../../../shared/utils/date/date";
+import { fetchMigraineAmount, fetchMigraineEvents } from "../../../shared/api/migraine.api";
+import { formatDateToUs, getStartOfMonth } from "../../../shared/utils/date/date";
 import { parseEventDescription } from "../../../shared/utils/formatter/event-parser";
 import { calculateMigrenosusFlags, determineStrength } from "../utils/event-highlight";
 import { fetchUserMedicinesGet } from "../../../shared/api/medicine.api";
@@ -10,6 +10,7 @@ import { useUser } from "../../../shared/hooks/user/use-user";
 import type { Medicine } from "../../../shared/types/user/medicine";
 import type { CalendarFilter } from "../types/calendar";
 import { filterEvents } from "../utils/filter";
+import { getMohMedicineFilter } from "../../../shared/utils/fetch-helper";
 
 // TODO refactor
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
@@ -18,6 +19,8 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [rawEvents, setRawEvents] = useState<Event[]>([]);
     const [events, setEvents] = useState<Event[]>([]);
+    const [medDaysCount, setMedDaysCount] = useState(0);
+    const [maxMedDaysCount] = useState(10); // TODO calculate dynamically (10 with mixed use, 15 without)
     const [migrenosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
     const [userMedicineOptions, setUserMedicineOptions] = useState<DropdownOption[]>([]);
     const [filter, setFilter] = useState<CalendarFilter>({ intensity: null, symptom: [], medicine: [], midas:[] });
@@ -184,6 +187,21 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
         load();
     }, [user]);
 
+    useEffect(() => {
+        const collectMedDays = async () => {
+            if (!user) return;
+
+            const start = formatDateToUs(getStartOfMonth(currentDate));
+            const end = formatDateToUs(new Date());
+
+            const medicines = await getMohMedicineFilter(user.id);
+            const medDays = await fetchMigraineAmount(start, end, { medicines });
+            setMedDaysCount(medDays);
+        };
+
+        collectMedDays();
+    }, [user, currentDate]);
+
     return (
         <CalendarContext.Provider
             value={{
@@ -197,6 +215,8 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 nextMonth,
                 refetchEvents,
                 events,
+                medDaysCount,
+                maxMedDaysCount,
                 migrenosusFlags,
                 userMedicineOptions,
                 filter,
