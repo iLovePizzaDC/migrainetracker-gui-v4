@@ -35,7 +35,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
                 Medicines
             </h3>
 
-            <div className="relative flex items-center gap-1 group">
+            <div className="relative inline-flex w-fit items-center p-1 rounded-xl bg-black/10 gap-1 group">
                 <p className='text-xs font-medium'>
                     <span
                         className={`${medDaysCount === maxMedDaysCount
@@ -60,7 +60,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
                 {showInfo && (
                     <div
                         ref={infoRef}
-                        className="absolute left-0 top-6 z-50 w-64 rounded-lg bg-black/60 backdrop-blur border border-white/10 p-3 text-xs text-white shadow-xl animate-fade-in"
+                        className="absolute left-1/2 top-6 -translate-x-1/2 z-50 w-64 rounded-lg bg-black/60 backdrop-blur border border-white/10 p-3 text-xs shadow-xl animate-fade-in"
                     >
                         <p>
                             A “Med-Day” is any day on which you've taken acute medication (either medication of type
