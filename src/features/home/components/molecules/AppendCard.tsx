@@ -31,7 +31,7 @@ function AppendCard() {
                 )}
             </div>
 
-            <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'h-96' : 'h-0'}`}>
+            <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'h-96 px-6 pb-6' : 'h-0'}`}>
                 {expanded && (
                     <CardForm onButtonClick={appendSetup} />
                 )}
