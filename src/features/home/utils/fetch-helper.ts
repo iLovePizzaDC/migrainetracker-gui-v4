@@ -1,7 +1,7 @@
-import { fetchAreaChart, fetchDurationAmount, fetchMedicineAmount, fetchMidasScore, fetchMigraineAmount } from "../../../../shared/api/migraine.api";
-import type { TimeFrameUnit } from "../../../../shared/constants/cards/time-frame";
-import { getMohMedicineFilter } from "../../../../shared/utils/fetch-helper";
-import { CARD_TYPES, type CardType } from "../../constants/card/card";
+import { CARD_TYPES, type CardType } from "@/features/home/constants/card";
+import type { TimeFrameUnit } from "@/features/home/constants/time-frame";
+import { fetchAreaChart, fetchDurationAmount, fetchMedicineAmount, fetchMidasScore, fetchMigraineAmount } from "@/shared/api/migraine.api";
+import { getMohMedicineFilter } from "@/shared/utils/fetch-helper";
 
 export async function fetchAreaData(
     cardType: CardType,

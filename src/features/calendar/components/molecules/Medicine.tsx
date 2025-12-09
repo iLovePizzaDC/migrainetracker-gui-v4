@@ -1,9 +1,9 @@
-import type { AppendMedicine } from "../../../../shared/types";
-import Combobox from "../atoms/Combobox";
-import Slider from "../atoms/Slider";
-import { useCalendar } from "../../hooks/use-calendar";
-import { useEffect, useRef, useState } from "react";
+import Combobox from "@/features/calendar/components/atoms/Combobox";
+import Slider from "@/features/calendar/components/atoms/Slider";
+import { useCalendar } from "@/features/calendar/hooks/use-calendar";
+import type { AppendMedicine } from "@/shared/types";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { useEffect, useRef, useState } from "react";
 
 interface IMedicine {
     medicines: AppendMedicine[];

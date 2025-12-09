@@ -1,7 +1,7 @@
-import { PieChart as RePieChart, Pie, ResponsiveContainer, Tooltip, Cell } from "recharts";
-import { FONT_FAMILY } from "../../../../../shared/constants/style/font";
-import { PIE_COLORS } from "../../../constants/card/pie-colors";
-import type { ChartData } from "../../../types/card/chart";
+import { PIE_COLORS } from "@/features/home/constants/pie-colors";
+import type { ChartData } from "@/features/home/types/chart";
+import { FONT_FAMILY } from "@/shared/constants/style/font";
+import { Cell, Pie, PieChart as RePieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 interface IPieChart {
     data: ChartData;

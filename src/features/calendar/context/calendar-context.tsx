@@ -1,6 +1,7 @@
+import type { CalendarFilter } from '@/features/calendar/types/calendar';
+import type { Event } from '@/features/calendar/types/event';
+import type { DropdownOption } from '@/shared/types';
 import { createContext } from 'react';
-import type { DropdownOption, Event } from '../../../shared/types';
-import type { CalendarFilter } from '../types/calendar';
 
 interface ICalendarContext {
     isLoading: boolean;

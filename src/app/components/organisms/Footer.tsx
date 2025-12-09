@@ -1,4 +1,4 @@
-import { fetchUserLogout } from "../../../shared/api/user.api";
+import { fetchUserLogout } from "@/shared/api/user.api";
 
 function Footer() {
 

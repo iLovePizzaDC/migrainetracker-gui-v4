@@ -1,4 +1,4 @@
-import type { DropdownOption } from "../../types";
+import type { DropdownOption } from "@/shared/types";
 
 export const TIME_FRAME_UNITS = {
   DAYS: "DAYS",

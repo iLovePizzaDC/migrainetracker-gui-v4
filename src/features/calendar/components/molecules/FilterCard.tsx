@@ -1,10 +1,10 @@
+import Combobox from "@/features/calendar/components/atoms/Combobox";
+import { INTENSITY_OPTIONS, MIDAS_OPTIONS, SYMPTOM_OPTIONS, type IntensityType, type MidasType, type SymptomType } from "@/features/calendar/constants/calendar";
+import { useCalendar } from "@/features/calendar/hooks/use-calendar";
+import DropdownInput from "@/features/home/components/atoms/card/DropdownInput";
+import type { DropdownOption } from "@/shared/types";
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
-import DropdownInput from "../../../home/components/atoms/card/DropdownInput";
-import Combobox from "../atoms/Combobox";
-import { INTENSITY_OPTIONS, MIDAS_OPTIONS, SYMPTOM_OPTIONS, type IntensityType, type MidasType, type SymptomType } from "../../constants/calendar";
-import { useCalendar } from "../../hooks/use-calendar";
-import type { DropdownOption } from "../../../../shared/types";
 
 // TODO same styled as other component contextmenu?
 function FilterCard() {

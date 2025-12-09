@@ -1,5 +1,5 @@
+import { CardSetupsContext } from "@/features/home/context/card-setups-context";
 import { useContext } from "react";
-import { CardSetupsContext } from "../../context/card/card-setups-context";
 
 export const useCardSetups = () => {
     const context = useContext(CardSetupsContext);

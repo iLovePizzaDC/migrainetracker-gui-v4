@@ -1,8 +1,8 @@
+import MobileNavigationLinks from "@/app/components/molecules/navigation/MobileNavigationLinks";
+import MobileNavigationOptions from "@/app/components/molecules/navigation/MobileNavigationOptions";
+import NavigationLinks from "@/app/components/molecules/navigation/NavigationLinks";
+import { useUser } from "@/shared/hooks/user/use-user";
 import { useState } from "react";
-import { useUser } from "../../../shared/hooks/user/use-user";
-import NavigationLinks from "../molecules/navigation/NavigationLinks";
-import MobileNavigationOptions from "../molecules/navigation/MobileNavigationOptions";
-import MobileNavigationLinks from "../molecules/navigation/MobileNavigationLinks";
 
 function Navigation() {
     const { user } = useUser();

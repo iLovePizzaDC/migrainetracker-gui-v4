@@ -1,5 +1,5 @@
+import MenuItem from "@/features/home/components/atoms/context-menu/MenuItem";
 import { useEffect, useRef, useState } from "react";
-import MenuItem from "./MenuItem";
 
 interface IContextOpen {
     open: boolean;

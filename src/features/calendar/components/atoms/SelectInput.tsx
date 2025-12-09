@@ -1,4 +1,4 @@
-import type { DropdownOption } from "../../../../shared/types";
+import type { DropdownOption } from "@/shared/types";
 
 interface ISelectInput {
     id: string;

@@ -1,14 +1,14 @@
+import Button from "@/features/home/components/atoms/card/Button";
+import DropdownInput from "@/features/home/components/atoms/card/DropdownInput";
+import Input from "@/features/home/components/atoms/card/Input";
+import { CARD_OPTIONS, CARD_TYPES, type CardType } from "@/features/home/constants/card";
+import { CHART_OPTIONS, CHART_TYPES, type ChartType } from "@/features/home/constants/chart";
+import { TIME_FRAME_UNITS, TIME_FRAME_UNIT_OPTIONS, type TimeFrameUnit } from "@/features/home/constants/time-frame";
+import { useCardSetups } from "@/features/home/hooks/use-card-setups";
+import type { CardSetup } from "@/features/home/types/chart";
+import { BUTTON_TYPES } from "@/shared/constants/input/button";
+import { INPUT_TYPES } from "@/shared/constants/input/input";
 import { useState } from "react";
-import { TIME_FRAME_UNIT_OPTIONS, TIME_FRAME_UNITS, type TimeFrameUnit } from "../../../../../shared/constants/cards/time-frame";
-import { BUTTON_TYPES } from "../../../../../shared/constants/input/button";
-import { INPUT_TYPES } from "../../../../../shared/constants/input/input";
-import { CARD_OPTIONS, CARD_TYPES, type CardType } from "../../../constants/card/card";
-import { CHART_OPTIONS, CHART_TYPES, type ChartType } from "../../../constants/card/chart";
-import Button from "../../atoms/card/Button";
-import DropdownInput from "../../atoms/card/DropdownInput";
-import Input from "../../atoms/card/Input";
-import type { CardSetup } from "../../../types/card/chart";
-import { useCardSetups } from "../../../hooks/card/use-card-setups";
 
 interface ICardForm {
     onButtonClick: (setup: CardSetup) => void;

@@ -1,6 +1,6 @@
-import type { TimeFrameUnit } from "../../../../shared/constants/cards/time-frame";
-import type { CardType } from "../../constants/card/card";
-import type { ChartType } from "../../constants/card/chart";
+import type { CardType } from "@/features/home/constants/card";
+import type { ChartType } from "@/features/home/constants/chart";
+import type { TimeFrameUnit } from "@/features/home/constants/time-frame";
 
 export type ChartData = {
     name: string;

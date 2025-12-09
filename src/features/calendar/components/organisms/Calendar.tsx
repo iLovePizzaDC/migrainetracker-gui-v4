@@ -1,14 +1,13 @@
-import CalendarContent from "./CalendarContent";
-import CalendarHeader from "../molecules/CalendarHeader";
-import MigrainePanel from "./MigrainePanel";
-import { useState } from "react";
-import { useCalendar } from "../../hooks/use-calendar";
-import { createEntry } from "../../../../shared/utils/formatter/event-parser";
-import type { Entry } from "../../../../shared/types";
-import { normalizeDate } from "../../../../shared/utils/date/date";
-import type { StoredEntry } from "../../../../shared/types/calendar/calendar";
+import CalendarHeader from "@/features/calendar/components/molecules/CalendarHeader";
+import FilterCard from "@/features/calendar/components/molecules/FilterCard";
+import CalendarContent from "@/features/calendar/components/organisms/CalendarContent";
+import MigrainePanel from "@/features/calendar/components/organisms/MigrainePanel";
+import { useCalendar } from "@/features/calendar/hooks/use-calendar";
+import type { Entry, StoredEntry } from "@/features/calendar/types/calendar";
+import { createEntry } from "@/features/calendar/utils/event-parser";
+import { normalizeDate } from "@/shared/utils/date/date";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
-import FilterCard from "../molecules/FilterCard";
+import { useState } from "react";
 
 function Calendar() {
     const { isLoading, date, events, setMonth, userMedicineOptions } = useCalendar();
@@ -26,7 +25,7 @@ function Calendar() {
             normalizeDate(event.date).getTime() === normalizeDate(selected).getTime()
         );
 
-        const entry = foundEvent ? createEntry(foundEvent) : null;
+        const entry: Entry | null = foundEvent ? createEntry(foundEvent) : null;
 
         if (entry) {
             entry.medicines = entry.medicines.map((med) => {

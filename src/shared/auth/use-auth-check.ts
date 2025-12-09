@@ -1,6 +1,6 @@
+import { fetchUserInformation, fetchUserLogin, fetchUserLogout } from '@/shared/api/user.api';
+import type { User } from '@/shared/types';
 import { useEffect, useState } from 'react';
-import type { User } from '../types';
-import { fetchUserInformation, fetchUserLogin, fetchUserLogout } from '../api/user.api';
 
 const REDIRECT_URL_SUFFIX = import.meta.env.VITE_GOOGLE_REDIRECT_URL_SUFFIX;
 
@@ -27,7 +27,7 @@ export function useAuthCheck(
         }
 
         checkAuthentication();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {

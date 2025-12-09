@@ -1,8 +1,8 @@
+import PieChart from "@/features/home/components/atoms/card/PieChart";
+import type { ChartData } from "@/features/home/types/chart";
+import { fetchMidasPieData } from "@/features/home/utils/fetch-helper";
+import { useUser } from "@/shared/hooks/user/use-user";
 import { useEffect, useState } from "react";
-import type { ChartData } from "../../../types/card/chart";
-import PieChart from "../../atoms/card/PieChart";
-import { fetchMidasPieData } from "../../../utils/card/fetch-helper";
-import { useUser } from "../../../../../shared/hooks/user/use-user";
 
 function MidasCard() {
     const { user } = useUser();

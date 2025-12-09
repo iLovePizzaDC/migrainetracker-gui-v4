@@ -1,6 +1,6 @@
+import Datepicker from "@/features/calendar/components/atoms/DatePicker";
+import type { AppendDuration } from "@/shared/types";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import type { AppendDuration } from "../../../../shared/types";
-import Datepicker from "../atoms/DatePicker";
 
 interface IDurations {
     durations: AppendDuration[];

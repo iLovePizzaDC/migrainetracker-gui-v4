@@ -1,6 +1,5 @@
-import type { EventDescription } from "../../../shared/types";
-import { STRENGTH_MAP } from "../constants/calendar";
-import type { Event } from "../../../shared/types/calendar/event";
+import { STRENGTH_MAP } from "@/features/calendar/constants/calendar";
+import type { Event, EventDescription } from "@/features/calendar/types/event";
 
 export function determineStrength(description: EventDescription): Event["strength"] {
     const totalDuration = description.duration.reduce((sum, range) => sum + (range.end - range.start), 0);

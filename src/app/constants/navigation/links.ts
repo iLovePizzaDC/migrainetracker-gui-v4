@@ -1,4 +1,4 @@
-import type { NavigationLink } from "../../../app/types/navigation/navigation";
+import type { NavigationLink } from "@/app/types/navigation/navigation";
 
 export const NAV_LINK_STATES = {
   HOME: "Home",

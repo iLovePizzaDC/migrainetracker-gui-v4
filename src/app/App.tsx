@@ -1,12 +1,12 @@
-import './styles/App.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "../features/landing-page/pages/LandingPage";
-import { UserProvider } from '../shared/hooks/user/user-provider';
-import OverviewPage from '../features/home/pages/OverviewPage';
-import Navigation from './components/organisms/Navigation';
-import { getSeasonBackground } from './utils/date';
-import Footer from './components/organisms/Footer';
-import CalendarPage from '../features/calendar/pages/CalendarPage';
+import Footer from '@/app/components/organisms/Footer';
+import Navigation from '@/app/components/organisms/Navigation';
+import '@/app/styles/App.css';
+import { getSeasonBackground } from '@/app/utils/date';
+import CalendarPage from '@/features/calendar/pages/CalendarPage';
+import OverviewPage from '@/features/home/pages/OverviewPage';
+import LandingPage from "@/features/landing-page/pages/LandingPage";
+import { UserProvider } from '@/shared/hooks/user/user-provider';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (

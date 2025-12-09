@@ -1,4 +1,4 @@
-import { useCalendar } from "../../hooks/use-calendar";
+import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 
 interface ICalendarContent {
     onDayClick: (day: number) => void;

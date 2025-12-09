@@ -1,11 +1,11 @@
-import type { AppendDuration, AppendMedicine, AppendMidas, Filter } from '../types';
-import type { TimeFrameUnit } from '../constants/cards/time-frame';
-import { formatEffectiveness, formatMedicine } from '../utils/formatter/event-parser';
-import { parseTimeToDecimal } from '../utils/date/date';
-import { api } from './api';
-import type { CardType } from '../../features/home/constants/card/card';
+import type { IntensityType, SymptomType } from '@/features/calendar/constants/calendar';
+import type { CardType } from '@/features/home/constants/card';
+import type { TimeFrameUnit } from '@/features/home/constants/time-frame';
+import { api } from '@/shared/api/api';
+import type { AppendDuration, AppendMedicine, AppendMidas, Filter } from '@/shared/types';
+import { parseTimeToDecimal } from '@/shared/utils/date/date';
+import { formatEffectiveness, formatMedicine } from '@/shared/utils/formatter/event-parser';
 import axios from 'axios';
-import type { IntensityType, SymptomType } from '../../features/calendar/constants/calendar';
 
 const ENDPOINT_BASE_URL = import.meta.env.VITE_ENDPOINT_BASE_URL;
 const API_URL_SUFFIX = import.meta.env.VITE_API_URL_SUFFIX;

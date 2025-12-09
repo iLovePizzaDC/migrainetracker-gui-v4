@@ -1,16 +1,17 @@
-import { useEffect, useState, useMemo, type ReactNode, useRef } from "react";
-import { CalendarContext } from "../context/calendar-context";
-import type { DropdownOption, Event, EventDescription, RawEventResponse } from "../../../shared/types";
-import { fetchMigraineAmount, fetchMigraineEvents } from "../../../shared/api/migraine.api";
-import { formatDateToUs, getEndOfMonth, getStartOfMonth } from "../../../shared/utils/date/date";
-import { parseEventDescription } from "../../../shared/utils/formatter/event-parser";
-import { calculateMigrenosusFlags, determineStrength } from "../utils/event-highlight";
-import { fetchUserMedicinesGet } from "../../../shared/api/medicine.api";
-import { useUser } from "../../../shared/hooks/user/use-user";
-import type { Medicine } from "../../../shared/types/user/medicine";
-import type { CalendarFilter } from "../types/calendar";
-import { filterEvents } from "../utils/filter";
-import { getMohMedicineFilter } from "../../../shared/utils/fetch-helper";
+import { CalendarContext } from "@/features/calendar/context/calendar-context";
+import type { CalendarFilter } from "@/features/calendar/types/calendar";
+import type { Event, EventDescription, RawEventResponse } from "@/features/calendar/types/event";
+import { calculateMigrenosusFlags, determineStrength } from "@/features/calendar/utils/event-highlight";
+import { parseEventDescription } from "@/features/calendar/utils/event-parser";
+import { filterEvents } from "@/features/calendar/utils/filter";
+import { fetchUserMedicinesGet } from "@/shared/api/medicine.api";
+import { fetchMigraineAmount, fetchMigraineEvents } from "@/shared/api/migraine.api";
+import { useUser } from "@/shared/hooks/user/use-user";
+import type { DropdownOption } from "@/shared/types";
+import type { Medicine } from "@/shared/types/user/medicine";
+import { formatDateToUs, getEndOfMonth, getStartOfMonth } from "@/shared/utils/date/date";
+import { getMohMedicineFilter } from "@/shared/utils/fetch-helper";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 // TODO refactor
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
