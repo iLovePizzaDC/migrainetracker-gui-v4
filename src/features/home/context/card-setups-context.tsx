@@ -1,5 +1,5 @@
+import type { CardSetup } from '@/features/home/types/chart';
 import { createContext } from 'react';
-import type { CardSetup } from '../../types/card/chart';
 
 interface ICardSetupsContext {
     cardSetups: CardSetup[];

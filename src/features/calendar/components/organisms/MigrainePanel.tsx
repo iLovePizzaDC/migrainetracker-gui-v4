@@ -1,25 +1,25 @@
-import { useState } from "react";
+import Durations from "@/features/calendar/components/molecules/Durations";
+import Intensity from "@/features/calendar/components/molecules/Intensity";
+import Medicine from "@/features/calendar/components/molecules/Medicine";
+import Midas from "@/features/calendar/components/molecules/Midas";
+import Symptoms from "@/features/calendar/components/molecules/Symptoms";
 import {
     INTENSITY_TYPES,
     SYMPTOM_TYPES,
     type IntensityType,
     type SymptomType
-} from "../../constants/calendar";
+} from "@/features/calendar/constants/calendar";
+import { useCalendar } from "@/features/calendar/hooks/use-calendar";
+import type { Entry } from "@/features/calendar/types/calendar";
+import { fetchNewEntry } from "@/shared/api/migraine.api";
 import type {
     AppendDuration,
     AppendMedicine,
     AppendMidas,
-    Entry
-} from "../../../../shared/types";
-import Durations from "../molecules/Durations";
-import Intensity from "../molecules/Intensity";
-import Symptoms from "../molecules/Symptoms";
-import Midas from "../molecules/Midas";
-import { fetchNewEntry } from "../../../../shared/api/migraine.api";
-import { formatDateToUs } from "../../../../shared/utils/date/date";
-import Medicine from "../molecules/Medicine";
+} from "@/shared/types";
+import { formatDateToUs } from "@/shared/utils/date/date";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useCalendar } from "../../hooks/use-calendar";
+import { useState } from "react";
 
 interface IMigrainePanel {
     date: Date;

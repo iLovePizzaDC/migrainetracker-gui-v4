@@ -1,5 +1,5 @@
+import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { useCalendar } from "../../hooks/use-calendar";
 
 function CalendarNavigation() {
     const { month, year, prevMonth, nextMonth } = useCalendar();

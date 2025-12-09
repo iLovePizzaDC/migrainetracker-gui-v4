@@ -1,12 +1,12 @@
-import { useState } from "react";
+import type { DropdownOption } from "@/shared/types";
 import {
-    Combobox as UICombobox,
     ComboboxInput,
     ComboboxOption,
     ComboboxOptions,
+    Combobox as UICombobox,
 } from "@headlessui/react";
-import type { DropdownOption } from "../../../../shared/types";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 interface ICombobox {
     id: string;

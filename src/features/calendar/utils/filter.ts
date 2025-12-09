@@ -1,5 +1,5 @@
-import type { Event } from "../../../shared/types";
-import type { CalendarFilter } from "../types/calendar";
+import type { CalendarFilter } from "@/features/calendar/types/calendar";
+import type { Event } from "@/features/calendar/types/event";
 
 export function filterEvents(parsedEvent: Event, filter: CalendarFilter) {
     const { intensity, symptoms, medicine, midas } = parsedEvent.description;

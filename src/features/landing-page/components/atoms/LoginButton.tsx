@@ -1,4 +1,4 @@
-import { fetchOAuthAccessToken } from "../../../../shared/api/google.api";
+import { fetchOAuthAccessToken } from "@/shared/api/google.api";
 
 function LoginButton() {
     const redirectToLogin = () => {

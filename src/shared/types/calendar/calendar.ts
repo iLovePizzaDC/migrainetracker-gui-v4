@@ -1,4 +1,4 @@
-import type { IntensityType, MIDAS_TYPES, SymptomType } from "../../../features/calendar/constants/calendar";
+import type { MIDAS_TYPES } from "@/features/calendar/constants/calendar";
 
 export type AppendDuration = {
     id: number;
@@ -23,16 +23,4 @@ export type AppendMidas = {
     [MIDAS_TYPES.CHORES_MISSED]: boolean;
     [MIDAS_TYPES.CHORES_IMPAIRED]: boolean;
     [MIDAS_TYPES.SOCIAL_MISSED]: boolean;
-}
-
-export type Entry = {
-    durations: AppendDuration[];
-    intensity: IntensityType;
-    symptoms: SymptomType[];
-    medicines: AppendMedicine[];
-    midas: AppendMidas;
-}
-
-export type StoredEntry = Entry & {
-    date: Date;
 }

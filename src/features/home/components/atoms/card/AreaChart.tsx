@@ -1,6 +1,6 @@
-import { AreaChart as RAreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
+import { FONT_FAMILY } from "@/shared/constants/style/font";
+import { Area, AreaChart as RAreaChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { ChartData } from "recharts/types/state/chartDataSlice";
-import { FONT_FAMILY } from "../../../../../shared/constants/style/font";
 
 interface IAreaChart {
     data: ChartData;

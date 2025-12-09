@@ -1,9 +1,9 @@
-import type { SymptomType } from "../../../features/calendar/constants/calendar";
+import type { SymptomType } from "@/features/calendar/constants/calendar";
 
 export type DescriptionEffectiveness = 'yes' | 'no' | '';
 
 export type EventDescription = {
-    duration:{
+    duration: {
         start: number,
         end: number
     }[],

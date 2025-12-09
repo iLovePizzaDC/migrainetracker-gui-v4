@@ -1,4 +1,4 @@
-import type { InputType } from "../../../../../shared/constants/input/input";
+import type { InputType } from "@/shared/constants/input/input";
 
 interface IInput {
     id: string;

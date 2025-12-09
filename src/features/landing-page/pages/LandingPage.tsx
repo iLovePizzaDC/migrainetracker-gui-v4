@@ -1,4 +1,4 @@
-import LoginButton from "../components/atoms/LoginButton"
+import LoginButton from "@/features/landing-page/components/atoms/LoginButton";
 
 function LandingPage() {
   return (

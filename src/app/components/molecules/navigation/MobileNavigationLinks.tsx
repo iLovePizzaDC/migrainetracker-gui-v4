@@ -1,5 +1,5 @@
-import { NAVIGATION_LINKS } from "../../../constants/navigation/links";
-import NavigationLink from "../../atoms/navigation/NavigationLink";
+import NavigationLink from "@/app/components/atoms/navigation/NavigationLink";
+import { NAVIGATION_LINKS } from "@/app/constants/navigation/links";
 
 interface IMobileNavigationLinks {
     toggleMenu: () => void;

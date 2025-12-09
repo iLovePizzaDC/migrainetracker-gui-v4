@@ -1,7 +1,7 @@
+import { SETUP_STORAGE_KEY } from "@/features/home/constants/setups";
+import { CardSetupsContext } from "@/features/home/context/card-setups-context";
+import type { CardSetup } from "@/features/home/types/chart";
 import { useEffect, useState, type ReactNode } from "react";
-import { CardSetupsContext } from "../../context/card/card-setups-context";
-import type { CardSetup } from "../../types/card/chart";
-import { SETUP_STORAGE_KEY } from "../../constants/card/setups";
 
 export const CardSetupsProvider = ({ children }: { children: ReactNode }) => {
     const [cardSetups, setCardSetups] = useState<CardSetup[]>(() => {

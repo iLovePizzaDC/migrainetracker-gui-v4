@@ -1,7 +1,7 @@
-import { useAuthCheck } from "../../../shared/auth/use-auth-check";
-import { useUser } from "../../../shared/hooks/user/use-user";
-import CardSection from "../components/organisms/card/CardSection";
-import { CardSetupsProvider } from "../hooks/card/card-setups-provider";
+import CardSection from "@/features/home/components/organisms/CardSection";
+import { CardSetupsProvider } from "@/features/home/hooks/card-setups-provider";
+import { useAuthCheck } from "@/shared/auth/use-auth-check";
+import { useUser } from "@/shared/hooks/user/use-user";
 
 function OverviewPage() {
   const { user, setUser } = useUser();

@@ -1,5 +1,5 @@
-import type { DropdownOption } from "../../../shared/types";
-import type { Event } from "../../../shared/types/calendar/event";
+import type { Event } from "@/features/calendar/types/event";
+import type { DropdownOption } from "@/shared/types";
 
 // --- INTENSITY START ---
 

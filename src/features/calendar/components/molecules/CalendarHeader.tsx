@@ -1,5 +1,5 @@
-import CalendarNavigation from "../atoms/CalendarNavigation";
-import Weekdays from "../atoms/Weekdays";
+import CalendarNavigation from "@/features/calendar/components/atoms/CalendarNavigation";
+import Weekdays from "@/features/calendar/components/atoms/Weekdays";
 
 function CalendarHeader() {
 

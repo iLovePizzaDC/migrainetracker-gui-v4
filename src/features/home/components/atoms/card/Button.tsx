@@ -1,4 +1,4 @@
-import type { ButtonType } from "../../../../../shared/constants/input/button";
+import type { ButtonType } from "@/shared/constants/input/button";
 
 interface IButton {
     type: ButtonType;

@@ -1,7 +1,7 @@
+import CardForm from "@/features/home/components/molecules/CardForm";
+import { useCardSetups } from "@/features/home/hooks/use-card-setups";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
-import CardForm from "./CardForm";
-import { useCardSetups } from "../../../hooks/card/use-card-setups";
 
 function AppendCard() {
     const { appendSetup } = useCardSetups();

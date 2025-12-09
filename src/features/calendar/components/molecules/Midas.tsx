@@ -1,6 +1,6 @@
-import type { AppendMidas } from "../../../../shared/types";
-import { MIDAS_OPTIONS, type MidasType } from "../../constants/calendar";
-import SelectInput from "../atoms/SelectInput";
+import SelectInput from "@/features/calendar/components/atoms/SelectInput";
+import { MIDAS_OPTIONS, type MidasType } from "@/features/calendar/constants/calendar";
+import type { AppendMidas } from "@/shared/types";
 
 interface IMidas {
     midas: AppendMidas;

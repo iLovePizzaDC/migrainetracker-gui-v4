@@ -1,7 +1,7 @@
-import AppendCard from "../../molecules/card/AppendCard";
-import ChartCard from "../../molecules/card/ChartCard";
-import MidasCard from "../../molecules/card/MidasCard";
-import { useCardSetups } from "../../../hooks/card/use-card-setups";
+import AppendCard from "@/features/home/components/molecules/AppendCard";
+import ChartCard from "@/features/home/components/molecules/ChartCard";
+import MidasCard from "@/features/home/components/molecules/MidasCard";
+import { useCardSetups } from "@/features/home/hooks/use-card-setups";
 
 function CardSection() {
     const { cardSetups } = useCardSetups();

@@ -1,5 +1,5 @@
+import type { User } from '@/shared/types';
 import { createContext } from 'react';
-import type { User } from '../../types';
 
 interface IUserContext {
     user: User | null;

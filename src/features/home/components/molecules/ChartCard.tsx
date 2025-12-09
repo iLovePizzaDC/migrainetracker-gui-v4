@@ -1,15 +1,15 @@
+import AreaChart from "@/features/home/components/atoms/card/AreaChart";
+import PieChart from "@/features/home/components/atoms/card/PieChart";
+import ContextMenu from "@/features/home/components/atoms/context-menu/ContextMenu";
+import CardForm from "@/features/home/components/molecules/CardForm";
+import { type CardType, CARD_TYPES } from "@/features/home/constants/card";
+import { type ChartType, CHART_TYPES } from "@/features/home/constants/chart";
+import type { TimeFrameUnit } from "@/features/home/constants/time-frame";
+import { useCardSetups } from "@/features/home/hooks/use-card-setups";
+import { useChartData } from "@/features/home/hooks/use-chart-data";
+import type { CardSetup } from "@/features/home/types/chart";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
-import { useChartData } from "../../../hooks/card/use-chart-data";
-import AreaChart from "../../atoms/card/AreaChart";
-import PieChart from "../../atoms/card/PieChart";
 import { useState } from "react";
-import { CHART_TYPES, type ChartType } from "../../../constants/card/chart";
-import { type TimeFrameUnit } from "../../../../../shared/constants/cards/time-frame";
-import { CARD_TYPES, type CardType } from "../../../constants/card/card";
-import ContextMenu from "../../atoms/context-menu/ContextMenu";
-import CardForm from "./CardForm";
-import { useCardSetups } from "../../../hooks/card/use-card-setups";
-import type { CardSetup } from "../../../types/card/chart";
 
 interface IChartCard {
     index: number;
