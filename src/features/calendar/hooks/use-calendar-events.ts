@@ -106,7 +106,7 @@ export function useCalendarEvents(
 
             const filteredEvents = parsedEvents.filter(parsedEvent => filterEvents(parsedEvent, filter));
             setEvents(filteredEvents);
-            const migrenosusFlags = calculateMigrenosusFlags(filteredEvents, daysInMonth, 3);
+            const migrenosusFlags = calculateMigrenosusFlags(parsedEvents, daysInMonth, 3);
             setMigrenosusFlags(migrenosusFlags);
         } catch (err) {
             if (!(err instanceof DOMException && err.name === "AbortError")) {
