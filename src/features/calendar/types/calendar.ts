@@ -3,8 +3,8 @@ import type { AppendDuration, AppendMedicine, AppendMidas, InputContent } from "
 
 export type CalendarFilter = {
     intensity: IntensityType | null;
-    symptom: SymptomType[];
-    medicine: InputContent[];
+    symptom: (SymptomType | 'any')[];
+    medicine: (InputContent | { abbreviation: 'any', label: 'Any' })[];
     midas: MidasType[];
 };
 

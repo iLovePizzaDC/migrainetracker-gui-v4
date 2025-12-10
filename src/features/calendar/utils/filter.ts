@@ -15,19 +15,31 @@ export function filterEvents(parsedEvent: Event, filter: CalendarFilter) {
     }
 
     if (symptomsFilter.length > 0) {
-        const missingSymptom = symptomsFilter.some(s => !symptoms.includes(s));
+        const missingSymptom = symptomsFilter.some(symptom => {
+            if (symptom === 'any') {
+                return symptoms.length === 0;
+            } else {
+                return !symptoms.includes(symptom)
+            }
+        });
         if (missingSymptom) return false;
     }
 
     if (medicineFilter.length > 0) {
-        const allowed = medicineFilter.map(m => m.abbreviation.toLowerCase());
+        const allowedMedicines = medicineFilter.map(m => m.abbreviation.toLowerCase());
 
         const eventMedicines = medicine
             .split(",")
             .map(m => m.trim().toLowerCase())
             .filter(Boolean);
 
-        const missing = allowed.some(a => !eventMedicines.includes(a));
+        const missing = allowedMedicines.some(medicine => {
+            if (medicine === 'any') {
+                return eventMedicines.length === 0;
+            } else {
+                return !eventMedicines.includes(medicine)
+            }
+        });
         if (missing) return false;
     }
 
