@@ -1,5 +1,7 @@
+import type { MedicineType } from "@/shared/constants/user/medicine";
+
 export type Medicine = {
-    name: string,
-    abbreviation: string,
-    type: 'painkiller' | 'migraine-painkiller' | 'others' // TODO outsource into consts
+    name: string;
+    abbreviation: string;
+    type: MedicineType;
 }
