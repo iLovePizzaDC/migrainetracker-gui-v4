@@ -6,7 +6,7 @@ import type { DropdownOption } from "@/shared/types";
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 
-const ANY_OPTION: DropdownOption = { value: 'any', label: 'Any' };
+const ANY_OPTION: DropdownOption = { value: 'any', label: 'Any' }; // TODO outsource into consts
 
 // TODO same styled as other component contextmenu?
 function FilterCard() {
