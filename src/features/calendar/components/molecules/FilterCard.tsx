@@ -1,13 +1,11 @@
 import Combobox from "@/features/calendar/components/atoms/Combobox";
-import { INTENSITY_OPTIONS, MIDAS_OPTIONS, SYMPTOM_OPTIONS, type IntensityType, type MidasType, type SymptomType } from "@/features/calendar/constants/calendar";
+import { ANY_OPTION, INTENSITY_OPTIONS, MIDAS_OPTIONS, SYMPTOM_OPTIONS, type IntensityType, type MidasType, type SymptomType } from "@/features/calendar/constants/calendar";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 import DropdownInput from "@/features/home/components/atoms/card/DropdownInput";
 import { useClickOutside } from "@/shared/hooks/use-click-outside";
 import type { DropdownOption } from "@/shared/types";
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
-
-const ANY_OPTION: DropdownOption = { value: 'any', label: 'Any' }; // TODO outsource into consts
 
 // TODO same styled as other component contextmenu?
 function FilterCard() {
@@ -45,12 +43,12 @@ function FilterCard() {
                                 id="filterIntensity"
                                 label="Intensity"
                                 value={filter.intensity ?? 'default'}
-                                options={[{ value: 'default', label: 'No filter' }, ...INTENSITY_OPTIONS]}
+                                options={[ANY_OPTION, ...INTENSITY_OPTIONS]}
                                 onChange={(event) => {
                                     const value = event.target.value;
                                     setFilter(prev => ({
                                         ...prev,
-                                        intensity: value === "default" ? null : (value as IntensityType)
+                                        intensity: value === ANY_OPTION.value ? null : (value as IntensityType)
                                     }));
                                 }}
                             />

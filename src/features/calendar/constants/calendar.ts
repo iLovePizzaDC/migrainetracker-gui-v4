@@ -67,6 +67,10 @@ export const MIDAS_OPTIONS: DropdownOption[] = [
     { label: "I missed social activities", value: MIDAS_TYPES.SOCIAL_MISSED },
 ]
 
+// --- OTHER START ---
+
+export const ANY_OPTION: DropdownOption = { value: 'any', label: 'Any' };
+
 // --- STRENGTH START ---
 
 export const STRENGTH_MAP: Record<number, Event["strength"]> = {
