@@ -2,9 +2,10 @@ import Combobox from "@/features/calendar/components/atoms/Combobox";
 import { INTENSITY_OPTIONS, MIDAS_OPTIONS, SYMPTOM_OPTIONS, type IntensityType, type MidasType, type SymptomType } from "@/features/calendar/constants/calendar";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 import DropdownInput from "@/features/home/components/atoms/card/DropdownInput";
+import { useClickOutside } from "@/shared/hooks/use-click-outside";
 import type { DropdownOption } from "@/shared/types";
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const ANY_OPTION: DropdownOption = { value: 'any', label: 'Any' }; // TODO outsource into consts
 
@@ -16,16 +17,7 @@ function FilterCard() {
 
     const cardRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
-                setFilterOpen(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    useClickOutside(cardRef, setFilterOpen);
 
     return (
         <div className="fixed bottom-5 right-5 z-50">

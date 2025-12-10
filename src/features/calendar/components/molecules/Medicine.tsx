@@ -1,9 +1,10 @@
 import Combobox from "@/features/calendar/components/atoms/Combobox";
 import Slider from "@/features/calendar/components/atoms/Slider";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
+import { useClickOutside } from "@/shared/hooks/use-click-outside";
 import type { AppendMedicine } from "@/shared/types";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface IMedicine {
     medicines: AppendMedicine[];
@@ -18,16 +19,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
 
     const [showInfo, setShowInfo] = useState(false);
 
-    useEffect(() => { // TODO duplicated code, also in FilterCard. refactor into reusable hook
-        function handleClickOutside(event: MouseEvent) {
-            if (infoRef.current && !infoRef.current.contains(event.target as Node)) {
-                setShowInfo(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    useClickOutside(infoRef, setShowInfo);
 
     return (
         <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
