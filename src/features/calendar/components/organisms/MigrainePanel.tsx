@@ -12,6 +12,7 @@ import {
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 import type { Entry } from "@/features/calendar/types/calendar";
 import { fetchNewEntry } from "@/shared/api/migraine.api";
+import { FEEDBACK_TYPES, type FeedbackType } from "@/shared/constants/button/feedback";
 import type {
     AppendDuration,
     AppendMedicine,
@@ -32,8 +33,8 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
     const { refetchEvents } = useCalendar();
 
     const [areInputsDisabled, setAreInputsDisabled] = useState(disabled);
-    const [cacheFeedback, setCacheFeedback] = useState<"success" | "error" | null>(null); // TODO outsource into consts
-    const [saveFeedback, setSaveFeedback] = useState<"success" | "error" | null>(null); // TODO outsource into consts
+    const [cacheFeedback, setCacheFeedback] = useState<FeedbackType>(FEEDBACK_TYPES.NULL);
+    const [saveFeedback, setSaveFeedback] = useState<FeedbackType>(FEEDBACK_TYPES.NULL);
     const [isLoading, setIsLoading] = useState(false);
 
     const [durations, setDurations] = useState<AppendDuration[]>(prefilled
@@ -76,12 +77,12 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
         try {
             setIsLoading(true);
             await fetchNewEntry(formatDateToUs(date), durations, intensity, symptoms, medicines, midas);
-            setSaveFeedback("success");
+            setSaveFeedback(FEEDBACK_TYPES.SUCCESS);
             await refetchEvents();
             onClose();
         } catch (err) {
             console.error(err);
-            setSaveFeedback("error");
+            setSaveFeedback(FEEDBACK_TYPES.ERROR);
         } finally {
             setIsLoading(false);
         }
@@ -93,11 +94,11 @@ function MigrainePanel({ date, onClose, prefilled = null, disabled = false }: IM
                 "MT_NE",
                 JSON.stringify({ date, durations, intensity, symptoms, medicines, midas })
             );
-            setCacheFeedback("success");
+            setCacheFeedback(FEEDBACK_TYPES.SUCCESS);
             setTimeout(() => onClose(), 500);
         } catch (err) {
             console.error(err);
-            setCacheFeedback("error");
+            setCacheFeedback(FEEDBACK_TYPES.ERROR);
         }
     };
 
