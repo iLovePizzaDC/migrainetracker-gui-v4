@@ -1,6 +1,6 @@
 {
-    "name": "Tracker",
-    "short_name": "Tracker",
+    "name": "MigraineTracker",
+    "short_name": "MigraineTracker",
     "description": "Analyze your migraine",
     "start_url": "/",
     "scope": "/",
