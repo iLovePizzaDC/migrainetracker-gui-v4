@@ -1,9 +1,10 @@
 import { api } from '@/shared/api/api';
+import type { UserResponse } from '@/shared/api/types/user';
 import type { User } from "@/shared/types";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const fetchUserLogin = async (code: string) => {
+export const fetchUserLogin = async (code: string): Promise<UserResponse> => {
     const response = await api.post('auth/google', { code });
     return response.data;
 };
@@ -14,12 +15,12 @@ export const fetchUserLogout = async () => {
     window.location.href = BASE_URL;
 };
 
-export const fetchUserInformation = async () => {
+export const fetchUserInformation = async (): Promise<User> => {
     const response = await api.get('auth/me');
     return response.data;
 };
 
-export const fetchNewUser = async (user: User) => {
+export const fetchNewUser = async (user: User): Promise<User> => {
     const response = await api.post(
         'User',
         { googleUserId: user.id },
@@ -34,6 +35,7 @@ export const fetchNewUser = async (user: User) => {
     return response.data;
 };
 
+// TODO add response types
 export const fetchUserPremiumGet = async (userId: string) => {
     const response = await api.get('PremiumUser', { params: { googleUserId: userId } });
     return response.data;

@@ -1,9 +1,10 @@
 import type { CalendarFilter } from "@/features/calendar/types/calendar";
-import type { Event, EventDescription, RawEventResponse } from "@/features/calendar/types/event";
+import type { Event, EventDescription } from "@/features/calendar/types/event";
 import { calculateMigrenosusFlags, determineStrength } from "@/features/calendar/utils/event-highlight";
 import { parseEventDescription } from "@/features/calendar/utils/event-parser";
 import { filterEvents } from "@/features/calendar/utils/filter";
 import { fetchMigraineEvents } from "@/shared/api/migraine.api";
+import type { RawEventResponse } from "@/shared/api/types/migraine";
 import { formatDateToUs } from "@/shared/utils/date/date";
 import { useEffect, useRef, useState } from "react";
 
@@ -35,7 +36,7 @@ export function useCalendarEvents(
                     abortController.signal
                 );
 
-                if (fetchId !== fetchIdRef.current) return;
+                if (fetchId !== fetchIdRef.current || !raw) return;
 
                 const parsedEvents: Event[] = raw
                     .map((event: RawEventResponse) => {
@@ -89,6 +90,8 @@ export function useCalendarEvents(
                 undefined,
                 abortController.signal
             );
+
+            if (!raw) return;
 
             const parsedEvents: Event[] = raw
                 .map((event: RawEventResponse) => {
