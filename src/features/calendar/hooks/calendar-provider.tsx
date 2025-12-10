@@ -118,7 +118,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
         const runFilter = () => {
             const filtered = rawEvents.filter(event => filterEvents(event, filter));
             setEvents(filtered);
-            setMigrenosusFlags(calculateMigrenosusFlags(filtered, daysInMonth, 3));
+            setMigrenosusFlags(calculateMigrenosusFlags(filtered, daysInMonth, 4));
         };
 
         runFilter();

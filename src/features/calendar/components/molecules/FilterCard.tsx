@@ -6,6 +6,8 @@ import type { DropdownOption } from "@/shared/types";
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef, useState } from "react";
 
+const ANY_OPTION: DropdownOption = { value: 'any', label: 'Any' };
+
 // TODO same styled as other component contextmenu?
 function FilterCard() {
     const { userMedicineOptions, filter, setFilter } = useCalendar();
@@ -63,22 +65,22 @@ function FilterCard() {
                             <Combobox
                                 id="filterSymptoms"
                                 label="Symptoms"
-                                options={SYMPTOM_OPTIONS}
+                                options={[ANY_OPTION, ...SYMPTOM_OPTIONS]}
                                 selected={filter.symptom
-                                    .map(symptom => SYMPTOM_OPTIONS.find(option => option.value === symptom))
+                                    .map(symptom => [ANY_OPTION, ...SYMPTOM_OPTIONS].find(option => option.value === symptom))
                                     .filter(Boolean) as DropdownOption[]
                                 }
                                 onChange={selectedSymptoms => {
                                     setFilter(prev => ({
                                         ...prev,
-                                        symptom: selectedSymptoms.map(symptom => symptom.value as SymptomType)
+                                        symptom: selectedSymptoms.map(symptom => symptom.value as SymptomType | 'any')
                                     }));
                                 }}
                             />
                             <Combobox
                                 id="filterMedicine"
                                 label="Medicine"
-                                options={userMedicineOptions}
+                                options={[ANY_OPTION, ...userMedicineOptions]}
                                 selected={filter.medicine.map(medicine => ({
                                     label: medicine.label,
                                     value: medicine.abbreviation,
