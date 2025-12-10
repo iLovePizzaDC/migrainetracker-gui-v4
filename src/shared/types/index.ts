@@ -1,4 +1,5 @@
-export type { AppendDuration, AppendMedicine, AppendMidas } from './calendar/calendar';
-export type { Filter } from './cards/filter';
-export type { DropdownOption } from './input/input';
-export type { User } from './user/user';
+export type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar/calendar';
+export type { Filter } from '@/shared/types/cards/filter';
+export type { DropdownOption } from '@/shared/types/input/input';
+export type { User } from '@/shared/types/user/user';
+

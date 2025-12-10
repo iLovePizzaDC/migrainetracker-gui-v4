@@ -1,6 +1,6 @@
 import { fetchUserMedicinesGet } from "@/shared/api/medicine.api";
+import { MEDICINE_TYPES } from "@/shared/constants/user/medicine";
 import type { Medicine } from "@/shared/types/user/medicine";
-import { MEDICINE_TYPES } from "../constants/user/medicine";
 
 export async function getMohMedicineFilter(userId: string) {
     const medicines: Medicine[] = await fetchUserMedicinesGet(userId);
