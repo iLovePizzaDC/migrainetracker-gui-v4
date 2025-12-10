@@ -1,5 +1,6 @@
 import type { Entry } from "@/features/calendar/types/calendar";
-import type { DescriptionEffectiveness, Event, EventDescription, RawEventResponse } from "@/features/calendar/types/event";
+import type { DescriptionEffectiveness, Event, EventDescription } from "@/features/calendar/types/event";
+import type { RawEventResponse } from "@/shared/api/types/migraine";
 import { parseDecimalToTime } from "@/shared/utils/date/date";
 
 export const parseEventDescription = (event: RawEventResponse): EventDescription | null => {

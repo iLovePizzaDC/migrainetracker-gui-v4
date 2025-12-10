@@ -2,6 +2,7 @@ import type { IntensityType, SymptomType } from '@/features/calendar/constants/c
 import type { CardType } from '@/features/home/constants/card';
 import type { TimeFrameUnit } from '@/features/home/constants/time-frame';
 import { api } from '@/shared/api/api';
+import type { RawAreaChartResponse, RawEventResponse } from '@/shared/api/types/migraine';
 import type { AppendDuration, AppendMedicine, AppendMidas, Filter } from '@/shared/types';
 import { parseTimeToDecimal } from '@/shared/utils/date/date';
 import { formatEffectiveness, formatMedicine } from '@/shared/utils/formatter/event-parser';
@@ -16,7 +17,7 @@ export const fetchMigraineEvents = async (
     end: string,
     filter?: Filter,
     signal?: AbortSignal
-) => {
+): Promise<RawEventResponse[] | undefined> => {
     const filterObject: { [key: string]: string } = {
         startDate: start,
         endDate: end,
@@ -52,7 +53,7 @@ export const fetchMigraineAmount = async (
     start: string,
     end: string,
     filter?: Filter
-) => {
+): Promise<number> => {
     const filterObject: { [key: string]: string } = {
         startDate: start,
         endDate: end,
@@ -82,7 +83,7 @@ export const fetchDurationAmount = async (
     start: string,
     end: string,
     filter?: Filter
-) => {
+): Promise<number> => {
     const filterObject: { [key: string]: string } = {
         startDate: start,
         endDate: end,
@@ -109,7 +110,7 @@ export const fetchMedicineAmount = async (
     start: string,
     end: string,
     filter?: Filter
-) => {
+): Promise<number> => {
     const filterObject: { [key: string]: string } = {
         startDate: start,
         endDate: end,
@@ -138,7 +139,7 @@ export const fetchAreaChart = async (
     timeFrameCount: number,
     timeFrameUnit: TimeFrameUnit,
     filter?: Filter
-) => {
+): Promise<RawAreaChartResponse> => {
     const filterObject: { [key: string]: string } = {};
 
     if (filter?.duration !== undefined && filter.duration !== 'all') filterObject.duration = filter.duration;
@@ -158,7 +159,14 @@ export const fetchAreaChart = async (
     }
 };
 
-export const fetchNewEntry = async (date: string, durations: AppendDuration[], intensity: IntensityType, symptoms: SymptomType[], medicines: AppendMedicine[], midas: AppendMidas) => {
+export const fetchNewEntry = async (
+    date: string,
+    durations: AppendDuration[],
+    intensity: IntensityType,
+    symptoms: SymptomType[],
+    medicines: AppendMedicine[],
+    midas: AppendMidas
+): Promise<RawEventResponse> => {
     const medicineString: string = formatMedicine(medicines);
     const effectivenessString: string = formatEffectiveness(medicines);
 
