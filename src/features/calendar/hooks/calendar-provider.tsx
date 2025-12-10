@@ -1,207 +1,27 @@
 import { CalendarContext } from "@/features/calendar/context/calendar-context";
-import type { CalendarFilter } from "@/features/calendar/types/calendar";
-import type { Event, EventDescription, RawEventResponse } from "@/features/calendar/types/event";
-import { calculateMigrenosusFlags, determineStrength } from "@/features/calendar/utils/event-highlight";
-import { parseEventDescription } from "@/features/calendar/utils/event-parser";
-import { filterEvents } from "@/features/calendar/utils/filter";
-import { fetchUserMedicinesGet } from "@/shared/api/medicine.api";
-import { fetchMigraineAmount, fetchMigraineEvents } from "@/shared/api/migraine.api";
-import { useUser } from "@/shared/hooks/user/use-user";
-import type { DropdownOption } from "@/shared/types";
-import type { Medicine } from "@/shared/types/user/medicine";
-import { formatDateToUs, getEndOfMonth, getStartOfMonth } from "@/shared/utils/date/date";
-import { getMohMedicineFilter } from "@/shared/utils/fetch-helper";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCalendarDate } from "@/features/calendar/hooks/use-calendar-date";
+import { useCalendarEvents } from "@/features/calendar/hooks/use-calendar-events";
+import { useMedDays } from "@/features/calendar/hooks/use-med-days";
+import { useUserMedicines } from "@/features/calendar/hooks/use-user-medicines";
+import { type ReactNode } from "react";
 
-// TODO refactor
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
-    const { user } = useUser();
+    const {
+        currentDate, firstDayOfMonth, lastDayOfMonth,
+        daysArray, daysInMonth, month, year,
+        setMonth, prevMonth, nextMonth,
+    } = useCalendarDate();
 
-    const [currentDate, setCurrentDate] = useState(new Date());
-    const [rawEvents, setRawEvents] = useState<Event[]>([]);
-    const [events, setEvents] = useState<Event[]>([]);
-    const [medDaysCount, setMedDaysCount] = useState(0);
-    const [maxMedDaysCount] = useState(10); // TODO calculate dynamically (10 with mixed use, 15 without)
-    const [migrenosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
-    const [userMedicineOptions, setUserMedicineOptions] = useState<DropdownOption[]>([]);
-    const [filter, setFilter] = useState<CalendarFilter>({ intensity: null, symptom: [], medicine: [], midas:[] });
-    const [isLoading, setIsLoading] = useState(true);
+    const {
+        events, migrenosusFlags, filter,
+        setFilter, isLoading, refetchEvents,
+    } = useCalendarEvents(firstDayOfMonth, lastDayOfMonth, daysInMonth);
 
-    const fetchIdRef = useRef(0);
+    const {
+        medDaysCount, maxMedDaysCount,
+    } = useMedDays(currentDate);
 
-    const month = currentDate.toLocaleString("en-US", { month: "long" });
-    const year = currentDate.getFullYear();
-
-    const firstDayOfMonth = useMemo(
-        () => new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-        [currentDate]
-    );
-
-    const lastDayOfMonth = useMemo(
-        () => new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0),
-        [currentDate]
-    );
-
-    const firstWeekday = (firstDayOfMonth.getDay() + 6) % 7;
-    const daysInMonth = lastDayOfMonth.getDate();
-
-    const daysArray = useMemo(() => {
-        const array: (number | null)[] = [];
-        for (let index = 0; index < firstWeekday; index++) array.push(null);
-        for (let index = 1; index <= daysInMonth; index++) array.push(index);
-        return array;
-    }, [firstWeekday, daysInMonth]);
-
-    const setMonth = (date: Date) => {
-        setCurrentDate((current) => {
-            if (
-                current.getMonth() === date.getMonth() &&
-                current.getFullYear() === date.getFullYear()
-            ) {
-                return current;
-            }
-
-            return new Date(date.getFullYear(), date.getMonth(), 1);
-        });
-    };
-
-    const prevMonth = () => {
-        setCurrentDate((date) => new Date(date.getFullYear(), date.getMonth() - 1, 1));
-        setEvents([]);
-    };
-
-    const nextMonth = () => {
-        setCurrentDate((date) => new Date(date.getFullYear(), date.getMonth() + 1, 1));
-        setEvents([]);
-    };
-
-    // TODO duplicated code here and in useeffect
-    const refetchEvents = async () => {
-        const abortController = new AbortController();
-        try {
-            setIsLoading(true);
-
-            const raw = await fetchMigraineEvents(
-                formatDateToUs(firstDayOfMonth),
-                formatDateToUs(lastDayOfMonth),
-                undefined,
-                abortController.signal
-            );
-
-            const parsedEvents: Event[] = raw
-                .map((event: RawEventResponse) => {
-                    const description = parseEventDescription(event);
-                    if (!description) return null;
-
-                    return {
-                        date: new Date(event.start.date),
-                        description,
-                        strength: determineStrength(description),
-                    } satisfies Event;
-                })
-                .filter((event: Event | null): event is Event => event !== null)
-                .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
-
-                const filteredEvents = parsedEvents.filter(parsedEvent => filterEvents(parsedEvent, filter));
-                setEvents(filteredEvents);
-                const migrenosusFlags = calculateMigrenosusFlags(filteredEvents, daysInMonth, 3);
-                setMigrenosusFlags(migrenosusFlags);
-        } catch (err) {
-            if (!(err instanceof DOMException && err.name === "AbortError")) {
-                console.error("Failed to refetch events:", err);
-            }
-        }
-        setIsLoading(false);
-    };
-
-    useEffect(() => {
-        const runFilter = () => {
-            const filtered = rawEvents.filter(event => filterEvents(event, filter));
-            setEvents(filtered);
-            setMigrenosusFlags(calculateMigrenosusFlags(filtered, daysInMonth, 4));
-        };
-
-        runFilter();
-    }, [rawEvents, filter, daysInMonth]);
-
-
-    useEffect(() => {
-        const fetchId = ++fetchIdRef.current;
-        const abortController = new AbortController();
-
-        const loadEvents = async () => {
-            try {
-                setIsLoading(true);
-
-                const raw = await fetchMigraineEvents(
-                    formatDateToUs(firstDayOfMonth),
-                    formatDateToUs(lastDayOfMonth),
-                    undefined,
-                    abortController.signal
-                );
-
-                if (fetchId !== fetchIdRef.current) return;
-
-                const parsedEvents: Event[] = raw
-                    .map((event: RawEventResponse) => {
-                        const description: EventDescription | null = parseEventDescription(event);
-                        if (!description) return null;
-
-                        return {
-                            date: new Date(event.start.date),
-                            description,
-                            strength: determineStrength(description),
-                        } satisfies Event;
-                    })
-                    .filter((event: Event | null): event is Event => event !== null)
-                    .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
-
-                setRawEvents(parsedEvents);
-            } catch (error) {
-                if (error instanceof DOMException && error.name === "AbortError") {
-                    return;
-                }
-                console.error("Failed to load events:", error);
-            }
-            setIsLoading(false);
-        };
-
-        loadEvents();
-
-        return () => {
-            abortController.abort();
-        };
-    }, [firstDayOfMonth, lastDayOfMonth]);
-
-    useEffect(() => {
-        const load = async () => {
-            if (!user) return;
-            const meds: Medicine[] = await fetchUserMedicinesGet(user.id);
-            setUserMedicineOptions(
-                meds.map(m => ({
-                    label: m.name,
-                    value: m.abbreviation
-                }))
-            );
-        };
-
-        load();
-    }, [user]);
-
-    useEffect(() => {
-        const collectMedDays = async () => {
-            if (!user) return;
-
-            const start = formatDateToUs(getStartOfMonth(currentDate));
-            const end = formatDateToUs(getEndOfMonth(currentDate));
-
-            const medicines = await getMohMedicineFilter(user.id);
-            const medDays = await fetchMigraineAmount(start, end, { medicines });
-            setMedDaysCount(medDays);
-        };
-
-        collectMedDays();
-    }, [user, currentDate]);
+    const { userMedicineOptions } = useUserMedicines()
 
     return (
         <CalendarContext.Provider
