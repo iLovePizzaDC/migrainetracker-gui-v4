@@ -1,5 +1,6 @@
 import SelectInput from "@/features/calendar/components/atoms/SelectInput";
 import { MIDAS_OPTIONS, type MidasType } from "@/features/calendar/constants/calendar";
+import { SELECT_TYPES } from "@/shared/constants/input/select";
 import type { AppendMidas } from "@/shared/types";
 
 interface IMidas {
@@ -18,7 +19,7 @@ function Midas({ midas, setMidas, disabled = false }: IMidas) {
 
             <SelectInput
                 id="midas"
-                type="checkbox"
+                type={SELECT_TYPES.CHECKBOX}
                 label=""
                 options={MIDAS_OPTIONS}
                 value={Object.entries(midas)

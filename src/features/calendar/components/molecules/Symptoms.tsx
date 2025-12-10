@@ -1,5 +1,6 @@
 import SelectInput from "@/features/calendar/components/atoms/SelectInput";
 import { SYMPTOM_OPTIONS, type SymptomType } from "@/features/calendar/constants/calendar";
+import { SELECT_TYPES } from "@/shared/constants/input/select";
 
 interface ISymptoms {
     symptoms: SymptomType[];
@@ -17,7 +18,7 @@ function Symptoms({ symptoms, setSymptoms, disabled = false }: ISymptoms) {
 
             <SelectInput
                 id="symptoms"
-                type="checkbox"
+                type={SELECT_TYPES.CHECKBOX}
                 label=""
                 options={SYMPTOM_OPTIONS}
                 value={symptoms}

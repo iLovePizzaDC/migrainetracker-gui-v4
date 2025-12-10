@@ -1,8 +1,9 @@
+import { SELECT_TYPES, type SelectType } from "@/shared/constants/input/select";
 import type { DropdownOption } from "@/shared/types";
 
 interface ISelectInput {
     id: string;
-    type: "radio" | "checkbox";
+    type: SelectType;
     label: string;
     options: DropdownOption[];
     value?: string | string[];
@@ -11,7 +12,6 @@ interface ISelectInput {
     disabled?: boolean;
 }
 
-// TODO outsource radio/checkbox consts
 function SelectInput({
     id,
     type,
@@ -34,7 +34,7 @@ function SelectInput({
                 const inputId = `${id}-${option.value}`;
 
                 const isChecked =
-                    type === "radio"
+                    type === SELECT_TYPES.RADIO
                         ? value === option.value
                         : Array.isArray(value) && value.includes(option.value);
 

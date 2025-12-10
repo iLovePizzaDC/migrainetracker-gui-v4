@@ -1,5 +1,6 @@
 import SelectInput from "@/features/calendar/components/atoms/SelectInput";
 import { INTENSITY_OPTIONS, type IntensityType } from "@/features/calendar/constants/calendar";
+import { SELECT_TYPES } from "@/shared/constants/input/select";
 
 interface IIntensity {
     intensity: IntensityType;
@@ -17,7 +18,7 @@ function Intensity({ intensity, setIntensity, disabled = false }: IIntensity) {
 
             <SelectInput
                 id="intensity"
-                type="radio"
+                type={SELECT_TYPES.RADIO}
                 label=""
                 options={INTENSITY_OPTIONS}
                 value={intensity}
