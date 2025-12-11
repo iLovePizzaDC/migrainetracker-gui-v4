@@ -1,4 +1,4 @@
-import type { User } from "@/shared/types";
+import type { User } from "@/shared/types/user/user";
 
 export type UserResponse = {
     user: User;

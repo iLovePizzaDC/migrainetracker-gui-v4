@@ -1,5 +1,5 @@
 import SelectInput from "@/features/calendar/components/atoms/SelectInput";
-import { INTENSITY_OPTIONS, type IntensityType } from "@/features/calendar/constants/calendar";
+import { INTENSITY_OPTIONS, type IntensityType } from "@/shared/constants/event/event-details";
 import { SELECT_TYPES } from "@/shared/constants/input/select";
 
 interface IIntensity {

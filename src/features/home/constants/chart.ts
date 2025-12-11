@@ -1,11 +1,5 @@
-import type { DropdownOption } from "@/shared/types";
-
-export const CHART_TYPES = {
-  PIE: "PIE",
-  AREA: "AREA",
-} as const;
-
-export type ChartType = typeof CHART_TYPES[keyof typeof CHART_TYPES];
+import { CHART_TYPES } from "@/shared/constants/event/card";
+import type { DropdownOption } from "@/shared/types/input/input";
 
 export const CHART_OPTIONS: DropdownOption[] = [
   { label: "Area Chart", value: CHART_TYPES.AREA },

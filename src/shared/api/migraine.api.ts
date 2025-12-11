@@ -1,9 +1,8 @@
-import type { IntensityType, SymptomType } from '@/features/calendar/constants/calendar';
-import type { CardType } from '@/features/home/constants/card';
-import type { TimeFrameUnit } from '@/features/home/constants/time-frame';
 import { api } from '@/shared/api/api';
-import type { RawAreaChartResponse, RawEventResponse } from '@/shared/api/types/migraine';
-import type { AppendDuration, AppendMedicine, AppendMidas, Filter } from '@/shared/types';
+import type { Filter, RawAreaChartResponse, RawEventResponse } from '@/shared/api/types/migraine';
+import type { IntensityType, SymptomType } from '@/shared/constants/event/event-details';
+import type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar/calendar';
+import type { CardType, TimeFrameUnit } from '@/shared/types/cards/card';
 import { parseTimeToDecimal } from '@/shared/utils/date/date';
 import { formatEffectiveness, formatMedicine } from '@/shared/utils/formatter/event-parser';
 import axios from 'axios';

@@ -1,4 +1,5 @@
-import { TIME_FRAME_UNITS, type TimeFrameUnit } from "@/features/home/constants/time-frame";
+import { TIME_FRAME_UNITS } from "@/shared/constants/event/card";
+import type { TimeFrameUnit } from "@/shared/types/cards/card";
 import { formatDateToUs, getDateBeforeDays, getDateBeforeMonths, getDayDifference } from "@/shared/utils/date/date";
 
 export function getDateRange(count: number, unit: TimeFrameUnit) {

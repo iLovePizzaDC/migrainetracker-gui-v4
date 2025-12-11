@@ -1,4 +1,4 @@
-import type { SymptomType } from "@/features/calendar/constants/calendar";
+import type { SymptomType } from "@/shared/constants/event/event-details";
 
 export type DescriptionEffectiveness = 'yes' | 'no' | '';
 

@@ -1,6 +1,6 @@
 import { api } from '@/shared/api/api';
 import type { UserResponse } from '@/shared/api/types/user';
-import type { User } from "@/shared/types";
+import type { User } from '@/shared/types/user/user';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 

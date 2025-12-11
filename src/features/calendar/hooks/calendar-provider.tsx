@@ -2,7 +2,7 @@ import { CalendarContext } from "@/features/calendar/context/calendar-context";
 import { useCalendarDate } from "@/features/calendar/hooks/use-calendar-date";
 import { useCalendarEvents } from "@/features/calendar/hooks/use-calendar-events";
 import { useMedDays } from "@/features/calendar/hooks/use-med-days";
-import { useUserMedicines } from "@/features/calendar/hooks/use-user-medicines";
+import { useUserMedicines } from "@/shared/hooks/user/use-user-medicines";
 import { type ReactNode } from "react";
 
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {

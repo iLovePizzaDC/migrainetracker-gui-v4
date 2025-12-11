@@ -1,6 +1,6 @@
-import { CARD_TYPES, type CardType } from "@/features/home/constants/card";
-import type { TimeFrameUnit } from "@/features/home/constants/time-frame";
 import { fetchAreaChart, fetchDurationAmount, fetchMedicineAmount, fetchMidasScore, fetchMigraineAmount } from "@/shared/api/migraine.api";
+import { CARD_TYPES } from "@/shared/constants/event/card";
+import type { CardType, TimeFrameUnit } from "@/shared/types/cards/card";
 import { getMohMedicineFilter } from "@/shared/utils/fetch-helper";
 
 export async function fetchAreaData(

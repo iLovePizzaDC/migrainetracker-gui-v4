@@ -1,6 +1,6 @@
-import type { CalendarFilter } from '@/features/calendar/types/calendar';
 import type { Event } from '@/features/calendar/types/event';
-import type { DropdownOption } from '@/shared/types';
+import type { EventFilter } from '@/shared/types/event/event';
+import type { DropdownOption } from '@/shared/types/input/input';
 import { createContext } from 'react';
 
 interface ICalendarContext {
@@ -18,8 +18,8 @@ interface ICalendarContext {
     maxMedDaysCount: number;
     migrenosusFlags: boolean[];
     userMedicineOptions: DropdownOption[];
-    filter: CalendarFilter;
-    setFilter: React.Dispatch<React.SetStateAction<CalendarFilter>>;
+    filter: EventFilter;
+    setFilter: React.Dispatch<React.SetStateAction<EventFilter>>;
 }
 
 export const CalendarContext = createContext<ICalendarContext>({

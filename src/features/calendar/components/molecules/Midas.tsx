@@ -1,7 +1,7 @@
 import SelectInput from "@/features/calendar/components/atoms/SelectInput";
-import { MIDAS_OPTIONS, type MidasType } from "@/features/calendar/constants/calendar";
+import { MIDAS_OPTIONS, type MidasType } from "@/shared/constants/event/event-details";
 import { SELECT_TYPES } from "@/shared/constants/input/select";
-import type { AppendMidas } from "@/shared/types";
+import type { AppendMidas } from "@/shared/types/calendar/calendar";
 
 interface IMidas {
     midas: AppendMidas;

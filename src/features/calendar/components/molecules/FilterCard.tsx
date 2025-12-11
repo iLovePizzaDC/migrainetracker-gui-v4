@@ -1,15 +1,12 @@
-import Combobox from "@/features/calendar/components/atoms/Combobox";
-import { ANY_OPTION, INTENSITY_OPTIONS, MIDAS_OPTIONS, SYMPTOM_OPTIONS, type IntensityType, type MidasType, type SymptomType } from "@/features/calendar/constants/calendar";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
-import DropdownInput from "@/features/home/components/atoms/card/DropdownInput";
+import FilterForm from "@/shared/components/molecules/FilterForm";
 import { useClickOutside } from "@/shared/hooks/use-click-outside";
-import type { DropdownOption } from "@/shared/types";
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 
 // TODO same styled as other component contextmenu?
 function FilterCard() {
-    const { userMedicineOptions, filter, setFilter } = useCalendar();
+    const { filter, setFilter } = useCalendar();
 
     const [filterOpen, setFilterOpen] = useState(false);
 
@@ -33,74 +30,13 @@ function FilterCard() {
                         className="absolute bottom-full right-0 mb-2 w-64 p-4 rounded-2xl bg-transparent backdrop-blur-xl border border-white/20 shadow-lg shadow-black/30"
                     >
                         <div className="flex justify-between items-center mb-2">
-                            <h3 className="font-semibold text-white">Filter</h3>
+                            <h3 className="font-semibold">Filter</h3>
                             <button onClick={() => setFilterOpen(false)}>
-                                <XMarkIcon className="h-5 w-5 text-white" />
+                                <XMarkIcon className="h-5 w-5" />
                             </button>
                         </div>
-                        <div className="flex flex-col gap-2 text-white">
-                            <DropdownInput
-                                id="filterIntensity"
-                                label="Intensity"
-                                value={filter.intensity ?? 'default'}
-                                options={[ANY_OPTION, ...INTENSITY_OPTIONS]}
-                                onChange={(event) => {
-                                    const value = event.target.value;
-                                    setFilter(prev => ({
-                                        ...prev,
-                                        intensity: value === ANY_OPTION.value ? null : (value as IntensityType)
-                                    }));
-                                }}
-                            />
-                            <Combobox
-                                id="filterSymptoms"
-                                label="Symptoms"
-                                options={[ANY_OPTION, ...SYMPTOM_OPTIONS]}
-                                selected={filter.symptom
-                                    .map(symptom => [ANY_OPTION, ...SYMPTOM_OPTIONS].find(option => option.value === symptom))
-                                    .filter(Boolean) as DropdownOption[]
-                                }
-                                onChange={selectedSymptoms => {
-                                    setFilter(prev => ({
-                                        ...prev,
-                                        symptom: selectedSymptoms.map(symptom => symptom.value as SymptomType | 'any')
-                                    }));
-                                }}
-                            />
-                            <Combobox
-                                id="filterMedicine"
-                                label="Medicine"
-                                options={[ANY_OPTION, ...userMedicineOptions]}
-                                selected={filter.medicine.map(medicine => ({
-                                    label: medicine.label,
-                                    value: medicine.abbreviation,
-                                }))}
-                                onChange={(selectedMedicine) => {
-                                    setFilter(prev => ({
-                                        ...prev,
-                                        medicine: selectedMedicine.map(medicine => ({
-                                            label: medicine.label,
-                                            abbreviation: medicine.value,
-                                        })),
-                                    }));
-                                }}
-                            />
-                            <Combobox
-                                id="filterMidas"
-                                label="Midas"
-                                options={MIDAS_OPTIONS}
-                                selected={filter.midas
-                                    .map(value => MIDAS_OPTIONS.find(option => option.value === value))
-                                    .filter(Boolean) as DropdownOption[]
-                                }
-                                onChange={(selectedMidas) => {
-                                    setFilter(prev => ({
-                                        ...prev,
-                                        midas: selectedMidas.map(midas => midas.value as MidasType),
-                                    }));
-                                }}
-                            />
-                        </div>
+
+                        <FilterForm filter={filter} setFilter={setFilter}/>
                     </div>
                 )}
             </div>

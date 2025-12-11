@@ -1,13 +1,5 @@
-import type { DropdownOption } from "@/shared/types";
-
-export const CARD_TYPES = {
-  MIGRAINE: "MIGRAINE",
-  MEDICINE: "MEDICINE",
-  DURATION: "DURATION",
-  MOH: "MOH",
-} as const;
-
-export type CardType = typeof CARD_TYPES[keyof typeof CARD_TYPES];
+import { CARD_TYPES } from "@/shared/constants/event/card";
+import type { DropdownOption } from "@/shared/types/input/input";
 
 export const CARD_OPTIONS: DropdownOption[] = [
   { label: "Migraine", value: CARD_TYPES.MIGRAINE },
