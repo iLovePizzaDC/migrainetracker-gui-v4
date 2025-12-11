@@ -1,5 +1,5 @@
 import { SELECT_TYPES, type SelectType } from "@/shared/constants/input/select";
-import type { DropdownOption } from "@/shared/types";
+import type { DropdownOption } from "@/shared/types/input/input";
 
 interface ISelectInput {
     id: string;

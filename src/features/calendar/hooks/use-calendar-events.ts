@@ -1,10 +1,10 @@
-import type { CalendarFilter } from "@/features/calendar/types/calendar";
 import type { Event, EventDescription } from "@/features/calendar/types/event";
 import { calculateMigrenosusFlags, determineStrength } from "@/features/calendar/utils/event-highlight";
 import { parseEventDescription } from "@/features/calendar/utils/event-parser";
 import { filterEvents } from "@/features/calendar/utils/filter";
 import { fetchMigraineEvents } from "@/shared/api/migraine.api";
 import type { RawEventResponse } from "@/shared/api/types/migraine";
+import type { EventFilter } from "@/shared/types/event/event";
 import { formatDateToUs } from "@/shared/utils/date/date";
 import { useEffect, useRef, useState } from "react";
 
@@ -16,7 +16,7 @@ export function useCalendarEvents(
     const [rawEvents, setRawEvents] = useState<Event[]>([]);
     const [events, setEvents] = useState<Event[]>([]);
     const [migrenosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
-    const [filter, setFilter] = useState<CalendarFilter>({ intensity: null, symptom: [], medicine: [], midas: [] });
+    const [filter, setFilter] = useState<EventFilter>({ intensity: null, symptom: [], medicine: [], midas: [] });
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchIdRef = useRef(0);

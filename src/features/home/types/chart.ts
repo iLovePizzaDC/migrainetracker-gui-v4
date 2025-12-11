@@ -1,6 +1,5 @@
-import type { CardType } from "@/features/home/constants/card";
-import type { ChartType } from "@/features/home/constants/chart";
-import type { TimeFrameUnit } from "@/features/home/constants/time-frame";
+import type { CardType, ChartType, TimeFrameUnit } from "@/shared/types/cards/card";
+import type { EventFilter } from "@/shared/types/event/event";
 
 export type ChartData = {
     name: string;
@@ -12,6 +11,7 @@ export type CardSetup = {
     title: string;
     cardType: CardType;
     chartType: ChartType;
+    filter: EventFilter;
     timeframe: {
         count: number;
         unit: TimeFrameUnit;

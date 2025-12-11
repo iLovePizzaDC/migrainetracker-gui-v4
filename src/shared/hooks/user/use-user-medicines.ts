@@ -1,6 +1,6 @@
 import { fetchUserMedicinesGet } from "@/shared/api/medicine.api";
 import { useUser } from "@/shared/hooks/user/use-user";
-import type { DropdownOption } from "@/shared/types";
+import type { DropdownOption } from "@/shared/types/input/input";
 import type { Medicine } from "@/shared/types/user/medicine";
 import { useEffect, useState } from "react";
 

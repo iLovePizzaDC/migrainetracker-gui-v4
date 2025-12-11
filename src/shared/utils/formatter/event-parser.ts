@@ -1,4 +1,4 @@
-import type { AppendMedicine } from "@/shared/types";
+import type { AppendMedicine } from "@/shared/types/calendar/calendar";
 
 export const formatMedicine = (medicine: AppendMedicine[]) => {
     const abbreviations = medicine.flatMap(item => {

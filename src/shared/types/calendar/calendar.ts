@@ -1,4 +1,4 @@
-import type { MIDAS_TYPES } from "@/features/calendar/constants/calendar";
+import type { MIDAS_TYPES } from "@/shared/constants/event/event-details";
 
 export type AppendDuration = {
     id: number;

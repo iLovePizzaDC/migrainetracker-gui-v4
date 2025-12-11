@@ -1,13 +1,17 @@
 import Button from "@/features/home/components/atoms/card/Button";
-import DropdownInput from "@/features/home/components/atoms/card/DropdownInput";
 import Input from "@/features/home/components/atoms/card/Input";
-import { CARD_OPTIONS, CARD_TYPES, type CardType } from "@/features/home/constants/card";
+import { CARD_OPTIONS } from "@/features/home/constants/card";
 import { CHART_OPTIONS, CHART_TYPES, type ChartType } from "@/features/home/constants/chart";
 import { TIME_FRAME_UNITS, TIME_FRAME_UNIT_OPTIONS, type TimeFrameUnit } from "@/features/home/constants/time-frame";
 import { useCardSetups } from "@/features/home/hooks/use-card-setups";
 import type { CardSetup } from "@/features/home/types/chart";
+import type { CardType } from "@/shared/api/types/migraine";
+import DropdownInput from "@/shared/components/atoms/DropdownInput";
+import FilterForm from "@/shared/components/molecules/FilterForm";
+import { CARD_TYPES } from "@/shared/constants/event/card";
 import { BUTTON_TYPES } from "@/shared/constants/input/button";
 import { INPUT_TYPES } from "@/shared/constants/input/input";
+import type { EventFilter } from "@/shared/types/event/event";
 import { useState } from "react";
 
 interface ICardForm {
@@ -16,6 +20,7 @@ interface ICardForm {
     defaultTitle?: string;
     defaultCardType?: CardType;
     defaultChartType?: ChartType;
+    defaultFilter?: EventFilter;
     defaultCount?: number;
     defaultUnit?: TimeFrameUnit;
 }
@@ -26,6 +31,7 @@ function CardForm({
     defaultTitle = '',
     defaultCardType = CARD_TYPES.MIGRAINE,
     defaultChartType = CHART_TYPES.AREA,
+    defaultFilter = { intensity: null, symptom: [], medicine: [], midas: [] },
     defaultCount = 12,
     defaultUnit = TIME_FRAME_UNITS.MONTHS,
 }: ICardForm) {
@@ -34,6 +40,7 @@ function CardForm({
     const [title, setTitle] = useState(defaultTitle);
     const [cardType, setCardType] = useState<CardType>(defaultCardType);
     const [chartType, setChartType] = useState<ChartType>(defaultChartType);
+    const [filter, setFilter] = useState<EventFilter>(defaultFilter);
     const [count, setCount] = useState(defaultCount);
     const [unit, setUnit] = useState<TimeFrameUnit>(defaultUnit);
 
@@ -45,6 +52,7 @@ function CardForm({
             title,
             cardType,
             chartType,
+            filter,
             timeframe: {
                 count,
                 unit,
@@ -54,6 +62,7 @@ function CardForm({
         setTitle(defaultTitle);
         setCardType(defaultCardType);
         setChartType(defaultChartType);
+        setFilter(defaultFilter);
         setCount(defaultCount);
         setUnit(defaultUnit);
 
@@ -88,6 +97,8 @@ function CardForm({
                 onChange={(event) => setChartType(event.target.value as ChartType)}
                 required
             />
+
+            <FilterForm filter={filter} setFilter={setFilter} />
 
             <div className="flex items-center space-x-2">
                 <div className="flex-1 w-1/2">

@@ -3,21 +3,12 @@ import Intensity from "@/features/calendar/components/molecules/Intensity";
 import Medicine from "@/features/calendar/components/molecules/Medicine";
 import Midas from "@/features/calendar/components/molecules/Midas";
 import Symptoms from "@/features/calendar/components/molecules/Symptoms";
-import {
-    INTENSITY_TYPES,
-    SYMPTOM_TYPES,
-    type IntensityType,
-    type SymptomType
-} from "@/features/calendar/constants/calendar";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 import type { Entry } from "@/features/calendar/types/calendar";
 import { fetchNewEntry } from "@/shared/api/migraine.api";
 import { FEEDBACK_TYPES, type FeedbackType } from "@/shared/constants/button/feedback";
-import type {
-    AppendDuration,
-    AppendMedicine,
-    AppendMidas,
-} from "@/shared/types";
+import { INTENSITY_TYPES, SYMPTOM_TYPES, type IntensityType, type SymptomType } from "@/shared/constants/event/event-details";
+import type { AppendDuration, AppendMedicine, AppendMidas } from "@/shared/types/calendar/calendar";
 import { formatDateToUs } from "@/shared/utils/date/date";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";

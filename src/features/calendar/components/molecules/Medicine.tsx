@@ -1,8 +1,8 @@
-import Combobox from "@/features/calendar/components/atoms/Combobox";
 import Slider from "@/features/calendar/components/atoms/Slider";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
+import Combobox from "@/shared/components/atoms/Combobox";
 import { useClickOutside } from "@/shared/hooks/use-click-outside";
-import type { AppendMedicine } from "@/shared/types";
+import type { AppendMedicine } from "@/shared/types/calendar/calendar";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 

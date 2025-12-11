@@ -1,5 +1,5 @@
 import SelectInput from "@/features/calendar/components/atoms/SelectInput";
-import { SYMPTOM_OPTIONS, type SymptomType } from "@/features/calendar/constants/calendar";
+import { SYMPTOM_OPTIONS, type SymptomType } from "@/shared/constants/event/event-details";
 import { SELECT_TYPES } from "@/shared/constants/input/select";
 
 interface ISymptoms {

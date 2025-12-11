@@ -1,12 +1,5 @@
-import type { IntensityType, MidasType, SymptomType } from "@/features/calendar/constants/calendar";
-import type { AppendDuration, AppendMedicine, AppendMidas, InputContent } from "@/shared/types/calendar/calendar";
-
-export type CalendarFilter = {
-    intensity: IntensityType | null;
-    symptom: (SymptomType | 'any')[];
-    medicine: (InputContent | { abbreviation: 'any', label: 'Any' })[];
-    midas: MidasType[];
-};
+import type { IntensityType, SymptomType } from "@/shared/constants/event/event-details";
+import type { AppendDuration, AppendMedicine, AppendMidas } from "@/shared/types/calendar/calendar";
 
 export type Entry = {
     durations: AppendDuration[];

@@ -1,4 +1,4 @@
-import type { ChartType } from "@/features/home/constants/chart";
+import type { ChartType } from "@/shared/types/cards/card";
 
 type EventCreator = {
     email: string;
@@ -14,6 +14,13 @@ type EventStartEnd = {
     date: string;
     timeZone: string | null;
 };
+
+export type Filter = {
+    duration?: string,
+    intensity?: string,
+    symptoms?: string,
+    medicines?: string
+}
 
 export type RawEventResponse = {
     kind: string;

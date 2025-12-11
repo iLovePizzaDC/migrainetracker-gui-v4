@@ -1,5 +1,5 @@
 import { fetchUserInformation, fetchUserLogin, fetchUserLogout } from '@/shared/api/user.api';
-import type { User } from '@/shared/types';
+import type { User } from '@/shared/types/user/user';
 import { useEffect, useState } from 'react';
 
 const REDIRECT_URL_SUFFIX = import.meta.env.VITE_GOOGLE_REDIRECT_URL_SUFFIX;
