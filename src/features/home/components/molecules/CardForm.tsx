@@ -1,16 +1,16 @@
 import Button from "@/features/home/components/atoms/card/Button";
 import Input from "@/features/home/components/atoms/card/Input";
 import { CARD_OPTIONS } from "@/features/home/constants/card";
-import { CHART_OPTIONS, CHART_TYPES, type ChartType } from "@/features/home/constants/chart";
-import { TIME_FRAME_UNITS, TIME_FRAME_UNIT_OPTIONS, type TimeFrameUnit } from "@/features/home/constants/time-frame";
+import { CHART_OPTIONS } from "@/features/home/constants/chart";
+import { TIME_FRAME_UNIT_OPTIONS } from "@/features/home/constants/time-frame";
 import { useCardSetups } from "@/features/home/hooks/use-card-setups";
 import type { CardSetup } from "@/features/home/types/chart";
-import type { CardType } from "@/shared/api/types/migraine";
 import DropdownInput from "@/shared/components/atoms/DropdownInput";
 import FilterForm from "@/shared/components/molecules/FilterForm";
-import { CARD_TYPES } from "@/shared/constants/event/card";
+import { CARD_TYPES, CHART_TYPES, TIME_FRAME_UNITS } from "@/shared/constants/event/card";
 import { BUTTON_TYPES } from "@/shared/constants/input/button";
 import { INPUT_TYPES } from "@/shared/constants/input/input";
+import type { CardType, ChartType, TimeFrameUnit } from "@/shared/types/cards/card";
 import type { EventFilter } from "@/shared/types/event/event";
 import { useState } from "react";
 

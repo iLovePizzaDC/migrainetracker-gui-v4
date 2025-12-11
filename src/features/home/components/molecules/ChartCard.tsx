@@ -2,12 +2,11 @@ import AreaChart from "@/features/home/components/atoms/card/AreaChart";
 import PieChart from "@/features/home/components/atoms/card/PieChart";
 import ContextMenu from "@/features/home/components/atoms/context-menu/ContextMenu";
 import CardForm from "@/features/home/components/molecules/CardForm";
-import { type CardType, CARD_TYPES } from "@/features/home/constants/card";
-import { type ChartType, CHART_TYPES } from "@/features/home/constants/chart";
-import type { TimeFrameUnit } from "@/features/home/constants/time-frame";
 import { useCardSetups } from "@/features/home/hooks/use-card-setups";
 import { useChartData } from "@/features/home/hooks/use-chart-data";
 import type { CardSetup } from "@/features/home/types/chart";
+import { CARD_TYPES, CHART_TYPES } from "@/shared/constants/event/card";
+import type { CardType, ChartType, TimeFrameUnit } from "@/shared/types/cards/card";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
