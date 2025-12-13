@@ -6,15 +6,28 @@ import type { EventFilter } from "@/shared/types/event/event";
 import type { DropdownOption } from "@/shared/types/input/input";
 
 interface IFilterForm {
+    variant: 'standard' | 'compact'; // TODO outsource into consts
     filter: EventFilter;
     setFilter: React.Dispatch<React.SetStateAction<EventFilter>>;
+    medicineInputVisible?: boolean;
+    midasInputVisible?: boolean;
 }
 
-function FilterForm({ filter, setFilter }: IFilterForm) {
+function FilterForm({
+    variant,
+    filter,
+    setFilter,
+    medicineInputVisible = true,
+    midasInputVisible = true,
+}: IFilterForm) {
     const { userMedicineOptions } = useUserMedicines();
 
+    const baseClasses = variant === "compact"
+        ? "space-y-2"
+        : "space-y-3 rounded-xl border border-white/10 bg-white/5";
+
     return (
-        <div className="flex flex-col gap-2">
+        <div className={`p-3 ${baseClasses}`}>
             <DropdownInput
                 id="filterIntensity"
                 label="Intensity"
@@ -43,39 +56,43 @@ function FilterForm({ filter, setFilter }: IFilterForm) {
                     }));
                 }}
             />
-            <Combobox
-                id="filterMedicine"
-                label="Medicine"
-                options={[ANY_OPTION, ...userMedicineOptions]}
-                selected={filter.medicine.map(medicine => ({
-                    label: medicine.label,
-                    value: medicine.abbreviation,
-                }))}
-                onChange={(selectedMedicine) => {
-                    setFilter(prev => ({
-                        ...prev,
-                        medicine: selectedMedicine.map(medicine => ({
-                            label: medicine.label,
-                            abbreviation: medicine.value,
-                        })),
-                    }));
-                }}
-            />
-            <Combobox
-                id="filterMidas"
-                label="Midas"
-                options={MIDAS_OPTIONS}
-                selected={filter.midas
-                    .map(value => MIDAS_OPTIONS.find(option => option.value === value))
-                    .filter(Boolean) as DropdownOption[]
-                }
-                onChange={(selectedMidas) => {
-                    setFilter(prev => ({
-                        ...prev,
-                        midas: selectedMidas.map(midas => midas.value as MidasType),
-                    }));
-                }}
-            />
+            {medicineInputVisible &&
+                <Combobox
+                    id="filterMedicine"
+                    label="Medicine"
+                    options={[ANY_OPTION, ...userMedicineOptions]}
+                    selected={filter.medicine.map(medicine => ({
+                        label: medicine.label,
+                        value: medicine.abbreviation,
+                    }))}
+                    onChange={(selectedMedicine) => {
+                        setFilter(prev => ({
+                            ...prev,
+                            medicine: selectedMedicine.map(medicine => ({
+                                label: medicine.label,
+                                abbreviation: medicine.value,
+                            })),
+                        }));
+                    }}
+                />
+            }
+            {midasInputVisible &&
+                <Combobox
+                    id="filterMidas"
+                    label="Midas"
+                    options={MIDAS_OPTIONS}
+                    selected={filter.midas
+                        .map(value => MIDAS_OPTIONS.find(option => option.value === value))
+                        .filter(Boolean) as DropdownOption[]
+                    }
+                    onChange={(selectedMidas) => {
+                        setFilter(prev => ({
+                            ...prev,
+                            midas: selectedMidas.map(midas => midas.value as MidasType),
+                        }));
+                    }}
+                />
+            }
         </div>
     );
 }

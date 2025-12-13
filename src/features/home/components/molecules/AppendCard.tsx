@@ -20,7 +20,7 @@ function AppendCard() {
             tabIndex={-1}
         >
             <div
-                className="p-6 flex items-center justify-between cursor-pointer"
+                className="p-4 sm:p-6 flex items-center justify-between cursor-pointer"
                 onClick={() => setExpanded(!expanded)}
             >
                 <h2 className="text-lg font-semibold">Add more</h2>
@@ -31,10 +31,15 @@ function AppendCard() {
                 )}
             </div>
 
-            <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'h-96 px-6 pb-6' : 'h-0'}`}>
-                {expanded && (
-                    <CardForm onButtonClick={appendSetup} />
-                )}
+            <div
+                className={`
+                    grid transition-all duration-300
+                    ${expanded ? 'grid-rows-[1fr] px-6 pb-6' : 'grid-rows-[0fr]'}
+                `}
+            >
+                <div className="overflow-hidden">
+                    {expanded && <CardForm onButtonClick={appendSetup} />}
+                </div>
             </div>
         </div>
     );

@@ -5,6 +5,7 @@ import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 
 // TODO same styled as other component contextmenu?
+// TODO no transition when opening/closing filter
 function FilterCard() {
     const { filter, setFilter } = useCalendar();
 
@@ -36,7 +37,11 @@ function FilterCard() {
                             </button>
                         </div>
 
-                        <FilterForm filter={filter} setFilter={setFilter}/>
+                        <FilterForm
+                            variant="compact" // TODO use const
+                            filter={filter}
+                            setFilter={setFilter}
+                        />
                     </div>
                 )}
             </div>
