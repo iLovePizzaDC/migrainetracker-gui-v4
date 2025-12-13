@@ -9,6 +9,7 @@ import { normalizeDate } from "@/shared/utils/date/date";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
+// TODO no transition when opening/closing migraine panel
 function Calendar() {
     const { isLoading, date, events, setMonth, userMedicineOptions } = useCalendar();
 

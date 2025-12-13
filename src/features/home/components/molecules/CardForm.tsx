@@ -25,6 +25,7 @@ interface ICardForm {
     defaultUnit?: TimeFrameUnit;
 }
 
+// TODO no transition when opening/closing edit mode
 function CardForm({
     onButtonClick,
     defaultIndex,
@@ -70,7 +71,7 @@ function CardForm({
     };
 
     return (
-        <form className="space-y-4" onSubmit={onSubmit}>
+        <form className="space-y-5" onSubmit={onSubmit}>
             <Input
                 id="appendTitle"
                 label="Title"
@@ -98,10 +99,15 @@ function CardForm({
                 required
             />
 
-            <FilterForm filter={filter} setFilter={setFilter} />
+            <FilterForm
+                variant="standard" // TODO use const
+                filter={filter}
+                setFilter={setFilter}
+                medicineInputVisible={defaultCardType !== CARD_TYPES.MOH}
+                midasInputVisible={false}
+            />
 
-            <div className="flex items-center space-x-2">
-                <div className="flex-1 w-1/2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <Input
                         id="appendValue"
                         label="Value"
@@ -111,9 +117,7 @@ function CardForm({
                         placeholder="Enter number"
                         required
                     />
-                </div>
 
-                <div className="w-1/2">
                     <DropdownInput
                         id="appendUnit"
                         label="Unit"
@@ -122,7 +126,6 @@ function CardForm({
                         onChange={(event) => setUnit(event.target.value as TimeFrameUnit)}
                         required
                     />
-                </div>
             </div>
 
             <Button

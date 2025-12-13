@@ -15,6 +15,7 @@ function CardSection() {
                     title={cardSetup.title}
                     cardType={cardSetup.cardType}
                     chartType={cardSetup.chartType}
+                    filter={cardSetup.filter}
                     timeframeCount={cardSetup.timeframe.count}
                     timeframeUnit={cardSetup.timeframe.unit}
                 />

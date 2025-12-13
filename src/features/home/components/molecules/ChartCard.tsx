@@ -7,6 +7,7 @@ import { useChartData } from "@/features/home/hooks/use-chart-data";
 import type { CardSetup } from "@/features/home/types/chart";
 import { CARD_TYPES, CHART_TYPES } from "@/shared/constants/event/card";
 import type { CardType, ChartType, TimeFrameUnit } from "@/shared/types/cards/card";
+import type { EventFilter } from "@/shared/types/event/event";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
@@ -15,13 +16,14 @@ interface IChartCard {
     title: string;
     cardType: CardType;
     chartType: ChartType;
+    filter: EventFilter;
     timeframeCount: number;
     timeframeUnit: TimeFrameUnit;
 }
 
-function ChartCard({ index, title, cardType, chartType, timeframeCount, timeframeUnit }: IChartCard) {
+function ChartCard({ index, title, cardType, chartType, filter, timeframeCount, timeframeUnit }: IChartCard) {
     const { removeSetupByIndex, updateSetupByIndex } = useCardSetups();
-    const { isLoading, areaData, pieData, currentPieValue, totalPieValue } = useChartData(cardType, chartType, timeframeCount, timeframeUnit);
+    const { isLoading, areaData, pieData, currentPieValue, totalPieValue } = useChartData(cardType, chartType, filter, timeframeCount, timeframeUnit);
 
     const [contextOpen, setContextOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -77,6 +79,7 @@ function ChartCard({ index, title, cardType, chartType, timeframeCount, timefram
                     defaultTitle={title}
                     defaultCardType={cardType}
                     defaultChartType={chartType}
+                    defaultFilter={filter}
                     defaultCount={timeframeCount}
                     defaultUnit={timeframeUnit}
                 />
