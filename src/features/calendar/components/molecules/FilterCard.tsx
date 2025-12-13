@@ -1,5 +1,6 @@
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 import FilterForm from "@/shared/components/molecules/FilterForm";
+import { FILTER_FORM_VARIANTS } from "@/shared/constants/variants/filter-form";
 import { useClickOutside } from "@/shared/hooks/use-click-outside";
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
@@ -38,7 +39,7 @@ function FilterCard() {
                         </div>
 
                         <FilterForm
-                            variant="compact" // TODO use const
+                            variant={FILTER_FORM_VARIANTS.COMPACT}
                             filter={filter}
                             setFilter={setFilter}
                         />

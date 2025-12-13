@@ -10,6 +10,7 @@ import FilterForm from "@/shared/components/molecules/FilterForm";
 import { CARD_TYPES, CHART_TYPES, TIME_FRAME_UNITS } from "@/shared/constants/event/card";
 import { BUTTON_TYPES } from "@/shared/constants/input/button";
 import { INPUT_TYPES } from "@/shared/constants/input/input";
+import { FILTER_FORM_VARIANTS } from "@/shared/constants/variants/filter-form";
 import type { CardType, ChartType, TimeFrameUnit } from "@/shared/types/cards/card";
 import type { EventFilter } from "@/shared/types/event/event";
 import { useState } from "react";
@@ -100,7 +101,7 @@ function CardForm({
             />
 
             <FilterForm
-                variant="standard" // TODO use const
+                variant={FILTER_FORM_VARIANTS.STANDARD}
                 filter={filter}
                 setFilter={setFilter}
                 medicineInputVisible={defaultCardType !== CARD_TYPES.MOH}

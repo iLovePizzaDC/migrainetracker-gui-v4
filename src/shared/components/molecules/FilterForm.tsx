@@ -1,12 +1,13 @@
 import Combobox from "@/shared/components/atoms/Combobox";
 import DropdownInput from "@/shared/components/atoms/DropdownInput";
 import { ANY_OPTION, INTENSITY_OPTIONS, MIDAS_OPTIONS, SYMPTOM_OPTIONS, type IntensityType, type MidasType, type SymptomType } from "@/shared/constants/event/event-details";
+import { FILTER_FORM_VARIANTS, type FilterFormVariant } from "@/shared/constants/variants/filter-form";
 import { useUserMedicines } from "@/shared/hooks/user/use-user-medicines";
 import type { EventFilter } from "@/shared/types/event/event";
 import type { DropdownOption } from "@/shared/types/input/input";
 
 interface IFilterForm {
-    variant: 'standard' | 'compact'; // TODO outsource into consts
+    variant: FilterFormVariant;
     filter: EventFilter;
     setFilter: React.Dispatch<React.SetStateAction<EventFilter>>;
     medicineInputVisible?: boolean;
@@ -22,7 +23,7 @@ function FilterForm({
 }: IFilterForm) {
     const { userMedicineOptions } = useUserMedicines();
 
-    const baseClasses = variant === "compact"
+    const baseClasses = variant === FILTER_FORM_VARIANTS.COMPACT
         ? "space-y-2"
         : "space-y-3 rounded-xl border border-white/10 bg-white/5";
 
