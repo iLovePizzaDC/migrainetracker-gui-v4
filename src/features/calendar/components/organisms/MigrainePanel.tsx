@@ -65,7 +65,7 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
         !areInputsDisabled ||
         medicines.length > 0;
 
-    const saveNewEntry = async () => {
+    const submitNewEntry = async () => {
         try {
             setIsLoading(true);
             await fetchNewEntry(formatDateToUs(date), durations, intensity, symptoms, medicines, midas);
@@ -80,7 +80,7 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
         }
     };
 
-    const cacheNewEntry = () => {
+    const saveNewEntry = () => {
         try {
             localStorage.setItem(
                 "MT_NE",
@@ -159,7 +159,7 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
                 {!areInputsDisabled &&
                     <div className="flex justify-between pt-2">
                         <button
-                            onClick={cacheNewEntry}
+                            onClick={saveNewEntry}
                             className={`
                                 px-4 py-2 rounded-lg backdrop-blur-xl border shadow-sm shadow-black/30 text-sm font-medium transition-opacity
                                 ${cacheFeedback === "success" ? "border-green-500/50 text-green-800" : ""}
@@ -168,11 +168,11 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
                                 hover:opacity-80 disabled:opacity-80
                             `}
                         >
-                            Cache
+                            Save
                         </button>
 
                         <button
-                            onClick={saveNewEntry}
+                            onClick={submitNewEntry}
                             disabled={isLoading}
                             className={`
                                 px-4 py-2 rounded-lg backdrop-blur-xl border shadow-sm shadow-black/30 text-sm font-medium transition-opacity
@@ -182,7 +182,7 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
                                 hover:opacity-80 disabled:opacity-80
                             `}
                         >
-                            {isLoading ? "Saving..." : "Save"}
+                            {isLoading ? "Submitting..." : "Submit"}
                         </button>
                     </div>
                 }
