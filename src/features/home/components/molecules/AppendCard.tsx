@@ -1,6 +1,6 @@
 import CardForm from "@/features/home/components/molecules/CardForm";
 import { useCardSetups } from "@/features/home/hooks/use-card-setups";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 function AppendCard() {
@@ -24,21 +24,25 @@ function AppendCard() {
                 onClick={() => setExpanded(!expanded)}
             >
                 <h2 className="text-lg font-semibold">Add more</h2>
-                {expanded ? (
-                    <MinusIcon className="w-6 h-6" />
-                ) : (
-                    <PlusIcon className="w-6 h-6" />
-                )}
+                <PlusIcon
+                    className={`w-6 h-6 transition-transform duration-300 ${
+                        expanded ? "rotate-45" : ""
+                    }`}
+                />
             </div>
 
             <div
                 className={`
-                    grid transition-all duration-300
-                    ${expanded ? 'grid-rows-[1fr] px-6 pb-6' : 'grid-rows-[0fr]'}
+                    grid overflow-hidden
+                    transition-[grid-template-rows,opacity] duration-300 ease-out
+                    ${expanded
+                        ? "grid-rows-[1fr] opacity-100 px-6 pb-6"
+                        : "grid-rows-[0fr] opacity-0"
+                    }
                 `}
             >
                 <div className="overflow-hidden">
-                    {expanded && <CardForm onButtonClick={appendSetup} />}
+                    <CardForm onButtonClick={appendSetup} />
                 </div>
             </div>
         </div>

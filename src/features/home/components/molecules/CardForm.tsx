@@ -26,7 +26,6 @@ interface ICardForm {
     defaultUnit?: TimeFrameUnit;
 }
 
-// TODO no transition when opening/closing edit mode
 function CardForm({
     onButtonClick,
     defaultIndex,
