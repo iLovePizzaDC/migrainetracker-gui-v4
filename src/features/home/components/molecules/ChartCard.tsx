@@ -72,19 +72,14 @@ function ChartCard({ index, title, cardType, chartType, filter, timeframeCount, 
                 />
             </div>
 
-            {isEditing ? (
-                <CardForm
-                    onButtonClick={onEdit}
-                    defaultIndex={index}
-                    defaultTitle={title}
-                    defaultCardType={cardType}
-                    defaultChartType={chartType}
-                    defaultFilter={filter}
-                    defaultCount={timeframeCount}
-                    defaultUnit={timeframeUnit}
-                />
-            ) : (
-                <>
+            <div
+                className={`
+                    grid overflow-hidden
+                    transition-[grid-template-rows] duration-300 ease-out
+                    ${isEditing ? "grid-rows-[0fr_1fr]" : "grid-rows-[1fr_0fr]"}
+                `}
+            >
+                <div className="overflow-hidden transition-all duration-300">
                     <div className="h-72 w-full flex items-center justify-center">
                         {/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
                         {/* TODO add average line to areachart? */}
@@ -104,8 +99,29 @@ function ChartCard({ index, title, cardType, chartType, filter, timeframeCount, 
                             </p>
                         </div>
                     )}
-                </>
-            )}
+                </div>
+                <div
+                    className={`
+                        overflow-hidden
+                        transition-[opacity,max-height] duration-300 ease-out
+                        ${isEditing
+                            ? "opacity-100 max-h-[1000px] visible pointer-events-auto"
+                            : "opacity-0 max-h-0 invisible pointer-events-none"
+                        }
+                    `}
+                >
+                    <CardForm
+                        onButtonClick={onEdit}
+                        defaultIndex={index}
+                        defaultTitle={title}
+                        defaultCardType={cardType}
+                        defaultChartType={chartType}
+                        defaultFilter={filter}
+                        defaultCount={timeframeCount}
+                        defaultUnit={timeframeUnit}
+                        />
+                </div>
+            </div>
         </div>
     );
 }

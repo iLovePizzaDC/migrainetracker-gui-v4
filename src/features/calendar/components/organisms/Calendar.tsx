@@ -9,7 +9,6 @@ import { normalizeDate } from "@/shared/utils/date/date";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-// TODO no transition when opening/closing migraine panel
 function Calendar() {
     const { isLoading, date, events, setMonth, userMedicineOptions } = useCalendar();
 
@@ -92,19 +91,19 @@ function Calendar() {
                 </div>
             </div>
             <FilterCard />
-            {openDay && (
+            <div className="mt-4">
                 <MigrainePanel
-                    key={openDay}
                     date={selectedDate ?? date}
                     onClose={() => {
                         setOpenDay(null);
                         setSelectedDate(null);
                         setEntry(null);
                     }}
+                    isOpen={!!openDay}
                     prefilled={entry}
                     disabled={!!entry && !isStoredEntryDisplaying}
                 />
-            )}
+            </div>
         </>
     );
 }
