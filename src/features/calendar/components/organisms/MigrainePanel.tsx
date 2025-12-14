@@ -11,7 +11,7 @@ import { INTENSITY_TYPES, SYMPTOM_TYPES, type IntensityType, type SymptomType } 
 import type { AppendDuration, AppendMedicine, AppendMidas } from "@/shared/types/calendar/calendar";
 import { formatDateToUs } from "@/shared/utils/date/date";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IMigrainePanel {
     date: Date;
@@ -94,6 +94,8 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
         }
     };
 
+    useEffect(() => setAreInputsDisabled(disabled), [date, disabled]);
+
     return (
         <div
             className={`
@@ -132,13 +134,13 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
                             disabled={isLoading}
                         >
                             {areInputsDisabled ? (
-                                <PencilIcon className="h-4 w-4" />
+                                <PencilIcon className="h-5 w-5" />
                             ) : (
-                                <XMarkIcon className="h-4 w-4" />
+                                <XMarkIcon className="h-5 w-5" />
                             )}
                         </button>
                     ) : (
-                        <div className="h-4 w-4" />
+                        <div className="h-5 w-5" />
                     )}
                 </div>
 
