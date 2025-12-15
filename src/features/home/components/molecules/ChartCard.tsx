@@ -111,6 +111,15 @@ function ChartCard({ index, title, cardType, chartType, filter, timeframeCount, 
                     `}
                 >
                     <CardForm
+                        key={JSON.stringify({
+                            index,
+                            title,
+                            cardType,
+                            chartType,
+                            filter,
+                            timeframeCount,
+                            timeframeUnit
+                        })}
                         onButtonClick={onEdit}
                         defaultIndex={index}
                         defaultTitle={title}
@@ -119,7 +128,7 @@ function ChartCard({ index, title, cardType, chartType, filter, timeframeCount, 
                         defaultFilter={filter}
                         defaultCount={timeframeCount}
                         defaultUnit={timeframeUnit}
-                        />
+                    />
                 </div>
             </div>
         </div>
