@@ -99,11 +99,12 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
     return (
         <div
             className={`
-                transition-[opacity,transform] duration-300 ease-out
+                overflow-hidden transition-all duration-300 ease-out
                 will-change-transform
                 ${isOpen
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-2 absolute inset-x-0 pointer-events-none"}
+                    ? "opacity-100 translate-y-0 max-h-[2000px]"
+                    : "opacity-0 translate-y-2 max-h-0 pointer-events-none"
+                }
             `}
         >
             <div
