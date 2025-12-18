@@ -68,7 +68,7 @@ function Calendar() {
             setMonth(entryDate);
             setEntry(entry);
             setSelectedDate(entryDate);
-            setOpenDay(entryDate.getDay());
+            setOpenDay(entryDate.getDate());
         }
     };
 
