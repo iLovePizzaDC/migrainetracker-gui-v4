@@ -93,6 +93,7 @@ function Calendar() {
             <FilterCard />
             <div className="mt-4">
                 <MigrainePanel
+                    key={openDay}
                     date={selectedDate ?? date}
                     onClose={() => {
                         setOpenDay(null);
