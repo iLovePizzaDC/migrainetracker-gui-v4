@@ -96,6 +96,39 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
 
     useEffect(() => setAreInputsDisabled(disabled), [date, disabled]);
 
+    useEffect(() => {
+        setAreInputsDisabled(disabled);
+        setSaveFeedback(FEEDBACK_TYPES.NULL);
+        setCacheFeedback(FEEDBACK_TYPES.NULL);
+
+        setDurations(prefilled
+            ? prefilled.durations
+            : [{ id: 0, startTime: "12:00", endTime: "13:00" }]
+        );
+        setIntensity(prefilled
+            ? prefilled.intensity
+            : INTENSITY_TYPES.MEDIUM
+        );
+        setSymptoms(prefilled
+            ? prefilled.symptoms
+            : [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT]
+        );
+        setMedicines(prefilled
+            ? prefilled.medicines
+            : []
+        );
+        setMidas(prefilled
+            ? prefilled.midas
+            : {
+                workMissed: false,
+                workImpaired: false,
+                choresMissed: false,
+                choresImpaired: false,
+                socialMissed: false
+            }
+        );
+    }, [date, disabled, prefilled]);
+
     return (
         <div
             className={`
