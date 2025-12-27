@@ -12,7 +12,7 @@ import { useState } from "react";
 function Calendar() {
     const { isLoading, date, events, setMonth, userMedicineOptions } = useCalendar();
 
-    const [openDay, setOpenDay] = useState<number | null>(null);
+    const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [entry, setEntry] = useState<Entry | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [isStoredEntryDisplaying, setIsStoredEntryDisplaying] = useState(false);
@@ -54,7 +54,7 @@ function Calendar() {
         setIsStoredEntryDisplaying(false);
         setEntry(entry);
         setSelectedDate(selected);
-        setOpenDay(day);
+        setIsPanelOpen(true);
     };
 
     const onLoadEntryClick = () => {
@@ -68,7 +68,7 @@ function Calendar() {
             setMonth(entryDate);
             setEntry(entry);
             setSelectedDate(entryDate);
-            setOpenDay(entryDate.getDate());
+            setIsPanelOpen(true);
         }
     };
 
@@ -77,7 +77,7 @@ function Calendar() {
             <div className="relative rounded-2xl p-6 bg-transparent backdrop-blur-xl border border-white/20 shadow-lg shadow-black/30 w-full max-w-md min-h-96 mx-auto flex flex-col">
                 <div className="flex-1 flex flex-col">
                     <CalendarHeader />
-                    <CalendarContent onDayClick={onDayClick} />
+                    <CalendarContent openDate={selectedDate} onDayClick={onDayClick} />
                 </div>
 
                 <div className="mt-2 flex justify-end">
@@ -95,11 +95,11 @@ function Calendar() {
                 <MigrainePanel
                     date={selectedDate ?? date}
                     onClose={() => {
-                        setOpenDay(null);
+                        setIsPanelOpen(false);
                         setSelectedDate(null);
                         setEntry(null);
                     }}
-                    isOpen={!!openDay}
+                    isOpen={!!isPanelOpen}
                     prefilled={entry}
                     disabled={!!entry && !isStoredEntryDisplaying}
                 />
