@@ -1,16 +1,21 @@
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 
 interface ICalendarContent {
+    openDate: Date | null;
     onDayClick: (day: number) => void;
 }
 
-function CalendarContent({ onDayClick }: ICalendarContent) {
-    const { isLoading, daysArray, events, migrenosusFlags } = useCalendar();
+function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
+    const { isLoading, date, daysArray, events, migrenosusFlags } = useCalendar();
 
     const getEventForDay = (day: number | null) => {
         if (!day) return null;
         return events.find(event => event.date.getDate() === day);
     };
+
+    const today = new Date();
+    const isInSelectedMonth = (openDate && date.getMonth() === openDate.getMonth() && date.getFullYear() === openDate.getFullYear() ||
+                                date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear());
 
     return (
         <div className="space-y-4">
@@ -33,8 +38,17 @@ function CalendarContent({ onDayClick }: ICalendarContent) {
                             onClick={() => day && onDayClick(day)}
                             className={`
                                 h-14 flex flex-col items-center justify-center
-                                rounded-lg transition
-                                ${day ? "hover:bg-white/10 cursor-pointer" : "opacity-0"}
+                                rounded-lg transition-color duration-200
+                                ${day
+                                    ? `${day === openDate?.getDate() && isInSelectedMonth
+                                            ? 'bg-white/10'
+                                            : `${day === today.getDate() && isInSelectedMonth
+                                                ? 'bg-white/5 hover:bg-white/10 cursor-pointer'
+                                                : 'hover:bg-white/10 cursor-pointer'
+                                            }`
+                                        }`
+                                    : "opacity-0"
+                                }
                             `}
                         >
                             {day ?? ""}
