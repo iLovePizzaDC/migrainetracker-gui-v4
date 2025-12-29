@@ -3,7 +3,7 @@ import { useCalendarDate } from "@/features/calendar/hooks/use-calendar-date";
 import { useCalendarEvents } from "@/features/calendar/hooks/use-calendar-events";
 import { useMedDays } from "@/features/calendar/hooks/use-med-days";
 import { useUserMedicines } from "@/shared/hooks/user/use-user-medicines";
-import { useEffect, type ReactNode } from "react";
+import { useCallback, useEffect, type ReactNode } from "react";
 
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     const {
@@ -14,7 +14,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 
     const {
         calendarEvents, filteredEvents, migrainosusFlags, filter,
-        setFilter, isLoading, refetchEvents,
+        setFilter, isLoading, refetchEvents: _refetchEvents,
     } = useCalendarEvents(firstDayOfMonth, lastDayOfMonth, daysInMonth);
 
     const {
@@ -23,6 +23,11 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     } = useMedDays(currentDate);
 
     const { userMedicineOptions, loadUserMedicines } = useUserMedicines()
+
+    const refetchEvents = useCallback(async () => {
+        await _refetchEvents();
+        await collectMedDays();
+    }, [_refetchEvents, collectMedDays]);
 
     useEffect(() => {
         collectMedDays();
