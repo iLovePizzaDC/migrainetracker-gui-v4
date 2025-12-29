@@ -17,11 +17,8 @@ export function useMedDays(currentDate: Date) {
     }, [currentDate]);
 
     useEffect(() => {
-        const run = () => {
-            collectMedDays();
-        }
-
-        run();
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        void collectMedDays();
     }, [collectMedDays]);
 
     return {
