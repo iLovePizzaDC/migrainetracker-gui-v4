@@ -13,9 +13,9 @@ MigraineTracker-GUI is a [**Vite**](https://vite.dev) project, using the [**Migr
 
 ## Environment Variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the project root
 
-```env
+```properties
 VITE_BASE_URL="http://localhost:5173/"
 VITE_ENDPOINT_BASE_URL="http://localhost:8080/"
 VITE_API_URL_SUFFIX="api/"
@@ -24,6 +24,26 @@ VITE_GOOGLE_CLIENT_ID="changeme"
 ```
 
 The `.env` file is automatically loaded and must not be committed.
+
+## Deploy new version
+
+First build the code with
+
+```bash
+npm run build
+```
+
+Move the **dist** folder to Luna at `/home/nicob`.
+
+After this run the following commands
+
+```bash
+sudo rm -rf /var/www/migrainetracker/
+sudo mkdir /var/www/migrainetracker
+sudo cp -r ~/dist/* /var/www/migrainetracker/
+sudo chown -R www-data:www-data /var/www/migrainetracker
+sudo chmod -R 755 /var/www/migrainetracker
+```
 
 ## MigraineTrackerV3 endpoints
 
