@@ -1,12 +1,13 @@
 import type { DropdownOption } from "@/shared/types/input/input";
 import {
+    ComboboxButton,
     ComboboxInput,
     ComboboxOption,
     ComboboxOptions,
     Combobox as UICombobox,
 } from "@headlessui/react";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface ICombobox {
     id: string;
@@ -30,6 +31,7 @@ function Combobox({
     disabled = false,
 }: ICombobox) {
     const [query, setQuery] = useState("");
+    const buttonRef = useRef<HTMLButtonElement | null>(null);
 
     const filtered =
         query === ""
@@ -84,10 +86,14 @@ function Combobox({
 
                         onChange(newValue);
                         setQuery("");
+
+                        buttonRef.current?.click();
                     }}
                     multiple
                 >
                     <div className="relative mt-1">
+                        <ComboboxButton ref={buttonRef} className="sr-only" type="button" />
+
                         <ComboboxInput
                             id={id}
                             required={required}
