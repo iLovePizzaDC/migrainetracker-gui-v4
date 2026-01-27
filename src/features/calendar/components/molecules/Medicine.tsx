@@ -49,7 +49,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
                     <InformationCircleIcon className="w-4 h-4" />
                 </button>
 
-                {showInfo && (
+                {showInfo && ( //TODO outsource
                     <div
                         ref={infoRef}
                         className="absolute left-1/2 top-6 -translate-x-1/2 z-50 w-64 rounded-lg bg-black/60 backdrop-blur border border-white/10 p-3 text-xs shadow-xl animate-fade-in"
