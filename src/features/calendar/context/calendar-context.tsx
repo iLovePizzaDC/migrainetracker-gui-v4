@@ -13,6 +13,8 @@ interface ICalendarContext {
     prevMonth: () => void;
     nextMonth: () => void;
     refetchEvents: () => Promise<void>;
+    collectMedDays: () => Promise<void>;
+    loadUserMedicines: () => Promise<void>;
     events: Event[];
     medDaysCount: number;
     maxMedDaysCount: number;
@@ -32,6 +34,8 @@ export const CalendarContext = createContext<ICalendarContext>({
     prevMonth: () => {},
     nextMonth: () => {},
     refetchEvents: async () => {},
+    collectMedDays: async () => {},
+    loadUserMedicines: async () => {},
     events: [],
     medDaysCount: 0,
     maxMedDaysCount: 10,

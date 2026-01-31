@@ -1,30 +1,35 @@
 import { fetchUserMedicinesGet } from "@/shared/api/medicine.api";
-import { useUser } from "@/shared/hooks/user/use-user";
 import type { DropdownOption } from "@/shared/types/input/input";
 import type { Medicine } from "@/shared/types/user/medicine";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useUser } from "./use-user";
 
 export function useUserMedicines() {
     const { user } = useUser();
-
     const [userMedicineOptions, setUserMedicineOptions] = useState<DropdownOption[]>([]);
 
-    useEffect(() => {
-        const load = async () => {
-            if (!user) return;
-            const meds: Medicine[] = await fetchUserMedicinesGet(user.id);
-            setUserMedicineOptions(
-                meds.map(m => ({
-                    label: m.name,
-                    value: m.abbreviation
-                }))
-            );
-        };
+    const loadUserMedicines = useCallback(async () => {
+        const meds: Medicine[] = await fetchUserMedicinesGet();
+        setUserMedicineOptions(
+            meds.map(m => ({
+                label: m.name,
+                value: m.abbreviation
+            }))
+        );
+    }, []);
 
-        load();
-    }, [user]);
+    useEffect(() => {
+        if (!user) return;
+
+        const run = () => {
+            loadUserMedicines();
+        }
+
+        run();
+    }, [user, loadUserMedicines]);
 
     return {
         userMedicineOptions,
+        loadUserMedicines,
     };
 }

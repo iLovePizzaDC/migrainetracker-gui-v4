@@ -7,28 +7,32 @@ import {
     Combobox as UICombobox,
 } from "@headlessui/react";
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useRef, useState } from "react";
+import React, { useRef, useState, type ReactNode } from "react";
 
 interface ICombobox {
     id: string;
-    label: string;
     options: DropdownOption[];
     selected: DropdownOption[];
     onChange: (value: DropdownOption[]) => void;
+    label?: string;
     placeholder?: string;
     required?: boolean;
     disabled?: boolean;
+    renderOptionActions?: (option: DropdownOption) => ReactNode;
+    ref?: React.RefObject<HTMLDivElement | null>;
 }
 
 function Combobox({
     id,
-    label,
     options,
     selected,
     onChange,
+    label,
     placeholder = '',
     required = false,
     disabled = false,
+    renderOptionActions,
+    ref,
 }: ICombobox) {
     const [query, setQuery] = useState("");
     const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -43,31 +47,37 @@ function Combobox({
               );
 
     return (
-        <div className="w-full">
-            <label htmlFor={id} className="block text-sm font-medium mb-1">
-                {label}
-            </label>
+        <div ref={ref} className="w-full">
+            {label &&
+                <label htmlFor={id} className="block text-sm font-medium mb-1">
+                    {label}
+                </label>
+            }
 
             <div className="flex flex-wrap gap-1 mb-1">
-                {selected.map((option) => (
-                    <button
-                        key={option.value}
-                        type="button"
-                        className={`px-2 py-0.5 bg-purple-700/50 rounded text-xs flex items-center gap-1 ${disabled ? '' : 'hover:opacity-80 transition-opacity'}`}
-                        onClick={() =>
-                            onChange(selected.filter((selectedOption) => selectedOption.value !== option.value))
-                        }
-                        disabled={disabled}
-                    >
-                        {option.label}
-                        {!disabled &&
-                            <span
-                                className="text-xs hover:text-red-300"
-                            >
-                                <XMarkIcon className="h-3 w-3" />
-                            </span>
-                        }
-                    </button>
+                {selected.length === 0 ? (
+                    <div className="h-5" />
+                ) : (
+                    selected.map((option) => (
+                        <button
+                            key={option.value}
+                            type="button"
+                            className={`px-2 py-0.5 bg-purple-700/50 rounded text-xs flex items-center gap-1 ${disabled ? '' : 'hover:opacity-80 transition-opacity'}`}
+                            onClick={() =>
+                                onChange(selected.filter((selectedOption) => selectedOption.value !== option.value))
+                            }
+                            disabled={disabled}
+                        >
+                            {option.label}
+                            {!disabled &&
+                                <span
+                                    className="text-xs hover:text-red-300"
+                                >
+                                    <XMarkIcon className="h-3 w-3" />
+                                </span>
+                            }
+                        </button>
+                    )
                 ))}
             </div>
 
@@ -116,18 +126,24 @@ function Combobox({
                             {filtered.map((option) => {
                                 const active = selected.some((v) => v.value === option.value);
                                 return (
-                                    <ComboboxOption
+                                    <div
                                         key={option.value}
-                                        value={option}
-                                        className={({ active }) =>
-                                            `px-3 py-2 cursor-pointer flex justify-between ${
-                                                active ? "bg-white/20" : ""
-                                            }`
-                                        }
+                                        className={`px-3 py-2 flex justify-between items-center cursor-pointer ${
+                                            active ? "bg-white/20" : ""
+                                        }`}
                                     >
-                                        <span>{option.label}</span>
-                                        {active && <span className="my-auto"><CheckIcon className="h-4 w-4" /> </span>}
-                                    </ComboboxOption>
+                                        <ComboboxOption
+                                            as="span"
+                                            value={option}
+                                            className="flex-1 hover:opacity-80 transition-opacity"
+                                        >
+                                            {option.label}
+                                        </ComboboxOption>
+
+                                        {renderOptionActions?.(option)}
+
+                                        {active && <CheckIcon className="h-4 w-4 ml-2" />}
+                                    </div>
                                 );
                             })}
                         </ComboboxOptions>

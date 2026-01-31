@@ -6,7 +6,9 @@ import { fetchMigraineEvents } from "@/shared/api/migraine.api";
 import type { RawEventResponse } from "@/shared/api/types/migraine";
 import type { EventFilter } from "@/shared/types/event/event";
 import { formatDateToUs } from "@/shared/utils/date/date";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+const MIGRENOSUS_FLAG_THRESHOLD = 4;
 
 export function useCalendarEvents(
     firstDayOfMonth: Date,
@@ -21,106 +23,57 @@ export function useCalendarEvents(
 
     const fetchIdRef = useRef(0);
 
-    useEffect(() => {
-        const fetchId = ++fetchIdRef.current;
-        const abortController = new AbortController();
+    const loadEvents = useCallback(async (abortController?: AbortController) => {
+        const id = ++fetchIdRef.current;
+        setIsLoading(true);
 
-        const loadEvents = async () => {
-            try {
-                setIsLoading(true);
-
-                const raw = await fetchMigraineEvents(
-                    formatDateToUs(firstDayOfMonth),
-                    formatDateToUs(lastDayOfMonth),
-                    undefined,
-                    abortController.signal
-                );
-
-                if (fetchId !== fetchIdRef.current || !raw) return;
-
-                const parsedEvents: Event[] = raw
-                    .map((event: RawEventResponse) => {
-                        const description: EventDescription | null = parseEventDescription(event);
-                        if (!description) return null;
-
-                        return {
-                            date: new Date(event.start.date),
-                            description,
-                            strength: determineStrength(description),
-                        } satisfies Event;
-                    })
-                    .filter((event: Event | null): event is Event => event !== null)
-                    .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
-
-                setRawEvents(parsedEvents);
-            } catch (error) {
-                if (error instanceof DOMException && error.name === "AbortError") {
-                    return;
-                }
-                console.error("Failed to load events:", error);
-            }
-            setIsLoading(false);
-        };
-
-        loadEvents();
-
-        return () => {
-            abortController.abort();
-        };
-    }, [firstDayOfMonth, lastDayOfMonth]);
-
-    useEffect(() => {
-        const runFilter = () => {
-            const filtered = rawEvents.filter(event => filterEvents(event, filter));
-            setEvents(filtered);
-            setMigrenosusFlags(calculateMigrenosusFlags(filtered, daysInMonth, 4));
-        };
-
-        runFilter();
-    }, [rawEvents, filter, daysInMonth]);
-
-    const refetchEvents = async () => {
-        const abortController = new AbortController();
         try {
-            setIsLoading(true);
-
             const raw = await fetchMigraineEvents(
                 formatDateToUs(firstDayOfMonth),
                 formatDateToUs(lastDayOfMonth),
                 undefined,
-                abortController.signal
+                abortController?.signal
             );
 
-            if (!raw) return;
+            if (!raw || id !== fetchIdRef.current) return;
 
             const parsedEvents: Event[] = raw
                 .map((event: RawEventResponse) => {
-                    const description = parseEventDescription(event);
+                    const description: EventDescription | null = parseEventDescription(event);
                     if (!description) return null;
-
                     return {
                         date: new Date(event.start.date),
                         description,
                         strength: determineStrength(description),
                     } satisfies Event;
                 })
-                .filter((event: Event | null): event is Event => event !== null)
-                .sort((a: Event, b: Event) => a.date.getTime() - b.date.getTime());
+                .filter((e): e is Event => e !== null)
+                .sort((a, b) => a.date.getTime() - b.date.getTime());
 
-            const filteredEvents = parsedEvents.filter(parsedEvent => filterEvents(parsedEvent, filter));
-            setEvents(filteredEvents);
-            const migrenosusFlags = calculateMigrenosusFlags(parsedEvents, daysInMonth, 3);
-            setMigrenosusFlags(migrenosusFlags);
+            setRawEvents(parsedEvents);
         } catch (err) {
             if (!(err instanceof DOMException && err.name === "AbortError")) {
-                console.error("Failed to refetch events:", err);
+                console.error("Failed to load events:", err);
             }
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
-    };
+    }, [firstDayOfMonth, lastDayOfMonth]);
 
-    return {
-        events, migrenosusFlags, filter,
-        setFilter, isLoading, refetchEvents,
-    };
+    useEffect(() => {
+        const abortController = new AbortController();
+        loadEvents(abortController);
+
+        return () => abortController.abort();
+    }, [loadEvents]);
+
+    useEffect(() => {
+        const filtered = rawEvents.filter(e => filterEvents(e, filter));
+        setEvents(filtered);
+        setMigrenosusFlags(calculateMigrenosusFlags(filtered, daysInMonth, MIGRENOSUS_FLAG_THRESHOLD));
+    }, [rawEvents, filter, daysInMonth]);
+
+    const refetchEvents = () => loadEvents(new AbortController());
+
+    return { events, migrenosusFlags, filter, setFilter, isLoading, refetchEvents };
 }
