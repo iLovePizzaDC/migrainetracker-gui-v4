@@ -32,6 +32,7 @@ function Combobox({
 }: ICombobox) {
     const [query, setQuery] = useState("");
     const buttonRef = useRef<HTMLButtonElement | null>(null);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
     const filtered =
         query === ""
@@ -88,6 +89,7 @@ function Combobox({
                         setQuery("");
 
                         buttonRef.current?.click();
+                        inputRef.current?.blur();
                     }}
                     multiple
                 >
@@ -95,6 +97,7 @@ function Combobox({
                         <ComboboxButton ref={buttonRef} className="sr-only" type="button" />
 
                         <ComboboxInput
+                            ref={inputRef}
                             id={id}
                             required={required}
                             className="w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/5"
