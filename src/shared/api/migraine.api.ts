@@ -35,7 +35,7 @@ export const fetchMigraineEvents = async (
         filterObject.medicines = filter.medicines;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvents?filter=${filterString}`;
+    const url = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvents?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
     try {
         const response = await api.get(url, { signal });
@@ -67,7 +67,7 @@ export const fetchMigraineAmount = async (
     }
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineAmount?filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineAmount?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
     try {
         const response = await api.get(url);
@@ -94,7 +94,7 @@ export const fetchDurationAmount = async (
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}DurationAmount?filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}DurationAmount?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
     try {
         const response = await api.get(url);
@@ -121,7 +121,7 @@ export const fetchMedicineAmount = async (
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MedicineAmount?filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MedicineAmount?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
     try {
         const response = await api.get(url);
