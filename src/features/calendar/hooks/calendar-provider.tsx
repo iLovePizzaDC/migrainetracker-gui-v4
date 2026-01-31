@@ -19,7 +19,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 
     const {
         medDaysCount, maxMedDaysCount,
-    } = useMedDays(currentDate);
+    } = useMedDays(currentDate, refetchEvents);
 
     const { userMedicineOptions } = useUserMedicines()
 

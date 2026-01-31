@@ -4,7 +4,7 @@ import { formatDateToUs, getEndOfMonth, getStartOfMonth } from "@/shared/utils/d
 import { getMohMedicineFilter } from "@/shared/utils/fetch-helper";
 import { useEffect, useState } from "react";
 
-export function useMedDays(currentDate: Date) {
+export function useMedDays(currentDate: Date, refetchEvents: () => Promise<void>) {
     const { user } = useUser();
 
     const [medDaysCount, setMedDaysCount] = useState(0);
@@ -23,7 +23,7 @@ export function useMedDays(currentDate: Date) {
         };
 
         collectMedDays();
-    }, [user, currentDate]);
+    }, [user, currentDate, refetchEvents]);
 
     return {
         medDaysCount, maxMedDaysCount,
