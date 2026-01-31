@@ -17,10 +17,7 @@ export const fetchMigraineEvents = async (
     filter?: Filter,
     signal?: AbortSignal
 ): Promise<RawEventResponse[] | undefined> => {
-    const filterObject: { [key: string]: string } = {
-        startDate: start,
-        endDate: end,
-    };
+    const filterObject: { [key: string]: string } = {};
 
     if (filter?.duration !== undefined && filter.duration !== 'all')
         filterObject.duration = filter.duration;
@@ -53,10 +50,7 @@ export const fetchMigraineAmount = async (
     end: string,
     filter?: Filter
 ): Promise<number> => {
-    const filterObject: { [key: string]: string } = {
-        startDate: start,
-        endDate: end,
-    };
+    const filterObject: { [key: string]: string } = {};
 
     if (filter) {
         Object.entries(filter).forEach(([key, value]) => {
@@ -83,10 +77,7 @@ export const fetchDurationAmount = async (
     end: string,
     filter?: Filter
 ): Promise<number> => {
-    const filterObject: { [key: string]: string } = {
-        startDate: start,
-        endDate: end,
-    };
+    const filterObject: { [key: string]: string } = {};
 
     if (filter?.duration !== undefined && filter.duration !== 'all') filterObject.duration = filter.duration;
     if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
@@ -110,10 +101,7 @@ export const fetchMedicineAmount = async (
     end: string,
     filter?: Filter
 ): Promise<number> => {
-    const filterObject: { [key: string]: string } = {
-        startDate: start,
-        endDate: end,
-    };
+    const filterObject: { [key: string]: string } = {};
 
     if (filter?.duration !== undefined && filter.duration !== 'all') filterObject.duration = filter.duration;
     if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
