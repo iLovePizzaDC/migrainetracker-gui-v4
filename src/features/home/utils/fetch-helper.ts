@@ -8,12 +8,11 @@ import type { Medicine } from "@/shared/types/user/medicine";
 import { getMohMedicineFilter } from "@/shared/utils/fetch-helper";
 
 const mapEventFilterToFilter = async (
-    userId: string,
     userMedicines: Medicine[],
     filter: EventFilter,
     isMoh: boolean = false
 ): Promise<Filter> => {
-    const mohMedFilter = isMoh ? await getMohMedicineFilter(userId) : undefined;
+    const mohMedFilter = isMoh ? await getMohMedicineFilter() : undefined;
 
     const medHasAny = filter.medicine.some(medicine => medicine.abbreviation === ANY_OPTION.value);
     let mappedMedicines: string | undefined = undefined;
@@ -45,7 +44,6 @@ export async function fetchAreaData(
     endDate: string,
     count: number,
     unit: TimeFrameUnit,
-    userId: string,
     filter: EventFilter,
     userMedicines: Medicine[],
 ) {
@@ -56,7 +54,7 @@ export async function fetchAreaData(
             endDate,
             count,
             unit,
-            await mapEventFilterToFilter(userId, userMedicines, filter, true),
+            await mapEventFilterToFilter(userMedicines, filter, true),
         );
     } else {
 
@@ -65,7 +63,7 @@ export async function fetchAreaData(
             endDate,
             count,
             unit,
-            await mapEventFilterToFilter(userId, userMedicines, filter),
+            await mapEventFilterToFilter(userMedicines, filter),
         );
     }
 }
@@ -75,7 +73,6 @@ export async function fetchPieData(
     startDate: string,
     endDate: string,
     totalDays: number,
-    userId: string,
     filter: EventFilter,
     userMedicines: Medicine[],
 ) {
@@ -84,7 +81,7 @@ export async function fetchPieData(
             const migraineDays = await fetchMigraineAmount(
                 startDate,
                 endDate,
-                await mapEventFilterToFilter(userId, userMedicines, filter),
+                await mapEventFilterToFilter(userMedicines, filter),
             );
 
             return {
@@ -100,7 +97,7 @@ export async function fetchPieData(
             const duration = await fetchDurationAmount(
                 startDate,
                 endDate,
-                await mapEventFilterToFilter(userId, userMedicines, filter),
+                await mapEventFilterToFilter(userMedicines, filter),
             );
 
             return {
@@ -116,7 +113,7 @@ export async function fetchPieData(
             const med = await fetchMedicineAmount(
                 startDate,
                 endDate,
-                await mapEventFilterToFilter(userId, userMedicines, filter),
+                await mapEventFilterToFilter(userMedicines, filter),
             );
 
             const noMed = Math.max(totalDays - med, 0);
@@ -133,7 +130,7 @@ export async function fetchPieData(
             const medDays = await fetchMigraineAmount(
                 startDate,
                 endDate,
-                await mapEventFilterToFilter(userId, userMedicines, filter, true),
+                await mapEventFilterToFilter(userMedicines, filter, true),
             );
             const noMedDays = Math.max(totalDays - medDays, 0);
 

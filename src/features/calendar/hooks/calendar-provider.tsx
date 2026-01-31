@@ -3,7 +3,7 @@ import { useCalendarDate } from "@/features/calendar/hooks/use-calendar-date";
 import { useCalendarEvents } from "@/features/calendar/hooks/use-calendar-events";
 import { useMedDays } from "@/features/calendar/hooks/use-med-days";
 import { useUserMedicines } from "@/shared/hooks/user/use-user-medicines";
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     const {
@@ -19,9 +19,14 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 
     const {
         medDaysCount, maxMedDaysCount,
-    } = useMedDays(currentDate, refetchEvents);
+        collectMedDays,
+    } = useMedDays(currentDate);
 
-    const { userMedicineOptions } = useUserMedicines()
+    const { userMedicineOptions, loadUserMedicines } = useUserMedicines()
+
+    useEffect(() => {
+        collectMedDays();
+    }, [collectMedDays, refetchEvents])
 
     return (
         <CalendarContext.Provider
@@ -35,6 +40,8 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 prevMonth,
                 nextMonth,
                 refetchEvents,
+                collectMedDays,
+                loadUserMedicines,
                 events,
                 medDaysCount,
                 maxMedDaysCount,

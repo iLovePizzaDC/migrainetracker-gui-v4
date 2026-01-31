@@ -12,19 +12,24 @@ export function useAuthCheck(
     const [authChecked, setAuthChecked] = useState(false);
 
     useEffect(() => {
-        const checkAuthentication = () => {
+        const checkAuthentication = async () => {
             const code = new URLSearchParams(window.location.search).get("code");
 
             if (code) {
-                fetchUserLogin(code).then(response => {
+                try {
+                    const response = await fetchUserLogin(code);
                     setUser(response.user);
+
                     window.history.replaceState({}, "", `/${REDIRECT_URL_SUFFIX}`);
+                } catch (error) {
+                    console.error("Login failed:", error);
+                } finally {
                     setAuthChecked(true);
-                });
+                }
             } else {
                 setAuthChecked(true);
             }
-        }
+        };
 
         checkAuthentication();
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,9 +1,10 @@
 import Slider from "@/features/calendar/components/atoms/Slider";
+import AddMedicineForm from "@/features/calendar/components/molecules/AddMedicineForm";
+import MedicineCombobox from "@/features/calendar/components/molecules/MedicineCombobox";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
-import Combobox from "@/shared/components/atoms/Combobox";
 import { useClickOutside } from "@/shared/hooks/use-click-outside";
 import type { AppendMedicine } from "@/shared/types/calendar/calendar";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 
 interface IMedicine {
@@ -13,19 +14,31 @@ interface IMedicine {
 }
 
 function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
-    const { userMedicineOptions, medDaysCount, maxMedDaysCount } = useCalendar();
+    const { medDaysCount, maxMedDaysCount } = useCalendar();
 
     const infoRef = useRef<HTMLDivElement>(null);
 
     const [showInfo, setShowInfo] = useState(false);
+    const [showMedicineForm, setShowMedicineForm] = useState(false);
 
-    useClickOutside(infoRef, setShowInfo);
+    useClickOutside(infoRef, () => {
+        setShowInfo(false);
+    });
 
     return (
         <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
-            <h3 className="text-sm font-medium text-purple-300">
-                Medicines
-            </h3>
+            <div className="flex w-full items-center justify-between">
+                <div className="w-5"></div>
+                <h3 className="text-sm font-medium text-purple-300 text-center flex-1">
+                    Medicines
+                </h3>
+                <button onClick={() => setShowMedicineForm((prev) => !prev)} className="hover:opacity-80 transition-opacity w-4">
+                    <PlusCircleIcon className={`w-5 h-5 transition-transform duration-300 ${
+                            showMedicineForm ? "rotate-45" : ""
+                        }`}
+                    />
+                </button>
+            </div>
 
             <div className="relative inline-flex w-fit items-center p-1 rounded-xl bg-black/10 gap-1 group">
                 <p className='text-xs font-medium'>
@@ -65,28 +78,9 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
                 )}
             </div>
 
-
-            <Combobox
-                id="meds"
-                label=""
-                options={userMedicineOptions}
-                selected={medicines.map(medicine => ({
-                    label: medicine.medicine.label,
-                    value: medicine.medicine.abbreviation
-                }))}
-                onChange={selectedMedicines => {
-                    setMedicines(
-                        selectedMedicines.map(medicine => ({
-                            medicine: {
-                                label: medicine.label,
-                                abbreviation: medicine.value
-                            },
-                            taken: 1,
-                            effectiveness: 0
-                        }))
-                    );
-                }}
-                placeholder="Add medicine..."
+            <MedicineCombobox
+                medicines={medicines}
+                setMedicines={setMedicines}
                 disabled={disabled}
             />
 
@@ -126,6 +120,10 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
                     />
                 </div>
             ))}
+
+            {showMedicineForm && // TODO add animation
+                <AddMedicineForm />
+            }
         </div>
     );
 }
