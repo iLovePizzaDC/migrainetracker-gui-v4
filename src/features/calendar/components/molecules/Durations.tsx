@@ -1,4 +1,4 @@
-import Datepicker from "@/features/calendar/components/atoms/DatePicker";
+import TimePicker from "@/features/calendar/components/atoms/TimePicker";
 import type { AppendDuration } from "@/shared/types/calendar/calendar";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -41,7 +41,7 @@ function Durations({ durations, setDurations, disabled = false }: IDurations) {
                 <div key={duration.id} className="space-y-2">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="min-w-0">
-                            <Datepicker
+                            <TimePicker
                                 id={`start-${index}`}
                                 label="Start"
                                 value={duration.startTime}
@@ -54,7 +54,7 @@ function Durations({ durations, setDurations, disabled = false }: IDurations) {
                             />
                         </div>
                         <div className="min-w-0">
-                            <Datepicker
+                            <TimePicker
                                 id={`end-${index}`}
                                 label="End"
                                 value={duration.endTime}
