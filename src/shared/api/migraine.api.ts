@@ -182,8 +182,8 @@ export const fetchNewEntry = async (
     }
 };
 
-export const fetchMidasScore = async () => {
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MidasScore`;
+export const fetchMidasScore = async (end: string) => {
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MidasScore?end=${end}`;
 
     try {
         const response = await api.get(url);
