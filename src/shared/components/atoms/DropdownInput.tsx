@@ -36,7 +36,7 @@ function DropdownInput({ id, label, value, options, onChange, required = false }
                 className="w-full p-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/25 text-white text-left"
                 onClick={() => setOpen(prev => !prev)}
             >
-                {options.find(o => o.value === value)?.label || "Select..."}
+                {options.find(option => option.value === value)?.label || "Select..."}
             </button>
 
             {open && (
