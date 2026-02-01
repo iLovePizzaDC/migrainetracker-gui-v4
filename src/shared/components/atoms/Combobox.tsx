@@ -110,7 +110,7 @@ function Combobox({
                             ref={inputRef}
                             id={id}
                             required={required}
-                            className="w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/5"
+                            className="w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/20"
                             onChange={(event) => setQuery(event.target.value)}
                             displayValue={() => query}
                             placeholder={placeholder}
