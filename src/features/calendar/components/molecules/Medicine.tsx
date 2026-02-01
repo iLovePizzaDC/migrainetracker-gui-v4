@@ -121,9 +121,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
                 </div>
             ))}
 
-            {showMedicineForm && // TODO add animation
-                <AddMedicineForm />
-            }
+            <AddMedicineForm show={showMedicineForm} />
         </div>
     );
 }
