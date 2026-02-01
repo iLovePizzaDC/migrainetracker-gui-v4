@@ -33,18 +33,18 @@ function DropdownInput({ id, label, value, options, onChange, required = false }
             <button
                 ref={buttonRef}
                 type="button"
-                className="w-full p-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/25 text-white text-left"
+                className="w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/20 text-left"
                 onClick={() => setOpen(prev => !prev)}
             >
                 {options.find(option => option.value === value)?.label || "Select..."}
             </button>
 
             {open && (
-                <ul ref={menuRef} className="absolute z-10 w-full mt-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/25 text-white max-h-60 overflow-auto">
+                <ul ref={menuRef} className="absolute z-10 mt-1 w-full max-h-48 overflow-auto rounded-lg bg-black/30 backdrop-blur-md border border-white/20 text-white shadow-lg">
                     {options.map(option => (
                         <li
                             key={option.value}
-                            className="px-3 py-2 cursor-pointer hover:bg-white/20"
+                            className={`px-3 py-2 cursor-pointer ${option.value === value ? 'bg-white/20' : ''} hover:opacity-80 transition-opacity`}
                             onClick={() => handleSelect(option.value)}
                         >
                             {option.label}
