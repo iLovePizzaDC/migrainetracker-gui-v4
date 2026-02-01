@@ -8,7 +8,7 @@ function MidasCard() {
     const { user } = useUser();
 
     const [midasScore, setMidasScore] = useState<number>(0);
-    const [pieData, setPieData] = useState<ChartData>([]);
+    const [pieData, setPieData] = useState<{ current: ChartData, previous: ChartData }>({ current: [], previous: [] });
     const [isLoading, setIsLoading] = useState(true);
 
     const getColorIndicator = () => {
@@ -23,9 +23,14 @@ function MidasCard() {
 
         const collectChartData = async () => {
             setIsLoading(true);
+
             const pie = await fetchMidasPieData();
-            setMidasScore(pie.midasScore);
-            setPieData(pie.data);
+            setMidasScore(pie.current.score);
+            setPieData({
+                current: pie.current.pieData,
+                previous: pie.previous.pieData,
+            });
+
             setIsLoading(false);
         };
 
@@ -62,7 +67,7 @@ function MidasCard() {
                 {isLoading ? (
                     <div className="w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse" />
                 ) : (
-                    <PieChart data={pieData} />
+                    <PieChart outerData={pieData.current} innerData={pieData.previous} />
                 )}
             </div>
 

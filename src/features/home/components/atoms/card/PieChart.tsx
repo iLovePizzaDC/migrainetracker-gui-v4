@@ -4,10 +4,11 @@ import { FONT_FAMILY } from "@/shared/constants/style/font";
 import { Cell, Pie, PieChart as RePieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 interface IPieChart {
-    data: ChartData;
+    outerData: ChartData;
+    innerData?: ChartData;
 }
 
-function PieChart({ data }: IPieChart) {
+function PieChart({ outerData, innerData }: IPieChart) {
     return (
         <ResponsiveContainer width="100%" height="100%">
             <RePieChart>
@@ -26,16 +27,29 @@ function PieChart({ data }: IPieChart) {
                     labelStyle={{ color: "#000" }}
                 />
                 <Pie
-                    data={data}
+                    data={outerData}
                     dataKey="value"
                     innerRadius="60%"
                     outerRadius="80%"
                     paddingAngle={2}
                 >
-                {data.map((_, index) => (
+                    {outerData.map((_, index) => (
                     <Cell key={index} fill={PIE_COLORS[index]} />
                 ))}
                 </Pie>
+                {innerData &&
+                    <Pie
+                        data={innerData}
+                        dataKey="value"
+                        innerRadius="40%"
+                        outerRadius="55%"
+                        paddingAngle={2}
+                    >
+                    {innerData.map((_, index) => (
+                        <Cell key={index} fill={PIE_COLORS[index]} />
+                    ))}
+                    </Pie>
+                }
             </RePieChart>
         </ResponsiveContainer>
     );

@@ -1,3 +1,4 @@
+import { MAX_MIDAS_SCORE } from "@/features/home/constants/midas";
 import { fetchAreaChart, fetchDurationAmount, fetchMedicineAmount, fetchMidasScore, fetchMigraineAmount } from "@/shared/api/migraine.api";
 import type { Filter } from "@/shared/api/types/migraine";
 import { CARD_TYPES } from "@/shared/constants/event/card";
@@ -5,6 +6,7 @@ import { ANY_OPTION, SYMPTOM_OPTIONS } from "@/shared/constants/event/event-deta
 import type { CardType, TimeFrameUnit } from "@/shared/types/cards/card";
 import type { EventFilter } from "@/shared/types/event/event";
 import type { Medicine } from "@/shared/types/user/medicine";
+import { formatDateToUs } from "@/shared/utils/date/date";
 import { getMohMedicineFilter } from "@/shared/utils/fetch-helper";
 
 const mapEventFilterToFilter = async (
@@ -152,13 +154,31 @@ export async function fetchPieData(
 }
 
 export async function fetchMidasPieData() {
-    const midasScore = await fetchMidasScore();
+    const previousMonth = new Date();
+    previousMonth.setMonth(previousMonth.getMonth() - 1);
+
+    const twoMonthsAgo = new Date();
+    previousMonth.setMonth(previousMonth.getMonth() - 2);
+
+    const [currentScore, previousScore] = await Promise.all([
+        fetchMidasScore(formatDateToUs(previousMonth)),
+        fetchMidasScore(formatDateToUs(twoMonthsAgo))
+    ]);
 
     return {
-        midasScore,
-        data: [
-            { name: "Midas Score", value: midasScore },
-            { name: "Remaining", value: 270 },
-        ]
+        current: {
+            score: currentScore,
+            pieData: [
+                { name: "Current Score", value: currentScore },
+                { name: "Remaining", value: MAX_MIDAS_SCORE - currentScore },
+            ],
+        },
+        previous: {
+            score: previousScore,
+            pieData: [
+                { name: "Previous Score", value: previousScore },
+                { name: "Remaining", value: MAX_MIDAS_SCORE - previousScore },
+            ],
+        },
     };
 }
