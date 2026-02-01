@@ -86,7 +86,7 @@ function CardForm({
                 label="Card Type"
                 value={cardType}
                 options={CARD_OPTIONS}
-                onChange={(event) => setCardType(event.target.value as CardType)}
+                onChange={(value) => setCardType(value as CardType)}
                 required
             />
 
@@ -95,7 +95,7 @@ function CardForm({
                 label="Chart Type"
                 value={chartType}
                 options={CHART_OPTIONS}
-                onChange={(event) => setChartType(event.target.value as ChartType)}
+                onChange={(value) => setChartType(value as ChartType)}
                 required
             />
 
@@ -123,7 +123,7 @@ function CardForm({
                         label="Unit"
                         value={unit}
                         options={TIME_FRAME_UNIT_OPTIONS}
-                        onChange={(event) => setUnit(event.target.value as TimeFrameUnit)}
+                        onChange={(value) => setUnit(value as TimeFrameUnit)}
                         required
                     />
             </div>

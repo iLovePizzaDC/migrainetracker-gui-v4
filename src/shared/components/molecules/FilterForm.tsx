@@ -34,8 +34,7 @@ function FilterForm({
                 label="Intensity"
                 value={filter.intensity ?? 'default'}
                 options={[ANY_OPTION, ...INTENSITY_OPTIONS]}
-                onChange={(event) => {
-                    const value = event.target.value;
+                onChange={(value) => {
                     setFilter(prev => ({
                         ...prev,
                         intensity: value === ANY_OPTION.value ? null : (value as IntensityType)

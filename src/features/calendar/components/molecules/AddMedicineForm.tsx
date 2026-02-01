@@ -51,9 +51,8 @@ function AddMedicineForm() {
                 label="Type"
                 value={type}
                 options={MEDICINE_OPTIONS}
-                onChange={(event) => {
-                    const value = event.target.value as MedicineType;
-                    setType(value);
+                onChange={(value) => {
+                    setType(value as MedicineType);
                 }}
                 required
             />
