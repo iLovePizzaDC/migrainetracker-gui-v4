@@ -1,6 +1,6 @@
 import TimePicker from "@/features/calendar/components/atoms/TimePicker";
 import type { AppendDuration } from "@/shared/types/calendar/calendar";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface IDurations {
     durations: AppendDuration[];
@@ -22,19 +22,19 @@ function Durations({ durations, setDurations, disabled = false }: IDurations) {
 
     return (
         <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-3">
-            <div className="flex justify-between items-center">
-                <h3 className="text-sm font-medium text-purple-300">
+            <div className="flex w-full items-center justify-between">
+                <div className="w-5"></div>
+                <h3 className="text-sm font-medium text-purple-300 text-center flex-1">
                     Duration
                 </h3>
 
-                {!disabled &&
-                    <button
-                        onClick={addDuration}
-                        className="px-2 py-1 text-xs rounded-lg bg-purple-600/50 backdrop-blur-xl border border-purple-700/20 shadow-black/30 hover:opacity-80 transition-opacity"
-                    >
-                        Add
+                {disabled ? (
+                    <div className="w-5 h-5" />
+                ) : (
+                    <button onClick={addDuration} className="hover:opacity-80 transition-opacity w-4">
+                        <PlusCircleIcon className="w-5 h-5 transition-transform duration-300" />
                     </button>
-                }
+                )}
             </div>
 
             {durations.map((duration, index) => (
