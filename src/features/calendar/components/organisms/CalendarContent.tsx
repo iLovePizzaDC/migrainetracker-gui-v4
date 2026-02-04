@@ -6,11 +6,11 @@ interface ICalendarContent {
 }
 
 function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
-    const { isLoading, date, daysArray, events, migrenosusFlags } = useCalendar();
+    const { isLoading, date, daysArray, filteredEvents, migrenosusFlags } = useCalendar();
 
     const getEventForDay = (day: number | null) => {
         if (!day) return null;
-        return events.find(event => event.date.getDate() === day);
+        return filteredEvents.find(event => event.date.getDate() === day);
     };
 
     const today = new Date();

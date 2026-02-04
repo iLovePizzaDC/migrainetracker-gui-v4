@@ -10,7 +10,7 @@ import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 function Calendar() {
-    const { isLoading, date, events, setMonth, userMedicineOptions } = useCalendar();
+    const { isLoading, date, filteredEvents, setMonth, userMedicineOptions } = useCalendar();
 
     const [isPanelOpen, setIsPanelOpen] = useState(false);
     const [entry, setEntry] = useState<Entry | null>(null);
@@ -21,7 +21,7 @@ function Calendar() {
         const selected = new Date(date);
         selected.setDate(day);
 
-        const foundEvent = events.find((event) =>
+        const foundEvent = filteredEvents.find((event) =>
             normalizeDate(event.date).getTime() === normalizeDate(selected).getTime()
         );
 

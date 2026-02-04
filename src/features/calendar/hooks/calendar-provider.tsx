@@ -13,7 +13,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     } = useCalendarDate();
 
     const {
-        events, migrenosusFlags, filter,
+        calendarEvents, filteredEvents, migrenosusFlags, filter,
         setFilter, isLoading, refetchEvents,
     } = useCalendarEvents(firstDayOfMonth, lastDayOfMonth, daysInMonth);
 
@@ -42,7 +42,8 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 refetchEvents,
                 collectMedDays,
                 loadUserMedicines,
-                events,
+                calendarEvents,
+                filteredEvents,
                 medDaysCount,
                 maxMedDaysCount,
                 migrenosusFlags,
