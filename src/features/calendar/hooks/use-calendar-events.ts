@@ -2,7 +2,7 @@ import { MIGRAINOSUS_FLAG_THRESHOLD } from "@/features/calendar/constants/calend
 import type { Event, EventDescription } from "@/features/calendar/types/event";
 import { calculateMigrenosusFlags, determineStrength } from "@/features/calendar/utils/event-highlight";
 import { parseEventDescription } from "@/features/calendar/utils/event-parser";
-import { filterEvents } from "@/features/calendar/utils/filter";
+import { filterEvents, isDefaultFilter } from "@/features/calendar/utils/filter";
 import { fetchMigraineEvents } from "@/shared/api/migraine.api";
 import type { RawEventResponse } from "@/shared/api/types/migraine";
 import type { EventFilter } from "@/shared/types/event/event";
@@ -35,7 +35,9 @@ export function useCalendarEvents(
     }, [rawEvents, firstDayOfMonth, lastDayOfMonth]);
 
     const filteredEvents = useMemo(() => {
-        return calendarEvents.filter(e => filterEvents(e, filter));
+        if (isDefaultFilter(filter)) return [];
+
+        return calendarEvents.filter(event => filterEvents(event, filter));
     }, [calendarEvents, filter]);
 
     const loadEvents = useCallback(async (abortController?: AbortController) => {

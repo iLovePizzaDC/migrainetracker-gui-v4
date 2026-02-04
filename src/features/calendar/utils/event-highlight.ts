@@ -1,17 +1,18 @@
-import { STRENGTH_MAP } from "@/features/calendar/constants/calendar";
+import { STRENGTH_MAP, type StrengthKey } from "@/features/calendar/constants/calendar";
 import type { Event, EventDescription } from "@/features/calendar/types/event";
+import { INTENSITY_TYPES } from "@/shared/constants/event/event-details";
 
 export function determineStrength(description: EventDescription): Event["strength"] {
     const totalDuration = description.duration.reduce((sum, range) => sum + (range.end - range.start), 0);
     let baseStrength = 200;
 
-    if (description.intensity === "very-high") {
+    if (description.intensity === INTENSITY_TYPES.VERY_HIGH) {
         baseStrength += 500;
-    } else if (description.intensity === "high") {
+    } else if (description.intensity === INTENSITY_TYPES.HIGH) {
         baseStrength += 350;
-    } else if (description.intensity === "medium") {
+    } else if (description.intensity === INTENSITY_TYPES.MEDIUM) {
         baseStrength += 200;
-    } else if (description.intensity === "low") {
+    } else if (description.intensity === INTENSITY_TYPES.LOW) {
         baseStrength += 100;
     }
 
@@ -26,11 +27,10 @@ export function determineStrength(description: EventDescription): Event["strengt
     }
 
     const validStrengths = Object.keys(STRENGTH_MAP).map(Number);
-    const closestStrength = validStrengths.reduce((prev, curr) =>
-        Math.abs(curr - baseStrength) < Math.abs(prev - baseStrength) ? curr : prev
-    );
 
-    return STRENGTH_MAP[closestStrength] ?? "bg-purple-200";
+    return validStrengths.reduce((prev, curr) =>
+        Math.abs(curr - baseStrength) < Math.abs(prev - baseStrength) ? curr : prev
+    ) as StrengthKey;
 }
 
 export function calculateMigrenosusFlags(
