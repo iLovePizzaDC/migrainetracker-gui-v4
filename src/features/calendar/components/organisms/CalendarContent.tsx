@@ -67,12 +67,12 @@ function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
                                 className={baseClasses.join(" ")}
                             >
                                 {day ?? ""}
-                            <div
-                                className={`w-2 h-2 rounded-full mt-1
-                                    ${event ? `bg-${STRENGTH_MAP[event.strength]}` : "bg-transparent"}
-                                    ${day && migrainosusFlags[day - 1] ? "ring-1 ring-red-500" : ""}
-                                `}
-                            />
+                                <div
+                                    className={`w-2 h-2 rounded-full mt-1
+                                        ${event ? `${STRENGTH_MAP[event.strength]}` : "bg-transparent"}
+                                        ${day && migrainosusFlags[day - 1] ? "ring-1 ring-red-500" : ""}
+                                    `}
+                                />
                             </div>
                         );
                     })
