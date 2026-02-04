@@ -15,7 +15,8 @@ interface ICalendarContext {
     refetchEvents: () => Promise<void>;
     collectMedDays: () => Promise<void>;
     loadUserMedicines: () => Promise<void>;
-    events: Event[];
+    calendarEvents: Event[];
+    filteredEvents: Event[];
     medDaysCount: number;
     maxMedDaysCount: number;
     migrenosusFlags: boolean[];
@@ -36,7 +37,8 @@ export const CalendarContext = createContext<ICalendarContext>({
     refetchEvents: async () => {},
     collectMedDays: async () => {},
     loadUserMedicines: async () => {},
-    events: [],
+    calendarEvents: [],
+    filteredEvents: [],
     medDaysCount: 0,
     maxMedDaysCount: 10,
     migrenosusFlags: [],

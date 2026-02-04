@@ -5,10 +5,10 @@ import { filterEvents } from "@/features/calendar/utils/filter";
 import { fetchMigraineEvents } from "@/shared/api/migraine.api";
 import type { RawEventResponse } from "@/shared/api/types/migraine";
 import type { EventFilter } from "@/shared/types/event/event";
-import { formatDateToUs } from "@/shared/utils/date/date";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { formatDateToUs, getDateAfterDays, getDateBeforeDays } from "@/shared/utils/date/date";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-const MIGRENOSUS_FLAG_THRESHOLD = 4;
+const MIGRENOSUS_FLAG_THRESHOLD = 4; // TODO outsource
 
 export function useCalendarEvents(
     firstDayOfMonth: Date,
@@ -16,21 +16,39 @@ export function useCalendarEvents(
     daysInMonth: number,
 ) {
     const [rawEvents, setRawEvents] = useState<Event[]>([]);
-    const [events, setEvents] = useState<Event[]>([]);
     const [migrenosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
     const [filter, setFilter] = useState<EventFilter>({ intensity: null, symptom: [], medicine: [], midas: [] });
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchIdRef = useRef(0);
 
+    const calendarEvents = useMemo(() => {
+        const start = new Date(firstDayOfMonth);
+        start.setHours(0, 0, 0, 0);
+
+        const end = new Date(lastDayOfMonth);
+        end.setHours(23, 59, 59, 999);
+
+        return rawEvents.filter(
+            event => event.date >= start && event.date <= end
+        );
+    }, [rawEvents, firstDayOfMonth, lastDayOfMonth]);
+
+    const filteredEvents = useMemo(() => {
+        return calendarEvents.filter(e => filterEvents(e, filter));
+    }, [calendarEvents, filter]);
+
     const loadEvents = useCallback(async (abortController?: AbortController) => {
         const id = ++fetchIdRef.current;
         setIsLoading(true);
 
         try {
+            const fetchStart = getDateBeforeDays(firstDayOfMonth, MIGRENOSUS_FLAG_THRESHOLD);
+            const fetchEnd = getDateAfterDays(lastDayOfMonth, MIGRENOSUS_FLAG_THRESHOLD);
+
             const raw = await fetchMigraineEvents(
-                formatDateToUs(firstDayOfMonth),
-                formatDateToUs(lastDayOfMonth),
+                formatDateToUs(fetchStart),
+                formatDateToUs(fetchEnd),
                 undefined,
                 abortController?.signal
             );
@@ -68,12 +86,31 @@ export function useCalendarEvents(
     }, [loadEvents]);
 
     useEffect(() => {
-        const filtered = rawEvents.filter(e => filterEvents(e, filter));
-        setEvents(filtered);
-        setMigrenosusFlags(calculateMigrenosusFlags(filtered, daysInMonth, MIGRENOSUS_FLAG_THRESHOLD));
-    }, [rawEvents, filter, daysInMonth]);
+        const start = new Date(firstDayOfMonth);
+        start.setHours(0, 0, 0, 0);
+
+        const end = new Date(lastDayOfMonth);
+        end.setHours(23, 59, 59, 999);
+
+        setMigrenosusFlags(
+            calculateMigrenosusFlags(
+                rawEvents,
+                firstDayOfMonth,
+                daysInMonth,
+                MIGRENOSUS_FLAG_THRESHOLD
+            )
+        );
+    }, [rawEvents, filter, daysInMonth, firstDayOfMonth, lastDayOfMonth]);
 
     const refetchEvents = () => loadEvents(new AbortController());
 
-    return { events, migrenosusFlags, filter, setFilter, isLoading, refetchEvents };
+    return {
+        calendarEvents,
+        filteredEvents,
+        migrenosusFlags,
+        filter,
+        setFilter,
+        isLoading,
+        refetchEvents
+    };
 }
