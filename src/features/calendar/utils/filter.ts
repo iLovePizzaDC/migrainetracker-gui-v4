@@ -50,3 +50,10 @@ export function filterEvents(parsedEvent: Event, filter: EventFilter) {
 
     return true;
 }
+
+export const isDefaultFilter = (filter: EventFilter) => {
+    return filter.intensity === null &&
+        filter.symptom.length === 0 &&
+        filter.medicine.length === 0 &&
+        filter.midas.length === 0;
+};
