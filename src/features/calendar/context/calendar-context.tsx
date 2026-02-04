@@ -19,7 +19,7 @@ interface ICalendarContext {
     filteredEvents: Event[];
     medDaysCount: number;
     maxMedDaysCount: number;
-    migrenosusFlags: boolean[];
+    migrainosusFlags: boolean[];
     userMedicineOptions: DropdownOption[];
     filter: EventFilter;
     setFilter: React.Dispatch<React.SetStateAction<EventFilter>>;
@@ -41,7 +41,7 @@ export const CalendarContext = createContext<ICalendarContext>({
     filteredEvents: [],
     medDaysCount: 0,
     maxMedDaysCount: 10,
-    migrenosusFlags: [],
+    migrainosusFlags: [],
     userMedicineOptions: [],
     filter: { intensity: null, symptom: [], medicine: [], midas:[] },
     setFilter: () => {},
