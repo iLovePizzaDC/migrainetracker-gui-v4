@@ -1,3 +1,4 @@
+import { MIGRAINOSUS_FLAG_THRESHOLD } from "@/features/calendar/constants/calendar";
 import type { Event, EventDescription } from "@/features/calendar/types/event";
 import { calculateMigrenosusFlags, determineStrength } from "@/features/calendar/utils/event-highlight";
 import { parseEventDescription } from "@/features/calendar/utils/event-parser";
@@ -8,7 +9,6 @@ import type { EventFilter } from "@/shared/types/event/event";
 import { formatDateToUs, getDateAfterDays, getDateBeforeDays } from "@/shared/utils/date/date";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-const MIGRENOSUS_FLAG_THRESHOLD = 4; // TODO outsource
 
 export function useCalendarEvents(
     firstDayOfMonth: Date,
@@ -16,7 +16,7 @@ export function useCalendarEvents(
     daysInMonth: number,
 ) {
     const [rawEvents, setRawEvents] = useState<Event[]>([]);
-    const [migrenosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
+    const [migrainosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
     const [filter, setFilter] = useState<EventFilter>({ intensity: null, symptom: [], medicine: [], midas: [] });
     const [isLoading, setIsLoading] = useState(true);
 
@@ -43,8 +43,8 @@ export function useCalendarEvents(
         setIsLoading(true);
 
         try {
-            const fetchStart = getDateBeforeDays(firstDayOfMonth, MIGRENOSUS_FLAG_THRESHOLD);
-            const fetchEnd = getDateAfterDays(lastDayOfMonth, MIGRENOSUS_FLAG_THRESHOLD);
+            const fetchStart = getDateBeforeDays(firstDayOfMonth, MIGRAINOSUS_FLAG_THRESHOLD);
+            const fetchEnd = getDateAfterDays(lastDayOfMonth, MIGRAINOSUS_FLAG_THRESHOLD);
 
             const raw = await fetchMigraineEvents(
                 formatDateToUs(fetchStart),
@@ -97,7 +97,7 @@ export function useCalendarEvents(
                 rawEvents,
                 firstDayOfMonth,
                 daysInMonth,
-                MIGRENOSUS_FLAG_THRESHOLD
+                MIGRAINOSUS_FLAG_THRESHOLD
             )
         );
     }, [rawEvents, filter, daysInMonth, firstDayOfMonth, lastDayOfMonth]);
@@ -107,7 +107,7 @@ export function useCalendarEvents(
     return {
         calendarEvents,
         filteredEvents,
-        migrenosusFlags,
+        migrainosusFlags,
         filter,
         setFilter,
         isLoading,

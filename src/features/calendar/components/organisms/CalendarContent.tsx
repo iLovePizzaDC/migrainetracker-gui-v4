@@ -6,7 +6,7 @@ interface ICalendarContent {
 }
 
 function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
-    const { isLoading, date, daysArray, filteredEvents, migrenosusFlags } = useCalendar();
+    const { isLoading, date, daysArray, filteredEvents, migrainosusFlags } = useCalendar();
 
     const getEventForDay = (day: number | null) => {
         if (!day) return null;
@@ -55,7 +55,7 @@ function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
                             <div
                                 className={`w-2 h-2 rounded-full mt-1
                                     ${event ? event.strength : "bg-transparent"}
-                                    ${day && migrenosusFlags[day - 1] ? "ring-1 ring-red-500" : ""}
+                                    ${day && migrainosusFlags[day - 1] ? "ring-1 ring-red-500" : ""}
                                 `}
                             />
 

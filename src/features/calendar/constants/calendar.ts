@@ -11,3 +11,5 @@ export const STRENGTH_MAP: Record<number, Event["strength"]> = {
     900: "bg-purple-900",
     950: "bg-purple-950"
 };
+
+export const MIGRAINOSUS_FLAG_THRESHOLD = 4;
