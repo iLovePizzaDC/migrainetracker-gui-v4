@@ -32,7 +32,7 @@ function CardForm({
     defaultTitle = '',
     defaultCardType = CARD_TYPES.MIGRAINE,
     defaultChartType = CHART_TYPES.AREA,
-    defaultFilter = { intensity: null, symptom: [], medicine: [], midas: [] },
+    defaultFilter = { intensity: null, symptom: [], medicine: [], effectiveness: null, midas: [] },
     defaultCount = 12,
     defaultUnit = TIME_FRAME_UNITS.MONTHS,
 }: ICardForm) {
