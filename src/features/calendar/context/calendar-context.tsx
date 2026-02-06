@@ -43,6 +43,6 @@ export const CalendarContext = createContext<ICalendarContext>({
     maxMedDaysCount: 10,
     migrainosusFlags: [],
     userMedicineOptions: [],
-    filter: { intensity: null, symptom: [], medicine: [], midas:[] },
+    filter: { intensity: null, symptom: [], medicine: [], effectiveness: null, midas:[] },
     setFilter: () => {},
 });
