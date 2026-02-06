@@ -2,7 +2,7 @@ import { MAX_MIDAS_SCORE } from "@/features/home/constants/midas";
 import { fetchAreaChart, fetchDurationAmount, fetchMedicineAmount, fetchMidasScore, fetchMigraineAmount } from "@/shared/api/migraine.api";
 import type { Filter } from "@/shared/api/types/migraine";
 import { CARD_TYPES } from "@/shared/constants/event/card";
-import { ANY_OPTION, SYMPTOM_OPTIONS } from "@/shared/constants/event/event-details";
+import { ANY_FILTER_OPTIONS, ANY_FILTER_TYPE, SYMPTOM_OPTIONS } from "@/shared/constants/event/event-details";
 import type { CardType, TimeFrameUnit } from "@/shared/types/cards/card";
 import type { EventFilter } from "@/shared/types/event/event";
 import type { Medicine } from "@/shared/types/user/medicine";
@@ -16,7 +16,7 @@ const mapEventFilterToFilter = async (
 ): Promise<Filter> => {
     const mohMedFilter = isMoh ? await getMohMedicineFilter() : undefined;
 
-    const medHasAny = filter.medicine.some(medicine => medicine.abbreviation === ANY_OPTION.value);
+    const medHasAny = filter.medicine.some(medicine => medicine.abbreviation === ANY_FILTER_OPTIONS.value);
     let mappedMedicines: string | undefined = undefined;
 
     if (filter.medicine.length > 0) {
@@ -28,7 +28,7 @@ const mapEventFilterToFilter = async (
     let mappedSymptoms: string | undefined = undefined;
 
     if (filter.symptom.length > 0) {
-        mappedSymptoms = filter.symptom.length === 0 || filter.symptom.includes("any")
+        mappedSymptoms = filter.symptom.length === 0 || filter.symptom.includes(ANY_FILTER_TYPE.ANY)
             ? SYMPTOM_OPTIONS.map(symptomOption => symptomOption.value).join(",")
             : filter.symptom.join(",");
     }

@@ -17,7 +17,7 @@ export function useCalendarEvents(
 ) {
     const [rawEvents, setRawEvents] = useState<Event[]>([]);
     const [migrainosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
-    const [filter, setFilter] = useState<EventFilter>({ intensity: null, symptom: [], medicine: [], midas: [] });
+    const [filter, setFilter] = useState<EventFilter>({ intensity: null, symptom: [], medicine: [], effectiveness: null, midas: [] });
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchIdRef = useRef(0);
