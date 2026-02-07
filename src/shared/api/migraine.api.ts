@@ -31,6 +31,9 @@ export const fetchMigraineEvents = async (
     if (filter?.medicines !== undefined && filter.medicines !== 'all')
         filterObject.medicines = filter.medicines;
 
+    if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all')
+        filterObject.effectiveness = filter.effectiveness;
+
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
     const url = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvents?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
@@ -83,6 +86,7 @@ export const fetchDurationAmount = async (
     if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
     if (filter?.symptoms !== undefined && filter.symptoms !== 'all') filterObject.symptoms = filter.symptoms;
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
+    if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all') filterObject.effectiveness = filter.effectiveness;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
     const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}DurationAmount?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
@@ -107,6 +111,7 @@ export const fetchMedicineAmount = async (
     if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
     if (filter?.symptoms !== undefined && filter.symptoms !== 'all') filterObject.symptoms = filter.symptoms;
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
+    if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all') filterObject.effectiveness = filter.effectiveness;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
     const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MedicineAmount?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
@@ -133,6 +138,7 @@ export const fetchAreaChart = async (
     if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
     if (filter?.symptoms !== undefined && filter.symptoms !== 'all') filterObject.symptoms = filter.symptoms;
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
+    if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all') filterObject.effectiveness = filter.effectiveness;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
     const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}AreaChart?type=${type}&end=${end}&timeFrameCount=${timeFrameCount}&timeFrameUnit=${timeFrameUnit}&filter=${filterString}`;
