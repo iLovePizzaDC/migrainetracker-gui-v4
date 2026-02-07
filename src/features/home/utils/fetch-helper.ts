@@ -2,7 +2,7 @@ import { MAX_MIDAS_SCORE } from "@/features/home/constants/midas";
 import { fetchAreaChart, fetchDurationAmount, fetchMedicineAmount, fetchMidasScore, fetchMigraineAmount } from "@/shared/api/migraine.api";
 import type { Filter } from "@/shared/api/types/migraine";
 import { CARD_TYPES } from "@/shared/constants/event/card";
-import { ANY_FILTER_OPTIONS, ANY_FILTER_TYPE, SYMPTOM_OPTIONS } from "@/shared/constants/event/event-details";
+import { ANY_FILTER_OPTIONS, ANY_FILTER_TYPE, SYMPTOM_OPTIONS, type EffectivenessType } from "@/shared/constants/event/event-details";
 import type { CardType, TimeFrameUnit } from "@/shared/types/cards/card";
 import type { EventFilter } from "@/shared/types/event/event";
 import type { Medicine } from "@/shared/types/user/medicine";
@@ -37,6 +37,7 @@ const mapEventFilterToFilter = async (
         intensity: filter.intensity ?? undefined,
         symptoms: mappedSymptoms,
         medicines: isMoh ? mohMedFilter : mappedMedicines,
+        effectiveness: filter.effectiveness as EffectivenessType,
     };
 };
 
