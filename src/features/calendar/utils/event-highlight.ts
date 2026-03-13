@@ -1,17 +1,18 @@
-import { STRENGTH_MAP } from "@/features/calendar/constants/calendar";
+import { STRENGTH_MAP, type StrengthKey } from "@/features/calendar/constants/calendar";
 import type { Event, EventDescription } from "@/features/calendar/types/event";
+import { INTENSITY_TYPES } from "@/shared/constants/event/event-details";
 
 export function determineStrength(description: EventDescription): Event["strength"] {
     const totalDuration = description.duration.reduce((sum, range) => sum + (range.end - range.start), 0);
     let baseStrength = 200;
 
-    if (description.intensity === "very-high") {
+    if (description.intensity === INTENSITY_TYPES.VERY_HIGH) {
         baseStrength += 500;
-    } else if (description.intensity === "high") {
+    } else if (description.intensity === INTENSITY_TYPES.HIGH) {
         baseStrength += 350;
-    } else if (description.intensity === "medium") {
+    } else if (description.intensity === INTENSITY_TYPES.MEDIUM) {
         baseStrength += 200;
-    } else if (description.intensity === "low") {
+    } else if (description.intensity === INTENSITY_TYPES.LOW) {
         baseStrength += 100;
     }
 
@@ -26,37 +27,76 @@ export function determineStrength(description: EventDescription): Event["strengt
     }
 
     const validStrengths = Object.keys(STRENGTH_MAP).map(Number);
-    const closestStrength = validStrengths.reduce((prev, curr) =>
-        Math.abs(curr - baseStrength) < Math.abs(prev - baseStrength) ? curr : prev
-    );
 
-    return STRENGTH_MAP[closestStrength] ?? "bg-purple-200";
+    return validStrengths.reduce((prev, curr) =>
+        Math.abs(curr - baseStrength) < Math.abs(prev - baseStrength) ? curr : prev
+    ) as StrengthKey;
 }
 
-export function calculateMigrenosusFlags(events: Event[], daysInMonth: number, minDays = 4): boolean[] {
+export function calculateMigrenosusFlags(
+    events: Event[],
+    firstDayOfMonth: Date,
+    daysInMonth: number,
+    minDays = 4
+): boolean[] {
     const flags = Array(daysInMonth).fill(false);
+    if (!events.length) return flags;
 
-    const hasEvent = Array(daysInMonth).fill(false);
-    events.forEach(e => {
-        const day = e.date.getDate();
-        hasEvent[day - 1] = true;
-    });
+    const normalizeDay = (date: Date) =>
+        new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
-    let streakStart = -1;
-    for (let dayIndex = 0; dayIndex < daysInMonth; dayIndex++) {
-        if (hasEvent[dayIndex]) {
-            if (streakStart === -1) streakStart = dayIndex;
-        } else {
-            if (streakStart !== -1 && dayIndex - streakStart >= minDays) {
-                for (let streakDayIndex = streakStart; streakDayIndex < dayIndex; streakDayIndex++) flags[streakDayIndex] = true;
+    const eventDays = new Set(
+        events.map(e => normalizeDay(e.date).getTime())
+    );
+
+    const sortedDates = [...eventDays]
+        .map(time => new Date(time))
+        .sort((a, b) => a.getTime() - b.getTime());
+
+    const isNextDay = (a: Date, b: Date) => {
+        const next = new Date(b);
+        next.setDate(next.getDate() + 1);
+
+        return next.getTime() === a.getTime();
+    };
+
+    let streak: Date[] = [];
+
+    const flushStreak = () => {
+        if (streak.length >= minDays) {
+            for (const date of streak) {
+                const dayIndex =
+                    Math.floor(
+                        (
+                            Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) -
+                            Date.UTC(
+                                firstDayOfMonth.getFullYear(),
+                                firstDayOfMonth.getMonth(),
+                                firstDayOfMonth.getDate()
+                            )
+                        ) / 86400000
+                    );
+
+                if (dayIndex >= 0 && dayIndex < daysInMonth) {
+                    flags[dayIndex] = true;
+                }
             }
-            streakStart = -1;
+        }
+        streak = [];
+    };
+
+    for (let index = 0; index < sortedDates.length; index++) {
+        const curr = sortedDates[index];
+        const prev = sortedDates[index - 1];
+
+        if (index === 0 || isNextDay(curr, prev)) {
+            streak.push(curr);
+        } else {
+            flushStreak();
+            streak.push(curr);
         }
     }
 
-    if (streakStart !== -1 && daysInMonth - streakStart >= minDays) {
-        for (let j = streakStart; j < daysInMonth; j++) flags[j] = true;
-    }
-
+    flushStreak();
     return flags;
-};
+}

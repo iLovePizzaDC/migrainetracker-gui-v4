@@ -1,3 +1,4 @@
+import type { InputContent } from "@/shared/types/calendar/calendar";
 import type { DropdownOption } from "@/shared/types/input/input";
 
 // --- INTENSITY START ---
@@ -46,6 +47,20 @@ export const SYMPTOM_OPTIONS: DropdownOption[] = [
     { label: "Jaw Pain", value: SYMPTOM_TYPES.JAW },
 ]
 
+// --- EFFECTIVENESS START ---
+
+export const EFFECTIVENESS_TYPES = {
+    EFFECTIVE: "yes",
+    INEFFECTIVE: "no",
+} as const;
+
+export type EffectivenessType = typeof EFFECTIVENESS_TYPES[keyof typeof EFFECTIVENESS_TYPES];
+
+export const EFFECTIVENESS_OPTIONS: DropdownOption[] = [
+    { label: "Effective", value: EFFECTIVENESS_TYPES.EFFECTIVE },
+    { label: "Ineffective", value: EFFECTIVENESS_TYPES.INEFFECTIVE },
+]
+
 // --- MIDAS START ---
 
 export const MIDAS_TYPES = {
@@ -68,4 +83,20 @@ export const MIDAS_OPTIONS: DropdownOption[] = [
 
 // --- OTHER START ---
 
-export const ANY_OPTION: DropdownOption = { value: 'any', label: 'Any' };
+export const ANY_FILTER_TYPE = {
+    ANY: "any",
+} as const;
+
+export type AnyFilterType = typeof ANY_FILTER_TYPE[keyof typeof ANY_FILTER_TYPE];
+
+export const ANY_FILTER_OPTIONS: DropdownOption = { label: 'Any', value: ANY_FILTER_TYPE.ANY };
+
+
+export const ANY_INPUT_FILTER_TYPES = {
+    abbreviation: ANY_FILTER_TYPE.ANY,
+    label: ANY_FILTER_OPTIONS.label,
+} as const;
+
+export type AnyInputFilterType = typeof ANY_INPUT_FILTER_TYPES;
+
+export const ANY_INPUT_FILTER_OPTION: InputContent | AnyInputFilterType = ANY_INPUT_FILTER_TYPES;

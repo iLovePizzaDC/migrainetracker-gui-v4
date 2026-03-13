@@ -1,1 +1,1 @@
-export const PIE_COLORS = ["#ffffffcc", "#ffffff88", "#ffffff55"];
+export const PIE_COLORS = ["#FFFFFF7F", "#FFFFFF00"];

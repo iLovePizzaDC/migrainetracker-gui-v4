@@ -13,7 +13,9 @@ function FilterCard() {
 
     const cardRef = useRef<HTMLDivElement>(null);
 
-    useClickOutside(cardRef, setFilterOpen);
+    useClickOutside(cardRef, () => {
+        setFilterOpen(false);
+    });
 
     return (
         <div className="fixed bottom-5 right-5 z-50">

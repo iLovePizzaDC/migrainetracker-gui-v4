@@ -17,10 +17,7 @@ export const fetchMigraineEvents = async (
     filter?: Filter,
     signal?: AbortSignal
 ): Promise<RawEventResponse[] | undefined> => {
-    const filterObject: { [key: string]: string } = {
-        startDate: start,
-        endDate: end,
-    };
+    const filterObject: { [key: string]: string } = {};
 
     if (filter?.duration !== undefined && filter.duration !== 'all')
         filterObject.duration = filter.duration;
@@ -34,8 +31,11 @@ export const fetchMigraineEvents = async (
     if (filter?.medicines !== undefined && filter.medicines !== 'all')
         filterObject.medicines = filter.medicines;
 
+    if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all')
+        filterObject.effectiveness = filter.effectiveness;
+
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvents?filter=${filterString}`;
+    const url = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineEvents?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
     try {
         const response = await api.get(url, { signal });
@@ -53,10 +53,7 @@ export const fetchMigraineAmount = async (
     end: string,
     filter?: Filter
 ): Promise<number> => {
-    const filterObject: { [key: string]: string } = {
-        startDate: start,
-        endDate: end,
-    };
+    const filterObject: { [key: string]: string } = {};
 
     if (filter) {
         Object.entries(filter).forEach(([key, value]) => {
@@ -67,7 +64,7 @@ export const fetchMigraineAmount = async (
     }
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineAmount?filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MigraineAmount?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
     try {
         const response = await api.get(url);
@@ -83,18 +80,16 @@ export const fetchDurationAmount = async (
     end: string,
     filter?: Filter
 ): Promise<number> => {
-    const filterObject: { [key: string]: string } = {
-        startDate: start,
-        endDate: end,
-    };
+    const filterObject: { [key: string]: string } = {};
 
     if (filter?.duration !== undefined && filter.duration !== 'all') filterObject.duration = filter.duration;
     if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
     if (filter?.symptoms !== undefined && filter.symptoms !== 'all') filterObject.symptoms = filter.symptoms;
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
+    if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all') filterObject.effectiveness = filter.effectiveness;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}DurationAmount?filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}DurationAmount?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
     try {
         const response = await api.get(url);
@@ -110,18 +105,16 @@ export const fetchMedicineAmount = async (
     end: string,
     filter?: Filter
 ): Promise<number> => {
-    const filterObject: { [key: string]: string } = {
-        startDate: start,
-        endDate: end,
-    };
+    const filterObject: { [key: string]: string } = {};
 
     if (filter?.duration !== undefined && filter.duration !== 'all') filterObject.duration = filter.duration;
     if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
     if (filter?.symptoms !== undefined && filter.symptoms !== 'all') filterObject.symptoms = filter.symptoms;
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
+    if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all') filterObject.effectiveness = filter.effectiveness;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MedicineAmount?filter=${filterString}`;
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MedicineAmount?dateMin=${start}&dateMax=${end}&filter=${filterString}`;
 
     try {
         const response = await api.get(url);
@@ -145,6 +138,7 @@ export const fetchAreaChart = async (
     if (filter?.intensity !== undefined && filter.intensity !== 'all') filterObject.intensity = filter.intensity;
     if (filter?.symptoms !== undefined && filter.symptoms !== 'all') filterObject.symptoms = filter.symptoms;
     if (filter?.medicines !== undefined && filter.medicines !== 'all') filterObject.medicines = filter.medicines;
+    if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all') filterObject.effectiveness = filter.effectiveness;
 
     const filterString = encodeURIComponent(JSON.stringify(filterObject));
     const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}AreaChart?type=${type}&end=${end}&timeFrameCount=${timeFrameCount}&timeFrameUnit=${timeFrameUnit}&filter=${filterString}`;
@@ -194,8 +188,8 @@ export const fetchNewEntry = async (
     }
 };
 
-export const fetchMidasScore = async () => {
-    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MidasScore`;
+export const fetchMidasScore = async (end: string) => {
+    const url: string = `${ENDPOINT_BASE_URL}${API_URL_SUFFIX}MidasScore?end=${end}`;
 
     try {
         const response = await api.get(url);

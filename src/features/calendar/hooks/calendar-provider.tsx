@@ -3,7 +3,7 @@ import { useCalendarDate } from "@/features/calendar/hooks/use-calendar-date";
 import { useCalendarEvents } from "@/features/calendar/hooks/use-calendar-events";
 import { useMedDays } from "@/features/calendar/hooks/use-med-days";
 import { useUserMedicines } from "@/shared/hooks/user/use-user-medicines";
-import { type ReactNode } from "react";
+import { useCallback, useEffect, type ReactNode } from "react";
 
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     const {
@@ -13,15 +13,25 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
     } = useCalendarDate();
 
     const {
-        events, migrenosusFlags, filter,
-        setFilter, isLoading, refetchEvents,
+        calendarEvents, filteredEvents, migrainosusFlags, filter,
+        setFilter, isLoading, refetchEvents: _refetchEvents,
     } = useCalendarEvents(firstDayOfMonth, lastDayOfMonth, daysInMonth);
 
     const {
         medDaysCount, maxMedDaysCount,
+        collectMedDays,
     } = useMedDays(currentDate);
 
-    const { userMedicineOptions } = useUserMedicines()
+    const { userMedicineOptions, loadUserMedicines } = useUserMedicines()
+
+    const refetchEvents = useCallback(async () => {
+        await _refetchEvents();
+        await collectMedDays();
+    }, [_refetchEvents, collectMedDays]);
+
+    useEffect(() => {
+        collectMedDays();
+    }, [collectMedDays, refetchEvents])
 
     return (
         <CalendarContext.Provider
@@ -35,10 +45,13 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
                 prevMonth,
                 nextMonth,
                 refetchEvents,
-                events,
+                collectMedDays,
+                loadUserMedicines,
+                calendarEvents,
+                filteredEvents,
                 medDaysCount,
                 maxMedDaysCount,
-                migrenosusFlags,
+                migrainosusFlags,
                 userMedicineOptions,
                 filter,
                 setFilter,

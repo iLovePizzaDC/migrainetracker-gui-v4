@@ -33,7 +33,7 @@ First build the code with
 npm run build
 ```
 
-Move the **dist** folder to Luna at `/home/nicob`.
+Move the **dist** folder to Luna at `~`.
 
 After this run the following commands
 
@@ -41,6 +41,7 @@ After this run the following commands
 sudo rm -rf /var/www/migrainetracker/
 sudo mkdir /var/www/migrainetracker
 sudo cp -r ~/dist/* /var/www/migrainetracker/
+sudo rm -rf ~/dist
 sudo chown -R www-data:www-data /var/www/migrainetracker
 sudo chmod -R 755 /var/www/migrainetracker
 ```

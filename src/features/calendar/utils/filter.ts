@@ -1,12 +1,14 @@
 import type { Event } from "@/features/calendar/types/event";
+import { ANY_FILTER_TYPE, EFFECTIVENESS_TYPES } from "@/shared/constants/event/event-details";
 import type { EventFilter } from "@/shared/types/event/event";
 
 export function filterEvents(parsedEvent: Event, filter: EventFilter) {
-    const { intensity, symptoms, medicine, midas } = parsedEvent.description;
+    const { intensity, symptoms, medicine, effectiveness, midas } = parsedEvent.description;
     const {
         intensity: intensityFilter,
         symptom: symptomsFilter,
         medicine: medicineFilter,
+        effectiveness: effectivenessFilter,
         midas: midasFilter,
     } = filter;
 
@@ -16,7 +18,7 @@ export function filterEvents(parsedEvent: Event, filter: EventFilter) {
 
     if (symptomsFilter.length > 0) {
         const missingSymptom = symptomsFilter.some(symptom => {
-            if (symptom === 'any') {
+            if (symptom === ANY_FILTER_TYPE.ANY) {
                 return symptoms.length === 0;
             } else {
                 return !symptoms.includes(symptom)
@@ -34,13 +36,23 @@ export function filterEvents(parsedEvent: Event, filter: EventFilter) {
             .filter(Boolean);
 
         const missing = allowedMedicines.some(medicine => {
-            if (medicine === 'any') {
+            if (medicine === ANY_FILTER_TYPE.ANY) {
                 return eventMedicines.length === 0;
             } else {
                 return !eventMedicines.includes(medicine)
             }
         });
         if (missing) return false;
+    }
+
+    if (effectivenessFilter) {
+        if (effectivenessFilter === EFFECTIVENESS_TYPES.EFFECTIVE) {
+            const anyWorked = effectiveness.some(status => status === EFFECTIVENESS_TYPES.EFFECTIVE);
+            if (!anyWorked) return false;
+        } else if (effectivenessFilter === EFFECTIVENESS_TYPES.INEFFECTIVE) {
+            const anyNotWorked = effectiveness.some(status => status === EFFECTIVENESS_TYPES.INEFFECTIVE);
+            if (!anyNotWorked) return false;
+        }
     }
 
     if (midasFilter.length > 0) {
@@ -50,3 +62,11 @@ export function filterEvents(parsedEvent: Event, filter: EventFilter) {
 
     return true;
 }
+
+export const isDefaultFilter = (filter: EventFilter) => {
+    return filter.intensity === null &&
+        filter.symptom.length === 0 &&
+        filter.medicine.length === 0 &&
+        filter.effectiveness === null &&
+        filter.midas.length === 0;
+};
