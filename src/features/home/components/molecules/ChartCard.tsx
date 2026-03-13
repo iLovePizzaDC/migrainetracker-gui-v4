@@ -88,7 +88,7 @@ function ChartCard({ index, title, cardType, chartType, filter, timeframeCount, 
                         ) : chartType === CHART_TYPES.AREA ? (
                             <AreaChart data={areaData} showThresholdLine={cardType === CARD_TYPES.MOH} thresholdY={cardType === CARD_TYPES.MOH ? 10 : undefined} />
                         ) : (
-                            <PieChart data={pieData} />
+                            <PieChart outerData={pieData} />
                         )}
                     </div>
 

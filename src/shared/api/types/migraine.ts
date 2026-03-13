@@ -19,7 +19,8 @@ export type Filter = {
     duration?: string,
     intensity?: string,
     symptoms?: string,
-    medicines?: string
+    medicines?: string,
+    effectiveness?: string,
 }
 
 export type RawEventResponse = {

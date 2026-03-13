@@ -6,8 +6,10 @@ import Symptoms from "@/features/calendar/components/molecules/Symptoms";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
 import type { Entry } from "@/features/calendar/types/calendar";
 import { fetchNewEntry } from "@/shared/api/migraine.api";
+import SubmitButton from "@/shared/components/atoms/SubmitButton";
 import { FEEDBACK_TYPES, type FeedbackType } from "@/shared/constants/button/feedback";
 import { INTENSITY_TYPES, SYMPTOM_TYPES, type IntensityType, type SymptomType } from "@/shared/constants/event/event-details";
+import { BUTTON_TYPES } from "@/shared/constants/input/button";
 import type { AppendDuration, AppendMedicine, AppendMidas } from "@/shared/types/calendar/calendar";
 import { formatDateToUs } from "@/shared/utils/date/date";
 import { PencilIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -192,32 +194,28 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
 
                 {!areInputsDisabled &&
                     <div className="flex justify-between pt-2">
-                        <button
+                        <SubmitButton
+                            type={BUTTON_TYPES.BUTTON}
+                            label="Save"
                             onClick={saveNewEntry}
                             className={`
-                                px-4 py-2 rounded-lg backdrop-blur-xl border shadow-sm shadow-black/30 text-sm font-medium transition-opacity
                                 ${cacheFeedback === "success" ? "border-green-500/50 text-green-800" : ""}
                                 ${cacheFeedback === "error" ? "border-red-500/50 text-red-800" : ""}
                                 ${!cacheFeedback ? "bg-gray-600/50 border-gray-700/20 text-white" : ""}
-                                hover:opacity-80 disabled:opacity-80
                             `}
-                        >
-                            Save
-                        </button>
+                        />
 
-                        <button
+                        <SubmitButton
+                            type={BUTTON_TYPES.BUTTON}
+                            label={isLoading ? "Submitting..." : "Submit"}
                             onClick={submitNewEntry}
                             disabled={isLoading}
                             className={`
-                                px-4 py-2 rounded-lg backdrop-blur-xl border shadow-sm shadow-black/30 text-sm font-medium transition-opacity
                                 ${saveFeedback === "success" ? "border-green-500/50 text-green-800" : ""}
                                 ${saveFeedback === "error" ? "border-red-500/50 text-red-800" : ""}
                                 ${!saveFeedback ? "bg-purple-600/50 border-purple-700/20 text-white" : ""}
-                                hover:opacity-80 disabled:opacity-80
                             `}
-                        >
-                            {isLoading ? "Submitting..." : "Submit"}
-                        </button>
+                        />
                     </div>
                 }
             </div>

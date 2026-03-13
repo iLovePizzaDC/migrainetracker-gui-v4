@@ -1,4 +1,6 @@
+import { STRENGTH_MAP } from "@/features/calendar/constants/calendar";
 import { useCalendar } from "@/features/calendar/hooks/use-calendar";
+import type { Event } from "@/features/calendar/types/event";
 
 interface ICalendarContent {
     openDate: Date | null;
@@ -6,10 +8,10 @@ interface ICalendarContent {
 }
 
 function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
-    const { isLoading, date, daysArray, events, migrenosusFlags } = useCalendar();
+    const { isLoading, date, daysArray, calendarEvents, filteredEvents, migrainosusFlags } = useCalendar();
 
-    const getEventForDay = (day: number | null) => {
-        if (!day) return null;
+    const getEventForDay = (day: number | null, events: Event[]) => {
+        if (!day) return undefined;
         return events.find(event => event.date.getDate() === day);
     };
 
@@ -20,8 +22,8 @@ function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
     return (
         <div className="space-y-4">
             <div className="grid grid-cols-7 text-center gap-1">
-                {isLoading ? (
-                    Array.from({ length: 35 }).map((_, index) => (
+                {isLoading
+                    ? Array.from({ length: 35 }).map((_, index) => (
                         <div
                             key={index}
                             className="h-14 flex flex-col items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm animate-pulse"
@@ -29,39 +31,52 @@ function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
                             <div className="w-4 h-4 rounded-full bg-white/20 mt-1" />
                         </div>
                     ))
-                ) : daysArray.map((day, index) => {
-                    const event = getEventForDay(day);
+                    : daysArray.map((day, index) => {
+                        const event = getEventForDay(day, calendarEvents);
+                        const filteredEvent = getEventForDay(day, filteredEvents);
 
-                    return (
-                        <div
-                            key={index}
-                            onClick={() => day && onDayClick(day)}
-                            className={`
-                                h-14 flex flex-col items-center justify-center
-                                rounded-lg transition-color duration-200
-                                ${day
-                                    ? `${day === openDate?.getDate() && isInSelectedMonth
-                                            ? 'bg-white/10'
-                                            : `${day === today.getDate() && isInSelectedMonth
-                                                ? 'bg-white/5 hover:bg-white/10 cursor-pointer'
-                                                : 'hover:bg-white/10 cursor-pointer'
-                                            }`
-                                        }`
-                                    : "opacity-0"
-                                }
-                            `}
-                        >
-                            {day ?? ""}
+                        const baseClasses = [
+                            "h-14",
+                            "flex",
+                            "flex-col",
+                            "items-center",
+                            "justify-center",
+                            "rounded-lg",
+                            "transition-colors",
+                            "duration-200",
+                        ];
+
+                        if (day) {
+                            if (day === openDate?.getDate() && isInSelectedMonth) {
+                                baseClasses.push("bg-white/10");
+                            } else if (day === today.getDate() && isInSelectedMonth) {
+                                baseClasses.push("bg-white/5", "hover:bg-white/10", "cursor-pointer");
+                            } else {
+                                baseClasses.push("hover:bg-white/10", "cursor-pointer");
+                            }
+                        } else {
+                            baseClasses.push("opacity-0");
+                        }
+
+                        if (filteredEvent) baseClasses.push("border", "border-white/30");
+
+                        return (
                             <div
-                                className={`w-2 h-2 rounded-full mt-1
-                                    ${event ? event.strength : "bg-transparent"}
-                                    ${day && migrenosusFlags[day - 1] ? "ring-1 ring-red-500" : ""}
-                                `}
-                            />
-
-                        </div>
-                    );
-                })}
+                                key={index}
+                                onClick={() => day && onDayClick(day)}
+                                className={baseClasses.join(" ")}
+                            >
+                                {day ?? ""}
+                                <div
+                                    className={`w-2 h-2 rounded-full mt-1
+                                        ${event ? `${STRENGTH_MAP[event.strength]}` : "bg-transparent"}
+                                        ${day && migrainosusFlags[day - 1] ? "ring-1 ring-red-500" : ""}
+                                    `}
+                                />
+                            </div>
+                        );
+                    })
+                }
             </div>
         </div>
     );

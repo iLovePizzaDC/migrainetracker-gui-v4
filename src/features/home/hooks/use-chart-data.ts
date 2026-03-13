@@ -31,17 +31,17 @@ export function useChartData(
             setIsLoading(true);
 
             const { startDate, endDate, totalDays } = getDateRange(timeframeCount, timeframeUnit);
-            const userMedicine = await fetchUserMedicinesGet(user.id);
+            const userMedicine = await fetchUserMedicinesGet();
 
-            if (chartType === CHART_TYPES.AREA && user) {
-                const response = await fetchAreaData(cardType, endDate, timeframeCount, timeframeUnit, user.id, filter, userMedicine);
+            if (chartType === CHART_TYPES.AREA) {
+                const response = await fetchAreaData(cardType, endDate, timeframeCount, timeframeUnit, filter, userMedicine);
                 setAreaData(mapAreaResponse(response));
                 setIsLoading(false);
                 return;
             }
 
-            if (chartType === CHART_TYPES.PIE && user) {
-                const { data, value } = await fetchPieData(cardType, startDate, endDate, totalDays, user.id, filter, userMedicine);
+            if (chartType === CHART_TYPES.PIE) {
+                const { data, value } = await fetchPieData(cardType, startDate, endDate, totalDays, filter, userMedicine);
                 setPieData(data);
                 setCurrentPieValue(value);
                 setTotalPieValue(cardType === CARD_TYPES.DURATION ? (totalDays * 24) : totalDays);
