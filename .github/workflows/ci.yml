@@ -8,7 +8,28 @@ on:
     workflow_dispatch:
 
 jobs:
+    lint:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - run: npm ci
+            - run: npm run lint
+
+    security:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - run: npm ci
+            - run: npm audit --audit-level=high
+
     build:
+        needs: [lint, security]
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v4
