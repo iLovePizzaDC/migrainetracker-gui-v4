@@ -8,7 +8,22 @@ on:
     workflow_dispatch:
 
 jobs:
+    typecheck:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+            - run: npm ci
+            - run: npm run type-check
+
     lint:
+        needs: typecheck
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v4
@@ -56,12 +71,17 @@ jobs:
     deploy:
         needs: build
         runs-on: self-hosted
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: |
+            github.ref == 'refs/heads/main' &&
+            github.event_name == 'push' &&
+            github.actor != 'github-actions[bot]'
         steps:
             - name: Copy dist to nginx
               run: |
                   rm -rf /var/www/migrainetracker/*
                   cp -r dist/* /var/www/migrainetracker/
+            - name: Health Check
+              run: curl --fail https://migrainetracker.de
 
     release:
         needs: deploy
