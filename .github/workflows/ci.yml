@@ -60,3 +60,16 @@ jobs:
               run: |
                   rm -rf /var/www/migrainetracker/*
                   cp -r dist/* /var/www/migrainetracker/
+
+    release:
+        needs: deploy
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: googleapis/release-please-action@v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  release-type: simple
