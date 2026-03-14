@@ -50,6 +50,8 @@ jobs:
                   key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
             - run: npm ci
             - run: npm run build
+              env:
+                  VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
 
     deploy:
         needs: build
