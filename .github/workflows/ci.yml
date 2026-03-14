@@ -8,13 +8,46 @@ on:
     workflow_dispatch:
 
 jobs:
-    build:
+    lint:
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: 20
+            - uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+            - run: npm ci
+            - run: npm run lint
+
+    security:
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+            - run: npm ci
+            - run: npm audit --audit-level=high
+
+    build:
+        needs: [lint, security]
+        runs-on: self-hosted
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - uses: actions/cache@v4
+              with:
+                  path: node_modules
+                  key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
             - run: npm ci
             - run: npm run build
 
@@ -27,3 +60,19 @@ jobs:
               run: |
                   rm -rf /var/www/migrainetracker/*
                   cp -r dist/* /var/www/migrainetracker/
+
+    release:
+        needs: deploy
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        permissions:
+            contents: write
+            pull-requests: write
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: googleapis/release-please-action@v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  release-type: simple

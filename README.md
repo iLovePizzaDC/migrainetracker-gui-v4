@@ -49,3 +49,10 @@ sudo chmod -R 755 /var/www/migrainetracker
 ## MigraineTrackerV3 endpoints
 
 Start the server by running the  [MigraineTrackerV3](https://github.com/iLovePizzaDC/migraineTrackerV3) project in IntelliJ.
+
+## Commit message convention
+
+- `feat: xxx`  → Minor version  (1.0.0 → 1.1.0)
+- `fix: xxx`   → Patch version  (1.0.0 → 1.0.1)
+- `feat!: xxx` → Major version  (1.0.0 → 2.0.0)
+- `chore: xxx` → no release
