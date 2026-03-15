@@ -15,25 +15,18 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: 20
-            - uses: actions/cache@v4
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+                  cache: npm
             - run: npm ci
             - run: npm run type-check
 
     lint:
-        needs: typecheck
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: 20
-            - uses: actions/cache@v4
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+                  cache: npm
             - run: npm ci
             - run: npm run lint
 
@@ -44,29 +37,28 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: 20
-            - uses: actions/cache@v4
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+                  cache: npm
             - run: npm ci
             - run: npm audit --audit-level=high
 
     build:
-        needs: [lint, security]
+        needs: [typecheck, lint, security]
         runs-on: self-hosted
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
                   node-version: 20
-            - uses: actions/cache@v4
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+                  cache: npm
             - run: npm ci
             - run: npm run build
               env:
                   VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+            - uses: actions/upload-artifact@v4
+              with:
+                  name: dist
+                  path: dist
+                  retention-days: 1
 
     deploy:
         needs: build
@@ -76,6 +68,9 @@ jobs:
             github.event_name == 'push' &&
             github.actor != 'github-actions[bot]'
         steps:
+            - uses: actions/download-artifact@v4
+              with:
+                  name: dist
             - name: Copy dist to nginx
               run: |
                   rm -rf /var/www/migrainetracker/*
