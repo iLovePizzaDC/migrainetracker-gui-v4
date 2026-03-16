@@ -23,7 +23,7 @@ function SelectInput({
 	disabled = false,
 }: ISelectInput) {
 	return (
-		<div className='space-y-1'>
+		<div data-testid='select-input' className='space-y-1'>
 			{label && <label className='block text-sm font-medium mb-1'>{label}</label>}
 
 			{options.map((option) => {

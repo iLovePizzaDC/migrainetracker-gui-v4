@@ -5,7 +5,7 @@ function CalendarNavigation() {
 	const { month, year, prevMonth, nextMonth } = useCalendar();
 
 	return (
-		<div className='flex items-center justify-between mb-4'>
+		<div data-testid='calendar-navigation' className='flex items-center justify-between mb-4'>
 			<button
 				onClick={prevMonth}
 				aria-label='Previous month'
