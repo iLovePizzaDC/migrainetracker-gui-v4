@@ -1,6 +1,9 @@
 function Weekdays() {
 	return (
-		<div className='grid grid-cols-7 text-center mb-2 text-sm font-semibold opacity-80'>
+		<div
+			data-testid='weekdays'
+			className='grid grid-cols-7 text-center mb-2 text-sm font-semibold opacity-80'
+		>
 			<div>Mon.</div>
 			<div>Tue.</div>
 			<div>Wed.</div>
