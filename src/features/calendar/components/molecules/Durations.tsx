@@ -18,7 +18,10 @@ function Durations({ durations, setDurations, disabled = false }: IDurations) {
 	};
 
 	return (
-		<div className='p-4 rounded-xl bg-white/5 border border-white/10 space-y-3'>
+		<div
+			data-testid='durations'
+			className='p-4 rounded-xl bg-white/5 border border-white/10 space-y-3'
+		>
 			<div className='flex w-full items-center justify-between'>
 				<div className='w-5'></div>
 				<h3 className='text-sm font-medium text-purple-300 text-center flex-1'>Duration</h3>

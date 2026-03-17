@@ -11,7 +11,7 @@ interface IMidas {
 
 function Midas({ midas, setMidas, disabled = false }: IMidas) {
 	return (
-		<div className='p-4 rounded-xl bg-white/5 border border-white/10'>
+		<div data-testid='midas' className='p-4 rounded-xl bg-white/5 border border-white/10'>
 			<h3 className='text-sm font-medium text-purple-300 mb-2'>MIDAS</h3>
 
 			<SelectInput
