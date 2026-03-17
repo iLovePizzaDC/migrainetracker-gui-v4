@@ -6,11 +6,11 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach } from 'node:test';
 import { describe, expect, it, vi } from 'vitest';
 
-const loadUserMedicinesMock = vi.fn();
+const mockLoadUserMedicines = vi.fn();
 
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: () => ({
-		loadUserMedicines: loadUserMedicinesMock,
+		loadUserMedicines: mockLoadUserMedicines,
 	}),
 }));
 
@@ -22,7 +22,7 @@ describe('<AddMedicineForm />', () => {
 	const user = userEvent.setup();
 
 	beforeEach(() => {
-		loadUserMedicinesMock.mockClear();
+		mockLoadUserMedicines.mockClear();
 	});
 
 	it('renders form elements and is visible', () => {
@@ -79,7 +79,7 @@ describe('<AddMedicineForm />', () => {
 			'tst_med',
 			MEDICINE_TYPES.MIGRAINE_PAINKILLER,
 		);
-		expect(loadUserMedicinesMock).toHaveBeenCalled();
+		expect(mockLoadUserMedicines).toHaveBeenCalled();
 
 		expect(screen.getByLabelText('Name')).toHaveValue('');
 		expect(screen.getByLabelText('Abbreviation')).toHaveValue('');

@@ -3,7 +3,7 @@ import { MIDAS_TYPES } from '@/shared/constants/event/event-details';
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const midasFalse = {
+const mockMidasFalse = {
 	workMissed: false,
 	workImpaired: false,
 	choresMissed: false,
@@ -20,14 +20,14 @@ describe('<Midas />', () => {
 	});
 
 	it('renders the heading', () => {
-		render(<Midas midas={midasFalse} setMidas={setMidas} />);
+		render(<Midas midas={mockMidasFalse} setMidas={setMidas} />);
 
 		expect(screen.getByText('MIDAS')).toBeInTheDocument();
 	});
 
 	it('renders pre checked midas', () => {
 		const midasWithWork = {
-			...midasFalse,
+			...mockMidasFalse,
 			[MIDAS_TYPES.WORK_MISSED]: true,
 			[MIDAS_TYPES.WORK_IMPAIRED]: true,
 		};
@@ -44,7 +44,7 @@ describe('<Midas />', () => {
 	});
 
 	it('is disabled if prop is true', () => {
-		render(<Midas midas={midasFalse} setMidas={setMidas} disabled />);
+		render(<Midas midas={mockMidasFalse} setMidas={setMidas} disabled />);
 
 		expect(screen.getByLabelText('I missed work')).toBeDisabled();
 		expect(screen.getByLabelText('my work performance was reduced')).toBeDisabled();

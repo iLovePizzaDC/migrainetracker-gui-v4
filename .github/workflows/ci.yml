@@ -30,6 +30,17 @@ jobs:
             - run: npm ci
             - run: npm run lint
 
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: npm
+            - run: npm ci
+            - run: npm run test
+
     security:
         runs-on: ubuntu-latest
         steps:
@@ -42,7 +53,7 @@ jobs:
             - run: npm audit --audit-level=high
 
     build:
-        needs: [typecheck, lint, security]
+        needs: [typecheck, lint, test, security]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4

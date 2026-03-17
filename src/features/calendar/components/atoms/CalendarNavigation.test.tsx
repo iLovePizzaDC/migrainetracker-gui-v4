@@ -3,15 +3,15 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const prevMonth = vi.fn();
-const nextMonth = vi.fn();
+const mockPrevMonth = vi.fn();
+const mockNextMonth = vi.fn();
 
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: () => ({
 		month: 'January',
 		year: '2026',
-		prevMonth,
-		nextMonth,
+		prevMonth: mockPrevMonth,
+		nextMonth: mockNextMonth,
 	}),
 }));
 
@@ -19,8 +19,8 @@ describe('<CalendarNavigation />', () => {
 	const user = userEvent.setup();
 
 	beforeEach(() => {
-		prevMonth.mockClear();
-		nextMonth.mockClear();
+		mockPrevMonth.mockClear();
+		mockNextMonth.mockClear();
 	});
 
 	it('renders navigation and date', () => {
@@ -36,7 +36,7 @@ describe('<CalendarNavigation />', () => {
 
 		await user.click(screen.getByRole('button', { name: 'Previous month' }));
 
-		expect(prevMonth).toHaveBeenCalled();
+		expect(mockPrevMonth).toHaveBeenCalled();
 	});
 
 	it('calls nextMonth on button click', async () => {
@@ -44,6 +44,6 @@ describe('<CalendarNavigation />', () => {
 
 		await user.click(screen.getByRole('button', { name: 'Next month' }));
 
-		expect(nextMonth).toHaveBeenCalled();
+		expect(mockNextMonth).toHaveBeenCalled();
 	});
 });

@@ -33,11 +33,11 @@ vi.mock('@/shared/api/migraine.api', () => ({
 	fetchNewEntry: vi.fn().mockResolvedValue(undefined),
 }));
 
-const date = new Date('01-01-2026');
+const mockDate = new Date('01-01-2026');
 
-const onClose = vi.fn();
+const mockOnClose = vi.fn();
 
-const prefilled = {
+const mockPrefilled = {
 	durations: [
 		{
 			id: 0,
@@ -70,13 +70,13 @@ describe('<MigrainePanel />', () => {
 	const user = userEvent.setup();
 
 	beforeEach(() => {
-		onClose.mockClear();
+		mockOnClose.mockClear();
 		vi.mocked(fetchNewEntry).mockClear();
 	});
 
 	describe('rendering', () => {
 		it('renders header, buttons and input fields when isOpen', () => {
-			render(<MigrainePanel date={date} onClose={onClose} isOpen />);
+			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
 
 			expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
 			expect(screen.getByText('01.01.')).toBeInTheDocument();
@@ -91,21 +91,27 @@ describe('<MigrainePanel />', () => {
 		});
 
 		it('renders edit button when prefilled is set', () => {
-			render(<MigrainePanel date={date} onClose={onClose} prefilled={prefilled} isOpen />);
+			render(
+				<MigrainePanel date={mockDate} onClose={mockOnClose} prefilled={mockPrefilled} isOpen />,
+			);
 
 			expect(screen.queryByTestId('edit-button')).toBeInTheDocument();
 		});
 
 		it('hides when isOpen is false', () => {
-			render(<MigrainePanel date={date} onClose={onClose} isOpen={false} />);
+			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen={false} />);
 
 			expect(screen.getByTestId('migraine-panel')).toHaveClass(
-				'opacity-0 max-h-0 pointer-events-none',
+				'opacity-0',
+				'max-h-0',
+				'pointer-events-none',
 			);
 		});
 
 		it('passes prefilled values to child components', () => {
-			render(<MigrainePanel date={date} onClose={onClose} prefilled={prefilled} isOpen />);
+			render(
+				<MigrainePanel date={mockDate} onClose={mockOnClose} prefilled={mockPrefilled} isOpen />,
+			);
 
 			expect(screen.getByLabelText('Start')).toHaveAttribute('value', '10:00');
 			expect(screen.getByLabelText('End')).toHaveAttribute('value', '15:00');
@@ -124,7 +130,7 @@ describe('<MigrainePanel />', () => {
 
 	describe('disabled state', () => {
 		it('hides submit buttons when disabled', () => {
-			render(<MigrainePanel date={date} onClose={onClose} isOpen disabled />);
+			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen disabled />);
 
 			expect(screen.getByTestId('medicine')).toHaveAttribute('data-disabled', 'true');
 			expect(screen.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument();
@@ -132,16 +138,30 @@ describe('<MigrainePanel />', () => {
 		});
 
 		it('hides medicine when prefilled with no medicines and disabled', () => {
-			const prefilledNoMeds = { ...prefilled, medicines: [] };
+			const prefilledNoMeds = { ...mockPrefilled, medicines: [] };
 			render(
-				<MigrainePanel date={date} onClose={onClose} prefilled={prefilledNoMeds} isOpen disabled />,
+				<MigrainePanel
+					date={mockDate}
+					onClose={mockOnClose}
+					prefilled={prefilledNoMeds}
+					isOpen
+					disabled
+				/>,
 			);
 
 			expect(screen.queryByTestId('medicine')).not.toBeInTheDocument();
 		});
 
 		it('toggles edit mode on edit button click', async () => {
-			render(<MigrainePanel date={date} onClose={onClose} prefilled={prefilled} isOpen disabled />);
+			render(
+				<MigrainePanel
+					date={mockDate}
+					onClose={mockOnClose}
+					prefilled={mockPrefilled}
+					isOpen
+					disabled
+				/>,
+			);
 
 			expect(screen.queryByRole('button', { name: 'Submit' })).not.toBeInTheDocument();
 
@@ -153,38 +173,40 @@ describe('<MigrainePanel />', () => {
 
 	describe('interactions', () => {
 		it('calls onClose when Close button is clicked', async () => {
-			render(<MigrainePanel date={date} onClose={onClose} isOpen />);
+			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
 
 			await user.click(screen.getByRole('button', { name: 'Close' }));
 
-			expect(onClose).toHaveBeenCalledOnce();
+			expect(mockOnClose).toHaveBeenCalledOnce();
 		});
 	});
 
 	describe('submit', () => {
 		it('calls fetchNewEntry and closes on submit', async () => {
-			render(<MigrainePanel date={date} onClose={onClose} isOpen />);
+			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
 
 			await user.click(screen.getByRole('button', { name: 'Submit' }));
 
 			expect(fetchNewEntry).toHaveBeenCalled();
-			expect(onClose).toHaveBeenCalled();
+			expect(mockOnClose).toHaveBeenCalled();
 		});
 
 		it('shows error feedback when submit fails', async () => {
 			vi.mocked(fetchNewEntry).mockRejectedValueOnce(new Error('fail'));
-			render(<MigrainePanel date={date} onClose={onClose} isOpen />);
+
+			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
 
 			await user.click(screen.getByRole('button', { name: 'Submit' }));
 
 			expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
-			expect(onClose).not.toHaveBeenCalled();
+			expect(mockOnClose).not.toHaveBeenCalled();
 		});
 
 		it('shows "Submitting..." and disables buttons while loading', async () => {
 			vi.mocked(fetchNewEntry).mockImplementationOnce(() => new Promise(() => {}));
 
-			render(<MigrainePanel date={date} onClose={onClose} isOpen />);
+			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
+
 			await user.click(screen.getByRole('button', { name: 'Submit' }));
 
 			expect(screen.getByRole('button', { name: 'Submitting...' })).toBeDisabled();
@@ -197,7 +219,8 @@ describe('<MigrainePanel />', () => {
 			const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
 			const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
 
-			render(<MigrainePanel date={date} onClose={onClose} isOpen />);
+			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
+
 			await user.click(screen.getByRole('button', { name: 'Save' }));
 
 			expect(setItemSpy).toHaveBeenCalledWith('MT_NE', expect.any(String));
@@ -208,7 +231,7 @@ describe('<MigrainePanel />', () => {
 			const callback = saveCall![0] as () => void;
 			callback();
 
-			expect(onClose).toHaveBeenCalled();
+			expect(mockOnClose).toHaveBeenCalled();
 		});
 	});
 });

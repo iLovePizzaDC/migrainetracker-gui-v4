@@ -4,9 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import SelectInput from './SelectInput';
 
-const onChange = vi.fn();
+const mockOnChange = vi.fn();
 
-const optionsMock = [
+const mockOptions = [
 	{
 		label: 'test label 1',
 		value: 'test_value_1',
@@ -25,13 +25,13 @@ describe('<SelectInput />', () => {
 	const user = userEvent.setup();
 
 	beforeEach(() => {
-		onChange.mockClear();
+		mockOnChange.mockClear();
 	});
 
 	it.each([SELECT_TYPES.RADIO, SELECT_TYPES.CHECKBOX])(
 		'renders label and options for type %s',
 		(type) => {
-			render(<SelectInput id='select' type={type} options={optionsMock} onChange={onChange} />);
+			render(<SelectInput id='select' type={type} options={mockOptions} onChange={mockOnChange} />);
 
 			expect(screen.getByLabelText('test label 1')).toBeInTheDocument();
 			expect(screen.getByLabelText('test label 2')).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe('<SelectInput />', () => {
 	it.each([SELECT_TYPES.RADIO, SELECT_TYPES.CHECKBOX])(
 		'renders options with correct values for type %s',
 		(type) => {
-			render(<SelectInput id='select' type={type} options={optionsMock} onChange={onChange} />);
+			render(<SelectInput id='select' type={type} options={mockOptions} onChange={mockOnChange} />);
 
 			expect(screen.getByRole(type, { name: 'test label 1' })).toHaveAttribute(
 				'value',
@@ -62,11 +62,11 @@ describe('<SelectInput />', () => {
 	it.each([SELECT_TYPES.RADIO, SELECT_TYPES.CHECKBOX])(
 		'calls onChange when clicking an option for type %s',
 		async (type) => {
-			render(<SelectInput id='select' type={type} options={optionsMock} onChange={onChange} />);
+			render(<SelectInput id='select' type={type} options={mockOptions} onChange={mockOnChange} />);
 
 			await user.click(screen.getByLabelText('test label 2'));
 
-			expect(onChange).toHaveBeenCalled();
+			expect(mockOnChange).toHaveBeenCalled();
 		},
 	);
 
@@ -77,8 +77,8 @@ describe('<SelectInput />', () => {
 				<SelectInput
 					id='select'
 					type={type}
-					options={optionsMock}
-					onChange={onChange}
+					options={mockOptions}
+					onChange={mockOnChange}
 					label='Select'
 				/>,
 			);
@@ -91,7 +91,13 @@ describe('<SelectInput />', () => {
 		'is disabled if prop is true for type %s',
 		(type) => {
 			render(
-				<SelectInput id='select' type={type} options={optionsMock} onChange={onChange} disabled />,
+				<SelectInput
+					id='select'
+					type={type}
+					options={mockOptions}
+					onChange={mockOnChange}
+					disabled
+				/>,
 			);
 
 			expect(screen.getByLabelText('test label 1')).toBeDisabled();
@@ -104,7 +110,13 @@ describe('<SelectInput />', () => {
 		'is required if prop is true for type %s',
 		(type) => {
 			render(
-				<SelectInput id='select' type={type} options={optionsMock} onChange={onChange} required />,
+				<SelectInput
+					id='select'
+					type={type}
+					options={mockOptions}
+					onChange={mockOnChange}
+					required
+				/>,
 			);
 
 			expect(screen.getByLabelText('test label 1')).toBeRequired();
@@ -119,8 +131,8 @@ describe('<SelectInput />', () => {
 				<SelectInput
 					id='select'
 					type={SELECT_TYPES.CHECKBOX}
-					options={optionsMock}
-					onChange={onChange}
+					options={mockOptions}
+					onChange={mockOnChange}
 					value={['test_value_1']}
 				/>,
 			);
@@ -135,8 +147,8 @@ describe('<SelectInput />', () => {
 				<SelectInput
 					id='select'
 					type={SELECT_TYPES.CHECKBOX}
-					options={optionsMock}
-					onChange={onChange}
+					options={mockOptions}
+					onChange={mockOnChange}
 					value={['test_value_1', 'test_value_2']}
 				/>,
 			);
@@ -153,8 +165,8 @@ describe('<SelectInput />', () => {
 				<SelectInput
 					id='select'
 					type={SELECT_TYPES.RADIO}
-					options={optionsMock}
-					onChange={onChange}
+					options={mockOptions}
+					onChange={mockOnChange}
 					value='test_value_1'
 				/>,
 			);
@@ -169,8 +181,8 @@ describe('<SelectInput />', () => {
 				<SelectInput
 					id='select'
 					type={SELECT_TYPES.RADIO}
-					options={optionsMock}
-					onChange={onChange}
+					options={mockOptions}
+					onChange={mockOnChange}
 					value={['test_value_1', 'test_value_2']}
 				/>,
 			);
