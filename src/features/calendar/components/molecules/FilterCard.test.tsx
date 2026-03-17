@@ -13,7 +13,6 @@ vi.mock('@/shared/hooks/user/use-user', () => ({
 		],
 	}),
 }));
-
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: () => ({
 		filter: {
@@ -26,7 +25,6 @@ vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 		setFilter: vi.fn(),
 	}),
 }));
-
 vi.mock('@/shared/hooks/use-click-outside', () => ({
 	useClickOutside: () => vi.fn(),
 }));

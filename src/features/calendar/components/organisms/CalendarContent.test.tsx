@@ -14,13 +14,11 @@ const mockEvent1 = {
 	description: {},
 	strength: 200 as keyof typeof STRENGTH_MAP,
 };
-
 const mockEvent2 = {
 	date: new Date('2026-01-04'),
 	description: {},
 	strength: 500 as keyof typeof STRENGTH_MAP,
 };
-
 const mockUseCalendar = (overrides = {}) =>
 	({
 		isLoading: false,
@@ -31,9 +29,7 @@ const mockUseCalendar = (overrides = {}) =>
 		migrainosusFlags: Array(31).fill(false),
 		...overrides,
 	}) as any;
-
 const mockOpenDate = new Date('01-01-2026');
-
 const mockOnDayClick = vi.fn();
 
 describe('<CalendarContent /', () => {

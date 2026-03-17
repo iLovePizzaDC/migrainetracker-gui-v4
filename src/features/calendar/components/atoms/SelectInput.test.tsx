@@ -1,11 +1,10 @@
+import SelectInput from '@/features/calendar/components/atoms/SelectInput';
 import { SELECT_TYPES } from '@/shared/constants/input/select';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import SelectInput from './SelectInput';
 
 const mockOnChange = vi.fn();
-
 const mockOptions = [
 	{
 		label: 'test label 1',

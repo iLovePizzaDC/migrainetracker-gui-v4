@@ -1,6 +1,6 @@
+import CalendarHeader from '@/features/calendar/components/molecules/CalendarHeader';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import CalendarHeader from './CalendarHeader';
 
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: () => ({

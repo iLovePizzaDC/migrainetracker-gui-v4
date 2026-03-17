@@ -14,7 +14,6 @@ vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 		refetchEvents: vi.fn(),
 	}),
 }));
-
 vi.mock('@/features/calendar/components/molecules/Medicine', () => ({
 	default: ({ disabled, medicines }: any) => (
 		<div data-testid='medicine' data-disabled={disabled} data-count={medicines?.length ?? 0}>
@@ -28,15 +27,12 @@ vi.mock('@/features/calendar/components/molecules/Medicine', () => ({
 		</div>
 	),
 }));
-
 vi.mock('@/shared/api/migraine.api', () => ({
 	fetchNewEntry: vi.fn().mockResolvedValue(undefined),
 }));
 
 const mockDate = new Date('01-01-2026');
-
 const mockOnClose = vi.fn();
-
 const mockPrefilled = {
 	durations: [
 		{

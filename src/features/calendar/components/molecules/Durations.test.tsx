@@ -5,7 +5,6 @@ import { beforeEach } from 'node:test';
 import { describe, expect, it, vi } from 'vitest';
 
 const mockSetDurations = vi.fn();
-
 const mockDurations = [
 	{
 		id: 0,

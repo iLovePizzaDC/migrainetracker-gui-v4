@@ -1,7 +1,11 @@
 import Calendar from '@/features/calendar/components/organisms/Calendar';
 import type { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
-import { SYMPTOM_TYPES } from '@/shared/constants/event/event-details';
+import {
+	EFFECTIVENESS_TYPES,
+	INTENSITY_TYPES,
+	SYMPTOM_TYPES,
+} from '@/shared/constants/event/event-details';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -18,15 +22,12 @@ vi.mock('@/shared/hooks/user/use-user', () => ({
 		userMedicineOptions: [mockUserMedicine],
 	}),
 }));
-
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: vi.fn(),
 }));
-
 vi.mock('@/features/calendar/components/molecules/Durations', () => ({
 	default: () => <div>durations</div>,
 }));
-
 vi.mock('@/shared/components/atoms/Combobox', () => ({
 	default: () => <div>combobox</div>,
 }));
@@ -40,10 +41,10 @@ const mockEvent1 = {
 				end: 15,
 			},
 		],
-		intensity: 'high',
+		intensity: INTENSITY_TYPES.HIGH,
 		symptoms: [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT, SYMPTOM_TYPES.SMELL],
 		medicine: mockUserMedicine.value,
-		effectiveness: ['yes'],
+		effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE],
 		midas: {
 			workMissed: true,
 			workImpaired: false,
@@ -54,7 +55,6 @@ const mockEvent1 = {
 	},
 	strength: 200 as keyof typeof STRENGTH_MAP,
 };
-
 const mockEvent2 = {
 	date: new Date('2026-01-04'),
 	description: {
@@ -64,10 +64,10 @@ const mockEvent2 = {
 				end: 15,
 			},
 		],
-		intensity: 'high',
+		intensity: INTENSITY_TYPES.HIGH,
 		symptoms: [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT, SYMPTOM_TYPES.SMELL],
 		medicine: mockUserMedicine.value,
-		effectiveness: ['yes'],
+		effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE],
 		midas: {
 			workMissed: true,
 			workImpaired: false,
@@ -78,7 +78,6 @@ const mockEvent2 = {
 	},
 	strength: 500 as keyof typeof STRENGTH_MAP,
 };
-
 const mockUseCalendar = (overrides = {}) =>
 	({
 		isLoading: false,
