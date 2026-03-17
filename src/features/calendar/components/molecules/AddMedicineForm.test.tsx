@@ -13,7 +13,6 @@ vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 		loadUserMedicines: mockLoadUserMedicines,
 	}),
 }));
-
 vi.mock('@/shared/api/medicine.api', () => ({
 	fetchUserMedicinesPost: vi.fn(),
 }));

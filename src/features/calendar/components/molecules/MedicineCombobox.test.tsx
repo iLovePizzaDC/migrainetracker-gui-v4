@@ -12,15 +12,12 @@ vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 		loadUserMedicines: vi.fn(),
 	}),
 }));
-
 vi.mock('@/shared/hooks/use-click-outside', () => ({
 	useClickOutside: vi.fn(),
 }));
-
 vi.mock('@/shared/api/medicine.api', () => ({
 	fetchUserMedicinesDelete: vi.fn(),
 }));
-
 vi.mock('@/shared/components/atoms/Combobox', () => ({
 	default: ({ selected, onChange, renderOptionActions, disabled }: any) => (
 		<div>
@@ -56,7 +53,6 @@ const mockMedicines = [
 		effectiveness: 2,
 	},
 ];
-
 const mockSetMedicines = vi.fn();
 
 describe('<MedicineCombobox />', () => {

@@ -8,7 +8,6 @@ const mockMedValue = 'tst_med';
 vi.mock('@/shared/hooks/use-click-outside', () => ({
 	useClickOutside: vi.fn(),
 }));
-
 vi.mock('@/features/calendar/components/molecules/MedicineCombobox', () => ({
 	default: ({ medicines, disabled }: any) => (
 		<div data-testid='medicine-combobox'>

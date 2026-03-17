@@ -13,11 +13,9 @@ vi.mock('@/features/calendar/hooks/use-scroll-snap-picker', () => ({
 		handleScroll: vi.fn(),
 	}),
 }));
-
 vi.mock('@/shared/hooks/use-click-outside', () => ({
 	useClickOutside: vi.fn(),
 }));
-
 vi.mock('@/features/calendar/utils/scroll-snap-helper', () => ({
 	normalizeTime: (value: string) => value,
 }));
