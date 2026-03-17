@@ -2,8 +2,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const medLabel = 'test medicine';
-const medValue = 'tst-med';
+const mockMedLabel = 'test medicine';
+const mockMedValue = 'tst_med';
 
 vi.mock('@/shared/hooks/use-click-outside', () => ({
 	useClickOutside: vi.fn(),
@@ -20,18 +20,18 @@ vi.mock('@/features/calendar/components/molecules/MedicineCombobox', () => ({
 	),
 }));
 
-const medicines = [
+const mockMedicines = [
 	{
 		medicine: {
-			abbreviation: `${medValue}-1`,
-			label: `${medLabel} 1`,
+			abbreviation: `${mockMedValue}_1`,
+			label: `${mockMedLabel} 1`,
 		},
 		taken: 1,
 		effectiveness: 0,
 	},
 ];
 
-const setMedicines = vi.fn();
+const mockSetMedicines = vi.fn();
 
 const mockUseCalendar = (medDaysCount: number, maxMedDaysCount: number) => {
 	vi.doMock('@/features/calendar/hooks/use-calendar', () => ({
@@ -43,7 +43,7 @@ describe('<Medicine />', () => {
 	const user = userEvent.setup();
 
 	beforeEach(() => {
-		setMedicines.mockClear();
+		mockSetMedicines.mockClear();
 		vi.resetModules();
 	});
 
@@ -57,10 +57,9 @@ describe('<Medicine />', () => {
 		'renders med-days $days/$max with color $color',
 		async ({ days, max, color }) => {
 			mockUseCalendar(days, max);
-			const { default: Medicine } = await import(
-				'@/features/calendar/components/molecules/Medicine'
-			);
-			render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+			const { default: Medicine } =
+				await import('@/features/calendar/components/molecules/Medicine');
+			render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
 			const medDaysSpan = screen.getByTestId('med-days-count');
 			expect(medDaysSpan).toHaveTextContent(`${days}`);
@@ -71,7 +70,7 @@ describe('<Medicine />', () => {
 	it('renders the heading', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
 		expect(screen.getByText('Medicines')).toBeInTheDocument();
 	});
@@ -79,7 +78,7 @@ describe('<Medicine />', () => {
 	it('renders med-days label with correct values', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
 		expect(screen.getByText('5')).toBeInTheDocument();
 		expect(screen.getByText('/10 Med-Days this month')).toBeInTheDocument();
@@ -88,16 +87,16 @@ describe('<Medicine />', () => {
 	it('renders medicines with correct values', async () => {
 		mockUseCalendar(15, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
-		expect(screen.getByRole('slider', { name: /taken/i })).toHaveAttribute('value', '1');
-		expect(screen.getByRole('slider', { name: /effectiveness/i })).toHaveAttribute('value', '0');
+		expect(screen.getByRole('slider', { name: /Taken/ })).toHaveAttribute('value', '1');
+		expect(screen.getByRole('slider', { name: /Effectiveness/ })).toHaveAttribute('value', '0');
 	});
 
 	it('does not render info popup by default', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
 		expect(screen.queryByText('MOH')).not.toBeInTheDocument();
 	});
@@ -105,7 +104,7 @@ describe('<Medicine />', () => {
 	it('renders info popup on info button click', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
 		await user.click(screen.getByTestId('info-toggle'));
 
@@ -115,7 +114,7 @@ describe('<Medicine />', () => {
 	it('does not render add medicine form by default', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
 		expect(screen.queryByTestId('add-medicine-form')).toHaveStyle('height: 0');
 	});
@@ -123,7 +122,7 @@ describe('<Medicine />', () => {
 	it('renders add medicine form on first button click', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
 		await user.click(screen.getByTestId('add-medicine'));
 
@@ -133,7 +132,7 @@ describe('<Medicine />', () => {
 	it('closes add medicine form on second button click', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
 		await user.click(screen.getByTestId('add-medicine'));
 		await user.click(screen.getByTestId('add-medicine'));
@@ -144,36 +143,38 @@ describe('<Medicine />', () => {
 	it('calls setMedicines with correct taken value on slider change', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
-		fireEvent.change(screen.getByRole('slider', { name: /taken/i }), { target: { value: 8 } });
+		fireEvent.change(screen.getByRole('slider', { name: /Taken/ }), { target: { value: 8 } });
 
-		const updated = [...medicines];
+		const updated = [...mockMedicines];
 		updated[0].taken = 8;
-		expect(setMedicines).toHaveBeenCalledWith(updated);
+		expect(mockSetMedicines).toHaveBeenCalledWith(updated);
 	});
 
 	it('calls setMedicines with correct effectiveness value on slider change', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
-		fireEvent.change(screen.getByRole('slider', { name: /effectiveness/i }), {
+		fireEvent.change(screen.getByRole('slider', { name: /Effectiveness/ }), {
 			target: { value: 1 },
 		});
 
-		const updated = [...medicines];
+		const updated = [...mockMedicines];
 		updated[0].taken = 1;
-		expect(setMedicines).toHaveBeenCalledWith(updated);
+		expect(mockSetMedicines).toHaveBeenCalledWith(updated);
 	});
 
 	it('adapts effectiveness max value on taken slider change', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
 
-		let testMedicines = [...medicines];
+		let testMedicines = [...mockMedicines];
 
-		const handleSetMedicines: React.Dispatch<React.SetStateAction<typeof medicines>> = (value) => {
+		const handleSetMedicines: React.Dispatch<React.SetStateAction<typeof mockMedicines>> = (
+			value,
+		) => {
 			testMedicines = typeof value === 'function' ? value(testMedicines) : value;
 
 			rerender(<Medicine medicines={testMedicines} setMedicines={handleSetMedicines} />);
@@ -183,20 +184,20 @@ describe('<Medicine />', () => {
 			<Medicine medicines={testMedicines} setMedicines={handleSetMedicines} />,
 		);
 
-		fireEvent.change(screen.getByRole('slider', { name: /taken/i }), {
+		fireEvent.change(screen.getByRole('slider', { name: /Taken/ }), {
 			target: { value: 3 },
 		});
 
-		expect(screen.getByRole('slider', { name: /effectiveness/i })).toHaveAttribute('max', '3');
+		expect(screen.getByRole('slider', { name: /Effectiveness/ })).toHaveAttribute('max', '3');
 	});
 
 	it('is disabled if prop is true', async () => {
 		mockUseCalendar(5, 10);
 		const { default: Medicine } = await import('@/features/calendar/components/molecules/Medicine');
-		render(<Medicine medicines={medicines} setMedicines={setMedicines} disabled />);
+		render(<Medicine medicines={mockMedicines} setMedicines={mockSetMedicines} disabled />);
 
 		expect(screen.getByTestId('combobox-disabled')).toBeInTheDocument();
-		expect(screen.getByRole('slider', { name: /taken/i })).toBeDisabled();
-		expect(screen.getByRole('slider', { name: /effectiveness/i })).toBeDisabled();
+		expect(screen.getByRole('slider', { name: /Taken/ })).toBeDisabled();
+		expect(screen.getByRole('slider', { name: /Effectiveness/ })).toBeDisabled();
 	});
 });

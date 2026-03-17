@@ -3,19 +3,32 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/shared/hooks/user/use-user', () => ({
+	useUser: () => ({
+		userMedicineOptions: [
+			{
+				label: 'Test medicine 1',
+				value: 'tst_med_1',
+			},
+		],
+	}),
+}));
+
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: () => ({
-		filter: '',
+		filter: {
+			intensity: null,
+			symptom: [],
+			medicine: [],
+			effectiveness: null,
+			midas: [],
+		},
 		setFilter: vi.fn(),
 	}),
 }));
 
 vi.mock('@/shared/hooks/use-click-outside', () => ({
 	useClickOutside: () => vi.fn(),
-}));
-
-vi.mock('@/shared/components/molecules/FilterForm', () => ({
-	default: () => <div data-testid='filter-form' />,
 }));
 
 describe('<FilterCard />', () => {
@@ -26,7 +39,7 @@ describe('<FilterCard />', () => {
 
 		expect(screen.getByTestId('toggle-button')).toBeInTheDocument();
 		expect(screen.getByTestId('close-button')).toBeInTheDocument();
-		expect(screen.getByTestId('filter-card')).toHaveClass('opacity-0 pointer-events-none');
+		expect(screen.getByTestId('filter-card')).toHaveClass('opacity-0', 'pointer-events-none');
 	});
 
 	it('renders the filter card on first toggle button click', async () => {

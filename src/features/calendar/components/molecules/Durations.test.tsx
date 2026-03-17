@@ -4,9 +4,9 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach } from 'node:test';
 import { describe, expect, it, vi } from 'vitest';
 
-const setDurations = vi.fn();
+const mockSetDurations = vi.fn();
 
-const durations = [
+const mockDurations = [
 	{
 		id: 0,
 		startTime: '10:00',
@@ -18,11 +18,11 @@ describe('<Durations />', () => {
 	const user = userEvent.setup();
 
 	beforeEach(() => {
-		setDurations.mockClear();
+		mockSetDurations.mockClear();
 	});
 
 	it('renders the header, add button and time pickers', () => {
-		render(<Durations durations={durations} setDurations={setDurations} />);
+		render(<Durations durations={mockDurations} setDurations={mockSetDurations} />);
 
 		expect(screen.getByText('Duration')).toBeInTheDocument();
 		expect(screen.getByTestId('add-button')).toBeInTheDocument();
@@ -32,42 +32,42 @@ describe('<Durations />', () => {
 
 	it('shows remove button for min 2 duration pairs', () => {
 		const twoDurations = [
-			...durations,
+			...mockDurations,
 			{
 				id: 1,
 				startTime: '15:00',
 				endTime: '18:00',
 			},
 		];
-		render(<Durations durations={twoDurations} setDurations={setDurations} />);
+		render(<Durations durations={twoDurations} setDurations={mockSetDurations} />);
 
 		expect(screen.getAllByText('Remove')).toHaveLength(2);
 	});
 
 	it('does not show remove button with min 2 duration pairs and disabled', () => {
 		const twoDurations = [
-			...durations,
+			...mockDurations,
 			{
 				id: 1,
 				startTime: '15:00',
 				endTime: '18:00',
 			},
 		];
-		render(<Durations durations={twoDurations} setDurations={setDurations} disabled />);
+		render(<Durations durations={twoDurations} setDurations={mockSetDurations} disabled />);
 
 		expect(screen.queryByText('Remove')).not.toBeInTheDocument();
 	});
 
 	it('calls setDurations on button click', async () => {
-		render(<Durations durations={durations} setDurations={setDurations} />);
+		render(<Durations durations={mockDurations} setDurations={mockSetDurations} />);
 
 		await user.click(screen.getByTestId('add-button'));
 
-		expect(setDurations).toHaveBeenCalled();
+		expect(mockSetDurations).toHaveBeenCalled();
 	});
 
 	it('is disabled if prop is true', () => {
-		render(<Durations durations={durations} setDurations={setDurations} disabled />);
+		render(<Durations durations={mockDurations} setDurations={mockSetDurations} disabled />);
 
 		expect(screen.queryByTestId('add-button')).not.toBeInTheDocument();
 		expect(screen.getByLabelText('Start')).toBeDisabled();

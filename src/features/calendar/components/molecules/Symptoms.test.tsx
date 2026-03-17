@@ -4,20 +4,23 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-const setSymptoms = vi.fn();
+const mockSetSymptoms = vi.fn();
 
 describe('<Symptoms />', () => {
 	const user = userEvent.setup();
 
 	it('renders the heading', () => {
-		render(<Symptoms symptoms={[]} setSymptoms={setSymptoms} />);
+		render(<Symptoms symptoms={[]} setSymptoms={mockSetSymptoms} />);
 
 		expect(screen.getByText('Symptoms')).toBeInTheDocument();
 	});
 
 	it('renders pre checked symptoms', () => {
 		render(
-			<Symptoms symptoms={[SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT]} setSymptoms={setSymptoms} />,
+			<Symptoms
+				symptoms={[SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT]}
+				setSymptoms={mockSetSymptoms}
+			/>,
 		);
 
 		expect(screen.getByLabelText('Noise Sensitive')).toBeChecked();
@@ -32,29 +35,29 @@ describe('<Symptoms />', () => {
 	});
 
 	it('adds symptom when clicking unchecked option', async () => {
-		render(<Symptoms symptoms={[]} setSymptoms={setSymptoms} />);
+		render(<Symptoms symptoms={[]} setSymptoms={mockSetSymptoms} />);
 
 		await user.click(screen.getByLabelText('Noise Sensitive'));
 
-		expect(setSymptoms).toHaveBeenCalled();
+		expect(mockSetSymptoms).toHaveBeenCalled();
 
-		const updater = setSymptoms.mock.calls[0][0];
+		const updater = mockSetSymptoms.mock.calls[0][0];
 		expect(updater([])).toEqual([SYMPTOM_TYPES.NOISE]);
 	});
 
 	it('removes symptom when clicking checked option', async () => {
-		render(<Symptoms symptoms={[SYMPTOM_TYPES.NOISE]} setSymptoms={setSymptoms} />);
+		render(<Symptoms symptoms={[SYMPTOM_TYPES.NOISE]} setSymptoms={mockSetSymptoms} />);
 
 		await user.click(screen.getByLabelText('Noise Sensitive'));
 
-		expect(setSymptoms).toHaveBeenCalled();
+		expect(mockSetSymptoms).toHaveBeenCalled();
 
-		const updater = setSymptoms.mock.calls[0][0];
+		const updater = mockSetSymptoms.mock.calls[0][0];
 		expect(updater([])).toEqual([SYMPTOM_TYPES.NOISE]);
 	});
 
 	it('is disabled if prop is true', () => {
-		render(<Symptoms symptoms={[]} setSymptoms={setSymptoms} disabled />);
+		render(<Symptoms symptoms={[]} setSymptoms={mockSetSymptoms} disabled />);
 
 		expect(screen.getByLabelText('Noise Sensitive')).toBeDisabled();
 		expect(screen.getByLabelText('Light Sensitive')).toBeDisabled();
