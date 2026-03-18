@@ -1,8 +1,8 @@
+import MidasCard from '@/features/home/components/molecules/MidasCard';
+import { fetchMidasPieData } from '@/features/home/utils/fetch-helper';
 import { useUser } from '@/shared/hooks/user/use-user';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { fetchMidasPieData } from '../../utils/fetch-helper';
-import MidasCard from './MidasCard';
 
 vi.mock('@/shared/hooks/user/use-user', () => ({
 	useUser: vi.fn(() => ({
