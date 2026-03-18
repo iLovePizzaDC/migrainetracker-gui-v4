@@ -1,19 +1,26 @@
-import { TIME_FRAME_UNITS } from "@/shared/constants/event/card";
-import type { TimeFrameUnit } from "@/shared/types/cards/card";
-import { formatDateToUs, getDateBeforeDays, getDateBeforeMonths, getDayDifference } from "@/shared/utils/date/date";
+import { TIME_FRAME_UNITS } from '@/shared/constants/event/card';
+import type { TimeFrameUnit } from '@/shared/types/cards/card';
+import {
+	formatDateToUs,
+	getDateBeforeDays,
+	getDateBeforeMonths,
+	getDayDifference,
+} from '@/shared/utils/date/date';
 
 export function getDateRange(count: number, unit: TimeFrameUnit) {
-    const start = unit === TIME_FRAME_UNITS.DAYS
-        ? getDateBeforeDays(new Date(), count)
-        : getDateBeforeMonths(new Date(), count);
+	const start =
+		unit === TIME_FRAME_UNITS.DAYS
+			? getDateBeforeDays(new Date(), count)
+			: getDateBeforeMonths(new Date(), count);
 
-    const end = unit === TIME_FRAME_UNITS.DAYS
-        ? getDateBeforeDays(new Date(), 1)
-        : getDateBeforeMonths(new Date(), 1);
+	const end =
+		unit === TIME_FRAME_UNITS.DAYS
+			? getDateBeforeDays(new Date(), 1)
+			: getDateBeforeMonths(new Date(), 1);
 
-    const startDate = formatDateToUs(start);
-    const endDate = formatDateToUs(end);
-    const totalDays = getDayDifference(new Date(startDate), new Date(endDate));
+	const startDate = formatDateToUs(start);
+	const endDate = formatDateToUs(end);
+	const totalDays = getDayDifference(new Date(startDate), new Date(endDate));
 
-    return { startDate, endDate, totalDays };
+	return { startDate, endDate, totalDays };
 }
