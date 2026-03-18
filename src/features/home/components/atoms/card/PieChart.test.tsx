@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('recharts', () => ({
 	ResponsiveContainer: ({ children }: any) => <div>{children}</div>,
-	PieChart: ({ children }: any) => <div data-testid='pie-chart'>{children}</div>,
+	PieChart: ({ children }: any) => <div>{children}</div>,
 	Pie: ({ data, innerRadius, outerRadius, children }: any) => (
 		<div
 			data-testid='pie'

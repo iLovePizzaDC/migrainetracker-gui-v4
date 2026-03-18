@@ -4,15 +4,20 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 describe('<Button />', () => {
+	const defaultProps = {
+		type: BUTTON_TYPES.BUTTON,
+		title: 'Test title',
+	};
+
 	it('render button correct title and type', () => {
-		render(<Button type={BUTTON_TYPES.BUTTON} title='Test title' />);
+		render(<Button {...defaultProps} />);
 
 		expect(screen.getByText('Test title')).toBeInTheDocument();
 		expect(screen.getByText('Test title')).toHaveAttribute('type', 'button');
 	});
 
 	it('renders with type submit', () => {
-		render(<Button type={BUTTON_TYPES.SUBMIT} title='Test title' />);
+		render(<Button {...defaultProps} type={BUTTON_TYPES.SUBMIT} />);
 
 		expect(screen.getByText('Test title')).toHaveAttribute('type', 'submit');
 	});
