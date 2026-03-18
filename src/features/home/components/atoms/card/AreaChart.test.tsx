@@ -7,7 +7,7 @@ vi.mock('recharts', () => ({
 		<div data-testid='responsive-container'>{children}</div>
 	),
 	AreaChart: ({ children, data }: any) => (
-		<div data-testid='area-chart' data-length={data?.length}>
+		<div data-testid='recharts-area-chart' data-length={data?.length}>
 			{children}
 		</div>
 	),
@@ -30,12 +30,12 @@ const mockData = [
 describe('<AreaChart />', () => {
 	it('renders without crashing', () => {
 		render(<AreaChart data={mockData} />);
-		expect(screen.getByTestId('area-chart')).toBeInTheDocument();
+		expect(screen.getByTestId('recharts-area-chart')).toBeInTheDocument();
 	});
 
 	it('passes data to the chart', () => {
 		render(<AreaChart data={mockData} />);
-		expect(screen.getByTestId('area-chart')).toHaveAttribute('data-length', '3');
+		expect(screen.getByTestId('recharts-area-chart')).toHaveAttribute('data-length', '3');
 	});
 
 	it('renders Area with dataKey "value"', () => {

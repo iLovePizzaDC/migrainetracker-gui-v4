@@ -91,6 +91,7 @@ function DropdownInput({ id, label, value, options, onChange, required = false }
 					>
 						{options.map((option) => (
 							<li
+								data-testid={option.value}
 								key={option.value}
 								className={`px-3 py-2 cursor-pointer ${
 									option.value === value ? 'bg-white/20' : ''
