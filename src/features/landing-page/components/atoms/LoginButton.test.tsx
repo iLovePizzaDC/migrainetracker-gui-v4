@@ -2,14 +2,27 @@ import LoginButton from '@/features/landing-page/components/atoms/LoginButton';
 import { fetchOAuthAccessToken } from '@/shared/api/google.api';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/api/google.api', () => ({
 	fetchOAuthAccessToken: vi.fn(() => 'https://auth.example.com'),
 }));
 
+let locationSpy: ReturnType<typeof vi.spyOn>;
+
 describe('<LoginButton />', () => {
 	const user = userEvent.setup();
+
+	beforeEach(() => {
+		locationSpy = vi.spyOn(window, 'location', 'get').mockReturnValue({
+			...window.location,
+			href: '',
+		} as any);
+	});
+
+	afterEach(() => {
+		locationSpy.mockRestore();
+	});
 
 	it('renders button and text', () => {
 		render(<LoginButton />);

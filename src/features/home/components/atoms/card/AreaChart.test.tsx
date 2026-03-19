@@ -16,8 +16,8 @@ vi.mock('recharts', () => ({
 	YAxis: () => <div data-testid='yaxis' />,
 	Tooltip: () => <div data-testid='tooltip' />,
 	ReferenceLine: (props: any) => <div data-testid='reference-line' data-y={props.y} />,
-	defs: ({ children }: any) => <defs>{children}</defs>,
-	linearGradient: ({ children }: any) => <linearGradient>{children}</linearGradient>,
+	defs: ({ children }: any) => <>{children}</>,
+	linearGradient: ({ children }: any) => <>{children}</>,
 	stop: () => null,
 }));
 

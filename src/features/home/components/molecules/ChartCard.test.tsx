@@ -39,6 +39,12 @@ vi.mock('@/features/home/hooks/use-chart-data', () => ({
 		totalPieValue: 8,
 	})),
 }));
+vi.mock('@/features/home/components/atoms/card/AreaChart', () => ({
+	default: () => <div data-testid='area-chart' />,
+}));
+vi.mock('@/features/home/components/atoms/card/PieChart', () => ({
+	default: () => <div data-testid='pie-chart' />,
+}));
 
 describe('<ChartCard /', () => {
 	const user = userEvent.setup();

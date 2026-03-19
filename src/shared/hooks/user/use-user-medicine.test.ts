@@ -1,7 +1,7 @@
 import * as medicineApi from '@/shared/api/medicine.api';
 import * as useUserHook from '@/shared/hooks/user/use-user';
 import { useUserMedicines } from '@/shared/hooks/user/use-user-medicines';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/api/medicine.api');
@@ -68,7 +68,9 @@ describe('useUserMedicines', () => {
 			{ name: 'Test medicine 3', abbreviation: 'tst_med_3' },
 		] as any);
 
-		await result.current.loadUserMedicines();
+		await act(async () => {
+			await result.current.loadUserMedicines();
+		});
 
 		await waitFor(() =>
 			expect(result.current.userMedicineOptions).toEqual([
