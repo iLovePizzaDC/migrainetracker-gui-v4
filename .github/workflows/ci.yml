@@ -6,6 +6,8 @@ on:
     pull_request:
         branches: [main, develop]
     workflow_dispatch:
+permissions:
+    contents: read
 
 jobs:
     typecheck:
@@ -83,20 +85,33 @@ jobs:
               with:
                   name: dist
                   path: dist
+            - name: Backup current deployment
+              run: |
+                  rm -rf /var/www/migrainetracker.bak
+                  cp -r /var/www/migrainetracker /var/www/migrainetracker.bak
             - name: Copy dist to nginx
               run: |
                   rm -rf /var/www/migrainetracker/*
                   cp -r dist/* /var/www/migrainetracker/
             - name: Health Check
+              id: healthcheck
               run: curl --fail https://migrainetracker.de
+            - name: Rollback on failure
+              if: failure() && steps.healthcheck.conclusion == 'failure'
+              run: |
+                  rm -rf /var/www/migrainetracker/*
+                  cp -r /var/www/migrainetracker.bak/* /var/www/migrainetracker/
+                  echo "Rollback completed"
 
     release:
         needs: deploy
-        runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         permissions:
             contents: write
             pull-requests: write
+        runs-on: ubuntu-latest
+        if: |
+            always() &&
+            needs.deploy.result == 'success'
         steps:
             - uses: actions/checkout@v4
               with:
