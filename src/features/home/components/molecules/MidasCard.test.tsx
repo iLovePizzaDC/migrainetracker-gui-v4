@@ -1,7 +1,7 @@
 import MidasCard from '@/features/home/components/molecules/MidasCard';
 import { fetchMidasPieData } from '@/features/home/utils/fetch-helper';
 import { useUser } from '@/shared/hooks/user/use-user';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/hooks/user/use-user', () => ({
@@ -18,6 +18,9 @@ vi.mock('@/shared/hooks/user/use-user', () => ({
 }));
 vi.mock('@/features/home/utils/fetch-helper', () => ({
 	fetchMidasPieData: vi.fn(),
+}));
+vi.mock('@/features/home/components/atoms/card/PieChart', () => ({
+	default: () => <div data-testid='pie-chart' />,
 }));
 
 const mockFetchMidasPieData = (currentScore = 7, previousScore = 5) =>
@@ -62,11 +65,13 @@ describe('<MidasCard />', () => {
 			expect(screen.queryByText('MIDAS Score')).not.toBeInTheDocument();
 		});
 
-		it('renders nothing when midasScore is 0', () => {
+		it('renders nothing when midasScore is 0', async () => {
 			vi.mocked(fetchMidasPieData).mockReturnValue(mockFetchMidasPieData(0));
 			render(<MidasCard />);
 
-			expect(screen.queryByText('0/270')).not.toBeInTheDocument();
+			await waitFor(() => {
+				expect(screen.queryByText('0/270')).not.toBeInTheDocument();
+			});
 		});
 	});
 
