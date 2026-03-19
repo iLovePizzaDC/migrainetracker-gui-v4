@@ -221,6 +221,7 @@ describe('<MigrainePanel />', () => {
 
 			expect(setItemSpy).toHaveBeenCalledWith('MT_NE', expect.any(String));
 
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const saveCall = setTimeoutSpy.mock.calls.find(([_, delay]) => delay === 500);
 			expect(saveCall).toBeDefined();
 

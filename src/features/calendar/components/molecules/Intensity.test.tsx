@@ -2,8 +2,7 @@ import Intensity from '@/features/calendar/components/molecules/Intensity';
 import { INTENSITY_TYPES } from '@/shared/constants/event/event-details';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach } from 'node:test';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockSetIntensity = vi.fn();
 
