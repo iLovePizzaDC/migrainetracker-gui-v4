@@ -3,8 +3,7 @@ import { fetchUserMedicinesPost } from '@/shared/api/medicine.api';
 import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach } from 'node:test';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockLoadUserMedicines = vi.fn();
 

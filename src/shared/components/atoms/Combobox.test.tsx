@@ -72,7 +72,7 @@ describe('<Combobox />', () => {
 		});
 	});
 
-	describe(' options dropdown', () => {
+	describe('options dropdown', () => {
 		it('shows options when input is clicked', async () => {
 			render(<Combobox {...defaultProps} />);
 

@@ -1,8 +1,7 @@
 import Durations from '@/features/calendar/components/molecules/Durations';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach } from 'node:test';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockSetDurations = vi.fn();
 const mockDurations = [
