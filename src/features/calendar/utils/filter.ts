@@ -1,72 +1,76 @@
-import type { Event } from "@/features/calendar/types/event";
-import { ANY_FILTER_TYPE, EFFECTIVENESS_TYPES } from "@/shared/constants/event/event-details";
-import type { EventFilter } from "@/shared/types/event/event";
+import type { Event } from '@/features/calendar/types/event';
+import { ANY_FILTER_TYPE, EFFECTIVENESS_TYPES } from '@/shared/constants/event/event-details';
+import type { EventFilter } from '@/shared/types/event/event';
 
 export function filterEvents(parsedEvent: Event, filter: EventFilter) {
-    const { intensity, symptoms, medicine, effectiveness, midas } = parsedEvent.description;
-    const {
-        intensity: intensityFilter,
-        symptom: symptomsFilter,
-        medicine: medicineFilter,
-        effectiveness: effectivenessFilter,
-        midas: midasFilter,
-    } = filter;
+	const { intensity, symptoms, medicine, effectiveness, midas } = parsedEvent.description;
+	const {
+		intensity: intensityFilter,
+		symptom: symptomsFilter,
+		medicine: medicineFilter,
+		effectiveness: effectivenessFilter,
+		midas: midasFilter,
+	} = filter;
 
-    if (intensityFilter && intensity !== intensityFilter) {
-        return false;
-    }
+	if (intensityFilter && intensity !== intensityFilter) {
+		return false;
+	}
 
-    if (symptomsFilter.length > 0) {
-        const missingSymptom = symptomsFilter.some(symptom => {
-            if (symptom === ANY_FILTER_TYPE.ANY) {
-                return symptoms.length === 0;
-            } else {
-                return !symptoms.includes(symptom)
-            }
-        });
-        if (missingSymptom) return false;
-    }
+	if (symptomsFilter.length > 0) {
+		const missingSymptom = symptomsFilter.some((symptom) => {
+			if (symptom === ANY_FILTER_TYPE.ANY) {
+				return symptoms.length === 0;
+			} else {
+				return !symptoms.includes(symptom);
+			}
+		});
+		if (missingSymptom) return false;
+	}
 
-    if (medicineFilter.length > 0) {
-        const allowedMedicines = medicineFilter.map(m => m.abbreviation.toLowerCase());
+	if (medicineFilter.length > 0) {
+		const allowedMedicines = medicineFilter.map((m) => m.abbreviation.toLowerCase());
 
-        const eventMedicines = medicine
-            .split(",")
-            .map(m => m.trim().toLowerCase())
-            .filter(Boolean);
+		const eventMedicines = medicine
+			.split(',')
+			.map((m) => m.trim().toLowerCase())
+			.filter(Boolean);
 
-        const missing = allowedMedicines.some(medicine => {
-            if (medicine === ANY_FILTER_TYPE.ANY) {
-                return eventMedicines.length === 0;
-            } else {
-                return !eventMedicines.includes(medicine)
-            }
-        });
-        if (missing) return false;
-    }
+		const missing = allowedMedicines.some((medicine) => {
+			if (medicine === ANY_FILTER_TYPE.ANY) {
+				return eventMedicines.length === 0;
+			} else {
+				return !eventMedicines.includes(medicine);
+			}
+		});
+		if (missing) return false;
+	}
 
-    if (effectivenessFilter) {
-        if (effectivenessFilter === EFFECTIVENESS_TYPES.EFFECTIVE) {
-            const anyWorked = effectiveness.some(status => status === EFFECTIVENESS_TYPES.EFFECTIVE);
-            if (!anyWorked) return false;
-        } else if (effectivenessFilter === EFFECTIVENESS_TYPES.INEFFECTIVE) {
-            const anyNotWorked = effectiveness.some(status => status === EFFECTIVENESS_TYPES.INEFFECTIVE);
-            if (!anyNotWorked) return false;
-        }
-    }
+	if (effectivenessFilter) {
+		if (effectivenessFilter === EFFECTIVENESS_TYPES.EFFECTIVE) {
+			const anyWorked = effectiveness.some((status) => status === EFFECTIVENESS_TYPES.EFFECTIVE);
+			if (!anyWorked) return false;
+		} else if (effectivenessFilter === EFFECTIVENESS_TYPES.INEFFECTIVE) {
+			const anyNotWorked = effectiveness.some(
+				(status) => status === EFFECTIVENESS_TYPES.INEFFECTIVE,
+			);
+			if (!anyNotWorked) return false;
+		}
+	}
 
-    if (midasFilter.length > 0) {
-        const missingMidas = midasFilter.some(key => !midas[key]);
-        if (missingMidas) return false;
-    }
+	if (midasFilter.length > 0) {
+		const missingMidas = midasFilter.some((key) => !midas[key]);
+		if (missingMidas) return false;
+	}
 
-    return true;
+	return true;
 }
 
 export const isDefaultFilter = (filter: EventFilter) => {
-    return filter.intensity === null &&
-        filter.symptom.length === 0 &&
-        filter.medicine.length === 0 &&
-        filter.effectiveness === null &&
-        filter.midas.length === 0;
+	return (
+		filter.intensity === null &&
+		filter.symptom.length === 0 &&
+		filter.medicine.length === 0 &&
+		filter.effectiveness === null &&
+		filter.midas.length === 0
+	);
 };
