@@ -1,28 +1,29 @@
-import { fetchMigraineAmount } from "@/shared/api/migraine.api";
-import { formatDateToUs, getEndOfMonth, getStartOfMonth } from "@/shared/utils/date/date";
-import { getMohMedicineFilter } from "@/shared/utils/fetch-helper";
-import { useCallback, useEffect, useState } from "react";
+import { fetchMigraineAmount } from '@/shared/api/migraine.api';
+import { formatDateToUs, getEndOfMonth, getStartOfMonth } from '@/shared/utils/date/date';
+import { getMohMedicineFilter } from '@/shared/utils/fetch-helper';
+import { useCallback, useEffect, useState } from 'react';
 
 export function useMedDays(currentDate: Date) {
-    const [medDaysCount, setMedDaysCount] = useState(0);
-    const [maxMedDaysCount] = useState(10); // TODO calculate dynamically (10 with mixed use, 15 without)
+	const [medDaysCount, setMedDaysCount] = useState(0);
+	const [maxMedDaysCount] = useState(10); // TODO calculate dynamically (10 with mixed use, 15 without)
 
-    const collectMedDays = useCallback(async () => {
-        const start = formatDateToUs(getStartOfMonth(currentDate));
-        const end = formatDateToUs(getEndOfMonth(currentDate));
+	const collectMedDays = useCallback(async () => {
+		const start = formatDateToUs(getStartOfMonth(currentDate));
+		const end = formatDateToUs(getEndOfMonth(currentDate));
 
-        const medicines = await getMohMedicineFilter();
-        const medDays = await fetchMigraineAmount(start, end, { medicines });
-        setMedDaysCount(medDays);
-    }, [currentDate]);
+		const medicines = await getMohMedicineFilter();
+		const medDays = await fetchMigraineAmount(start, end, { medicines });
+		setMedDaysCount(medDays);
+	}, [currentDate]);
 
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        void collectMedDays();
-    }, [collectMedDays]);
+	useEffect(() => {
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		void collectMedDays();
+	}, [collectMedDays]);
 
-    return {
-        medDaysCount, maxMedDaysCount,
-        collectMedDays,
-    };
+	return {
+		medDaysCount,
+		maxMedDaysCount,
+		collectMedDays,
+	};
 }
