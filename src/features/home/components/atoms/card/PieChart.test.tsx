@@ -30,7 +30,7 @@ describe('<PieChart />', () => {
 	it('renders without crashing', () => {
 		render(<PieChart outerData={outerData} />);
 
-		expect(screen.getByTestId('pie-chart')).toBeInTheDocument();
+		expect(screen.getByTestId('pie')).toBeInTheDocument();
 	});
 
 	it('renders outer Pie with correct data length', () => {

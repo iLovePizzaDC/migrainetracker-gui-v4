@@ -11,8 +11,7 @@ import { CARD_TYPES } from '@/shared/constants/event/card';
 import {
 	ANY_FILTER_OPTIONS,
 	ANY_FILTER_TYPE,
-	SYMPTOM_OPTIONS,
-	type EffectivenessType,
+	SYMPTOM_OPTIONS
 } from '@/shared/constants/event/event-details';
 import type { CardType, TimeFrameUnit } from '@/shared/types/cards/card';
 import type { EventFilter } from '@/shared/types/event/event';
@@ -52,7 +51,7 @@ const mapEventFilterToFilter = async (
 		intensity: filter.intensity ?? undefined,
 		symptoms: mappedSymptoms,
 		medicines: isMoh ? mohMedFilter : mappedMedicines,
-		effectiveness: filter.effectiveness as EffectivenessType,
+		effectiveness: filter.effectiveness ?? undefined,
 	};
 };
 
