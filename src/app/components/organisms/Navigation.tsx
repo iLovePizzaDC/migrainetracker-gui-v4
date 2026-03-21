@@ -18,7 +18,7 @@ function Navigation() {
 			<div className='max-w-7xl mx-auto flex items-center justify-between'>
 				<h3>Sorry to see you{user ? `, ${user.given_name}` : ''}</h3>
 
-				<nav className='hidden lg:md:flex lg:md:space-x-6' data-testid='desktop-nav'>
+				<nav className='hidden lg:flex lg:space-x-6' data-testid='desktop-nav'>
 					<NavigationLinks />
 				</nav>
 
