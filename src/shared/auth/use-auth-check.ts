@@ -6,7 +6,7 @@ const REDIRECT_URL_SUFFIX = import.meta.env.VITE_GOOGLE_REDIRECT_URL_SUFFIX;
 
 export function useAuthCheck(
 	user: User | null,
-	setUser: (user: User) => void,
+	setUser: (user: User | null) => void,
 	allowAnonymous = false,
 ) {
 	const [authChecked, setAuthChecked] = useState(false);
@@ -39,8 +39,8 @@ export function useAuthCheck(
 		if (authChecked && !user) {
 			fetchUserInformation()
 				.then(setUser)
-				.catch(() => {
-					if (!allowAnonymous) fetchUserLogout();
+				.catch(async () => {
+					if (!allowAnonymous) await fetchUserLogout();
 				});
 		}
 	}, [authChecked, user, setUser, allowAnonymous]);
