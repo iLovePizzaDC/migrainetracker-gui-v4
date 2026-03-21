@@ -52,7 +52,11 @@ function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
 							];
 
 							if (day) {
-								if (day === openDate?.getDate() && isInSelectedMonth) {
+								if (
+									day === openDate?.getDate() &&
+									date.getMonth() === openDate?.getMonth() &&
+									isInSelectedMonth
+								) {
 									baseClasses.push('bg-white/10');
 								} else if (day === today.getDate() && isInSelectedMonth) {
 									baseClasses.push('bg-white/5', 'hover:bg-white/10', 'cursor-pointer');
