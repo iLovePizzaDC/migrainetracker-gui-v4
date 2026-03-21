@@ -10,9 +10,12 @@ export const fetchUserLogin = async (code: string): Promise<UserResponse> => {
 };
 
 export const fetchUserLogout = async () => {
-	await api.post('auth/logout');
-	sessionStorage.clear();
-	window.location.href = BASE_URL;
+    try {
+        await api.post('auth/logout');
+    } finally {
+        sessionStorage.clear();
+        window.location.href = BASE_URL;
+    }
 };
 
 export const fetchUserInformation = async (): Promise<User> => {
