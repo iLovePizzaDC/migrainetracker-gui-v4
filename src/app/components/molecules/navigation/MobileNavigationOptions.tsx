@@ -12,7 +12,7 @@ export default function MobileNavigationOptions({ toggleMenu, isOpen }: IMobileN
 			className='text-white hover:text-gray-200 pl-6'
 			data-testid='mobile-nav-toggle'
 		>
-			{isOpen ? <XMarkIcon data-testid='close-icon' /> : <Bars3Icon data-testid='open-icon' />}
+			{isOpen ? <XMarkIcon data-testid='close-icon' className='h-6 w-6' /> : <Bars3Icon data-testid='open-icon' className='h-6 w-6' />}
 		</button>
 	);
 }
