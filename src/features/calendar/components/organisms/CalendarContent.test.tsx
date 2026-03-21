@@ -88,7 +88,15 @@ describe('<CalendarContent /', () => {
 			expect(screen.getByText('1')).toHaveClass('bg-white/10');
 		});
 
-		it('sets background for selected day if today', () => {
+		it('sets background for today', () => {
+			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar({ date: new Date('2025-12-01') }));
+
+			render(<CalendarContent openDate={null} onDayClick={mockOnDayClick} />);
+
+			expect(screen.getByText('2')).not.toHaveClass('bg-white/5');
+		});
+
+		it('does not set background for today if month is not matching', () => {
 			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar());
 
 			render(<CalendarContent openDate={null} onDayClick={mockOnDayClick} />);
