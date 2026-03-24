@@ -209,25 +209,7 @@ describe('fetchPieData', () => {
 			);
 
 			expect(result.value).toBe(3);
-			expect(result.data).toEqual([
-				{ name: 'Medicine', value: 3 },
-				{ name: 'No Medicine', value: 28 },
-			]);
-		});
-
-		it('clamps No Medicine to 0 when medicine days exceed totalDays', async () => {
-			vi.mocked(migraineApi.fetchMedicineAmount).mockResolvedValue(50);
-
-			const result = await fetchPieData(
-				CARD_TYPES.MEDICINE,
-				'2026-01-01',
-				'2026-01-31',
-				31,
-				mockFilter,
-				[],
-			);
-
-			expect(result.data[1].value).toBe(0);
+			expect(result.data).toEqual([{ name: 'Medicine', value: 3 }]);
 		});
 	});
 
