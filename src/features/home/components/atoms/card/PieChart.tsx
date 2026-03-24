@@ -26,30 +26,33 @@ function PieChart({ outerData, innerData }: IPieChart) {
 					itemStyle={{ color: '#000' }}
 					labelStyle={{ color: '#000' }}
 				/>
-				<Pie
-					data={outerData}
-					dataKey='value'
-					innerRadius='60%'
-					outerRadius='80%'
-					paddingAngle={2}
-				>
-					{outerData.map((_, index) => (
-						<Cell key={index} fill={PIE_COLORS[index]} />
-					))}
-				</Pie>
-				{innerData && (
+				<div style={{ width: '100%', height: 200 }}>
 					<Pie
-						data={innerData}
+						data={outerData}
 						dataKey='value'
-						innerRadius='40%'
-						outerRadius='55%'
+						innerRadius='60%'
+						outerRadius='80%'
 						paddingAngle={2}
 					>
-						{innerData.map((_, index) => (
+						{outerData.map((_, index) => (
 							<Cell key={index} fill={PIE_COLORS[index]} />
 						))}
 					</Pie>
-				)}
+					{innerData && (
+						<Pie
+							data={innerData}
+							dataKey='value'
+							innerRadius='40%'
+							outerRadius='55%'
+							paddingAngle={2}
+							isAnimationActive
+						>
+							{innerData.map((_, index) => (
+								<Cell key={index} fill={PIE_COLORS[index]} />
+							))}
+						</Pie>
+					)}
+				</div>
 			</RePieChart>
 		</ResponsiveContainer>
 	);
