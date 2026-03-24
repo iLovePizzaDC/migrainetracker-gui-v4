@@ -117,8 +117,17 @@ function ChartCard({
 					{!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 && (
 						<div className='mt-2 text-center'>
 							<p className='text-lg font-medium'>
-								{currentPieValue.toLocaleString('en-US')}/{totalPieValue.toLocaleString('en-US')}{' '}
-								{cardType === CARD_TYPES.DURATION ? 'hours' : 'days'}
+								{cardType !== CARD_TYPES.MEDICINE ? (
+									<>
+										{currentPieValue.toLocaleString('en-US')}/
+										{totalPieValue.toLocaleString('en-US')}{' '}
+										{cardType === CARD_TYPES.DURATION ? 'hours' : 'days'}
+									</>
+								) : (
+									<>
+										{currentPieValue.toLocaleString('en-US')} {'medicines'}
+									</>
+								)}
 							</p>
 						</div>
 					)}

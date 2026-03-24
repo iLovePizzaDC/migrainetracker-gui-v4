@@ -1,4 +1,4 @@
-import { fetchUserInformation, fetchUserLogin, fetchUserLogout } from '@/shared/api/user.api';
+import { fetchUserInformation, fetchUserLogin } from '@/shared/api/user.api';
 import type { User } from '@/shared/types/user/user';
 import { useEffect, useState } from 'react';
 
@@ -40,8 +40,10 @@ export function useAuthCheck(
 			fetchUserInformation()
 				.then(setUser)
 				.catch(async () => {
-					if (!allowAnonymous) await fetchUserLogout();
+					setUser(null);
 				});
 		}
 	}, [authChecked, user, setUser, allowAnonymous]);
+
+	return { authChecked };
 }

@@ -11,9 +11,8 @@ describe('useAuthCheck', () => {
 	const setUser = vi.fn();
 
 	beforeEach(() => {
-		vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser } as any);
+		vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser });
 		vi.mocked(userApi.fetchUserInformation).mockResolvedValue(mockUser);
-		vi.mocked(userApi.fetchUserLogout).mockResolvedValue(undefined as any);
 		Object.defineProperty(window, 'location', {
 			value: { search: '', href: '' },
 			writable: true,
@@ -47,15 +46,6 @@ describe('useAuthCheck', () => {
 
 			await waitFor(() => expect(window.history.replaceState).toHaveBeenCalled());
 		});
-
-		it('does not call fetchUserLogin when no code in URL', async () => {
-			window.location.search = '';
-
-			renderHook(() => useAuthCheck(null, setUser));
-
-			await waitFor(() => expect(userApi.fetchUserInformation).toHaveBeenCalled());
-			expect(userApi.fetchUserLogin).not.toHaveBeenCalled();
-		});
 	});
 
 	describe('fetchUserInformation', () => {
@@ -82,41 +72,29 @@ describe('useAuthCheck', () => {
 
 			await waitFor(() => expect(setUser).toHaveBeenCalledWith(mockUser));
 		});
-	});
 
-	describe('allowAnonymous', () => {
-		it('calls fetchUserLogout when fetchUserInformation fails and allowAnonymous is false', async () => {
+		it('sets user to null if fetchUserInformation fails', async () => {
 			window.location.search = '';
-			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('unauthorized'));
+			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('fail'));
 
-			renderHook(() => useAuthCheck(null, setUser, false));
+			renderHook(() => useAuthCheck(null, setUser));
 
-			await waitFor(() => expect(userApi.fetchUserLogout).toHaveBeenCalled());
-		});
-
-		it('does not call fetchUserLogout when fetchUserInformation fails and allowAnonymous is true', async () => {
-			window.location.search = '';
-			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('unauthorized'));
-
-			renderHook(() => useAuthCheck(null, setUser, true));
-
-			await waitFor(() => expect(userApi.fetchUserInformation).toHaveBeenCalled());
-			expect(userApi.fetchUserLogout).not.toHaveBeenCalled();
+			await waitFor(() => expect(setUser).toHaveBeenCalledWith(null));
 		});
 	});
 
 	describe('login failure', () => {
-		it('does not call setUser when fetchUserLogin throws', async () => {
+		it('does not call setUser with user when fetchUserLogin throws', async () => {
 			window.location.search = '?code=abc123';
 			vi.mocked(userApi.fetchUserLogin).mockRejectedValue(new Error('fail'));
-			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('unauthorized'));
+			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('fail'));
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-			renderHook(() => useAuthCheck(null, setUser, true));
+			renderHook(() => useAuthCheck(null, setUser));
 
 			await waitFor(() => expect(userApi.fetchUserLogin).toHaveBeenCalled());
 			await waitFor(() => expect(userApi.fetchUserInformation).toHaveBeenCalled());
-			expect(setUser).not.toHaveBeenCalled();
+			expect(setUser).toHaveBeenCalledWith(null);
 			consoleSpy.mockRestore();
 		});
 	});

@@ -11,7 +11,7 @@ import { CARD_TYPES } from '@/shared/constants/event/card';
 import {
 	ANY_FILTER_OPTIONS,
 	ANY_FILTER_TYPE,
-	SYMPTOM_OPTIONS
+	SYMPTOM_OPTIONS,
 } from '@/shared/constants/event/event-details';
 import type { CardType, TimeFrameUnit } from '@/shared/types/cards/card';
 import type { EventFilter } from '@/shared/types/event/event';
@@ -56,6 +56,7 @@ const mapEventFilterToFilter = async (
 };
 
 // TODO refactor
+// TODO also add midas only for area charts which displays the score over the months
 export async function fetchAreaData(
 	cardType: CardType,
 	endDate: string,
@@ -131,12 +132,8 @@ export async function fetchPieData(
 				await mapEventFilterToFilter(userMedicines, filter),
 			);
 
-			const noMed = Math.max(totalDays - med, 0);
 			return {
-				data: [
-					{ name: 'Medicine', value: med },
-					{ name: 'No Medicine', value: noMed },
-				],
+				data: [{ name: 'Medicine', value: med }],
 				value: med,
 			};
 		}
