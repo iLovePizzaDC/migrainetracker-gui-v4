@@ -57,15 +57,15 @@ function MidasCard() {
                 transition hover:shadow-xl
             '
 		>
-			<div className='flex justify-between items-start w-full mb-4'>
-				<div className='w-20'></div>
+			<div className='h-7 mb-2 flex justify-between items-start w-full'>
+				<div className='w-20 opacity-0 pointer-events-none'></div>
 
 				<h2 className='text-lg font-semibold text-center flex-1 leading-tight'>MIDAS Score</h2>
 
 				<p className={`w-20 px-1 text-sm font-medium text-right ${color}`}>{label}</p>
 			</div>
 
-			<div className='h-72 flex items-center justify-center'>
+			<div className='h-72 w-full flex items-center justify-center'>
 				{isLoading ? (
 					<div className='w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse' />
 				) : (
@@ -73,7 +73,7 @@ function MidasCard() {
 				)}
 			</div>
 
-			<div className='mt-4 text-center'>
+			<div className='text-center h-6'>
 				{isLoading ? (
 					<div className='h-6 w-20 mx-auto bg-white/10 backdrop-blur-sm rounded-md animate-pulse' />
 				) : (

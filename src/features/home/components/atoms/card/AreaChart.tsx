@@ -36,12 +36,7 @@ function AreaChart({ data, showThresholdLine, thresholdY }: IAreaChart) {
 				<YAxis tick={{ fill: '#fff', fontFamily: FONT_FAMILY, fontSize: 12, fontWeight: 500 }} />
 
 				{showThresholdLine && thresholdY && (
-					<ReferenceLine
-						y={thresholdY}
-						stroke='#ff4d4d'
-						strokeDasharray='4 4'
-						strokeWidth={1.5}
-					/>
+					<ReferenceLine y={thresholdY} stroke='#ff4d4d' strokeDasharray='4 4' strokeWidth={1.5} />
 				)}
 
 				<Tooltip
@@ -59,14 +54,17 @@ function AreaChart({ data, showThresholdLine, thresholdY }: IAreaChart) {
 					labelStyle={{ color: '#000', fontFamily: FONT_FAMILY, fontSize: 12, fontWeight: 600 }}
 				/>
 
-				<Area
-					type='monotone'
-					dataKey='value'
-					stroke='#fff'
-					fill='url(#colorArea)'
-					fillOpacity={0.4}
-					strokeWidth={2}
-				/>
+				<div style={{ width: '100%', height: 200 }}>
+					<Area
+						type='monotone'
+						dataKey='value'
+						stroke='#fff'
+						fill='url(#colorArea)'
+						fillOpacity={0.4}
+						strokeWidth={2}
+						isAnimationActive
+					/>
+				</div>
 			</RAreaChart>
 		</ResponsiveContainer>
 	);
