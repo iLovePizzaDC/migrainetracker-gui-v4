@@ -62,8 +62,8 @@ function ChartCard({
                 transition hover:shadow-xl
             '
 		>
-			<div className='flex items-center w-full mb-2 relative'>
-				<div className='w-7 h-7 p-1 opacity-0 pointer-events-none' />
+			<div className='h-7 mb-2 flex items-center w-full relative'>
+				<div className='w-7 p-1 opacity-0 pointer-events-none' />
 
 				<h2 className='flex-1 text-lg font-semibold text-center'>{title}</h2>
 
@@ -114,8 +114,8 @@ function ChartCard({
 						)}
 					</div>
 
-					{!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 && (
-						<div className='mt-2 text-center'>
+					{!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 ? (
+						<div className='text-center h-6'>
 							<p className='text-lg font-medium'>
 								{cardType !== CARD_TYPES.MEDICINE ? (
 									<>
@@ -130,6 +130,8 @@ function ChartCard({
 								)}
 							</p>
 						</div>
+					) : (
+						<div className='w-6 h-6 opacity-0 pointer-events-none' />
 					)}
 				</div>
 				<div
