@@ -119,7 +119,7 @@ describe('<ChartCard /', () => {
 				<ChartCard {...defaultProps} chartType={CHART_TYPES.PIE} cardType={CARD_TYPES.MEDICINE} />,
 			);
 
-			expect(screen.getByText('5/8 days')).toBeInTheDocument();
+			expect(screen.getByText('5 medicines')).toBeInTheDocument();
 		});
 
 		it('renders "hours" for DURATION card type', () => {
