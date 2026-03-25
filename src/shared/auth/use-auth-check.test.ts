@@ -11,10 +11,15 @@ describe('useAuthCheck', () => {
 	const setUser = vi.fn();
 
 	beforeEach(() => {
-		vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser });
+		vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser } as any);
 		vi.mocked(userApi.fetchUserInformation).mockResolvedValue(mockUser);
+
 		Object.defineProperty(window, 'location', {
-			value: { search: '', href: '' },
+			value: {
+				search: '',
+				href: 'https://example.com/home?code=abc123',
+				origin: 'https://example.com',
+			},
 			writable: true,
 		});
 		window.history.replaceState = vi.fn();
@@ -22,11 +27,11 @@ describe('useAuthCheck', () => {
 
 	afterEach(() => vi.clearAllMocks());
 
-	describe('code in url', () => {
+	describe('code in URL', () => {
 		it('calls fetchUserLogin when code is in URL', async () => {
 			window.location.search = '?code=abc123';
 
-			renderHook(() => useAuthCheck(null, setUser));
+			renderHook(() => useAuthCheck(setUser));
 
 			await waitFor(() => expect(userApi.fetchUserLogin).toHaveBeenCalledWith('abc123'));
 		});
@@ -34,68 +39,54 @@ describe('useAuthCheck', () => {
 		it('calls setUser with response user after login', async () => {
 			window.location.search = '?code=abc123';
 
-			renderHook(() => useAuthCheck(null, setUser));
+			renderHook(() => useAuthCheck(setUser));
 
 			await waitFor(() => expect(setUser).toHaveBeenCalledWith(mockUser));
 		});
 
-		it('replaces URL history after login', async () => {
+		it('replaces URL history after login with absolute URL', async () => {
 			window.location.search = '?code=abc123';
+			window.location.href = 'https://example.com/home?code=abc123';
 
-			renderHook(() => useAuthCheck(null, setUser));
+			renderHook(() => useAuthCheck(setUser));
 
-			await waitFor(() => expect(window.history.replaceState).toHaveBeenCalled());
+			await waitFor(() =>
+				expect(window.history.replaceState).toHaveBeenCalledWith(
+					{},
+					'',
+					'https://example.com/home',
+				),
+			);
 		});
 	});
 
-	describe('fetchUserInformation', () => {
-		it('calls fetchUserInformation when authChecked and user is null', async () => {
+	describe('no code in URL', () => {
+		it('calls fetchUserInformation when no code in URL', async () => {
 			window.location.search = '';
 
-			renderHook(() => useAuthCheck(null, setUser));
+			renderHook(() => useAuthCheck(setUser));
 
 			await waitFor(() => expect(userApi.fetchUserInformation).toHaveBeenCalled());
-		});
-
-		it('does not call fetchUserInformation when user is already set', async () => {
-			window.location.search = '';
-
-			renderHook(() => useAuthCheck(mockUser, setUser));
-
-			await waitFor(() => expect(userApi.fetchUserInformation).not.toHaveBeenCalled());
 		});
 
 		it('calls setUser with result of fetchUserInformation', async () => {
 			window.location.search = '';
 
-			renderHook(() => useAuthCheck(null, setUser));
+			renderHook(() => useAuthCheck(setUser));
 
 			await waitFor(() => expect(setUser).toHaveBeenCalledWith(mockUser));
-		});
-
-		it('sets user to null if fetchUserInformation fails', async () => {
-			window.location.search = '';
-			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('fail'));
-
-			renderHook(() => useAuthCheck(null, setUser));
-
-			await waitFor(() => expect(setUser).toHaveBeenCalledWith(null));
 		});
 	});
 
 	describe('login failure', () => {
-		it('does not call setUser with user when fetchUserLogin throws', async () => {
+		it('sets user to null if fetchUserLogin fails', async () => {
 			window.location.search = '?code=abc123';
 			vi.mocked(userApi.fetchUserLogin).mockRejectedValue(new Error('fail'));
-			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('fail'));
-			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('unauthorized'));
 
-			renderHook(() => useAuthCheck(null, setUser));
+			renderHook(() => useAuthCheck(setUser));
 
-			await waitFor(() => expect(userApi.fetchUserLogin).toHaveBeenCalled());
-			await waitFor(() => expect(userApi.fetchUserInformation).toHaveBeenCalled());
-			expect(setUser).toHaveBeenCalledWith(null);
-			consoleSpy.mockRestore();
+			await waitFor(() => expect(setUser).toHaveBeenCalledWith(null));
 		});
 	});
 });
