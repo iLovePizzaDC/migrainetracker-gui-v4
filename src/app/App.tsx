@@ -12,9 +12,12 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 function App() {
 	const { user, setUser } = useUser();
-	const { authChecked } = useAuthCheck(user, setUser);
+	const { authChecked } = useAuthCheck(setUser);
 
-	if (!authChecked) return null;
+	if (!authChecked) {
+		// TODO add skeleton or spinner
+		return <div className='h-screen flex items-center justify-center'>Loading...</div>;
+	}
 
 	return (
 		<div onContextMenu={(e) => e.preventDefault()} className='min-h-screen flex flex-col relative'>

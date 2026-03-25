@@ -21,21 +21,6 @@ export const fetchUserInformation = async (): Promise<User> => {
 	return response.data;
 };
 
-export const fetchNewUser = async (user: User): Promise<User> => {
-	const response = await api.post(
-		'User',
-		{ googleUserId: user.id },
-		{
-			params: {
-				email: user.email,
-				lastName: user.family_name,
-				firstName: user.name,
-			},
-		},
-	);
-	return response.data;
-};
-
 // TODO add response types
 export const fetchUserPremiumGet = async (userId: string) => {
 	const response = await api.get('PremiumUser', { params: { googleUserId: userId } });
