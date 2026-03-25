@@ -11,7 +11,7 @@ describe('useAuthCheck', () => {
 	const setUser = vi.fn();
 
 	beforeEach(() => {
-		vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser } as any);
+		vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser });
 		vi.mocked(userApi.fetchUserInformation).mockResolvedValue(mockUser);
 
 		Object.defineProperty(window, 'location', {
