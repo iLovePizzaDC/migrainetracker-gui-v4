@@ -1,7 +1,7 @@
 import { api } from '@/shared/api/api';
 import type { UserResponse } from '@/shared/api/types/user';
 
-export const fetchUserLogin = async (code: string): Promise<User> => {
+export const fetchUserLogin = async (code: string): Promise<UserResponse> => {
 	const response = await api.post('auth/google', { code });
 	return response.data;
 };
