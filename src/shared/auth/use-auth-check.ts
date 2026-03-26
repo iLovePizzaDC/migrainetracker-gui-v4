@@ -12,7 +12,7 @@ export function useAuthCheck(setUser: (user: User | null) => void) {
 			try {
 				if (code) {
 					const response = await fetchUserLogin(code);
-					setUser(response);
+					setUser(response.user);
 
 					const url = new URL(window.location.href);
 					url.search = '';
