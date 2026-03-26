@@ -2,17 +2,24 @@ import * as userApi from '@/shared/api/user.api';
 import { useAuthCheck } from '@/shared/auth/use-auth-check';
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { User } from '../types/user/user';
 
 vi.mock('@/shared/api/user.api');
 
-const mockUser = { id: 'user-1', name: 'Test' } as any;
+const mockUser = {
+	id: 1,
+	email: 'test@test.com',
+	name: 'Test User',
+	given_name: 'Test',
+	family_name: 'User',
+} as unknown as User;
 
 describe('useAuthCheck', () => {
 	const setUser = vi.fn();
 
 	beforeEach(() => {
-		vi.mocked(userApi.fetchUserLogin).mockResolvedValue(mockUser);
-		vi.mocked(userApi.fetchUserInformation).mockResolvedValue(mockUser);
+		vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser });
+		vi.mocked(userApi.fetchUserInformation).mockResolvedValue({ user: mockUser });
 
 		Object.defineProperty(window, 'location', {
 			value: {
