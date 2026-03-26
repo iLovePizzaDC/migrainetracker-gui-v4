@@ -19,7 +19,7 @@ export function useAuthCheck(setUser: (user: User | null) => void) {
 					window.history.replaceState({}, '', url.toString());
 				} else {
 					const me = await fetchUserInformation();
-					setUser(me);
+					setUser(me.user);
 				}
 			} catch {
 				setUser(null);

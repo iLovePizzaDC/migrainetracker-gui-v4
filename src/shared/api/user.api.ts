@@ -1,6 +1,5 @@
 import { api } from '@/shared/api/api';
 import type { UserResponse } from '@/shared/api/types/user';
-import type { User } from '@/shared/types/user/user';
 
 export const fetchUserLogin = async (code: string): Promise<UserResponse> => {
 	const response = await api.post('auth/google', { code });
@@ -16,29 +15,7 @@ export const fetchUserLogout = async () => {
 	}
 };
 
-export const fetchUserInformation = async (): Promise<User> => {
+export const fetchUserInformation = async (): Promise<UserResponse> => {
 	const response = await api.get('auth/me');
-	return response.data;
-};
-
-// TODO add response types
-export const fetchUserPremiumGet = async (userId: string) => {
-	const response = await api.get('PremiumUser', { params: { googleUserId: userId } });
-	return response.data;
-};
-
-export const fetchUserPremiumPost = async (userId: string) => {
-	const response = await api.post('PremiumUser', { googleUserId: userId });
-	return response.data;
-};
-
-export const fetchOrder = async (planId: number, subscriptionId: string, userId: string) => {
-	const response = await api.post(
-		'Order',
-		{ googleUserId: userId },
-		{
-			params: { planId, subscriptionId },
-		},
-	);
 	return response.data;
 };

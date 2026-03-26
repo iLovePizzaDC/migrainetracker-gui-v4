@@ -8,7 +8,7 @@ import LandingPage from '@/features/landing-page/pages/LandingPage';
 import { useAuthCheck } from '@/shared/auth/use-auth-check';
 import { useUser } from '@/shared/hooks/user/use-user';
 import ProtectedRoute from '@/shared/routing/protected-route';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 function App() {
 	const { user, setUser } = useUser();
@@ -24,32 +24,29 @@ function App() {
 			<div className='fixed inset-0 -z-10'>
 				<img src={getSeasonBackground()} alt='background' className='w-full h-full object-cover' />
 			</div>
-
-			<BrowserRouter>
-				<Navigation />
-				<main className='mt-10'>
-					<Routes>
-						<Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
-						<Route
-							path='/home'
-							element={
-								<ProtectedRoute user={user}>
-									<OverviewPage />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path='/calendar'
-							element={
-								<ProtectedRoute user={user}>
-									<CalendarPage />
-								</ProtectedRoute>
-							}
-						/>
-					</Routes>
-				</main>
-				<Footer />
-			</BrowserRouter>
+			<Navigation />
+			<main className='mt-10'>
+				<Routes>
+					<Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
+					<Route
+						path='/home'
+						element={
+							<ProtectedRoute user={user}>
+								<OverviewPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path='/calendar'
+						element={
+							<ProtectedRoute user={user}>
+								<CalendarPage />
+							</ProtectedRoute>
+						}
+					/>
+				</Routes>
+			</main>
+			<Footer />
 		</div>
 	);
 }
