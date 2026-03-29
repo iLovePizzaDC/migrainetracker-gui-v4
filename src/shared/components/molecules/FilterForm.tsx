@@ -31,7 +31,6 @@ interface IFilterForm {
 	midasInputVisible?: boolean;
 }
 
-// TODO add effectiveness filter
 function FilterForm({
 	variant,
 	filter,
@@ -119,20 +118,22 @@ function FilterForm({
 					/>
 				</>
 			)}
-			{midasInputVisible && (
+			{midasInputVisible && ( // TODO add tests
 				<Combobox
 					id='filterMidas'
 					label='Midas'
-					options={MIDAS_OPTIONS}
+					options={[ANY_FILTER_OPTIONS, ...MIDAS_OPTIONS]}
 					selected={
 						filter.midas
-							.map((value) => MIDAS_OPTIONS.find((option) => option.value === value))
+							.map((value) =>
+								[ANY_FILTER_OPTIONS, ...MIDAS_OPTIONS].find((option) => option.value === value),
+							)
 							.filter(Boolean) as DropdownOption[]
 					}
 					onChange={(selectedMidas) => {
 						setFilter((prev) => ({
 							...prev,
-							midas: selectedMidas.map((midas) => midas.value as MidasType),
+							midas: selectedMidas.map((midas) => midas.value as MidasType | AnyFilterType),
 						}));
 					}}
 				/>
