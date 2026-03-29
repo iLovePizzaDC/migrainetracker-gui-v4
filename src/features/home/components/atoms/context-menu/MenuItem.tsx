@@ -4,7 +4,6 @@ interface IMenuItem {
 	className?: string;
 }
 
-// TODO add tests
 function MenuItem({ label, onClick, className }: IMenuItem) {
 	return (
 		<button

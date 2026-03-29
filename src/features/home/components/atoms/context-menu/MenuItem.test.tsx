@@ -25,4 +25,10 @@ describe('<MenuItem />', () => {
 
 		expect(mockOnClick).toHaveBeenCalled();
 	});
+
+	it('passes down className correctly', async () => {
+		render(<MenuItem {...defaultProps} className='text-purple-500' />);
+
+		expect(screen.getByText('Test label')).toHaveClass('text-purple-500');
+	});
 });

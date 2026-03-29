@@ -50,7 +50,7 @@ function ContextMenu({ open, setOpen, isEditing, setIsEditing, onRemoveClick }: 
             '
 		>
 			<MenuItem label={isEditing ? 'Cancel' : 'Edit'} onClick={onEdit} />
-			<MenuItem // TODO add tests
+			<MenuItem
 				label={removalVerified ? 'Are you sure?' : 'Remove'}
 				onClick={onRemove}
 				className={`${removalVerified ? 'text-red-500' : 'text-white'}`}
