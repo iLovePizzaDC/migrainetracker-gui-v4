@@ -4,7 +4,6 @@ import NavigationLinks from '@/app/components/molecules/navigation/NavigationLin
 import { useUser } from '@/shared/hooks/user/use-user';
 import { useState } from 'react';
 
-// TODO add tests
 function Navigation() {
 	const { user } = useUser();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
