@@ -19,17 +19,12 @@ function Navigation() {
 			<div className='max-w-7xl mx-auto flex items-center justify-between'>
 				<h3>Sorry to see you{user ? `, ${user.given_name}` : ''}</h3>
 
-				{user && (
-					<>
-						<nav className='hidden lg:flex lg:space-x-6' data-testid='desktop-nav'>
-							<NavigationLinks />
-						</nav>
-
-						<div className='lg:hidden'>
-							<MobileNavigationOptions toggleMenu={toggleMenu} isOpen={isOpen} />
-						</div>
-					</>
-				)}
+				<nav className='hidden lg:flex lg:space-x-6' data-testid='desktop-nav'>
+					<NavigationLinks />
+				</nav>
+				<div className='lg:hidden'>
+					<MobileNavigationOptions toggleMenu={toggleMenu} isOpen={isOpen} />
+				</div>
 			</div>
 
 			<div
