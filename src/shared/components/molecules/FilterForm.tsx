@@ -118,7 +118,7 @@ function FilterForm({
 					/>
 				</>
 			)}
-			{midasInputVisible && ( // TODO add tests
+			{midasInputVisible && (
 				<Combobox
 					id='filterMidas'
 					label='Midas'
