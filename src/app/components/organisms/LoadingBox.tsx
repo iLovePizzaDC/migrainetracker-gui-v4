@@ -1,6 +1,5 @@
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 
-// TODO add tests
 function LoadingBox() {
 	return (
 		<div className='py-20 flex items-center justify-center'>
@@ -30,7 +29,7 @@ function LoadingBox() {
 						/>
 					</div>
 
-					<p className='pt-5 text-white/60 text-sm font-light tracking-widest'>Logging In...</p>
+					<p className='pt-5 text-white/60 text-sm font-light tracking-widest'>Logging in...</p>
 
 					<div className='w-full h-0.5 bg-white/15 rounded-full overflow-hidden'>
 						<div className='h-full bg-white/70 rounded-full animate-[shimmer_1.6s_ease-in-out_infinite]' />
