@@ -20,8 +20,8 @@ function App() {
 			<div className='fixed inset-0 -z-10'>
 				<img src={getSeasonBackground()} alt='background' className='w-full h-full object-cover' />
 			</div>
+			<Navigation />
 			<main>
-				<Navigation />
 				{authChecked ? (
 					<div className='mt-10'>
 						<Routes>
