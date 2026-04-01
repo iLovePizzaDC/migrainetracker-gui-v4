@@ -58,7 +58,13 @@ export function filterEvents(parsedEvent: Event, filter: EventFilter) {
 	}
 
 	if (midasFilter.length > 0) {
-		const missingMidas = midasFilter.some((key) => !midas[key]);
+		const missingMidas = midasFilter.some((key) => {
+			if (key === ANY_FILTER_TYPE.ANY) {
+				return false;
+			} else {
+				return !midas[key];
+			}
+		});
 		if (missingMidas) return false;
 	}
 
