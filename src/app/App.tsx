@@ -1,4 +1,5 @@
 import Footer from '@/app/components/organisms/Footer';
+import LoadingBox from '@/app/components/organisms/LoadingBox';
 import Navigation from '@/app/components/organisms/Navigation';
 import '@/app/styles/App.css';
 import { getSeasonBackground } from '@/app/utils/date';
@@ -14,37 +15,38 @@ function App() {
 	const { user, setUser } = useUser();
 	const { authChecked } = useAuthCheck(setUser);
 
-	if (!authChecked) {
-		// TODO add skeleton or spinner
-		return <div className='h-screen flex items-center justify-center'>Loading...</div>;
-	}
-
 	return (
-		<div onContextMenu={(e) => e.preventDefault()} className='min-h-screen flex flex-col relative'>
+		<div onContextMenu={(e) => e.preventDefault()} className='flex flex-col relative'>
 			<div className='fixed inset-0 -z-10'>
 				<img src={getSeasonBackground()} alt='background' className='w-full h-full object-cover' />
 			</div>
 			<Navigation />
-			<main className='mt-10'>
-				<Routes>
-					<Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
-					<Route
-						path='/home'
-						element={
-							<ProtectedRoute user={user}>
-								<OverviewPage />
-							</ProtectedRoute>
-						}
-					/>
-					<Route
-						path='/calendar'
-						element={
-							<ProtectedRoute user={user}>
-								<CalendarPage />
-							</ProtectedRoute>
-						}
-					/>
-				</Routes>
+			<main>
+				{authChecked ? (
+					<div className='mt-10'>
+						<Routes>
+							<Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
+							<Route
+								path='/home'
+								element={
+									<ProtectedRoute user={user}>
+										<OverviewPage />
+									</ProtectedRoute>
+								}
+							/>
+							<Route
+								path='/calendar'
+								element={
+									<ProtectedRoute user={user}>
+										<CalendarPage />
+									</ProtectedRoute>
+								}
+							/>
+						</Routes>
+					</div>
+				) : (
+					<LoadingBox />
+				)}
 			</main>
 			<Footer />
 		</div>
