@@ -50,6 +50,24 @@ describe('<ContextMenu />', () => {
 		expect(mockSetIsEditing).toHaveBeenCalledOnce();
 	});
 
+	it('has white remove text by default on remove button', async () => {
+		const mockOnRemoveClick = vi.fn();
+		render(<ContextMenu {...defaultProps} onRemoveClick={mockOnRemoveClick} />);
+
+		expect(screen.getByText('Remove')).not.toHaveClass('text-red-500');
+		expect(screen.getByText('Remove')).toHaveClass('text-white');
+	});
+
+	it('has red remove text on first click on remove button', async () => {
+		const mockOnRemoveClick = vi.fn();
+		render(<ContextMenu {...defaultProps} onRemoveClick={mockOnRemoveClick} />);
+
+		await user.click(screen.getByText('Remove'));
+
+		expect(screen.getByText('Are you sure?')).toHaveClass('text-red-500');
+		expect(screen.getByText('Are you sure?')).not.toHaveClass('text-white');
+	});
+
 	it('does not call onRemoveClick on first click on remove button', async () => {
 		const mockOnRemoveClick = vi.fn();
 		render(<ContextMenu {...defaultProps} onRemoveClick={mockOnRemoveClick} />);
