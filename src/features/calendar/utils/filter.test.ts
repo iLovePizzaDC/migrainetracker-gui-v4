@@ -201,6 +201,33 @@ describe('filterEvents', () => {
 			});
 			expect(result).toBe(false);
 		});
+
+		it('returns true for ANY midas filter regardless of midas values', () => {
+			const result = filterEvents(makeEvent(), {
+				...defaultFilter,
+				midas: [ANY_FILTER_TYPE.ANY],
+			});
+			expect(result).toBe(true);
+		});
+
+		it('returns true for ANY midas filter even when all midas flags are false', () => {
+			const result = filterEvents(
+				makeEvent({
+					midas: {
+						workMissed: false,
+						workImpaired: false,
+						choresMissed: false,
+						choresImpaired: false,
+						socialMissed: false,
+					},
+				}),
+				{
+					...defaultFilter,
+					midas: [ANY_FILTER_TYPE.ANY],
+				},
+			);
+			expect(result).toBe(true);
+		});
 	});
 });
 

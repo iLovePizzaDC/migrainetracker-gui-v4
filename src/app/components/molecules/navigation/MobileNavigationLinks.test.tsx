@@ -1,9 +1,11 @@
 import MobileNavigationLinks from '@/app/components/molecules/navigation/MobileNavigationLinks';
 import { NAVIGATION_LINKS } from '@/app/constants/navigation/links';
+import { useUser } from '@/shared/hooks/user/use-user';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/shared/hooks/user/use-user');
 vi.mock('react-router-dom', () => ({
 	useLocation: () => ({ pathname: '/' }),
 	Link: ({ children, href, onClick }: any) => (
@@ -12,17 +14,50 @@ vi.mock('react-router-dom', () => ({
 		</a>
 	),
 }));
+vi.mock('@/app/constants/navigation/links', () => ({
+	NAVIGATION_LINKS: [
+		{ label: 'Public', to: '/public', allowAnonymous: true },
+		{ label: 'Private', to: '/private', allowAnonymous: false },
+	],
+}));
 
 describe('<MobileNavigationLinks />', () => {
 	const user = userEvent.setup();
 	const defaultProps = { toggleMenu: vi.fn() };
 
-	it('renders a link for each navigation item', () => {
+	beforeEach(() => {
+		vi.mocked(useUser).mockReturnValue({ user: null } as any);
+	});
+
+	it('renders anonymous true links when user is null', () => {
 		render(<MobileNavigationLinks {...defaultProps} />);
 
-		for (const link of NAVIGATION_LINKS) {
-			expect(screen.getByText(link.label)).toBeInTheDocument();
-		}
+		expect(screen.getByText('Public')).toBeInTheDocument();
+		expect(screen.queryByText('Private')).not.toBeInTheDocument();
+	});
+
+	it('renders anonymous true links when user is set', () => {
+		vi.mocked(useUser).mockReturnValue({
+			user: { given_name: 'John' },
+		} as any);
+		render(<MobileNavigationLinks {...defaultProps} />);
+
+		expect(screen.getByText('Public')).toBeInTheDocument();
+	});
+
+	it('renders anonymous false links when user is set', () => {
+		vi.mocked(useUser).mockReturnValue({
+			user: { given_name: 'John' },
+		} as any);
+		render(<MobileNavigationLinks {...defaultProps} />);
+
+		expect(screen.getByText('Private')).toBeInTheDocument();
+	});
+
+	it('does not render anonymous false links when user is null', () => {
+		render(<MobileNavigationLinks {...defaultProps} />);
+
+		expect(screen.queryByText('Private')).not.toBeInTheDocument();
 	});
 
 	it('calls toggleMenu when a link is clicked', async () => {
