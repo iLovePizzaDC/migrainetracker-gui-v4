@@ -32,7 +32,13 @@ function CardForm({
 	defaultTitle = '',
 	defaultCardType = CARD_TYPES.MIGRAINE,
 	defaultChartType = CHART_TYPES.AREA,
-	defaultFilter = { intensity: null, symptom: [], medicine: [], effectiveness: null, midas: [] },
+	defaultFilter = {
+		intensity: null,
+		symptom: [],
+		medicine: [],
+		effectiveness: null,
+		midas: [],
+	},
 	defaultCount = 12,
 	defaultUnit = TIME_FRAME_UNITS.MONTHS,
 }: ICardForm) {
@@ -45,6 +51,7 @@ function CardForm({
 	const [count, setCount] = useState(defaultCount);
 	const [unit, setUnit] = useState<TimeFrameUnit>(defaultUnit);
 
+	// TODO 'FormEvent' is deprecated.ts(6385)
 	const onSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
 

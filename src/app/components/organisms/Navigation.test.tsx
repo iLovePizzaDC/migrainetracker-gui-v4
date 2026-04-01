@@ -33,26 +33,51 @@ describe('<Navigation />', () => {
 	describe('rendering', () => {
 		it('renders greeting without name when user is null', () => {
 			render(<Navigation />);
+
 			expect(screen.getByText('Sorry to see you')).toBeInTheDocument();
 		});
 
 		it('renders greeting with name when user is set', () => {
 			vi.mocked(useUser).mockReturnValue({
-				user: { given_name: 'Nico' },
+				user: { given_name: 'John' },
 			} as any);
 
 			render(<Navigation />);
-			expect(screen.getByText('Sorry to see you, Nico')).toBeInTheDocument();
+
+			expect(screen.getByText('Sorry to see you, John')).toBeInTheDocument();
 		});
 
-		it('renders desktop nav', () => {
+		it('renders desktop/mobile nav when user is set', () => {
+			vi.mocked(useUser).mockReturnValue({
+				user: { given_name: 'John' },
+			} as any);
+
 			render(<Navigation />);
+
 			expect(screen.getByTestId('desktop-nav')).toBeInTheDocument();
+			expect(screen.getByTestId('mobile-nav')).toBeInTheDocument();
 		});
 
 		it('renders mobile nav closed by default', () => {
 			render(<Navigation />);
+
 			expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-0', 'opacity-0');
+		});
+
+		it('renders menu toggle when user is set', () => {
+			vi.mocked(useUser).mockReturnValue({
+				user: { given_name: 'John' },
+			} as any);
+
+			render(<Navigation />);
+
+			expect(screen.getByTestId('mobile-nav-toggle')).toBeInTheDocument();
+		});
+
+		it('renders menu toggle when user is null', () => {
+			render(<Navigation />);
+
+			expect(screen.getByTestId('mobile-nav-toggle')).toBeInTheDocument();
 		});
 	});
 
