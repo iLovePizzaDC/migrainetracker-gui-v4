@@ -13,5 +13,5 @@ export type EventFilter = {
 	symptom: (SymptomType | AnyFilterType)[];
 	medicine: (InputContent | AnyInputFilterType)[];
 	effectiveness: EffectivenessType | null;
-	midas: MidasType[];
+	midas: (MidasType | AnyFilterType)[];
 };
