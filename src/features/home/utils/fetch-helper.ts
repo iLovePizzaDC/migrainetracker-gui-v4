@@ -168,7 +168,7 @@ export async function fetchMidasPieData() {
 	previousMonth.setMonth(previousMonth.getMonth() - 1);
 
 	const twoMonthsAgo = new Date();
-	previousMonth.setMonth(previousMonth.getMonth() - 2);
+	twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
 
 	const [currentScore, previousScore] = await Promise.all([
 		fetchMidasScore(formatDateToUs(previousMonth)),
