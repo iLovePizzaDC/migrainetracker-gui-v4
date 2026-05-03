@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react';
 
 export function useCalendarDate() {
-	const [currentDate, setCurrentDate] = useState(new Date());
+	const [currentDate, setCurrentDate] = useState(() => {
+		const now = new Date();
+		return new Date(now.getFullYear(), now.getMonth(), 1);
+	});
 
 	const month = currentDate.toLocaleString('en-US', { month: 'long' });
 	const year = currentDate.getFullYear();
