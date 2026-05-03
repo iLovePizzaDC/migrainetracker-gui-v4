@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.0.0...v1.1.0) (2026-04-01)
+
+
+### Features
+
+* add any option to midas filter ([#31](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/31)) ([ef864ff](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/ef864ff6b21ad76fc525c5baabee1946750b7a86))
+* add logging in loading state ([#32](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/32)) ([3e80381](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/3e80381f9332942f73a34ad5e107a4e3e87a324a))
+* coloring menuitem red for removal ([#33](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/33)) ([e916d4b](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/e916d4b3e951073fa7c26a7dc871b0ddbb2617a7))
+
+
+### Bug Fixes
+
+* show different navigation when user is logged out ([#34](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/34)) ([4bf0038](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/4bf00381f0174c8e06152bd579418cc2af2e2fd9))
+
 ## 1.0.0 (2026-03-21)
 
 
