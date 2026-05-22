@@ -4,7 +4,7 @@ import CalendarContent from '@/features/calendar/components/organisms/CalendarCo
 import MigrainePanel from '@/features/calendar/components/organisms/MigrainePanel';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import type { Entry, StoredEntry } from '@/features/calendar/types/calendar';
-import { createEntry } from '@/features/calendar/utils/event-parser';
+import { createEntry, enrichMedicineLabels } from '@/features/calendar/utils/event-parser';
 import { normalizeDate } from '@/shared/utils/date/date';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
@@ -27,28 +27,8 @@ function Calendar() {
 
 		const entry: Entry | null = foundEvent ? createEntry(foundEvent) : null;
 
-		if (entry) { // TODO outsource into utils file + add tests
-			entry.medicines = entry.medicines.map((med) => {
-				const { abbreviation, label } = med.medicine;
-
-				if (abbreviation.toLowerCase() === label.toLowerCase()) {
-					const match = userMedicineOptions.find(
-						(option) => option.value.toLowerCase() === abbreviation.toLowerCase(),
-					);
-
-					if (match) {
-						return {
-							...med,
-							medicine: {
-								abbreviation,
-								label: match.label,
-							},
-						};
-					}
-				}
-
-				return med;
-			});
+		if (entry) {
+			entry.medicines = enrichMedicineLabels(entry.medicines, userMedicineOptions);
 		}
 
 		setIsStoredEntryDisplaying(false);

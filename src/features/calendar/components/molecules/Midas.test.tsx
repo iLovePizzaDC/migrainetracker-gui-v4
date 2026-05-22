@@ -1,6 +1,7 @@
 import Midas from '@/features/calendar/components/molecules/Midas';
 import { MIDAS_TYPES } from '@/shared/constants/event/event-details';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockMidasFalse = {
@@ -13,8 +14,9 @@ const mockMidasFalse = {
 
 const setMidas = vi.fn();
 
-// TODO missing tests adds midas when clicking unchecked option and removes midas when clicking checked option
 describe('<Midas />', () => {
+	const user = userEvent.setup();
+
 	beforeEach(() => {
 		setMidas.mockClear();
 	});
@@ -41,6 +43,39 @@ describe('<Midas />', () => {
 			screen.getByLabelText('my ability to do household chores was reduced'),
 		).not.toBeChecked();
 		expect(screen.getByLabelText('I missed social activities')).not.toBeChecked();
+	});
+
+	it('calls setMidas with true when clicking an unchecked option', async () => {
+		let result: typeof mockMidasFalse | undefined;
+
+		setMidas.mockImplementation(
+			(updater: (prev: typeof mockMidasFalse) => typeof mockMidasFalse) => {
+				result = updater(mockMidasFalse);
+			},
+		);
+
+		render(<Midas midas={mockMidasFalse} setMidas={setMidas} />);
+
+		await user.click(screen.getByLabelText('I missed work'));
+
+		expect(result).toMatchObject({ [MIDAS_TYPES.WORK_MISSED]: true });
+	});
+
+	it('calls setMidas with false when clicking a checked option', async () => {
+		const midasWithWork = { ...mockMidasFalse, [MIDAS_TYPES.WORK_MISSED]: true };
+		let result: typeof mockMidasFalse | undefined;
+
+		setMidas.mockImplementation(
+			(updater: (prev: typeof mockMidasFalse) => typeof mockMidasFalse) => {
+				result = updater(midasWithWork);
+			},
+		);
+
+		render(<Midas midas={midasWithWork} setMidas={setMidas} />);
+
+		await user.click(screen.getByLabelText('I missed work'));
+
+		expect(result).toMatchObject({ [MIDAS_TYPES.WORK_MISSED]: false });
 	});
 
 	it('is disabled if prop is true', () => {
