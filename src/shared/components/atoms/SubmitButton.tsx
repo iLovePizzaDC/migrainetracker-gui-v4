@@ -8,7 +8,6 @@ interface ISubmitButton {
 	className?: string;
 }
 
-// TODO duplicate?! src/features/home/components/atoms/card/Button.tsx
 function SubmitButton({ type, label, onClick, disabled = false, className }: ISubmitButton) {
 	return (
 		<button
