@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.1.0...v1.2.0) (2026-05-22)
+
+
+### Features
+
+* outsource tooltip ([#44](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/44)) ([6d05881](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/6d0588114c15d44a51aeeb7e0dbfb359077c0ca6))
+
+
+### Bug Fixes
+
+* remove deprecated baseurl in config ([#40](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/40)) ([46b24fd](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/46b24fd4ca49120cc01bdb1a75323eb2d1f5666d))
+
 ## [1.1.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.0.0...v1.1.0) (2026-04-01)
 
 
