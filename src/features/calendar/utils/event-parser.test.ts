@@ -2,16 +2,23 @@ import type { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
 import type { Event } from '@/features/calendar/types/event';
 import {
 	createEntry,
+	enrichMedicineLabels,
 	parseEventDescription,
 	parseMedicineData,
 } from '@/features/calendar/utils/event-parser';
 import { INTENSITY_TYPES, SYMPTOM_TYPES } from '@/shared/constants/event/event-details';
+import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import { parseDecimalToTime } from '@/shared/utils/date/date';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/utils/date/date', () => ({
 	parseDecimalToTime: vi.fn((n: number) => `${n}:00`),
 }));
+
+const mockUserMedicineOptions = [
+	{ value: MEDICINE_TYPES.MIGRAINE_PAINKILLER, label: 'Test medicine 1' },
+	{ value: MEDICINE_TYPES.PAINKILLER, label: 'Test medicine 2' },
+];
 
 const makeEvent = (overrides: Partial<Event['description']> = {}): Event => ({
 	date: new Date('2026-01-01'),
@@ -198,5 +205,93 @@ describe('createEntry', () => {
 			choresImpaired: false,
 			socialMissed: false,
 		});
+	});
+});
+
+describe('enrichMedicineLabels', () => {
+	it('returns empty array when medicines is empty', () => {
+		const result = enrichMedicineLabels([], mockUserMedicineOptions);
+
+		expect(result).toEqual([]);
+	});
+
+	it('enriches label when abbreviation and label are equal', () => {
+		const medicines = [
+			{
+				medicine: {
+					abbreviation: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+					label: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+				},
+			},
+		] as any;
+
+		const result = enrichMedicineLabels(medicines, mockUserMedicineOptions);
+
+		expect(result[0].medicine.label).toBe('Test medicine 1');
+	});
+
+	it('does not enrich label when abbreviation and label differ', () => {
+		const medicines = [
+			{ medicine: { abbreviation: MEDICINE_TYPES.MIGRAINE_PAINKILLER, label: 'Test medicine 1' } },
+		] as any;
+
+		const result = enrichMedicineLabels(medicines, mockUserMedicineOptions);
+
+		expect(result[0].medicine.label).toBe('Test medicine 1');
+	});
+
+	it('does not enrich label when no matching option is found', () => {
+		const medicines = [{ medicine: { abbreviation: 'xyz', label: 'xyz' } }] as any;
+
+		const result = enrichMedicineLabels(medicines, mockUserMedicineOptions);
+
+		expect(result[0].medicine.label).toBe('xyz');
+	});
+
+	it('is case-insensitive when matching', () => {
+		const medicines = [
+			{
+				medicine: {
+					abbreviation: MEDICINE_TYPES.MIGRAINE_PAINKILLER.toUpperCase(),
+					label: MEDICINE_TYPES.MIGRAINE_PAINKILLER.toUpperCase(),
+				},
+			},
+		] as any;
+
+		const result = enrichMedicineLabels(medicines, mockUserMedicineOptions);
+
+		expect(result[0].medicine.label).toBe('Test medicine 1');
+	});
+
+	it('enriches only matching medicines and leaves others unchanged', () => {
+		const medicines = [
+			{
+				medicine: {
+					abbreviation: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+					label: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+				},
+			},
+			{ medicine: { abbreviation: 'xyz', label: 'xyz' } },
+		] as any;
+
+		const result = enrichMedicineLabels(medicines, mockUserMedicineOptions);
+
+		expect(result[0].medicine.label).toBe('Test medicine 1');
+		expect(result[1].medicine.label).toBe('xyz');
+	});
+
+	it('does not mutate the original medicines array', () => {
+		const medicines = [
+			{
+				medicine: {
+					abbreviation: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+					label: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+				},
+			},
+		] as any;
+
+		enrichMedicineLabels(medicines, mockUserMedicineOptions);
+
+		expect(medicines[0].medicine.label).toBe(MEDICINE_TYPES.MIGRAINE_PAINKILLER);
 	});
 });

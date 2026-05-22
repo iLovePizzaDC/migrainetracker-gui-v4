@@ -1,3 +1,4 @@
+import CalendarTooltip from '@/features/calendar/components/atoms/CalendarTooltip';
 import Slider from '@/features/calendar/components/atoms/Slider';
 import AddMedicineForm from '@/features/calendar/components/molecules/AddMedicineForm';
 import MedicineCombobox from '@/features/calendar/components/molecules/MedicineCombobox';
@@ -68,11 +69,8 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
 					<InformationCircleIcon className='w-4 h-4' />
 				</button>
 
-				{showInfo && ( //TODO outsource
-					<div
-						ref={infoRef}
-						className='absolute left-1/2 top-6 -translate-x-1/2 z-50 w-64 rounded-lg bg-black/60 backdrop-blur border border-white/10 p-3 text-xs shadow-xl animate-fade-in'
-					>
+				{showInfo && (
+					<CalendarTooltip ref={infoRef}>
 						<p>
 							A “Med-Day” is any day on which you've taken acute medication (either medication of
 							type "migraine-painkiller" or "painkiller"). When this occurs on 10 or more days per
@@ -86,7 +84,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
 							</a>
 							&nbsp; (Medication Overuse Headache) increases.
 						</p>
-					</div>
+					</CalendarTooltip>
 				)}
 			</div>
 
