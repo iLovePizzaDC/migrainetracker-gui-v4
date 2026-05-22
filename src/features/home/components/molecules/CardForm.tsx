@@ -1,4 +1,3 @@
-import Button from '@/features/home/components/atoms/card/Button';
 import Input from '@/features/home/components/atoms/card/Input';
 import { CARD_OPTIONS } from '@/features/home/constants/card';
 import { CHART_OPTIONS } from '@/features/home/constants/chart';
@@ -6,6 +5,7 @@ import { TIME_FRAME_UNIT_OPTIONS } from '@/features/home/constants/time-frame';
 import { useCardSetups } from '@/features/home/hooks/use-card-setups';
 import type { CardSetup } from '@/features/home/types/chart';
 import DropdownInput from '@/shared/components/atoms/DropdownInput';
+import SubmitButton from '@/shared/components/atoms/SubmitButton';
 import FilterForm from '@/shared/components/molecules/FilterForm';
 import { CARD_TYPES, CHART_TYPES, TIME_FRAME_UNITS } from '@/shared/constants/event/card';
 import { BUTTON_TYPES } from '@/shared/constants/input/button';
@@ -51,10 +51,7 @@ function CardForm({
 	const [count, setCount] = useState(defaultCount);
 	const [unit, setUnit] = useState<TimeFrameUnit>(defaultUnit);
 
-	// TODO 'FormEvent' is deprecated.ts(6385)
-	const onSubmit = (event: React.FormEvent) => {
-		event.preventDefault();
-
+	const onSubmit = () => {
 		const cardSetup: CardSetup = {
 			index: defaultIndex ?? cardSetups.length,
 			title,
@@ -78,7 +75,13 @@ function CardForm({
 	};
 
 	return (
-		<form className='space-y-5' onSubmit={onSubmit}>
+		<form
+			className='space-y-5'
+			onSubmit={(e) => {
+				e.preventDefault();
+				onSubmit();
+			}}
+		>
 			<Input
 				id='appendTitle'
 				label='Title'
@@ -135,7 +138,7 @@ function CardForm({
 				/>
 			</div>
 
-			<Button type={BUTTON_TYPES.SUBMIT} title='Submit' />
+			<SubmitButton type={BUTTON_TYPES.SUBMIT} label='Submit' />
 		</form>
 	);
 }
