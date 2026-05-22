@@ -69,3 +69,20 @@ export const createEntry = (event: Event): Entry => ({
 		socialMissed: false,
 	},
 });
+
+export const enrichMedicineLabels = (
+	medicines: Entry['medicines'],
+	userMedicineOptions: { value: string; label: string }[],
+): Entry['medicines'] => {
+	return medicines.map((med) => {
+		const { abbreviation, label } = med.medicine;
+
+		if (abbreviation.toLowerCase() !== label.toLowerCase()) return med;
+
+		const match = userMedicineOptions.find(
+			(option) => option.value.toLowerCase() === abbreviation.toLowerCase(),
+		);
+
+		return match ? { ...med, medicine: { abbreviation, label: match.label } } : med;
+	});
+};
