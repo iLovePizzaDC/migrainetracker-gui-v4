@@ -51,10 +51,7 @@ function CardForm({
 	const [count, setCount] = useState(defaultCount);
 	const [unit, setUnit] = useState<TimeFrameUnit>(defaultUnit);
 
-	// TODO 'FormEvent' is deprecated.ts(6385)
-	const onSubmit = (event: React.FormEvent) => {
-		event.preventDefault();
-
+	const onSubmit = () => {
 		const cardSetup: CardSetup = {
 			index: defaultIndex ?? cardSetups.length,
 			title,
@@ -78,7 +75,13 @@ function CardForm({
 	};
 
 	return (
-		<form className='space-y-5' onSubmit={onSubmit}>
+		<form
+			className='space-y-5'
+			onSubmit={(e) => {
+				e.preventDefault();
+				onSubmit();
+			}}
+		>
 			<Input
 				id='appendTitle'
 				label='Title'
