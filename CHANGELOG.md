@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.2.0...v1.2.1) (2026-05-28)
+
+
+### Bug Fixes
+
+* add more padding to select input ([#47](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/47)) ([61c747d](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/61c747d57714f7860ecf9586c2588c07eea248ff))
+* add more padding to select input ([#47](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/47)) ([9d60cac](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/9d60cacf90b572fa4b804f9cf123d55ae9cac726))
+
 ## [1.2.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.1.0...v1.2.0) (2026-05-22)
 
 
