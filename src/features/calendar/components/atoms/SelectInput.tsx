@@ -35,7 +35,7 @@ function SelectInput({
 						: Array.isArray(value) && value.includes(option.value);
 
 				return (
-					<div key={option.value} className='flex items-center gap-2'>
+					<div key={option.value} className='flex items-center gap-3 cursor-pointer'>
 						<input
 							id={inputId}
 							type={type}
@@ -43,10 +43,10 @@ function SelectInput({
 							checked={isChecked}
 							onChange={onChange}
 							required={required}
-							className='h-4 w-4'
+							className='h-4 w-4 shrink-0'
 							disabled={disabled}
 						/>
-						<label htmlFor={inputId} className='text-sm w-full text-left'>
+						<label htmlFor={inputId} className='text-sm w-full text-left py-1 cursor-pointer'>
 							{option.label}
 						</label>
 					</div>
