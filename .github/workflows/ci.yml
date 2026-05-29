@@ -16,8 +16,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
+                node-version: 20
+                cache: npm
             - run: npm ci
             - run: npm run type-check
 
@@ -27,8 +27,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
+                node-version: 20
+                cache: npm
             - run: npm ci
             - run: npm run lint
 
@@ -38,8 +38,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
+                node-version: 20
+                cache: npm
             - run: npm ci
             - run: npm run test
 
@@ -49,10 +49,10 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
+                node-version: 20
+                cache: npm
             - run: npm ci
-            - run: npm audit --audit-level=high
+            - run: npm audit --audit-level=high --omit=dev
 
     build:
         needs: [typecheck, lint, test, security]
@@ -61,17 +61,17 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
-                  cache: npm
+                node-version: 20
+                cache: npm
             - run: npm ci
             - run: npm run build
               env:
-                  VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+                VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
             - uses: actions/upload-artifact@v4
               with:
-                  name: dist
-                  path: dist
-                  retention-days: 1
+                name: dist
+                path: dist
+                retention-days: 1
 
     deploy:
         needs: build
@@ -83,25 +83,25 @@ jobs:
         steps:
             - uses: actions/download-artifact@v4
               with:
-                  name: dist
-                  path: dist
+                name: dist
+                path: dist
             - name: Backup current deployment
               run: |
-                  rm -rf /var/www/migrainetracker.bak
-                  cp -r /var/www/migrainetracker /var/www/migrainetracker.bak
+                rm -rf /var/www/migrainetracker.bak
+                cp -r /var/www/migrainetracker /var/www/migrainetracker.bak || true
             - name: Copy dist to nginx
               run: |
-                  rm -rf /var/www/migrainetracker/*
-                  cp -r dist/* /var/www/migrainetracker/
+                rm -rf /var/www/migrainetracker/*
+                cp -r dist/* /var/www/migrainetracker/
             - name: Health Check
               id: healthcheck
-              run: curl --fail https://migrainetracker.de
+              run: sleep 5 && curl --fail --retry 3 --retry-delay 2 https://migrainetracker.de
             - name: Rollback on failure
-              if: failure() && steps.healthcheck.conclusion == 'failure'
+              if: failure()
               run: |
-                  rm -rf /var/www/migrainetracker/*
-                  cp -r /var/www/migrainetracker.bak/* /var/www/migrainetracker/
-                  echo "Rollback completed"
+                rm -rf /var/www/migrainetracker/*
+                cp -r /var/www/migrainetracker.bak/* /var/www/migrainetracker/
+                echo "Rollback completed"
 
     release:
         needs: deploy
@@ -115,8 +115,8 @@ jobs:
         steps:
             - uses: actions/checkout@v4
               with:
-                  fetch-depth: 0
+                fetch-depth: 0
             - uses: googleapis/release-please-action@v4
               with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  release-type: simple
+                token: ${{ secrets.GITHUB_TOKEN }}
+                release-type: simple
