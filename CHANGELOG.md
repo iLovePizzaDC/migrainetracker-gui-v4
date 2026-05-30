@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.2.1...v1.2.2) (2026-05-29)
+
+
+### Bug Fixes
+
+* sleep for healthcheck ([#52](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/52)) ([3864a87](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/3864a8798226fd88095c8556fe0bab91c94e33f3))
+
 ## [1.2.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.2.0...v1.2.1) (2026-05-28)
 
 
