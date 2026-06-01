@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.2.2...v1.3.0) (2026-06-01)
+
+
+### Features
+
+* use refresh endpoint ([#56](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/56)) ([83b145f](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/83b145f38e28e3ab60e3c2348c061535f920828e))
+* use refresh endpoint ([#56](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/56)) ([ced221a](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/ced221a2e8c255e84fb487584566bc694daa0ec9))
+
 ## [1.2.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.2.1...v1.2.2) (2026-05-29)
 
 
