@@ -18,10 +18,15 @@ export function useAuthCheck(setUser: (user: User | null) => void) {
 					url.search = '';
 					window.history.replaceState({}, '', url.toString());
 				} else {
-					const me = await fetchUserInformation();
-					setUser(me.user);
+					try {
+						const me = await fetchUserInformation();
+						setUser(me.user);
+					} catch {
+						setUser(null);
+					}
 				}
-			} catch {
+			} catch (error) {
+				console.error('Auth check failed:', error);
 				setUser(null);
 			} finally {
 				setAuthChecked(true);
