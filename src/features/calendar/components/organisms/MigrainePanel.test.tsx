@@ -213,7 +213,7 @@ describe('<MigrainePanel />', () => {
 	describe('save', () => {
 		it('saves to localStorage and closes on save', async () => {
 			const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
-			const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
+			const setTimeoutSpy = vi.spyOn(globalThis, 'setTimeout');
 
 			render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
 
@@ -221,8 +221,10 @@ describe('<MigrainePanel />', () => {
 
 			expect(setItemSpy).toHaveBeenCalledWith('MT_NE', expect.any(String));
 
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const saveCall = setTimeoutSpy.mock.calls.find(([_, delay]) => delay === 500);
+			const saveCall = setTimeoutSpy.mock.calls.find(
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				([_, delay]: [TimerHandler, number?, ...unknown[]]) => delay === 500,
+			);
 			expect(saveCall).toBeDefined();
 
 			const callback = saveCall![0] as () => void;
