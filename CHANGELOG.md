@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.3.0...v1.3.1) (2026-06-05)
+
+
+### Bug Fixes
+
+* api encoding error ([#59](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/59)) ([cfa63d1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/cfa63d18162aa1065a32b18dd421f8f2b5632c66))
+* api encoding error ([#59](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/59)) ([308b811](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/308b811b7ce80863b22fea6f29d151916b08c2f3))
+
 ## [1.3.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.2.2...v1.3.0) (2026-06-01)
 
 
