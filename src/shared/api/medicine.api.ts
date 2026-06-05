@@ -11,9 +11,9 @@ export const fetchUserMedicinesPost = async (
 	abbreviation: string,
 	type: string,
 ): Promise<Medicine> => {
-	const response = await api.post(
-		`UserMedicine?name=${name}&abbreviation=${abbreviation}&type=${type}`,
-	);
+	const response = await api.post('UserMedicine', null, {
+		params: { name, abbreviation, type },
+	});
 	return response.data;
 };
 
@@ -21,6 +21,8 @@ export const fetchUserMedicinesDelete = async (
 	name: string,
 	abbreviation: string,
 ): Promise<Medicine[]> => {
-	const response = await api.delete(`UserMedicine?name=${name}&abbreviation=${abbreviation}`);
+	const response = await api.delete('UserMedicine', {
+		params: { name, abbreviation },
+	});
 	return response.data;
 };
