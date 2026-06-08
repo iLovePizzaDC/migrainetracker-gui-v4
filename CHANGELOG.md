@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.3.1...v1.3.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* fix overview card any filter ([#62](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/62)) ([830eda5](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/830eda5c2d87651309499ae41973bfb1aa6558a7))
+* select input is hard to select ([#63](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/63)) ([564e90e](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/564e90edfac2941daccdf20a0fe16b0ed76b6600))
+
 ## [1.3.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.3.0...v1.3.1) (2026-06-05)
 
 
