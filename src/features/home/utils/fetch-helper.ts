@@ -29,22 +29,19 @@ const mapEventFilterToFilter = async (
 	const medHasAny = filter.medicine.some(
 		(medicine) => medicine.abbreviation === ANY_FILTER_OPTIONS.value,
 	);
-	let mappedMedicines: string | undefined = undefined;
 
+	let mappedMedicines: string | undefined = undefined;
 	if (filter.medicine.length > 0) {
-		mappedMedicines =
-			filter.medicine.length === 0 || medHasAny
-				? userMedicines.map((medicine) => medicine.abbreviation).join(',')
-				: filter.medicine.map((medicine) => medicine.abbreviation).join(',');
+		mappedMedicines = medHasAny
+			? userMedicines.map((medicine) => medicine.abbreviation).join(',')
+			: filter.medicine.map((medicine) => medicine.abbreviation).join(',');
 	}
 
 	let mappedSymptoms: string | undefined = undefined;
-
 	if (filter.symptom.length > 0) {
-		mappedSymptoms =
-			filter.symptom.length === 0 || filter.symptom.includes(ANY_FILTER_TYPE.ANY)
-				? SYMPTOM_OPTIONS.map((symptomOption) => symptomOption.value).join(',')
-				: filter.symptom.join(',');
+		mappedSymptoms = filter.symptom.includes(ANY_FILTER_TYPE.ANY)
+			? SYMPTOM_OPTIONS.map((symptomOption) => symptomOption.value).join(',')
+			: filter.symptom.join(',');
 	}
 
 	return {
