@@ -102,3 +102,21 @@ jobs:
                 rm -rf /var/www/migrainetracker/*
                 cp -r /var/www/migrainetracker.bak/* /var/www/migrainetracker/
                 echo "Rollback completed"
+
+    release:
+        needs: deploy
+        permissions:
+            contents: write
+            pull-requests: write
+        runs-on: ubuntu-latest
+        if: |
+            always() &&
+            needs.deploy.result == 'success'
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+            - uses: googleapis/release-please-action@v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  release-type: simple
