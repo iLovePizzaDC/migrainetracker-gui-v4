@@ -111,5 +111,21 @@ describe('<FilterForm />', () => {
 
 			expect(setFilter).toHaveBeenCalled();
 		});
+
+		it('calls setFilter with null when intensity is set to ANY', async () => {
+			const setFilter = vi.fn();
+			const filterWithIntensity = { ...mockDefaultFilter, intensity: 'high' as any };
+
+			render(<FilterForm {...defaultProps} filter={filterWithIntensity} setFilter={setFilter} />);
+
+			await user.click(screen.getAllByTestId('dropdown-menu-trigger')[0]);
+			await user.click(screen.getByTestId('any'));
+
+			expect(setFilter).toHaveBeenCalledWith(expect.any(Function));
+
+			const updater = setFilter.mock.calls[0][0];
+			const result = updater(filterWithIntensity);
+			expect(result.intensity).toBeNull();
+		});
 	});
 });
