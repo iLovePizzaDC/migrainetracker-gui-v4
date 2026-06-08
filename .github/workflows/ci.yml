@@ -79,7 +79,8 @@ jobs:
         if: |
             github.ref == 'refs/heads/main' &&
             github.event_name == 'push' &&
-            github.actor != 'github-actions[bot]'
+            github.actor != 'github-actions[bot]' &&
+            github.actor != 'google-release-please[bot]'
         steps:
             - uses: actions/download-artifact@v4
               with:
