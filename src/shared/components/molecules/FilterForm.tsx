@@ -20,8 +20,6 @@ import {
 import { useUserMedicines } from '@/shared/hooks/user/use-user-medicines';
 import type { EventFilter } from '@/shared/types/event/event';
 import type { DropdownOption } from '@/shared/types/input/input';
-import { replaceAnyWithNull } from '@/shared/utils/formatter/filter-replacer';
-import { useEffect } from 'react';
 
 interface IFilterForm {
 	variant: FilterFormVariant;
@@ -45,10 +43,6 @@ function FilterForm({
 			? 'space-y-2'
 			: 'space-y-3 rounded-xl border border-white/10 bg-white/5';
 
-	useEffect(() => {
-		replaceAnyWithNull<EventFilter>(filter);
-	}, [filter]);
-
 	return (
 		<div data-testid='filter-form' className={`p-3 ${baseClasses}`}>
 			<DropdownInput
@@ -59,7 +53,7 @@ function FilterForm({
 				onChange={(value) => {
 					setFilter((prev) => ({
 						...prev,
-						intensity: value as IntensityType,
+						intensity: value === ANY_FILTER_TYPE.ANY ? null : (value as IntensityType),
 					}));
 				}}
 			/>
@@ -112,7 +106,7 @@ function FilterForm({
 						onChange={(value) => {
 							setFilter((prev) => ({
 								...prev,
-								effectiveness: value as EffectivenessType,
+								effectiveness: value === ANY_FILTER_TYPE.ANY ? null : (value as EffectivenessType),
 							}));
 						}}
 					/>

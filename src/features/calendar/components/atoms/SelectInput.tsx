@@ -46,7 +46,7 @@ function SelectInput({
 							className='h-4 w-4 shrink-0'
 							disabled={disabled}
 						/>
-						<label htmlFor={inputId} className='text-sm w-full text-left py-1 cursor-pointer'>
+						<label htmlFor={inputId} className='text-sm w-full text-left py-2 cursor-pointer'>
 							{option.label}
 						</label>
 					</div>
