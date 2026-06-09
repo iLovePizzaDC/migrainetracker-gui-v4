@@ -4,7 +4,7 @@
             "release-type": "node",
             "include-component-in-tag": false,
             "pull-request-title-pattern": "chore: release ${version}",
-            "pull-request-header": "🚀 Release ${version}"
+            "pull-request-header": "🚀 Release"
         }
     }
 }
