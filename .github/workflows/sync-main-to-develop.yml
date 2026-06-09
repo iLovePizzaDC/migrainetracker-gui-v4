@@ -21,5 +21,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout develop
-          git merge origin/main --ff-only
+          git pull --rebase origin main
           git push origin develop
