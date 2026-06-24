@@ -1,8 +1,13 @@
+import { fetchUserMedicinesGet } from '@/shared/api/medicine.api';
 import { UserContext } from '@/shared/context/user/user-context';
 import { UserProvider } from '@/shared/hooks/user/user-provider';
-import { act, render, renderHook, screen } from '@testing-library/react';
+import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
 import { useContext } from 'react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/shared/api/medicine.api', () => ({
+	fetchUserMedicinesGet: vi.fn(),
+}));
 
 function renderWithProvider() {
 	const { result } = renderHook(() => useContext(UserContext), {
@@ -16,6 +21,12 @@ describe('UserProvider', () => {
 		const result = renderWithProvider();
 
 		expect(result.current.user).toBeNull();
+	});
+
+	it('provides medicines as null initially', () => {
+		const result = renderWithProvider();
+
+		expect(result.current.medicines).toBeNull();
 	});
 
 	it('provides setUser function', () => {
@@ -33,6 +44,27 @@ describe('UserProvider', () => {
 		});
 
 		expect(result.current.user).toEqual(mockUser);
+	});
+
+	it('loads medicines when user is set', async () => {
+		const mockMedicines = [
+			{ id: 'medicine-1', name: 'Medicine 1' },
+			{ id: 'medicine-2', name: 'Medicine 2' },
+		] as any;
+
+		vi.mocked(fetchUserMedicinesGet).mockResolvedValue(mockMedicines);
+
+		const result = renderWithProvider();
+
+		act(() => {
+			result.current.setUser({ id: 'user-1' } as any);
+		});
+
+		await waitFor(() => {
+			expect(result.current.medicines).toEqual(mockMedicines);
+		});
+
+		expect(fetchUserMedicinesGet).toHaveBeenCalled();
 	});
 
 	it('renders children', () => {

@@ -1,9 +1,10 @@
-import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { fetchUserMedicinesDelete } from '@/shared/api/medicine.api';
 import Combobox from '@/shared/components/atoms/Combobox';
 import { BUTTON_TYPES } from '@/shared/constants/input/button';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
+import { useUser } from '@/shared/hooks/user/use-user';
 import type { AppendMedicine } from '@/shared/types/calendar/calendar';
+import type { DropdownOption } from '@/shared/types/input/input';
 import { CheckBadgeIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 
@@ -16,7 +17,7 @@ interface IMedicineCombobox {
 function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombobox) {
 	const comboboxRef = useRef<HTMLDivElement | null>(null);
 
-	const { userMedicineOptions, loadUserMedicines } = useCalendar();
+	const { medicines: userMedicines } = useUser();
 
 	const [deletionConfirmedFor, setDeletionConfirmedFor] = useState<string | null>(null);
 
@@ -24,16 +25,25 @@ function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombob
 		setDeletionConfirmedFor(null);
 	});
 
+	const medicineOptions: DropdownOption[] =
+		userMedicines === null
+			? []
+			: userMedicines.map((m) => ({
+					label: m.name,
+					value: m.abbreviation,
+				}));
+
 	const deleteMedicine = async (name: string, abbreviation: string) => {
 		await fetchUserMedicinesDelete(name, abbreviation);
 
-		loadUserMedicines();
+		//loadUserMedicines();
+		// TODO refetch medicine or update in context
 	};
 
 	return (
 		<Combobox
 			id='meds'
-			options={userMedicineOptions}
+			options={medicineOptions}
 			selected={medicines.map((medicine) => ({
 				label: medicine.medicine.label,
 				value: medicine.medicine.abbreviation,

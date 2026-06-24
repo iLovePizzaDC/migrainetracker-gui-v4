@@ -13,8 +13,7 @@ import {
 	INTENSITY_TYPES,
 	SYMPTOM_TYPES,
 } from '@/shared/constants/event/event-details';
-import { useUserMedicines } from '@/shared/hooks/user/use-user-medicines';
-import type { DropdownOption } from '@/shared/types/input/input';
+import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
 import { useContext } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -29,15 +28,23 @@ const mockPrevMonth = vi.fn();
 const mockNextMonth = vi.fn();
 const mockRefetchEvents = vi.fn().mockResolvedValue(undefined);
 const mockCollectMedDays = vi.fn().mockResolvedValue(undefined);
-const mockLoadUserMedicines = vi.fn().mockResolvedValue(undefined);
 const mockSetFilter = vi.fn();
 
 const mockMedLabel = 'test medicine';
 const mockMedValue = 'tst_med';
-const mockUserMedicine = {
-	label: `${mockMedLabel} 1`,
-	value: `${mockMedValue}_1`,
-};
+
+const mockUserMedicines = [
+	{
+		name: `${mockMedLabel} 1`,
+		abbreviation: `${mockMedValue}_1`,
+		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+	},
+	{
+		name: `${mockMedLabel} 2`,
+		abbreviation: `${mockMedValue}_2`,
+		type: MEDICINE_TYPES.PAINKILLER,
+	},
+];
 
 const mockEvent = {
 	date: new Date('2026-01-03'),
@@ -50,7 +57,7 @@ const mockEvent = {
 		],
 		intensity: INTENSITY_TYPES.HIGH,
 		symptoms: [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT, SYMPTOM_TYPES.SMELL],
-		medicine: mockUserMedicine.value,
+		medicine: mockMedValue,
 		effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE],
 		midas: {
 			workMissed: true,
@@ -62,6 +69,12 @@ const mockEvent = {
 	},
 	strength: 200 as keyof typeof STRENGTH_MAP,
 };
+
+vi.mock('@/shared/hooks/user/use-user', () => ({
+	useUser: () => ({
+		medicines: mockUserMedicines,
+	}),
+}));
 
 const defaultCalendarDate = {
 	currentDate: new Date('2026-05-01'),
@@ -98,17 +111,11 @@ const defaultMedDays = {
 	collectMedDays: mockCollectMedDays,
 };
 
-const defaultUserMedicines = {
-	userMedicineOptions: [] as DropdownOption[],
-	loadUserMedicines: mockLoadUserMedicines,
-};
-
 function setupMocks(
 	overrides: {
 		calendarDate?: Partial<typeof defaultCalendarDate>;
 		calendarEvents?: Partial<typeof defaultCalendarEvents>;
 		medDays?: Partial<typeof defaultMedDays>;
-		userMedicines?: Partial<typeof defaultUserMedicines>;
 	} = {},
 ) {
 	vi.mocked(useCalendarDate).mockReturnValue({ ...defaultCalendarDate, ...overrides.calendarDate });
@@ -117,10 +124,6 @@ function setupMocks(
 		...overrides.calendarEvents,
 	});
 	vi.mocked(useMedDays).mockReturnValue({ ...defaultMedDays, ...overrides.medDays });
-	vi.mocked(useUserMedicines).mockReturnValue({
-		...defaultUserMedicines,
-		...overrides.userMedicines,
-	});
 }
 
 function renderWithProvider() {
@@ -160,14 +163,6 @@ describe('CalendarProvider', () => {
 
 			expect(result.current.medDaysCount).toBe(7);
 			expect(result.current.maxMedDaysCount).toBe(15);
-		});
-
-		it('provides userMedicineOptions from useUserMedicines', () => {
-			setupMocks({ userMedicines: { userMedicineOptions: [mockUserMedicine] } });
-
-			const result = renderWithProvider();
-
-			expect(result.current.userMedicineOptions).toEqual([mockUserMedicine]);
 		});
 
 		it('forwards setMonth, prevMonth, nextMonth from useCalendarDate', () => {

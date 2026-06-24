@@ -1,15 +1,27 @@
 import MedicineCombobox from '@/features/calendar/components/molecules/MedicineCombobox';
+import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockMedLabel = 'test medicine';
 const mockMedValue = 'tst_med';
+const mockUserMedicines = [
+	{
+		name: `${mockMedLabel} 1`,
+		abbreviation: `${mockMedValue}_1`,
+		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+	},
+	{
+		name: `${mockMedLabel} 2`,
+		abbreviation: `${mockMedValue}_2`,
+		type: MEDICINE_TYPES.PAINKILLER,
+	},
+];
 
-vi.mock('@/features/calendar/hooks/use-calendar', () => ({
-	useCalendar: () => ({
-		userMedicineOptions: [{ label: `${mockMedLabel} 1`, value: `${mockMedValue}_1` }],
-		loadUserMedicines: vi.fn(),
+vi.mock('@/shared/hooks/user/use-user', () => ({
+	useUser: () => ({
+		medicines: mockUserMedicines,
 	}),
 }));
 vi.mock('@/shared/hooks/use-click-outside', () => ({
