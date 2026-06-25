@@ -6,6 +6,9 @@ import { describe, expect, it, vi } from 'vitest';
 describe('<ContextMenu />', () => {
 	const user = userEvent.setup();
 	const defaultProps = {
+		contextButtonRef: {
+			current: document.createElement('button'),
+		},
 		open: true,
 		setOpen: vi.fn(),
 		isEditing: false,
