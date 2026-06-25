@@ -17,9 +17,10 @@ interface IMedicineCombobox {
 function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombobox) {
 	const comboboxRef = useRef<HTMLDivElement | null>(null);
 
-	const { medicines: userMedicines } = useUser();
+	const { medicines: userMedicines, removeMedicine } = useUser();
 
 	const [deletionConfirmedFor, setDeletionConfirmedFor] = useState<string | null>(null);
+	const [deletingMedicine, setDeletingMedicine] = useState<string | null>(null);
 
 	useClickOutside(comboboxRef, () => {
 		setDeletionConfirmedFor(null);
@@ -34,10 +35,19 @@ function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombob
 				}));
 
 	const deleteMedicine = async (name: string, abbreviation: string) => {
-		await fetchUserMedicinesDelete(name, abbreviation);
+		try {
+			setDeletingMedicine(abbreviation);
 
-		//loadUserMedicines();
-		// TODO refetch medicine or update in context
+			removeMedicine(abbreviation);
+
+			await fetchUserMedicinesDelete(name, abbreviation);
+
+			setDeletionConfirmedFor(null);
+		} catch (error) {
+			console.error('Failed to delete medicine:', error);
+		} finally {
+			setDeletingMedicine(null);
+		}
 	};
 
 	return (
@@ -65,6 +75,7 @@ function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombob
 			disabled={disabled}
 			renderOptionActions={(option) => {
 				const isConfirming = deletionConfirmedFor === option.value;
+				const isDeleting = deletingMedicine === option.value;
 
 				return (
 					<button
@@ -75,12 +86,12 @@ function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombob
 							event.stopPropagation();
 							if (isConfirming) {
 								deleteMedicine(option.label, option.value);
-								setDeletionConfirmedFor(null);
 							} else {
 								setDeletionConfirmedFor(option.value);
 							}
 						}}
-						className='hover:text-red-500 transition-colors'
+						disabled={isDeleting}
+						className='hover:text-red-500 transition-colors disabled:opacity-50'
 					>
 						{isConfirming ? (
 							<CheckBadgeIcon data-testid='confirm-icon' className='h-4 w-4' />

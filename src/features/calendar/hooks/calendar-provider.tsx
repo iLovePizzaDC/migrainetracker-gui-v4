@@ -2,7 +2,7 @@ import { CalendarContext } from '@/features/calendar/context/calendar-context';
 import { useCalendarDate } from '@/features/calendar/hooks/use-calendar-date';
 import { useCalendarEvents } from '@/features/calendar/hooks/use-calendar-events';
 import { useMedDays } from '@/features/calendar/hooks/use-med-days';
-import { useCallback, useEffect, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 	const {
@@ -25,19 +25,10 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 		filter,
 		setFilter,
 		isLoading,
-		refetchEvents: _refetchEvents,
+		refetchEvents,
 	} = useCalendarEvents(firstDayOfMonth, lastDayOfMonth, daysInMonth);
 
 	const { medDaysCount, maxMedDaysCount, collectMedDays } = useMedDays(currentDate);
-
-	const refetchEvents = useCallback(async () => {
-		await _refetchEvents();
-		await collectMedDays();
-	}, [_refetchEvents, collectMedDays]);
-
-	useEffect(() => {
-		collectMedDays();
-	}, [collectMedDays, refetchEvents]);
 
 	return (
 		<CalendarContext.Provider
@@ -50,8 +41,8 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 				setMonth,
 				prevMonth,
 				nextMonth,
-				refetchEvents,
 				collectMedDays,
+				refetchEvents,
 				calendarEvents,
 				filteredEvents,
 				medDaysCount,

@@ -1,4 +1,3 @@
-import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { fetchUserMedicinesPost } from '@/shared/api/medicine.api';
 import DropdownInput from '@/shared/components/atoms/DropdownInput';
 import SubmitButton from '@/shared/components/atoms/SubmitButton';
@@ -9,6 +8,7 @@ import {
 	MEDICINE_TYPES,
 	type MedicineType,
 } from '@/shared/constants/user/medicine';
+import { useUser } from '@/shared/hooks/user/use-user';
 import { useEffect, useRef, useState } from 'react';
 
 interface IAddMedicineForm {
@@ -16,14 +16,15 @@ interface IAddMedicineForm {
 }
 
 function AddMedicineForm({ show }: IAddMedicineForm) {
-	const { loadUserMedicines } = useCalendar();
-
 	const ref = useRef<HTMLDivElement>(null);
+
+	const { addMedicine } = useUser();
 
 	const [name, setName] = useState('');
 	const [abbreviation, setAbbreviation] = useState('');
 	const [type, setType] = useState<MedicineType>(MEDICINE_TYPES.MIGRAINE_PAINKILLER);
 	const [height, setHeight] = useState(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const isFormValid = name.length > 0 && abbreviation.length > 0;
 
@@ -38,15 +39,23 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 	}, [show]);
 
 	const submitForm = async () => {
-		if (!isFormValid) return;
+		if (!isFormValid || isSubmitting) return;
 
-		await fetchUserMedicinesPost(name, abbreviation, type);
+		try {
+			setIsSubmitting(true);
 
-		loadUserMedicines();
+			addMedicine({ name, abbreviation, type });
 
-		setName('');
-		setAbbreviation('');
-		setType(MEDICINE_TYPES.MIGRAINE_PAINKILLER);
+			await fetchUserMedicinesPost(name, abbreviation, type);
+
+			setName('');
+			setAbbreviation('');
+			setType(MEDICINE_TYPES.MIGRAINE_PAINKILLER);
+		} catch (error) {
+			console.error('Failed to add medicine:', error);
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -64,6 +73,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 					onChange={(value) => {
 						setType(value as MedicineType);
 					}}
+					disabled={isSubmitting}
 					required
 				/>
 				<TextInput
@@ -72,6 +82,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 					value={name}
 					onChange={(event) => setName(event.target.value)}
 					placeholder='Name'
+					disabled={isSubmitting}
 					required
 				/>
 				<TextInput
@@ -80,14 +91,15 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 					value={abbreviation}
 					onChange={(event) => setAbbreviation(event.target.value)}
 					placeholder='Abbreviation'
+					disabled={isSubmitting}
 					required
 				/>
 
 				<SubmitButton
 					type={BUTTON_TYPES.BUTTON}
-					label='Save'
+					label={isSubmitting ? 'Saving...' : 'Save'}
 					onClick={submitForm}
-					disabled={!isFormValid}
+					disabled={!isFormValid || isSubmitting}
 					className='bg-purple-600/50 border-purple-700/20 text-white'
 				/>
 			</div>

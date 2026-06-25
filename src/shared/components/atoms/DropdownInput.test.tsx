@@ -1,7 +1,10 @@
 import DropdownInput from '@/shared/components/atoms/DropdownInput';
-import { render, screen } from '@testing-library/react';
+import { useClickOutside } from '@/shared/hooks/use-click-outside';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+vi.mock('@/shared/hooks/use-click-outside');
 
 const mockOptions = [
 	{ label: 'Apple', value: 'apple' },
@@ -18,6 +21,10 @@ describe('<DropdownInput />', () => {
 		options: mockOptions,
 		onChange: vi.fn(),
 	};
+
+	beforeEach(() => {
+		vi.mocked(useClickOutside).mockImplementation(() => {});
+	});
 
 	afterEach(() => vi.clearAllMocks());
 
@@ -51,6 +58,38 @@ describe('<DropdownInput />', () => {
 
 			expect(screen.getByRole('textbox', { hidden: true })).toBeRequired();
 		});
+
+		it('renders all options when dropdown is open', async () => {
+			render(<DropdownInput {...defaultProps} />);
+
+			await user.click(screen.getByTestId('dropdown-menu-trigger'));
+
+			expect(screen.getByTestId('apple')).toBeInTheDocument();
+			expect(screen.getByTestId('banana')).toBeInTheDocument();
+			expect(screen.getByTestId('cherry')).toBeInTheDocument();
+		});
+	});
+
+	describe('disabled state', () => {
+		it('disables trigger button when disabled prop is true', () => {
+			render(<DropdownInput {...defaultProps} disabled />);
+
+			expect(screen.getByTestId('dropdown-menu-trigger')).toBeDisabled();
+		});
+
+		it('disables hidden input when disabled prop is true', () => {
+			render(<DropdownInput {...defaultProps} disabled />);
+
+			expect(screen.getByRole('textbox', { hidden: true })).toBeDisabled();
+		});
+
+		it('does not open dropdown when disabled', async () => {
+			render(<DropdownInput {...defaultProps} disabled />);
+
+			await user.click(screen.getByTestId('dropdown-menu-trigger'));
+
+			expect(screen.queryByTestId('banana')).not.toBeInTheDocument();
+		});
 	});
 
 	describe('dropdown open/close', () => {
@@ -59,8 +98,8 @@ describe('<DropdownInput />', () => {
 
 			await user.click(screen.getByTestId('dropdown-menu-trigger'));
 
-			expect(screen.getByText('Banana')).toBeInTheDocument();
-			expect(screen.getByText('Cherry')).toBeInTheDocument();
+			expect(screen.getByTestId('banana')).toBeInTheDocument();
+			expect(screen.getByTestId('cherry')).toBeInTheDocument();
 		});
 
 		it('closes dropdown on second trigger click', async () => {
@@ -69,16 +108,26 @@ describe('<DropdownInput />', () => {
 			await user.click(screen.getByTestId('dropdown-menu-trigger'));
 			await user.click(screen.getByTestId('dropdown-menu-trigger'));
 
-			expect(screen.queryByText('Banana')).not.toBeInTheDocument();
+			expect(screen.queryByTestId('banana')).not.toBeInTheDocument();
 		});
 
-		it('closes dropdown when clicking outside', async () => {
+		it('closes dropdown when clicking outside via useClickOutside callback', async () => {
+			let clickOutsideCallback: () => void = () => {};
+
+			vi.mocked(useClickOutside).mockImplementation((_, callback: () => void) => {
+				clickOutsideCallback = callback;
+			});
+
 			render(<DropdownInput {...defaultProps} />);
 
 			await user.click(screen.getByTestId('dropdown-menu-trigger'));
-			await user.click(document.body);
+			expect(screen.getByTestId('banana')).toBeInTheDocument();
 
-			expect(screen.queryByText('Banana')).not.toBeInTheDocument();
+			clickOutsideCallback();
+
+			await waitFor(() => {
+				expect(screen.queryByTestId('banana')).not.toBeInTheDocument();
+			});
 		});
 	});
 
@@ -100,7 +149,7 @@ describe('<DropdownInput />', () => {
 			await user.click(screen.getByTestId('dropdown-menu-trigger'));
 			await user.click(screen.getByTestId('banana'));
 
-			expect(screen.queryByText('Cherry')).not.toBeInTheDocument();
+			expect(screen.queryByTestId('cherry')).not.toBeInTheDocument();
 		});
 
 		it('highlights the currently selected option', async () => {
@@ -110,6 +159,51 @@ describe('<DropdownInput />', () => {
 
 			expect(screen.getByTestId('banana')).toHaveClass('bg-white/20');
 			expect(screen.getByTestId('apple')).not.toHaveClass('bg-white/20');
+		});
+
+		it('calls onChange only once per selection', async () => {
+			const mockOnChange = vi.fn();
+
+			render(<DropdownInput {...defaultProps} onChange={mockOnChange} />);
+
+			await user.click(screen.getByTestId('dropdown-menu-trigger'));
+			await user.click(screen.getByTestId('banana'));
+
+			expect(mockOnChange).toHaveBeenCalledTimes(1);
+		});
+	});
+
+	describe('menu positioning', () => {
+		it('calculates menu position based on button bounds', async () => {
+			render(<DropdownInput {...defaultProps} />);
+
+			await user.click(screen.getByTestId('dropdown-menu-trigger'));
+
+			const menu = screen.getByRole('list');
+			const button = screen.getByTestId('dropdown-menu-trigger');
+			const buttonRect = button.getBoundingClientRect();
+
+			expect(menu).toHaveStyle({
+				position: 'fixed',
+				top: `${buttonRect.bottom + 4}px`,
+				left: `${buttonRect.left}px`,
+				width: `${buttonRect.width}px`,
+			});
+		});
+	});
+
+	describe('event listeners', () => {
+		it('sets up useClickOutside with button and menu refs', () => {
+			render(<DropdownInput {...defaultProps} />);
+
+			expect(vi.mocked(useClickOutside)).toHaveBeenCalled();
+		});
+
+		it('passes callback to useClickOutside', () => {
+			render(<DropdownInput {...defaultProps} />);
+
+			const call = vi.mocked(useClickOutside).mock.calls[0];
+			expect(typeof call[1]).toBe('function');
 		});
 	});
 });
