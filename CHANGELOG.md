@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.6.0...v1.7.0) (2026-07-01)
+
+
+### Features
+
+* update readme ([#86](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/86)) ([0951bcc](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/0951bcc5993af0dd931df5b20b5db9621c98eb19))
+
+
+### Bug Fixes
+
+* enhance timepicker ([#89](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/89)) ([ab3187d](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/ab3187de66742045ecc4942584469bb95f0278c7))
+* show stored value after not submiting ([#87](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/87)) ([9b76aa5](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/9b76aa5ff1c69e98dc8022a240aa0d639678a366))
+
 ## [1.6.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.5.0...v1.6.0) (2026-06-09)
 
 
