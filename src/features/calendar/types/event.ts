@@ -1,5 +1,5 @@
 import type { StrengthKey } from '@/features/calendar/constants/calendar';
-import type { SymptomType } from '@/shared/constants/event/event-details';
+import type { IntensityType, SymptomType } from '@/shared/constants/event/event-details';
 
 export type DescriptionEffectiveness = 'yes' | 'no' | '';
 
@@ -8,7 +8,7 @@ export type EventDescription = {
 		start: number;
 		end: number;
 	}[];
-	intensity: 'very-high' | 'high' | 'medium' | 'low';
+	intensity: IntensityType;
 	symptoms: SymptomType[];
 	medicine: string;
 	effectiveness: DescriptionEffectiveness[];

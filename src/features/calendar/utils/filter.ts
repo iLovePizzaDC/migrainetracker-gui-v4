@@ -1,74 +1,92 @@
-import type { Event } from '@/features/calendar/types/event';
+import type { Event, EventDescription } from '@/features/calendar/types/event';
 import { ANY_FILTER_TYPE, EFFECTIVENESS_TYPES } from '@/shared/constants/event/event-details';
 import type { EventFilter } from '@/shared/types/event/event';
 
-export function filterEvents(parsedEvent: Event, filter: EventFilter) {
-	const { intensity, symptoms, medicine, effectiveness, midas } = parsedEvent.description;
-	const {
-		intensity: intensityFilter,
-		symptom: symptomsFilter,
-		medicine: medicineFilter,
-		effectiveness: effectivenessFilter,
-		midas: midasFilter,
-	} = filter;
+function getEventMedicines(medicine: string): string[] {
+	return medicine
+		.split(',')
+		.map((m) => m.trim().toLowerCase())
+		.filter(Boolean);
+}
 
-	if (intensityFilter && intensity !== intensityFilter) {
-		return false;
-	}
+function matchesIntensity(description: EventDescription, filter: EventFilter): boolean {
+	if (!filter.intensity) return true;
+	return description.intensity === filter.intensity;
+}
 
-	if (symptomsFilter.length > 0) {
-		const missingSymptom = symptomsFilter.some((symptom) => {
-			if (symptom === ANY_FILTER_TYPE.ANY) {
-				return symptoms.length === 0;
-			} else {
-				return !symptoms.includes(symptom);
-			}
-		});
-		if (missingSymptom) return false;
-	}
+function matchesSymptoms(description: EventDescription, filter: EventFilter): boolean {
+	if (filter.symptom.length === 0) return true;
 
-	if (medicineFilter.length > 0) {
-		const allowedMedicines = medicineFilter.map((m) => m.abbreviation.toLowerCase());
-
-		const eventMedicines = medicine
-			.split(',')
-			.map((m) => m.trim().toLowerCase())
-			.filter(Boolean);
-
-		const missing = allowedMedicines.some((medicine) => {
-			if (medicine === ANY_FILTER_TYPE.ANY) {
-				return eventMedicines.length === 0;
-			} else {
-				return !eventMedicines.includes(medicine);
-			}
-		});
-		if (missing) return false;
-	}
-
-	if (effectivenessFilter) {
-		if (effectivenessFilter === EFFECTIVENESS_TYPES.EFFECTIVE) {
-			const anyWorked = effectiveness.some((status) => status === EFFECTIVENESS_TYPES.EFFECTIVE);
-			if (!anyWorked) return false;
-		} else if (effectivenessFilter === EFFECTIVENESS_TYPES.INEFFECTIVE) {
-			const anyNotWorked = effectiveness.some(
-				(status) => status === EFFECTIVENESS_TYPES.INEFFECTIVE,
-			);
-			if (!anyNotWorked) return false;
+	return filter.symptom.every((symptom) => {
+		if (symptom === ANY_FILTER_TYPE.ANY) {
+			return description.symptoms.length > 0;
 		}
+		return description.symptoms.includes(symptom);
+	});
+}
+
+function matchesMedicine(eventMedicines: string[], filter: EventFilter): boolean {
+	if (filter.medicine.length === 0) return true;
+
+	const allowedMedicines = filter.medicine.map((m) => m.abbreviation.toLowerCase());
+
+	return allowedMedicines.every((med) => {
+		if (med === ANY_FILTER_TYPE.ANY) {
+			return eventMedicines.length > 0;
+		}
+		return eventMedicines.includes(med);
+	});
+}
+
+function matchesEffectiveness(
+	description: EventDescription,
+	eventMedicines: string[],
+	filter: EventFilter,
+): boolean {
+	if (!filter.effectiveness) return true;
+
+	const allowedMedicines = filter.medicine.map((m) => m.abbreviation.toLowerCase());
+	const filtersSpecificMedicine =
+		allowedMedicines.length > 0 && !allowedMedicines.includes(ANY_FILTER_TYPE.ANY);
+
+	if (filtersSpecificMedicine) {
+		return allowedMedicines.every((med) => {
+			const index = eventMedicines.indexOf(med);
+			if (index === -1) return false;
+			return description.effectiveness[index] === filter.effectiveness;
+		});
 	}
 
-	if (midasFilter.length > 0) {
-		const missingMidas = midasFilter.some((key) => {
-			if (key === ANY_FILTER_TYPE.ANY) {
-				return false;
-			} else {
-				return !midas[key];
-			}
-		});
-		if (missingMidas) return false;
+	if (filter.effectiveness === EFFECTIVENESS_TYPES.EFFECTIVE) {
+		return description.effectiveness.includes(EFFECTIVENESS_TYPES.EFFECTIVE);
+	}
+	if (filter.effectiveness === EFFECTIVENESS_TYPES.INEFFECTIVE) {
+		return description.effectiveness.includes(EFFECTIVENESS_TYPES.INEFFECTIVE);
 	}
 
 	return true;
+}
+
+function matchesMidas(description: EventDescription, filter: EventFilter): boolean {
+	if (filter.midas.length === 0) return true;
+
+	return filter.midas.every((key) => {
+		if (key === ANY_FILTER_TYPE.ANY) return true;
+		return description.midas[key];
+	});
+}
+
+export function filterEvents(parsedEvent: Event, filter: EventFilter) {
+	const { description } = parsedEvent;
+	const eventMedicines = getEventMedicines(description.medicine);
+
+	return (
+		matchesIntensity(description, filter) &&
+		matchesSymptoms(description, filter) &&
+		matchesMedicine(eventMedicines, filter) &&
+		matchesEffectiveness(description, eventMedicines, filter) &&
+		matchesMidas(description, filter)
+	);
 }
 
 export const isDefaultFilter = (filter: EventFilter) => {
