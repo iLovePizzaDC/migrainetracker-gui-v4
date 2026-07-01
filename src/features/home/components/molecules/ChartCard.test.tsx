@@ -204,6 +204,26 @@ describe('<ChartCard /', () => {
 
 			expect(mockUpdateSetupByIndex).toHaveBeenCalled();
 		});
+
+		it('resets form to stored values after editing and cancelling', async () => {
+			render(<ChartCard {...defaultProps} />);
+
+			await user.click(screen.getByTestId('context-button'));
+			await user.click(screen.getByText('Edit'));
+
+			const titleInput = screen.getByLabelText('Title');
+			await user.clear(titleInput);
+			await user.type(titleInput, 'Changed title');
+			expect(titleInput).toHaveValue('Changed title');
+
+			await user.click(screen.getByTestId('context-button'));
+			await user.click(screen.getByText('Cancel'));
+
+			await user.click(screen.getByTestId('context-button'));
+			await user.click(screen.getByText('Edit'));
+
+			expect(screen.getByLabelText('Title')).toHaveValue('Test title');
+		});
 	});
 
 	describe('remove', () => {

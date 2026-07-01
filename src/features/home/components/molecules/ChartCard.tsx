@@ -152,6 +152,7 @@ function ChartCard({
 							filter,
 							timeframeCount,
 							timeframeUnit,
+							isEditing,
 						})}
 						onButtonClick={onEdit}
 						defaultIndex={index}
