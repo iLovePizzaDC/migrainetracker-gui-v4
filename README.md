@@ -42,7 +42,7 @@ sudo rm -rf /var/www/migrainetracker/
 sudo mkdir /var/www/migrainetracker
 sudo cp -r ~/dist/* /var/www/migrainetracker/
 sudo rm -rf ~/dist
-sudo chown -R www-data:www-data /var/www/migrainetracker
+sudo chown -R github-runner:github-runner /var/www/migrainetracker
 sudo chmod -R 755 /var/www/migrainetracker
 ```
 

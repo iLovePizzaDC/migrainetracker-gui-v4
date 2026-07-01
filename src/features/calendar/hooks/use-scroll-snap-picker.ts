@@ -12,6 +12,7 @@ export function useScrollSnapPicker(open: boolean, selectedHour: string, selecte
 	const hourRef = useRef<HTMLDivElement>(null);
 	const minuteRef = useRef<HTMLDivElement>(null);
 	const scrollTimeout = useRef<number | null>(null);
+	const pendingFlush = useRef<(() => void) | null>(null);
 
 	useEffect(() => {
 		if (!open) return;
@@ -59,9 +60,23 @@ export function useScrollSnapPicker(open: boolean, selectedHour: string, selecte
 
 		const el = e.currentTarget;
 
+		pendingFlush.current = () => handleScrollEnd(el, values, onSelect);
+
 		scrollTimeout.current = window.setTimeout(() => {
+			pendingFlush.current = null;
 			handleScrollEnd(el, values, onSelect);
 		}, 80);
+	};
+
+	const flushPendingScroll = () => {
+		if (scrollTimeout.current) {
+			clearTimeout(scrollTimeout.current);
+			scrollTimeout.current = null;
+		}
+		if (pendingFlush.current) {
+			pendingFlush.current();
+			pendingFlush.current = null;
+		}
 	};
 
 	return {
@@ -71,5 +86,6 @@ export function useScrollSnapPicker(open: boolean, selectedHour: string, selecte
 		minuteRef,
 		scrollToIndex,
 		handleScroll,
+		flushPendingScroll,
 	};
 }

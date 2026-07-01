@@ -1,8 +1,8 @@
 import * as userApi from '@/shared/api/user.api';
 import { useAuthCheck } from '@/shared/auth/use-auth-check';
+import type { User } from '@/shared/types/user/user';
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { User } from '../types/user/user';
 
 vi.mock('@/shared/api/user.api');
 

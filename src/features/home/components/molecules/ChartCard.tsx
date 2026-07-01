@@ -9,7 +9,7 @@ import { CARD_TYPES, CHART_TYPES } from '@/shared/constants/event/card';
 import type { CardType, ChartType, TimeFrameUnit } from '@/shared/types/cards/card';
 import type { EventFilter } from '@/shared/types/event/event';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface IChartCard {
 	index: number;
@@ -30,6 +30,8 @@ function ChartCard({
 	timeframeCount,
 	timeframeUnit,
 }: IChartCard) {
+	const contextButtonRef = useRef<HTMLButtonElement | null>(null);
+
 	const { removeSetupByIndex, updateSetupByIndex } = useCardSetups();
 	const { isLoading, areaData, pieData, currentPieValue, totalPieValue } = useChartData(
 		cardType,
@@ -55,7 +57,7 @@ function ChartCard({
 		<div
 			className='
                 w-full self-start
-                rounded-2xl p-6 relative
+                rounded-2xl p-3 relative
                 bg-transparent backdrop-blur-md
                 border border-white/20
                 shadow-lg shadow-black/20
@@ -63,22 +65,23 @@ function ChartCard({
             '
 		>
 			<div className='h-7 mb-2 flex items-center w-full relative'>
-				<div className='w-7 p-1 opacity-0 pointer-events-none' />
+				<div className='w-7 opacity-0 pointer-events-none' />
 
 				<h2 className='flex-1 text-lg font-semibold text-center'>{title}</h2>
 
 				<button
+					ref={contextButtonRef}
 					data-testid='context-button'
-					onClick={(event) => {
-						event.stopPropagation();
+					onClick={() => {
 						setContextOpen((v) => !v);
 					}}
-					className='hover:opacity-80 transition-opacity p-1'
+					className='hover:opacity-80 transition-opacity'
 				>
 					<EllipsisVerticalIcon className='h-7 w-7' />
 				</button>
 
 				<ContextMenu
+					contextButtonRef={contextButtonRef}
 					open={contextOpen}
 					setOpen={setContextOpen}
 					isEditing={isEditing}
@@ -114,7 +117,7 @@ function ChartCard({
 						)}
 					</div>
 
-					{!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 ? (
+					{!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 && (
 						<div className='text-center h-6'>
 							<p className='text-lg font-medium'>
 								{cardType !== CARD_TYPES.MEDICINE ? (
@@ -130,8 +133,6 @@ function ChartCard({
 								)}
 							</p>
 						</div>
-					) : (
-						<div className='w-6 h-6 opacity-0 pointer-events-none' />
 					)}
 				</div>
 				<div
@@ -151,6 +152,7 @@ function ChartCard({
 							filter,
 							timeframeCount,
 							timeframeUnit,
+							isEditing,
 						})}
 						onButtonClick={onEdit}
 						defaultIndex={index}

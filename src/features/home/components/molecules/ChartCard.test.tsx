@@ -1,9 +1,31 @@
 import ChartCard from '@/features/home/components/molecules/ChartCard';
 import { useChartData } from '@/features/home/hooks/use-chart-data';
 import { CARD_TYPES, CHART_TYPES, TIME_FRAME_UNITS } from '@/shared/constants/event/card';
+import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+const mockMedLabel = 'test medicine';
+const mockMedValue = 'tst_med';
+const mockUserMedicines = [
+	{
+		name: `${mockMedLabel} 1`,
+		abbreviation: `${mockMedValue}_1`,
+		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+	},
+	{
+		name: `${mockMedLabel} 2`,
+		abbreviation: `${mockMedValue}_2`,
+		type: MEDICINE_TYPES.PAINKILLER,
+	},
+];
+
+vi.mock('@/shared/hooks/user/use-user', () => ({
+	useUser: () => ({
+		medicines: mockUserMedicines,
+	}),
+}));
 
 const mockRemoveSetupByIndex = vi.fn();
 const mockUpdateSetupByIndex = vi.fn();
@@ -12,16 +34,6 @@ vi.mock('@/features/home/hooks/use-card-setups', () => ({
 	useCardSetups: () => ({
 		removeSetupByIndex: mockRemoveSetupByIndex,
 		updateSetupByIndex: mockUpdateSetupByIndex,
-	}),
-}));
-vi.mock('@/shared/hooks/user/use-user', () => ({
-	useUser: () => ({
-		userMedicineOptions: [
-			{
-				label: 'Test medicine 1',
-				value: 'tst_med_1',
-			},
-		],
 	}),
 }));
 vi.mock('@/features/home/hooks/use-chart-data', () => ({
@@ -191,6 +203,26 @@ describe('<ChartCard /', () => {
 			await user.click(screen.getByText('Submit'));
 
 			expect(mockUpdateSetupByIndex).toHaveBeenCalled();
+		});
+
+		it('resets form to stored values after editing and cancelling', async () => {
+			render(<ChartCard {...defaultProps} />);
+
+			await user.click(screen.getByTestId('context-button'));
+			await user.click(screen.getByText('Edit'));
+
+			const titleInput = screen.getByLabelText('Title');
+			await user.clear(titleInput);
+			await user.type(titleInput, 'Changed title');
+			expect(titleInput).toHaveValue('Changed title');
+
+			await user.click(screen.getByTestId('context-button'));
+			await user.click(screen.getByText('Cancel'));
+
+			await user.click(screen.getByTestId('context-button'));
+			await user.click(screen.getByText('Edit'));
+
+			expect(screen.getByLabelText('Title')).toHaveValue('Test title');
 		});
 	});
 

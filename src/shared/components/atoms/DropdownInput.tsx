@@ -9,10 +9,19 @@ interface IDropdownInput {
 	value: string;
 	options: DropdownOption[];
 	onChange: (value: string) => void;
+	disabled?: boolean;
 	required?: boolean;
 }
 
-function DropdownInput({ id, label, value, options, onChange, required = false }: IDropdownInput) {
+function DropdownInput({
+	id,
+	label,
+	value,
+	options,
+	onChange,
+	disabled = false,
+	required = false,
+}: IDropdownInput) {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const menuRef = useRef<HTMLUListElement>(null);
 
@@ -69,7 +78,15 @@ function DropdownInput({ id, label, value, options, onChange, required = false }
 				{label}
 			</label>
 
-			<input type='text' id={id} value={value} required={required} className='hidden' readOnly />
+			<input
+				type='text'
+				id={id}
+				value={value}
+				disabled={disabled}
+				required={required}
+				className='hidden'
+				readOnly
+			/>
 
 			<button
 				data-testid='dropdown-menu-trigger'
@@ -77,6 +94,7 @@ function DropdownInput({ id, label, value, options, onChange, required = false }
 				type='button'
 				className='w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/20 text-left'
 				onClick={() => (open ? setOpen(false) : openMenu())}
+				disabled={disabled}
 			>
 				{options.find((option) => option.value === value)?.label ?? 'Select...'}
 			</button>

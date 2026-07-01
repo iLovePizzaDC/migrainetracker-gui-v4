@@ -59,7 +59,13 @@ describe('<MidasCard />', () => {
 
 		it('renders nothing when user is null', () => {
 			vi.mocked(fetchMidasPieData).mockReturnValue(mockFetchMidasPieData());
-			vi.mocked(useUser).mockReturnValueOnce({ user: null, setUser: vi.fn() });
+			vi.mocked(useUser).mockReturnValueOnce({
+				user: null,
+				setUser: vi.fn(),
+				medicines: null,
+				addMedicine: vi.fn(),
+				removeMedicine: vi.fn(),
+			});
 			render(<MidasCard />);
 
 			expect(screen.queryByText('MIDAS Score')).not.toBeInTheDocument();

@@ -2,7 +2,6 @@ import type { ChartData } from '@/features/home/types/chart';
 import { fetchAreaData, fetchPieData } from '@/features/home/utils/fetch-helper';
 import { getDateRange } from '@/features/home/utils/get-date-range';
 import { mapAreaResponse } from '@/features/home/utils/map-chart-response';
-import { fetchUserMedicinesGet } from '@/shared/api/medicine.api';
 import { CARD_TYPES, CHART_TYPES } from '@/shared/constants/event/card';
 import { useUser } from '@/shared/hooks/user/use-user';
 import type { CardType, ChartType, TimeFrameUnit } from '@/shared/types/cards/card';
@@ -16,7 +15,7 @@ export function useChartData(
 	timeframeCount: number,
 	timeframeUnit: TimeFrameUnit,
 ) {
-	const { user } = useUser();
+	const { user, medicines } = useUser();
 
 	const [areaData, setAreaData] = useState<ChartData>([]);
 	const [pieData, setPieData] = useState<ChartData>([]);
@@ -26,12 +25,11 @@ export function useChartData(
 
 	useEffect(() => {
 		const collectChartData = async () => {
-			if (!user) return;
+			if (!user || !medicines) return;
 
 			setIsLoading(true);
 
 			const { startDate, endDate, totalDays } = getDateRange(timeframeCount, timeframeUnit);
-			const userMedicine = await fetchUserMedicinesGet();
 
 			if (chartType === CHART_TYPES.AREA) {
 				const response = await fetchAreaData(
@@ -40,7 +38,7 @@ export function useChartData(
 					timeframeCount,
 					timeframeUnit,
 					filter,
-					userMedicine,
+					medicines,
 				);
 				setAreaData(mapAreaResponse(response));
 				setIsLoading(false);
@@ -54,7 +52,7 @@ export function useChartData(
 					endDate,
 					totalDays,
 					filter,
-					userMedicine,
+					medicines,
 				);
 				setPieData(data);
 				setCurrentPieValue(value);
@@ -65,7 +63,7 @@ export function useChartData(
 		};
 
 		collectChartData();
-	}, [cardType, chartType, timeframeCount, timeframeUnit, user, filter]);
+	}, [cardType, chartType, timeframeCount, timeframeUnit, user, filter, medicines]);
 
 	return {
 		isLoading,
