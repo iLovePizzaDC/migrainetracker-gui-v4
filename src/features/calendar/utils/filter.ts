@@ -19,7 +19,7 @@ function matchesSymptoms(description: EventDescription, filter: EventFilter): bo
 
 	return filter.symptom.every((symptom) => {
 		if (symptom === ANY_FILTER_TYPE.ANY) {
-			return description.symptoms.length === 0;
+			return description.symptoms.length > 0;
 		}
 		return description.symptoms.includes(symptom);
 	});
@@ -32,7 +32,7 @@ function matchesMedicine(eventMedicines: string[], filter: EventFilter): boolean
 
 	return allowedMedicines.every((med) => {
 		if (med === ANY_FILTER_TYPE.ANY) {
-			return eventMedicines.length === 0;
+			return eventMedicines.length > 0;
 		}
 		return eventMedicines.includes(med);
 	});
