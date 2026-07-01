@@ -18,13 +18,11 @@ const fakeContext: ICalendarContext = {
 	nextMonth: () => {},
 	refetchEvents: async () => {},
 	collectMedDays: async () => {},
-	loadUserMedicines: async () => {},
 	calendarEvents: [],
 	filteredEvents: [],
 	medDaysCount: 3,
 	maxMedDaysCount: 10,
 	migrainosusFlags: [],
-	userMedicineOptions: [],
 	filter: {
 		intensity: null,
 		symptom: [],

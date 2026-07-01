@@ -75,9 +75,13 @@ function MigrainePanel({
 	const submitNewEntry = async () => {
 		try {
 			setIsLoading(true);
+
 			await fetchNewEntry(formatDateToUs(date), durations, intensity, symptoms, medicines, midas);
+
 			setSaveFeedback(FEEDBACK_TYPES.SUCCESS);
+
 			await refetchEvents();
+
 			onClose();
 		} catch (err) {
 			console.error(err);

@@ -6,20 +6,29 @@ import {
 	INTENSITY_TYPES,
 	SYMPTOM_TYPES,
 } from '@/shared/constants/event/event-details';
+import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 const mockMedLabel = 'test medicine';
 const mockMedValue = 'tst_med';
-const mockUserMedicine = {
-	label: `${mockMedLabel} 1`,
-	value: `${mockMedValue}_1`,
-};
+const mockUserMedicines = [
+	{
+		name: `${mockMedLabel} 1`,
+		abbreviation: `${mockMedValue}_1`,
+		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+	},
+	{
+		name: `${mockMedLabel} 2`,
+		abbreviation: `${mockMedValue}_2`,
+		type: MEDICINE_TYPES.PAINKILLER,
+	},
+];
 
 vi.mock('@/shared/hooks/user/use-user', () => ({
 	useUser: () => ({
-		userMedicineOptions: [mockUserMedicine],
+		medicines: mockUserMedicines,
 	}),
 }));
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
@@ -43,7 +52,7 @@ const mockEvent1 = {
 		],
 		intensity: INTENSITY_TYPES.HIGH,
 		symptoms: [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT, SYMPTOM_TYPES.SMELL],
-		medicine: mockUserMedicine.value,
+		medicine: `${mockMedValue}_1`,
 		effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE],
 		midas: {
 			workMissed: true,
@@ -66,7 +75,7 @@ const mockEvent2 = {
 		],
 		intensity: INTENSITY_TYPES.HIGH,
 		symptoms: [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT, SYMPTOM_TYPES.SMELL],
-		medicine: mockUserMedicine.value,
+		medicine: `${mockMedValue}_1`,
 		effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE],
 		midas: {
 			workMissed: true,
@@ -95,7 +104,6 @@ const mockUseCalendar = (overrides = {}) =>
 		},
 		setFilter: vi.fn(),
 		setMonth: vi.fn(),
-		userMedicineOptions: [mockUserMedicine],
 		...overrides,
 	}) as any;
 

@@ -1,8 +1,9 @@
 import MenuItem from '@/features/home/components/atoms/context-menu/MenuItem';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
-import { useRef, useState } from 'react';
+import { useRef, useState, type RefObject } from 'react';
 
 interface IContextOpen {
+	contextButtonRef: RefObject<HTMLButtonElement | null>;
 	open: boolean;
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	isEditing: boolean;
@@ -10,11 +11,18 @@ interface IContextOpen {
 	onRemoveClick: () => void;
 }
 
-function ContextMenu({ open, setOpen, isEditing, setIsEditing, onRemoveClick }: IContextOpen) {
+function ContextMenu({
+	contextButtonRef,
+	open,
+	setOpen,
+	isEditing,
+	setIsEditing,
+	onRemoveClick,
+}: IContextOpen) {
 	const menuRef = useRef<HTMLDivElement | null>(null);
 	const [removalVerified, setRemovalVerified] = useState(false);
 
-	useClickOutside(menuRef, () => {
+	useClickOutside([contextButtonRef, menuRef], () => {
 		setOpen(false);
 		setRemovalVerified(false);
 	});

@@ -1,9 +1,6 @@
-import * as medicineApi from '@/shared/api/medicine.api';
 import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import { getMohMedicineFilter } from '@/shared/utils/fetch-helper';
-import { afterEach, describe, expect, it, vi } from 'vitest';
-
-vi.mock('@/shared/api/medicine.api');
+import { describe, expect, it } from 'vitest';
 
 const makeMedicine = (abbreviation: string, type: string) => ({
 	name: abbreviation,
@@ -12,53 +9,50 @@ const makeMedicine = (abbreviation: string, type: string) => ({
 });
 
 describe('getMohMedicineFilter', () => {
-	afterEach(() => vi.clearAllMocks());
-
 	it('returns comma-separated abbreviations of MOH medicines', async () => {
-		vi.mocked(medicineApi.fetchUserMedicinesGet).mockResolvedValue([
-			makeMedicine('ibu', MEDICINE_TYPES.PAINKILLER),
-			makeMedicine('tri', MEDICINE_TYPES.MIGRAINE_PAINKILLER),
-		] as any);
+		const medicines = [
+			makeMedicine('at', MEDICINE_TYPES.PAINKILLER),
+			makeMedicine('zt-smt', MEDICINE_TYPES.MIGRAINE_PAINKILLER),
+		];
 
-		const result = await getMohMedicineFilter();
-		expect(result).toBe('ibu,tri');
+		const result = await getMohMedicineFilter(medicines as any);
+
+		expect(result).toBe('at,zt-smt');
 	});
 
 	it('filters out non-MOH medicine types', async () => {
-		vi.mocked(medicineApi.fetchUserMedicinesGet).mockResolvedValue([
-			makeMedicine('ibu', MEDICINE_TYPES.PAINKILLER),
+		const medicines = [
+			makeMedicine('at', MEDICINE_TYPES.PAINKILLER),
 			makeMedicine('vit', 'VITAMIN'),
-			makeMedicine('tri', MEDICINE_TYPES.MIGRAINE_PAINKILLER),
-		] as any);
+			makeMedicine('zt-smt', MEDICINE_TYPES.MIGRAINE_PAINKILLER),
+		];
 
-		const result = await getMohMedicineFilter();
-		expect(result).toBe('ibu,tri');
+		const result = await getMohMedicineFilter(medicines as any);
+
+		expect(result).toBe('at,zt-smt');
 	});
 
-	it('returns empty string when no MOH medicines exist', async () => {
-		vi.mocked(medicineApi.fetchUserMedicinesGet).mockResolvedValue([
-			makeMedicine('vit', 'VITAMIN'),
-		] as any);
+	it('returns empty string when medicines is null', async () => {
+		const result = await getMohMedicineFilter(null);
 
-		const result = await getMohMedicineFilter();
 		expect(result).toBe('');
 	});
 
 	it('returns empty string when medicines array is empty', async () => {
-		vi.mocked(medicineApi.fetchUserMedicinesGet).mockResolvedValue([]);
+		const result = await getMohMedicineFilter([]);
 
-		const result = await getMohMedicineFilter();
 		expect(result).toBe('');
 	});
 
 	it('includes both PAINKILLER and MIGRAINE_PAINKILLER types', async () => {
-		vi.mocked(medicineApi.fetchUserMedicinesGet).mockResolvedValue([
-			makeMedicine('ibu', MEDICINE_TYPES.PAINKILLER),
-			makeMedicine('tri', MEDICINE_TYPES.MIGRAINE_PAINKILLER),
-			makeMedicine('asp', MEDICINE_TYPES.PAINKILLER),
-		] as any);
+		const medicines = [
+			makeMedicine('at', MEDICINE_TYPES.PAINKILLER),
+			makeMedicine('zt-smt', MEDICINE_TYPES.MIGRAINE_PAINKILLER),
+			makeMedicine('st', MEDICINE_TYPES.PAINKILLER),
+		];
 
-		const result = await getMohMedicineFilter();
-		expect(result).toBe('ibu,tri,asp');
+		const result = await getMohMedicineFilter(medicines as any);
+
+		expect(result).toBe('at,zt-smt,st');
 	});
 });
