@@ -28,10 +28,20 @@ function TimePicker({
 	const [open, setOpen] = useState(false);
 	const [selectedHour = '12', selectedMinute = '00'] = value.split(':');
 
-	const { inputRef, pickerRef, hourRef, minuteRef, scrollToIndex, handleScroll } =
-		useScrollSnapPicker(open, selectedHour, selectedMinute);
+	const {
+		inputRef,
+		pickerRef,
+		hourRef,
+		minuteRef,
+		scrollToIndex,
+		handleScroll,
+		flushPendingScroll,
+	} = useScrollSnapPicker(open, selectedHour, selectedMinute);
 
-	useClickOutside([inputRef, pickerRef], () => setOpen(false));
+	useClickOutside([inputRef, pickerRef], () => {
+		flushPendingScroll();
+		setOpen(false);
+	});
 
 	return (
 		<div className='relative w-full space-y-1'>
