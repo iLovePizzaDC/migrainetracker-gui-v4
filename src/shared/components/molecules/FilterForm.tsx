@@ -17,7 +17,7 @@ import {
 	FILTER_FORM_VARIANTS,
 	type FilterFormVariant,
 } from '@/shared/constants/variants/filter-form';
-import { useUserMedicines } from '@/shared/hooks/user/use-user-medicines';
+import { useUser } from '@/shared/hooks/user/use-user';
 import type { EventFilter } from '@/shared/types/event/event';
 import type { DropdownOption } from '@/shared/types/input/input';
 
@@ -36,7 +36,15 @@ function FilterForm({
 	medicineInputVisible = true,
 	midasInputVisible = true,
 }: IFilterForm) {
-	const { userMedicineOptions } = useUserMedicines();
+	const { medicines } = useUser();
+
+	const medicineOptions: DropdownOption[] =
+		medicines === null
+			? []
+			: medicines.map((m) => ({
+					label: m.name,
+					value: m.abbreviation,
+				}));
 
 	const baseClasses =
 		variant === FILTER_FORM_VARIANTS.COMPACT
@@ -82,7 +90,7 @@ function FilterForm({
 					<Combobox
 						id='filterMedicine'
 						label='Medicine'
-						options={[ANY_FILTER_OPTIONS, ...userMedicineOptions]}
+						options={[ANY_FILTER_OPTIONS, ...medicineOptions]}
 						selected={filter.medicine.map((medicine) => ({
 							label: medicine.label,
 							value: medicine.abbreviation,

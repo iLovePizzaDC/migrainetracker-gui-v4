@@ -1,9 +1,10 @@
-import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { fetchUserMedicinesDelete } from '@/shared/api/medicine.api';
 import Combobox from '@/shared/components/atoms/Combobox';
 import { BUTTON_TYPES } from '@/shared/constants/input/button';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
+import { useUser } from '@/shared/hooks/user/use-user';
 import type { AppendMedicine } from '@/shared/types/calendar/calendar';
+import type { DropdownOption } from '@/shared/types/input/input';
 import { CheckBadgeIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 
@@ -16,24 +17,43 @@ interface IMedicineCombobox {
 function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombobox) {
 	const comboboxRef = useRef<HTMLDivElement | null>(null);
 
-	const { userMedicineOptions, loadUserMedicines } = useCalendar();
+	const { medicines: userMedicines, removeMedicine } = useUser();
 
 	const [deletionConfirmedFor, setDeletionConfirmedFor] = useState<string | null>(null);
+	const [deletingMedicine, setDeletingMedicine] = useState<string | null>(null);
 
 	useClickOutside(comboboxRef, () => {
 		setDeletionConfirmedFor(null);
 	});
 
-	const deleteMedicine = async (name: string, abbreviation: string) => {
-		await fetchUserMedicinesDelete(name, abbreviation);
+	const medicineOptions: DropdownOption[] =
+		userMedicines === null
+			? []
+			: userMedicines.map((m) => ({
+					label: m.name,
+					value: m.abbreviation,
+				}));
 
-		loadUserMedicines();
+	const deleteMedicine = async (name: string, abbreviation: string) => {
+		try {
+			setDeletingMedicine(abbreviation);
+
+			removeMedicine(abbreviation);
+
+			await fetchUserMedicinesDelete(name, abbreviation);
+
+			setDeletionConfirmedFor(null);
+		} catch (error) {
+			console.error('Failed to delete medicine:', error);
+		} finally {
+			setDeletingMedicine(null);
+		}
 	};
 
 	return (
 		<Combobox
 			id='meds'
-			options={userMedicineOptions}
+			options={medicineOptions}
 			selected={medicines.map((medicine) => ({
 				label: medicine.medicine.label,
 				value: medicine.medicine.abbreviation,
@@ -55,6 +75,7 @@ function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombob
 			disabled={disabled}
 			renderOptionActions={(option) => {
 				const isConfirming = deletionConfirmedFor === option.value;
+				const isDeleting = deletingMedicine === option.value;
 
 				return (
 					<button
@@ -65,12 +86,12 @@ function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombob
 							event.stopPropagation();
 							if (isConfirming) {
 								deleteMedicine(option.label, option.value);
-								setDeletionConfirmedFor(null);
 							} else {
 								setDeletionConfirmedFor(option.value);
 							}
 						}}
-						className='hover:text-red-500 transition-colors'
+						disabled={isDeleting}
+						className='hover:text-red-500 transition-colors disabled:opacity-50'
 					>
 						{isConfirming ? (
 							<CheckBadgeIcon data-testid='confirm-icon' className='h-4 w-4' />

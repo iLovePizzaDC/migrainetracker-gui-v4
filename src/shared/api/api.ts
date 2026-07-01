@@ -1,3 +1,5 @@
+import { fetchUserLogout } from '@/shared/api/user.api';
+import { GOOGLE_TOKEN_EXPIRED } from '@/shared/constants/api/exceptions';
 import axios from 'axios';
 
 const BASE_URL = import.meta.env.VITE_ENDPOINT_BASE_URL;
@@ -47,8 +49,16 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
 	(response) => response,
-	(error) => {
+	async (error) => {
 		const originalRequest = error.config;
+
+		if (error.response?.status === 401 && error.response?.data?.error === GOOGLE_TOKEN_EXPIRED) {
+			sessionStorage.setItem(GOOGLE_TOKEN_EXPIRED, 'true');
+
+			await fetchUserLogout();
+
+			return Promise.reject(error);
+		}
 
 		const isRefreshOrMeRequest =
 			originalRequest.url?.includes('auth/refresh') || originalRequest.url?.includes('auth/me');

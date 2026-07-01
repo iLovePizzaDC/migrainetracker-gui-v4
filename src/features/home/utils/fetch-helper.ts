@@ -24,7 +24,7 @@ const mapEventFilterToFilter = async (
 	filter: EventFilter,
 	isMoh: boolean = false,
 ): Promise<Filter> => {
-	const mohMedFilter = isMoh ? await getMohMedicineFilter() : undefined;
+	const mohMedFilter = isMoh ? await getMohMedicineFilter(userMedicines) : undefined;
 
 	const medHasAny = filter.medicine.some(
 		(medicine) => medicine.abbreviation === ANY_FILTER_OPTIONS.value,

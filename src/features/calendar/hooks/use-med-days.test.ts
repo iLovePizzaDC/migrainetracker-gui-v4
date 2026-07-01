@@ -1,11 +1,33 @@
 import { useMedDays } from '@/features/calendar/hooks/use-med-days';
 import * as api from '@/shared/api/migraine.api';
+import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import * as dateUtils from '@/shared/utils/date/date';
 import * as fetchHelper from '@/shared/utils/fetch-helper';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const fakeDate = new Date('2026-01-01');
+
+const mockMedLabel = 'test medicine';
+const mockMedValue = 'tst_med';
+const mockUserMedicines = [
+	{
+		name: `${mockMedLabel} 1`,
+		abbreviation: `${mockMedValue}_1`,
+		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+	},
+	{
+		name: `${mockMedLabel} 2`,
+		abbreviation: `${mockMedValue}_2`,
+		type: MEDICINE_TYPES.PAINKILLER,
+	},
+];
+
+vi.mock('@/shared/hooks/user/use-user', () => ({
+	useUser: () => ({
+		medicines: mockUserMedicines,
+	}),
+}));
 
 describe('useMedDays', () => {
 	beforeEach(() => {

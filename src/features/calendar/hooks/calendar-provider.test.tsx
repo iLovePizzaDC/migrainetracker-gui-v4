@@ -13,31 +13,35 @@ import {
 	INTENSITY_TYPES,
 	SYMPTOM_TYPES,
 } from '@/shared/constants/event/event-details';
-import { useUserMedicines } from '@/shared/hooks/user/use-user-medicines';
-import type { DropdownOption } from '@/shared/types/input/input';
-import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
+import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
+import { act, render, renderHook, screen } from '@testing-library/react';
 import { useContext } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/features/calendar/hooks/use-calendar-date');
 vi.mock('@/features/calendar/hooks/use-calendar-events');
 vi.mock('@/features/calendar/hooks/use-med-days');
-vi.mock('@/shared/hooks/user/use-user-medicines');
-
-const mockSetMonth = vi.fn();
-const mockPrevMonth = vi.fn();
-const mockNextMonth = vi.fn();
-const mockRefetchEvents = vi.fn().mockResolvedValue(undefined);
-const mockCollectMedDays = vi.fn().mockResolvedValue(undefined);
-const mockLoadUserMedicines = vi.fn().mockResolvedValue(undefined);
-const mockSetFilter = vi.fn();
+vi.mock('@/shared/hooks/user/use-user', () => ({
+	useUser: () => ({
+		medicines: mockUserMedicines,
+	}),
+}));
 
 const mockMedLabel = 'test medicine';
 const mockMedValue = 'tst_med';
-const mockUserMedicine = {
-	label: `${mockMedLabel} 1`,
-	value: `${mockMedValue}_1`,
-};
+
+const mockUserMedicines = [
+	{
+		name: `${mockMedLabel} 1`,
+		abbreviation: `${mockMedValue}_1`,
+		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+	},
+	{
+		name: `${mockMedLabel} 2`,
+		abbreviation: `${mockMedValue}_2`,
+		type: MEDICINE_TYPES.PAINKILLER,
+	},
+];
 
 const mockEvent = {
 	date: new Date('2026-01-03'),
@@ -50,7 +54,7 @@ const mockEvent = {
 		],
 		intensity: INTENSITY_TYPES.HIGH,
 		symptoms: [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT, SYMPTOM_TYPES.SMELL],
-		medicine: mockUserMedicine.value,
+		medicine: mockMedValue,
 		effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE],
 		midas: {
 			workMissed: true,
@@ -71,9 +75,9 @@ const defaultCalendarDate = {
 	daysInMonth: 31,
 	month: 'May',
 	year: 2026,
-	setMonth: mockSetMonth,
-	prevMonth: mockPrevMonth,
-	nextMonth: mockNextMonth,
+	setMonth: vi.fn(),
+	prevMonth: vi.fn(),
+	nextMonth: vi.fn(),
 };
 
 const defaultCalendarEvents = {
@@ -87,20 +91,15 @@ const defaultCalendarEvents = {
 		effectiveness: null,
 		midas: [],
 	},
-	setFilter: mockSetFilter,
+	setFilter: vi.fn(),
 	isLoading: false,
-	refetchEvents: mockRefetchEvents,
+	refetchEvents: vi.fn().mockResolvedValue(undefined),
 };
 
 const defaultMedDays = {
 	medDaysCount: 3,
 	maxMedDaysCount: 10,
-	collectMedDays: mockCollectMedDays,
-};
-
-const defaultUserMedicines = {
-	userMedicineOptions: [] as DropdownOption[],
-	loadUserMedicines: mockLoadUserMedicines,
+	collectMedDays: vi.fn().mockResolvedValue(undefined),
 };
 
 function setupMocks(
@@ -108,19 +107,17 @@ function setupMocks(
 		calendarDate?: Partial<typeof defaultCalendarDate>;
 		calendarEvents?: Partial<typeof defaultCalendarEvents>;
 		medDays?: Partial<typeof defaultMedDays>;
-		userMedicines?: Partial<typeof defaultUserMedicines>;
 	} = {},
 ) {
-	vi.mocked(useCalendarDate).mockReturnValue({ ...defaultCalendarDate, ...overrides.calendarDate });
+	vi.mocked(useCalendarDate).mockReturnValue({
+		...defaultCalendarDate,
+		...overrides.calendarDate,
+	});
 	vi.mocked(useCalendarEvents).mockReturnValue({
 		...defaultCalendarEvents,
 		...overrides.calendarEvents,
 	});
 	vi.mocked(useMedDays).mockReturnValue({ ...defaultMedDays, ...overrides.medDays });
-	vi.mocked(useUserMedicines).mockReturnValue({
-		...defaultUserMedicines,
-		...overrides.userMedicines,
-	});
 }
 
 function renderWithProvider() {
@@ -162,14 +159,6 @@ describe('CalendarProvider', () => {
 			expect(result.current.maxMedDaysCount).toBe(15);
 		});
 
-		it('provides userMedicineOptions from useUserMedicines', () => {
-			setupMocks({ userMedicines: { userMedicineOptions: [mockUserMedicine] } });
-
-			const result = renderWithProvider();
-
-			expect(result.current.userMedicineOptions).toEqual([mockUserMedicine]);
-		});
-
 		it('forwards setMonth, prevMonth, nextMonth from useCalendarDate', () => {
 			const result = renderWithProvider();
 
@@ -177,9 +166,9 @@ describe('CalendarProvider', () => {
 			result.current.prevMonth();
 			result.current.nextMonth();
 
-			expect(mockSetMonth).toHaveBeenCalledWith(new Date('2026-06-01'));
-			expect(mockPrevMonth).toHaveBeenCalledTimes(1);
-			expect(mockNextMonth).toHaveBeenCalledTimes(1);
+			expect(defaultCalendarDate.setMonth).toHaveBeenCalledWith(new Date('2026-06-01'));
+			expect(defaultCalendarDate.prevMonth).toHaveBeenCalledTimes(1);
+			expect(defaultCalendarDate.nextMonth).toHaveBeenCalledTimes(1);
 		});
 
 		it('forwards setFilter from useCalendarEvents', () => {
@@ -194,46 +183,31 @@ describe('CalendarProvider', () => {
 
 			result.current.setFilter(newFilter);
 
-			expect(mockSetFilter).toHaveBeenCalledWith(newFilter);
+			expect(defaultCalendarEvents.setFilter).toHaveBeenCalledWith(newFilter);
 		});
 	});
 
 	describe('refetchEvents', () => {
-		it('refetchEvents calls _refetchEvents and collectMedDays', async () => {
+		it('refetchEvents calls the hook refetchEvents function', async () => {
 			const result = renderWithProvider();
 
 			await act(async () => {
 				await result.current.refetchEvents();
 			});
 
-			expect(mockRefetchEvents).toHaveBeenCalledTimes(1);
-			expect(mockCollectMedDays).toHaveBeenCalled();
-		});
-
-		it('refetchEvents calls _refetchEvents before collectMedDays', async () => {
-			const order: string[] = [];
-			mockRefetchEvents.mockImplementation(async () => {
-				order.push('refetch');
-			});
-			mockCollectMedDays.mockImplementation(async () => {
-				order.push('collect');
-			});
-
-			const result = renderWithProvider();
-
-			await act(async () => {
-				await result.current.refetchEvents();
-			});
-
-			expect(order).toEqual(['collect', 'refetch', 'collect']);
+			expect(defaultCalendarEvents.refetchEvents).toHaveBeenCalledTimes(1);
 		});
 	});
 
-	describe('useEffect', () => {
-		it('calls collectMedDays on mount', async () => {
-			renderWithProvider();
+	describe('collectMedDays', () => {
+		it('collectMedDays calls the hook collectMedDays function', async () => {
+			const result = renderWithProvider();
 
-			await waitFor(() => expect(mockCollectMedDays).toHaveBeenCalledTimes(1));
+			await act(async () => {
+				await result.current.collectMedDays();
+			});
+
+			expect(defaultMedDays.collectMedDays).toHaveBeenCalled();
 		});
 	});
 
@@ -249,23 +223,21 @@ describe('CalendarProvider', () => {
 		});
 	});
 
-	describe('useCalendarEvents args', () => {
+	describe('hook arguments', () => {
 		it('passes firstDayOfMonth, lastDayOfMonth, daysInMonth to useCalendarEvents', () => {
 			renderWithProvider();
 
-			expect(useCalendarEvents).toHaveBeenCalledWith(
+			expect(vi.mocked(useCalendarEvents)).toHaveBeenCalledWith(
 				defaultCalendarDate.firstDayOfMonth,
 				defaultCalendarDate.lastDayOfMonth,
 				defaultCalendarDate.daysInMonth,
 			);
 		});
-	});
 
-	describe('useMedDays args', () => {
 		it('passes currentDate to useMedDays', () => {
 			renderWithProvider();
 
-			expect(useMedDays).toHaveBeenCalledWith(defaultCalendarDate.currentDate);
+			expect(vi.mocked(useMedDays)).toHaveBeenCalledWith(defaultCalendarDate.currentDate);
 		});
 	});
 });
