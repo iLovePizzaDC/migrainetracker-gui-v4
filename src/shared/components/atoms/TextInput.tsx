@@ -6,10 +6,19 @@ interface ITextInput {
 	value: string;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	placeholder?: string;
+	disabled?: boolean;
 	required?: boolean;
 }
 
-function TextInput({ id, label, value, onChange, placeholder, required }: ITextInput) {
+function TextInput({
+	id,
+	label,
+	value,
+	onChange,
+	placeholder,
+	disabled = false,
+	required = false,
+}: ITextInput) {
 	return (
 		<div>
 			<label htmlFor={id} className='block text-sm font-medium mb-1'>
@@ -22,6 +31,7 @@ function TextInput({ id, label, value, onChange, placeholder, required }: ITextI
 				onChange={onChange}
 				className='w-full p-2 rounded-lg bg-transparent backdrop-blur-sm border border-white/25'
 				placeholder={placeholder}
+				disabled={disabled}
 				required={required}
 			/>
 		</div>

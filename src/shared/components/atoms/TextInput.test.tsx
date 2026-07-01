@@ -41,6 +41,12 @@ describe('<TextInput />', () => {
 		expect(mockOnChange).toHaveBeenCalled();
 	});
 
+	it('is disabled if prop is true', () => {
+		render(<TextInput {...defaultProps} disabled />);
+
+		expect(screen.getByRole('textbox')).toBeDisabled();
+	});
+
 	it('is required if prop is true', () => {
 		render(<TextInput {...defaultProps} required />);
 

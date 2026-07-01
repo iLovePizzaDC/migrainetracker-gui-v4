@@ -5,17 +5,28 @@ import MigrainePanel from '@/features/calendar/components/organisms/MigrainePane
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import type { Entry, StoredEntry } from '@/features/calendar/types/calendar';
 import { createEntry, enrichMedicineLabels } from '@/features/calendar/utils/event-parser';
+import { useUser } from '@/shared/hooks/user/use-user';
+import type { DropdownOption } from '@/shared/types/input/input';
 import { normalizeDate } from '@/shared/utils/date/date';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 function Calendar() {
-	const { isLoading, date, calendarEvents, setMonth, userMedicineOptions } = useCalendar();
+	const { isLoading, date, calendarEvents, setMonth } = useCalendar();
+	const { medicines } = useUser();
 
 	const [isPanelOpen, setIsPanelOpen] = useState(false);
 	const [entry, setEntry] = useState<Entry | null>(null);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	const [isStoredEntryDisplaying, setIsStoredEntryDisplaying] = useState(false);
+
+	const medicineOptions: DropdownOption[] =
+		medicines === null
+			? []
+			: medicines.map((m) => ({
+					label: m.name,
+					value: m.abbreviation,
+				}));
 
 	const onDayClick = (day: number) => {
 		const selected = new Date(date);
@@ -28,7 +39,7 @@ function Calendar() {
 		const entry: Entry | null = foundEvent ? createEntry(foundEvent) : null;
 
 		if (entry) {
-			entry.medicines = enrichMedicineLabels(entry.medicines, userMedicineOptions);
+			entry.medicines = enrichMedicineLabels(entry.medicines, medicineOptions);
 		}
 
 		setIsStoredEntryDisplaying(false);

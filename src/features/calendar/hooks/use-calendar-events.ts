@@ -108,7 +108,7 @@ export function useCalendarEvents(
 		);
 	}, [rawEvents, filter, daysInMonth, firstDayOfMonth, lastDayOfMonth]);
 
-	const refetchEvents = () => loadEvents(new AbortController());
+	const refetchEvents = useCallback(async () => loadEvents(new AbortController()), [loadEvents]);
 
 	return {
 		calendarEvents,

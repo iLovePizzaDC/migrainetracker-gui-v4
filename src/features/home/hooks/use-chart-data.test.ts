@@ -2,14 +2,16 @@ import { useChartData } from '@/features/home/hooks/use-chart-data';
 import * as fetchHelper from '@/features/home/utils/fetch-helper';
 import * as getDateRangeUtil from '@/features/home/utils/get-date-range';
 import * as mapChartResponse from '@/features/home/utils/map-chart-response';
-import * as medicineApi from '@/shared/api/medicine.api';
 import { CARD_TYPES, CHART_TYPES, TIME_FRAME_UNITS } from '@/shared/constants/event/card';
+import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import * as useUserHook from '@/shared/hooks/user/use-user';
 import type { CardType, ChartType, TimeFrameUnit } from '@/shared/types/cards/card';
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/shared/hooks/user/use-user');
+vi.mock('@/shared/hooks/user/use-user', () => ({
+	useUser: vi.fn(),
+}));
 vi.mock('@/shared/api/medicine.api');
 vi.mock('@/features/home/utils/fetch-helper');
 vi.mock('@/features/home/utils/get-date-range');
@@ -31,6 +33,21 @@ const mockDateRange = {
 	totalDays: 31,
 };
 
+const mockMedLabel = 'test medicine';
+const mockMedValue = 'tst_med';
+const mockUserMedicines = [
+	{
+		name: `${mockMedLabel} 1`,
+		abbreviation: `${mockMedValue}_1`,
+		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+	},
+	{
+		name: `${mockMedLabel} 2`,
+		abbreviation: `${mockMedValue}_2`,
+		type: MEDICINE_TYPES.PAINKILLER,
+	},
+];
+
 function renderChartData(
 	cardType: CardType = CARD_TYPES.MIGRAINE,
 	chartType: ChartType = CHART_TYPES.AREA,
@@ -49,9 +66,12 @@ function renderChartData(
 
 describe('useChartData', () => {
 	beforeEach(() => {
-		vi.mocked(useUserHook.useUser).mockReturnValue({ user: mockUser } as any);
+		vi.mocked(useUserHook.useUser).mockReturnValue({
+			user: mockUser,
+			medicines: mockUserMedicines,
+		} as any);
+
 		vi.mocked(getDateRangeUtil.getDateRange).mockReturnValue(mockDateRange as any);
-		vi.mocked(medicineApi.fetchUserMedicinesGet).mockResolvedValue([] as any);
 		vi.mocked(fetchHelper.fetchAreaData).mockResolvedValue([] as any);
 		vi.mocked(fetchHelper.fetchPieData).mockResolvedValue({ data: [], value: 0 } as any);
 		vi.mocked(mapChartResponse.mapAreaResponse).mockReturnValue([]);
@@ -79,7 +99,15 @@ describe('useChartData', () => {
 
 			renderChartData();
 
-			expect(medicineApi.fetchUserMedicinesGet).not.toHaveBeenCalled();
+			expect(fetchHelper.fetchAreaData).not.toHaveBeenCalled();
+		});
+
+		it('does not fetch when medicines is null', () => {
+			vi.mocked(useUserHook.useUser).mockReturnValue({ medicines: null } as any);
+
+			renderChartData();
+
+			expect(fetchHelper.fetchAreaData).not.toHaveBeenCalled();
 		});
 	});
 
@@ -98,7 +126,7 @@ describe('useChartData', () => {
 				30,
 				TIME_FRAME_UNITS.DAYS,
 				mockFilter,
-				[],
+				mockUserMedicines,
 			);
 			expect(result.current.areaData).toEqual(fakeAreaData);
 		});
@@ -121,7 +149,7 @@ describe('useChartData', () => {
 		});
 	});
 
-	describe('pie cart', () => {
+	describe('pie chart', () => {
 		it('fetches pie data when chartType is PIE', async () => {
 			const fakePieData = [{ name: 'A', value: 10 }];
 			vi.mocked(fetchHelper.fetchPieData).mockResolvedValue({ data: fakePieData, value: 7 } as any);
@@ -136,7 +164,7 @@ describe('useChartData', () => {
 				mockDateRange.endDate,
 				mockDateRange.totalDays,
 				mockFilter,
-				[],
+				mockUserMedicines,
 			);
 			expect(result.current.pieData).toEqual(fakePieData);
 			expect(result.current.currentPieValue).toBe(7);
