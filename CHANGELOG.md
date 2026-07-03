@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.0...v1.7.1) (2026-07-03)
+
+
+### Bug Fixes
+
+* calendar filter with medicine and effectiveness ([#94](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/94)) ([a81a8a1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/a81a8a1a96d53cf7e8084cfce807ad6e516f1e36))
+
 ## [1.7.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.6.0...v1.7.0) (2026-07-01)
 
 
