@@ -2,7 +2,6 @@ name: CI & Deploy
 
 on:
   push:
-    branches: [main]
     tags:
       - "v*"
   pull_request:
@@ -16,10 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - run: npm ci
       - run: npm run type-check
 
@@ -27,10 +28,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - run: npm ci
       - run: npm run lint
 
@@ -38,10 +41,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - run: npm ci
       - run: npm run test
 
@@ -49,10 +54,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - run: npm ci
       - run: npm audit --audit-level=high --omit=dev
         continue-on-error: true
@@ -60,16 +67,21 @@ jobs:
   build:
     needs: [typecheck, lint, test, security]
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - run: npm ci
+
       - run: npm run build
         env:
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+
       - uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -86,7 +98,7 @@ jobs:
           name: dist
           path: dist
 
-      - name: Backup
+      - name: Backup current version
         run: |
           rm -rf /var/www/migrainetracker.bak
           cp -r /var/www/migrainetracker /var/www/migrainetracker.bak || true
@@ -96,13 +108,12 @@ jobs:
           rm -rf /var/www/migrainetracker/*
           cp -r dist/* /var/www/migrainetracker/
 
-      - name: Health Check
-        id: healthcheck
-        run: curl --fail --retry 30 --retry-delay 2 --retry-all-errors https://migrainetracker.de
+      - name: Health check
+        run: |
+          curl --fail --retry 20 --retry-delay 2 https://migrainetracker.de
 
       - name: Rollback on failure
         if: failure()
         run: |
           rm -rf /var/www/migrainetracker/*
           cp -r /var/www/migrainetracker.bak/* /var/www/migrainetracker/
-          echo "Rollback completed"
