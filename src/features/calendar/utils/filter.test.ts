@@ -141,6 +141,17 @@ describe('filterEvents', () => {
 			});
 			expect(result).toBe(true);
 		});
+
+		it('trims whitespace and ignores empty entries in the medicine string', () => {
+			const result = filterEvents(makeEvent({ medicine: ' med_a , , med_b ' }), {
+				...defaultFilter,
+				medicine: [
+					{ abbreviation: 'med_a', label: 'Medicine a' },
+					{ abbreviation: 'med_b', label: 'Medicine b' },
+				],
+			});
+			expect(result).toBe(true);
+		});
 	});
 
 	describe('effectiveness', () => {
@@ -174,6 +185,137 @@ describe('filterEvents', () => {
 				effectiveness: EFFECTIVENESS_TYPES.INEFFECTIVE,
 			});
 			expect(result).toBe(false);
+		});
+	});
+
+	describe('effectiveness combined with a specific medicine filter', () => {
+		it('returns true when the filtered medicine matches the required effectiveness at its own index', () => {
+			const result = filterEvents(
+				makeEvent({
+					medicine: 'med_a,med_b',
+					effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE, EFFECTIVENESS_TYPES.INEFFECTIVE],
+				}),
+				{
+					...defaultFilter,
+					medicine: [{ abbreviation: 'med_a', label: 'Medicine a' }],
+					effectiveness: EFFECTIVENESS_TYPES.EFFECTIVE,
+				},
+			);
+			expect(result).toBe(true);
+		});
+
+		it('returns false when the filtered medicine does not match the required effectiveness at its own index', () => {
+			const result = filterEvents(
+				makeEvent({
+					medicine: 'med_a,med_b',
+					effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE, EFFECTIVENESS_TYPES.INEFFECTIVE],
+				}),
+				{
+					...defaultFilter,
+					medicine: [{ abbreviation: 'med_b', label: 'Medicine b' }],
+					effectiveness: EFFECTIVENESS_TYPES.EFFECTIVE,
+				},
+			);
+			expect(result).toBe(false);
+		});
+
+		it('returns false when the filtered medicine is not present on the event', () => {
+			const result = filterEvents(
+				makeEvent({
+					medicine: 'med_a,med_b',
+					effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE, EFFECTIVENESS_TYPES.INEFFECTIVE],
+				}),
+				{
+					...defaultFilter,
+					medicine: [{ abbreviation: 'med_c', label: 'Medicine c' }],
+					effectiveness: EFFECTIVENESS_TYPES.EFFECTIVE,
+				},
+			);
+			expect(result).toBe(false);
+		});
+
+		it('returns true when all filtered medicines match their own effectiveness', () => {
+			const result = filterEvents(
+				makeEvent({
+					medicine: 'med_a,med_b',
+					effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE, EFFECTIVENESS_TYPES.EFFECTIVE],
+				}),
+				{
+					...defaultFilter,
+					medicine: [
+						{ abbreviation: 'med_a', label: 'Medicine a' },
+						{ abbreviation: 'med_b', label: 'Medicine b' },
+					],
+					effectiveness: EFFECTIVENESS_TYPES.EFFECTIVE,
+				},
+			);
+			expect(result).toBe(true);
+		});
+
+		it('returns false when only one of several filtered medicines matches the required effectiveness', () => {
+			const result = filterEvents(
+				makeEvent({
+					medicine: 'med_a,med_b',
+					effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE, EFFECTIVENESS_TYPES.INEFFECTIVE],
+				}),
+				{
+					...defaultFilter,
+					medicine: [
+						{ abbreviation: 'med_a', label: 'Medicine a' },
+						{ abbreviation: 'med_b', label: 'Medicine b' },
+					],
+					effectiveness: EFFECTIVENESS_TYPES.EFFECTIVE,
+				},
+			);
+			expect(result).toBe(false);
+		});
+
+		it('is case-insensitive when matching medicine abbreviation for the effectiveness lookup', () => {
+			const result = filterEvents(
+				makeEvent({
+					medicine: 'MED_A,med_b',
+					effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE, EFFECTIVENESS_TYPES.INEFFECTIVE],
+				}),
+				{
+					...defaultFilter,
+					medicine: [{ abbreviation: 'med_a', label: 'Medicine a' }],
+					effectiveness: EFFECTIVENESS_TYPES.EFFECTIVE,
+				},
+			);
+			expect(result).toBe(true);
+		});
+
+		it('checks each filtered medicine against its own index regardless of the filter order', () => {
+			const result = filterEvents(
+				makeEvent({
+					medicine: 'med_a,med_b',
+					effectiveness: [EFFECTIVENESS_TYPES.EFFECTIVE, EFFECTIVENESS_TYPES.INEFFECTIVE],
+				}),
+				{
+					...defaultFilter,
+					medicine: [
+						{ abbreviation: 'med_b', label: 'Medicine b' },
+						{ abbreviation: 'med_a', label: 'Medicine a' },
+					],
+					effectiveness: EFFECTIVENESS_TYPES.EFFECTIVE,
+				},
+			);
+			expect(result).toBe(false);
+		});
+
+		it('falls back to the includes-based check when the medicine filter is ANY', () => {
+			const result = filterEvents(
+				makeEvent({
+					medicine: 'med_a,med_b',
+					effectiveness: [EFFECTIVENESS_TYPES.INEFFECTIVE, EFFECTIVENESS_TYPES.EFFECTIVE],
+				}),
+				{
+					...defaultFilter,
+					medicine: [{ abbreviation: ANY_FILTER_TYPE.ANY, label: ANY_INPUT_FILTER_OPTION.label }],
+					effectiveness: EFFECTIVENESS_TYPES.EFFECTIVE,
+				},
+			);
+			expect(result).toBe(true);
 		});
 	});
 
