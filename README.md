@@ -25,7 +25,7 @@ VITE_GOOGLE_CLIENT_ID="changeme"
 
 The `.env` file is automatically loaded and must not be committed.
 
-## Deploy new version
+## Manually deploy new version
 
 First build the code with
 
