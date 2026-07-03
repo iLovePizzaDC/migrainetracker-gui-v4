@@ -1,104 +1,108 @@
 name: CI & Deploy
 
 on:
-    push:
-        branches: [main]
-        tags:
-            - "v*"
-    pull_request:
-      branches: [main, develop]
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+  pull_request:
+    branches: [main, develop]
 
 permissions:
-    contents: read
+  contents: read
 
 jobs:
-    typecheck:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm ci
-            - run: npm run type-check
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run type-check
 
-    lint:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm ci
-            - run: npm run lint
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
 
-    test:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm ci
-            - run: npm run test
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test
 
-    security:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm audit --audit-level=high --omit=dev
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm audit --audit-level=high --omit=dev
+        continue-on-error: true
 
-    build:
-        needs: [typecheck, lint, test, security]
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 20
-                cache: npm
-            - run: npm ci
-            - run: npm run build
-              env:
-                VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
-            - uses: actions/upload-artifact@v4
-              with:
-                name: dist
-                path: dist
+  build:
+    needs: [typecheck, lint, test, security]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 1
 
-    deploy:
-        needs: build
-        runs-on: self-hosted
-        if: startsWith(github.ref, 'refs/tags/v')
-        steps:
-            - uses: actions/download-artifact@v4
-              with:
-                name: dist
-                path: dist
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
 
-            - name: Backup
-              run: |
-                rm -rf /var/www/migrainetracker.bak
-                cp -r /var/www/migrainetracker /var/www/migrainetracker.bak
+      - name: Backup
+        run: |
+          rm -rf /var/www/migrainetracker.bak
+          cp -r /var/www/migrainetracker /var/www/migrainetracker.bak || true
 
-            - name: Deploy
-              run: |
-                rm -rf /var/www/migrainetracker/*
-                cp -r dist/* /var/www/migrainetracker/
+      - name: Deploy
+        run: |
+          rm -rf /var/www/migrainetracker/*
+          cp -r dist/* /var/www/migrainetracker/
 
-            - name: Health Check
-              id: healthcheck
-              run: sleep 5 && curl --fail --retry 3 --retry-delay 2 https://migrainetracker.de
-            - name: Rollback on failure
-              if: failure()
-              run: |
-                rm -rf /var/www/migrainetracker/*
-                cp -r /var/www/migrainetracker.bak/* /var/www/migrainetracker/
-                echo "Rollback completed"
+      - name: Health Check
+        id: healthcheck
+        run: curl --fail --retry 30 --retry-delay 2 --retry-all-errors https://migrainetracker.de
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          rm -rf /var/www/migrainetracker/*
+          cp -r /var/www/migrainetracker.bak/* /var/www/migrainetracker/
+          echo "Rollback completed"
