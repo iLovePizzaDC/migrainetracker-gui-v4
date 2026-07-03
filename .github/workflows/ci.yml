@@ -11,11 +11,21 @@ permissions:
   contents: read
 
 jobs:
-  typecheck:
+  security-secrets:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+
+  typecheck:
+    needs: security-secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -25,10 +35,10 @@ jobs:
       - run: npm run type-check
 
   lint:
+    needs: security-secrets
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -38,6 +48,7 @@ jobs:
       - run: npm run lint
 
   test:
+    needs: security-secrets
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,10 +62,10 @@ jobs:
       - run: npm run test
 
   security:
+    needs: security-secrets
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -70,14 +81,12 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
       - run: npm ci
-
       - run: npm run build
         env:
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
