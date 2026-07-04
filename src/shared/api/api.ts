@@ -15,37 +15,20 @@ export const api = axios.create({
 
 let isRefreshing = false;
 let failedQueue: Array<{
-	onSuccess: (token: string) => void;
+	onSuccess: (value?: unknown) => void;
 	onError: (error: unknown) => void;
 }> = [];
 
-const processQueue = (error: unknown, token: string | null = null) => {
+const processQueue = (error: unknown, value?: unknown) => {
 	failedQueue.forEach((prom) => {
 		if (error) {
 			prom.onError(error);
 		} else {
-			prom.onSuccess(token || '');
+			prom.onSuccess(value);
 		}
 	});
 	failedQueue = [];
 };
-
-api.interceptors.request.use(
-	(config) => {
-		const token = sessionStorage.getItem('authToken');
-		const expiry = sessionStorage.getItem('authTokenExpiry');
-
-		if (token && expiry && Date.now() < Number(expiry)) {
-			config.headers.Authorization = `Bearer ${token}`;
-		} else if (expiry && Date.now() >= Number(expiry)) {
-			sessionStorage.removeItem('authToken');
-			sessionStorage.removeItem('authTokenExpiry');
-		}
-
-		return config;
-	},
-	(error) => Promise.reject(error),
-);
 
 api.interceptors.response.use(
 	(response) => response,
@@ -53,10 +36,7 @@ api.interceptors.response.use(
 		const originalRequest = error.config;
 
 		if (error.response?.status === 401 && error.response?.data?.error === GOOGLE_TOKEN_EXPIRED) {
-			sessionStorage.setItem(GOOGLE_TOKEN_EXPIRED, 'true');
-
 			await fetchUserLogout();
-
 			return Promise.reject(error);
 		}
 
@@ -68,8 +48,7 @@ api.interceptors.response.use(
 				return new Promise((onSuccess, onError) => {
 					failedQueue.push({ onSuccess, onError });
 				})
-					.then((token) => {
-						originalRequest.headers.Authorization = `Bearer ${token}`;
+					.then(() => {
 						return api(originalRequest);
 					})
 					.catch((err) => Promise.reject(err));
@@ -81,24 +60,12 @@ api.interceptors.response.use(
 			return new Promise((resolve, reject) => {
 				api
 					.post('auth/refresh', {}, { withCredentials: true })
-					.then((response) => {
-						const newToken = response.data.accessToken;
-						const expiryTime = response.data.expiresIn
-							? Date.now() + response.data.expiresIn * 1000
-							: Date.now() + 60 * 60 * 1000;
-
-						sessionStorage.setItem('authToken', newToken);
-						sessionStorage.setItem('authTokenExpiry', expiryTime.toString());
-
-						api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
-						originalRequest.headers.Authorization = `Bearer ${newToken}`;
-
-						processQueue(null, newToken);
+					.then(() => {
+						processQueue(null);
 						resolve(api(originalRequest));
 					})
 					.catch((err) => {
-						processQueue(err, null);
-						sessionStorage.clear();
+						processQueue(err);
 						reject(err);
 					})
 					.finally(() => {
