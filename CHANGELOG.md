@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.1...v1.7.2) (2026-07-04)
+
+
+### Bug Fixes
+
+* use httponly ([#102](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/102)) ([9d7b210](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/9d7b2100923b5ac729b43605d8ae086e24c3c8a5))
+* use httponly ([#102](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/102)) ([310ddea](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/310ddead6ec7cb66ba00b5541f05357c7f9a3fd5))
+
 ## [1.7.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.0...v1.7.1) (2026-07-03)
 
 
