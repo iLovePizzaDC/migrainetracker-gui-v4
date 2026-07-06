@@ -24,6 +24,7 @@ dist-ssr
 *.sw?
 
 # env files
-.env.local
+.env*
+!.env.example
 
 coverage
