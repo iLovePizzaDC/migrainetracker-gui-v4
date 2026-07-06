@@ -193,27 +193,9 @@ npm run test:ui
 - `feat!: xxx` → Major version (`1.0.0 → 2.0.0`)
 - `chore: xxx` → no release
 
----
+## License
 
-## 🎯 Best Practices
+**Personal Portfolio Project** - Source code available for review by potential employers only.
+Redistribution and commercial use prohibited without permission.
 
-- Keep components small – Each organism should focus on one feature
-- Use TypeScript – Define types for all data and props
-- Centralize API calls – All fetches in `src/shared/api/`
-- Reuse atoms – Use existing atomic components instead of creating new ones
-- State management – Use Context + hooks per feature, avoid prop drilling
-- Responsive design – Test on mobile, tablet, and desktop
-
----
-
-## 📚 Resources
-
-- React Documentation
-- TypeScript Handbook
-- Tailwind CSS Docs
-- Vite Guide
-- Vitest Docs
-
----
-
-Part of the MigraineTracker ecosystem – a personal health tracking project combining frontend UI and backend analytics.
+© 2025 Nico Betz
