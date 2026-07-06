@@ -216,4 +216,4 @@ npm run test:ui
 
 ---
 
-Part of the MigraineTracker ecosystem – a personal health tracking project combining frontend UI and [backend](https://github.com/iLovePizzaDC/migraineTrackerV3) analytics.
+Part of the MigraineTracker ecosystem – a personal health tracking project combining frontend UI and backend analytics.
