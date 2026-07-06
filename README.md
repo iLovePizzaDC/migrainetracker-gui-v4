@@ -12,7 +12,6 @@ MigraineTracker GUI helps users monitor their migraine patterns over time with:
 - **Episode details** – Track duration, intensity, symptoms, and medications
 - **Health metrics** – MIDAS (Migraine Disability Assessment) scoring
 - **Analytics dashboard** – Overview of patterns and trends
-- **Export functionality** – Download your migraine data
 
 Built with React 19, TypeScript, and Vite for a responsive, fast experience.
 
@@ -144,7 +143,6 @@ Log migraine episodes with:
 Additional functionality:
 
 - Edit and update previous entries
-- Export data as CSV
 
 ### Home Page (`/home`)
 
