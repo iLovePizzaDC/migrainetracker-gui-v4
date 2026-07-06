@@ -95,3 +95,10 @@ sudo chmod -R 755 /var/www/migrainetracker
 - `fix: xxx` → Patch version (1.0.0 → 1.0.1)
 - `feat!: xxx` → Major version (1.0.0 → 2.0.0)
 - `chore: xxx` → no release
+
+## License
+
+**Personal Portfolio Project** - Source code available for review by potential employers only.
+Redistribution and commercial use prohibited without permission.
+
+© 2025 Nico Betz
