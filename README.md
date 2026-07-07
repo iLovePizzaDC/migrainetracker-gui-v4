@@ -14,6 +14,17 @@ MigraineTracker GUI helps users monitor their migraine patterns over time with:
 - **Analytics dashboard** – Overview of patterns and trends
 
 Built with React 19, TypeScript, and Vite for a responsive, fast experience.
+A modern web application for tracking, logging, and analyzing migraine episodes with detailed health metrics and insights.
+
+---
+
+## ⭐ Highlights
+
+- Designed a feature-based React architecture combined with Atomic Design component organization, built to scale with future modules
+- Implemented a full Google OAuth authentication flow with protected routes and secure session-cookie handling
+- Built a reusable UI component library (atoms/molecules/organisms) shared across features
+- Wrote comprehensive component and hook tests with Vitest and React Testing Library
+- Set up an automated CI/CD pipeline with GitHub Actions, including security audits, automated releases, and automatic rollback on health-check failure
 
 ---
 
@@ -46,6 +57,72 @@ src/
 ```
 
 ### Design Pattern: Atomic Design + Feature-Driven
+
+- **Atoms**: Smallest reusable UI elements (buttons, inputs, dropdowns)
+- **Molecules**: Simple component combinations
+- **Organisms**: Complete feature sections (Calendar, MigrainePanel, Cards)
+- **Features**: Self-contained domain modules with their own context & hooks
+- **Shared**: Reusable assets used across multiple features
+
+### How it fits together
+
+1. **Authentication** – Users log in via Google OAuth (handled by backend session cookie)
+2. **Home/Dashboard** – Overview cards show MIDAS scores, analytics, and trends
+3. **Calendar** – Users select a date and open the MigrainePanel to log details
+4. **MigrainePanel** – Form component for capturing duration, intensity, symptoms, medications, and MIDAS data
+5. **Data Flow** – All API calls go through `src/shared/api/`, state is managed via React Context providers per feature
+
+## 📸 Screenshots
+
+![Dashboard](./docs/dashboard.png)
+![Calendar view](./docs/calendar.png)
+
+---
+
+## 🎯 Overview
+
+MigraineTracker GUI helps users monitor their migraine patterns over time with:
+
+- **Calendar view** – Log migraine episodes day by day
+- **Episode details** – Track duration, intensity, symptoms, and medications
+- **Health metrics** – MIDAS (Migraine Disability Assessment) scoring
+- **Analytics dashboard** – Overview of patterns and trends
+
+Built with React 19, TypeScript, and Vite, with a focus on maintainability, type safety, and developer experience.
+
+---
+
+## 🏗️ Architecture
+
+### Folder Structure
+
+```text
+src/
+├── app/
+│   ├── components/
+│   │   └── organisms/        # App-level components (Navigation, Footer)
+│   ├── styles/
+│   └── utils/
+├── features/                 # Feature modules (self-contained)
+│   ├── calendar/              # Migraine logging and calendar view
+│   ├── home/                  # Dashboard with analytics cards
+│   └── landing-page/          # Authentication entry point
+├── shared/
+│   ├── api/                  # API communication (axios-based)
+│   ├── auth/                  # Google OAuth & session management
+│   ├── components/
+│   │   └── atoms/             # Reusable UI components
+│   ├── constants/             # App-wide constants
+│   ├── hooks/                 # Custom React hooks
+│   ├── routing/               # Route protection logic
+│   ├── types/                 # TypeScript type definitions
+│   └── utils/                 # Helper functions
+└── main.tsx                   # Entry point
+```
+
+### Component Architecture
+
+The application follows a feature-driven architecture, where each domain module is self-contained, combined with Atomic Design principles for organizing shared UI components:
 
 - **Atoms**: Smallest reusable UI elements (buttons, inputs, dropdowns)
 - **Molecules**: Simple component combinations
@@ -195,7 +272,6 @@ npm run test:ui
 
 ## License
 
-**Personal Portfolio Project** - Source code available for review by potential employers only.
-Redistribution and commercial use prohibited without permission.
+Personal portfolio project. See [LICENSE](./LICENSE) for details.
 
 © 2025 Nico Betz
