@@ -1,12 +1,15 @@
 import type { MigraineEvent, ProphylaxisEvent } from '@/features/calendar/types/event';
 import { determineStrength } from '@/features/calendar/utils/event-highlight';
-import { parseEventDescription } from '@/features/calendar/utils/event-parser';
+import {
+	parseMigraineEventDescription,
+	parseProphylaxisEventDescription,
+} from '@/features/calendar/utils/event-parser';
 import type { RawEventResponse } from '@/shared/api/types/event';
 
 export function mapMigraineEvents(raw: RawEventResponse[]): MigraineEvent[] {
 	return raw
 		.map((event) => {
-			const description = parseEventDescription(event);
+			const description = parseMigraineEventDescription(event);
 			if (!description) return null;
 			return {
 				date: new Date(event.start.date),
@@ -20,11 +23,11 @@ export function mapMigraineEvents(raw: RawEventResponse[]): MigraineEvent[] {
 
 export function mapProphylaxisEvents(raw: RawEventResponse[]): ProphylaxisEvent[] {
 	return raw
-		.map(
-			(event): ProphylaxisEvent => ({
+		.map((event) => {
+			return {
 				date: new Date(event.start.date),
-				summary: event.summary,
-			}),
-		)
+				description: parseProphylaxisEventDescription(event),
+			} satisfies ProphylaxisEvent;
+		})
 		.sort((a, b) => a.date.getTime() - b.date.getTime());
 }

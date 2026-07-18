@@ -1,35 +1,46 @@
 import { determineStrength } from '@/features/calendar/utils/event-highlight';
 import { mapMigraineEvents, mapProphylaxisEvents } from '@/features/calendar/utils/event-mapper';
-import { parseEventDescription } from '@/features/calendar/utils/event-parser';
+import {
+	parseMigraineEventDescription,
+	parseProphylaxisEventDescription,
+} from '@/features/calendar/utils/event-parser';
 import type { RawEventResponse } from '@/shared/api/types/event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/features/calendar/utils/event-parser', () => ({
-	parseEventDescription: vi.fn(),
+	parseMigraineEventDescription: vi.fn(),
+	parseProphylaxisEventDescription: vi.fn(),
 }));
 vi.mock('@/features/calendar/utils/event-highlight', () => ({
 	determineStrength: vi.fn(),
 }));
 
-const makeRawEvent = (dateStr: string, overrides: Partial<RawEventResponse> = {}) =>
+const makeRawMigraineEvent = (dateStr: string, overrides: Partial<RawEventResponse> = {}) =>
 	({
 		start: { date: dateStr },
 		summary: 'Migräne',
 		...overrides,
 	}) as RawEventResponse;
 
+const makeRawProphylaxisEvent = (dateStr: string, overrides: Partial<RawEventResponse> = {}) =>
+	({
+		start: { date: dateStr },
+		summary: 'Prophylaxis',
+		...overrides,
+	}) as RawEventResponse;
+
 describe('mapMigraineEvents', () => {
 	beforeEach(() => {
-		vi.mocked(parseEventDescription).mockReturnValue({} as any);
+		vi.mocked(parseMigraineEventDescription).mockReturnValue({} as any);
 		vi.mocked(determineStrength).mockReturnValue(200);
 	});
 
 	it('maps raw events to MigraineEvent objects', () => {
 		const description = { intensity: 'high' } as any;
-		vi.mocked(parseEventDescription).mockReturnValue(description);
+		vi.mocked(parseMigraineEventDescription).mockReturnValue(description);
 		vi.mocked(determineStrength).mockReturnValue(500);
 
-		const [result] = mapMigraineEvents([makeRawEvent('2026-01-10')]);
+		const [result] = mapMigraineEvents([makeRawMigraineEvent('2026-01-10')]);
 
 		expect(result.date).toEqual(new Date('2026-01-10'));
 		expect(result.description).toBe(description);
@@ -38,19 +49,22 @@ describe('mapMigraineEvents', () => {
 
 	it('calls determineStrength with the parsed description', () => {
 		const description = { intensity: 'low' } as any;
-		vi.mocked(parseEventDescription).mockReturnValue(description);
+		vi.mocked(parseMigraineEventDescription).mockReturnValue(description);
 
-		mapMigraineEvents([makeRawEvent('2026-01-10')]);
+		mapMigraineEvents([makeRawMigraineEvent('2026-01-10')]);
 
 		expect(determineStrength).toHaveBeenCalledWith(description);
 	});
 
 	it('drops events where parseEventDescription returns null', () => {
-		vi.mocked(parseEventDescription)
+		vi.mocked(parseMigraineEventDescription)
 			.mockReturnValueOnce(null)
 			.mockReturnValueOnce({} as any);
 
-		const result = mapMigraineEvents([makeRawEvent('2026-01-10'), makeRawEvent('2026-01-11')]);
+		const result = mapMigraineEvents([
+			makeRawMigraineEvent('2026-01-10'),
+			makeRawMigraineEvent('2026-01-11'),
+		]);
 
 		expect(result).toHaveLength(1);
 		expect(result[0].date).toEqual(new Date('2026-01-11'));
@@ -58,9 +72,9 @@ describe('mapMigraineEvents', () => {
 
 	it('sorts events by date ascending', () => {
 		const result = mapMigraineEvents([
-			makeRawEvent('2026-01-20'),
-			makeRawEvent('2026-01-05'),
-			makeRawEvent('2026-01-12'),
+			makeRawMigraineEvent('2026-01-20'),
+			makeRawMigraineEvent('2026-01-05'),
+			makeRawMigraineEvent('2026-01-12'),
 		]);
 
 		const dates = result.map((e) => e.date.toISOString());
@@ -74,13 +88,20 @@ describe('mapMigraineEvents', () => {
 
 describe('mapProphylaxisEvents', () => {
 	it('maps raw events to ProphylaxisEvent objects', () => {
-		const [result] = mapProphylaxisEvents([makeRawEvent('2026-01-10', { summary: 'Botox' })]);
+		const description = { medication: 'aimovig', dose: '70mg' } as any;
+		vi.mocked(parseProphylaxisEventDescription).mockReturnValue(description);
 
-		expect(result).toEqual({ date: new Date('2026-01-10'), summary: 'Botox' });
+		const [result] = mapProphylaxisEvents([makeRawProphylaxisEvent('2026-01-10')]);
+
+		expect(result.date).toEqual(new Date('2026-01-10'));
+		expect(result.description).toBe(description);
 	});
 
 	it('sorts events by date ascending', () => {
-		const result = mapProphylaxisEvents([makeRawEvent('2026-01-20'), makeRawEvent('2026-01-05')]);
+		const result = mapProphylaxisEvents([
+			makeRawProphylaxisEvent('2026-01-20'),
+			makeRawProphylaxisEvent('2026-01-05'),
+		]);
 
 		expect(result[0].date).toEqual(new Date('2026-01-05'));
 		expect(result[1].date).toEqual(new Date('2026-01-20'));

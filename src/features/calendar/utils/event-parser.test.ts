@@ -3,8 +3,8 @@ import type { MigraineEvent } from '@/features/calendar/types/event';
 import {
 	createEntry,
 	enrichMedicineLabels,
-	parseEventDescription,
 	parseMedicineData,
+	parseMigraineEventDescription,
 } from '@/features/calendar/utils/event-parser';
 import { INTENSITY_TYPES, SYMPTOM_TYPES } from '@/shared/constants/event/event-details';
 import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
@@ -40,9 +40,9 @@ const makeEvent = (overrides: Partial<MigraineEvent['description']> = {}): Migra
 	},
 });
 
-describe('parseEventDescription', () => {
+describe('parseMigraineEventDescription', () => {
 	it('parses a valid object description', () => {
-		const result = parseEventDescription({
+		const result = parseMigraineEventDescription({
 			description: { intensity: INTENSITY_TYPES.HIGH, symptoms: [SYMPTOM_TYPES.NOISE] },
 		} as any);
 
@@ -50,7 +50,7 @@ describe('parseEventDescription', () => {
 	});
 
 	it('parses a JSON string description', () => {
-		const result = parseEventDescription({
+		const result = parseMigraineEventDescription({
 			description: JSON.stringify({ intensity: INTENSITY_TYPES.LOW }),
 		} as any);
 
@@ -58,7 +58,7 @@ describe('parseEventDescription', () => {
 	});
 
 	it('splits effectiveness string into array', () => {
-		const result = parseEventDescription({
+		const result = parseMigraineEventDescription({
 			description: { effectiveness: 'yes,no,yes' },
 		} as any);
 
@@ -66,7 +66,7 @@ describe('parseEventDescription', () => {
 	});
 
 	it('leaves effectiveness array unchanged', () => {
-		const result = parseEventDescription({
+		const result = parseMigraineEventDescription({
 			description: { effectiveness: ['yes', 'no'] },
 		} as any);
 
@@ -74,7 +74,7 @@ describe('parseEventDescription', () => {
 	});
 
 	it('splits symptoms string into trimmed array', () => {
-		const result = parseEventDescription({
+		const result = parseMigraineEventDescription({
 			description: { symptoms: 'noi, lig , sme' },
 		} as any);
 
@@ -82,7 +82,7 @@ describe('parseEventDescription', () => {
 	});
 
 	it('leaves symptoms array unchanged', () => {
-		const result = parseEventDescription({
+		const result = parseMigraineEventDescription({
 			description: { symptoms: [SYMPTOM_TYPES.NOISE] },
 		} as any);
 
@@ -90,7 +90,7 @@ describe('parseEventDescription', () => {
 	});
 
 	it('returns null when description is invalid JSON', () => {
-		const result = parseEventDescription({
+		const result = parseMigraineEventDescription({
 			description: '{ invalid json',
 		} as any);
 
@@ -98,7 +98,7 @@ describe('parseEventDescription', () => {
 	});
 
 	it('returns null when description is null', () => {
-		const result = parseEventDescription({ description: null } as any);
+		const result = parseMigraineEventDescription({ description: null } as any);
 
 		expect(result).toBeNull();
 	});

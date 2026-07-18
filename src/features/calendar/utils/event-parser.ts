@@ -3,11 +3,14 @@ import type {
 	DescriptionEffectiveness,
 	MigraineDescription,
 	MigraineEvent,
+	ProphylaxisDescription,
 } from '@/features/calendar/types/event';
 import type { RawEventResponse } from '@/shared/api/types/event';
 import { parseDecimalToTime } from '@/shared/utils/date/date';
 
-export const parseEventDescription = (event: RawEventResponse): MigraineDescription | null => {
+export const parseMigraineEventDescription = (
+	event: RawEventResponse,
+): MigraineDescription | null => {
 	try {
 		const description =
 			typeof event.description === 'string' ? JSON.parse(event.description) : event.description;
@@ -25,6 +28,19 @@ export const parseEventDescription = (event: RawEventResponse): MigraineDescript
 		}
 
 		return description;
+	} catch {
+		return null;
+	}
+};
+
+// TODO tests
+export const parseProphylaxisEventDescription = (
+	event: RawEventResponse,
+): ProphylaxisDescription | null => {
+	try {
+		return typeof event.description === 'string'
+			? JSON.parse(event.description)
+			: event.description;
 	} catch {
 		return null;
 	}

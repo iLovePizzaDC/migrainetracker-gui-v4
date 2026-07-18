@@ -31,7 +31,12 @@ export type MigraineEvent = {
 	strength: StrengthKey;
 };
 
+export type ProphylaxisDescription = {
+	medication: string;
+	dose: string;
+};
+
 export type ProphylaxisEvent = {
 	date: Date;
-	summary: string;
+	description: ProphylaxisDescription | null;
 };
