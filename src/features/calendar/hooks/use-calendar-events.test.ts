@@ -28,8 +28,9 @@ vi.mock('@/features/calendar/utils/event-mapper', () => ({
 	mapProphylaxisEvents: vi.fn((raw: RawEventResponse[]) =>
 		raw.map((event) => ({
 			date: new Date(event.start.date),
-			description: event.description ?? '', // TODO adjusted type
-			recurrence: 'recurrence',
+			description:
+				typeof event.description === 'string' ? JSON.parse(event.description) : event.description,
+			recurrence: event.recurrence,
 		})),
 	),
 }));
@@ -46,8 +47,14 @@ const DAYS_IN_MONTH = 31;
 const makeRawEvent = (dateStr: string) =>
 	({ start: { date: dateStr } }) as unknown as RawEventResponse;
 
-const makeRawProphylaxisEvent = (dateStr: string, summary = 'Botox') =>
-	({ start: { date: dateStr }, summary }) as unknown as RawEventResponse;
+const makeRawProphylaxisEvent = (dateStr: string, overrides: Partial<RawEventResponse> = {}) =>
+	({
+		start: { date: dateStr },
+		summary: 'Prophylaxis',
+		description: JSON.stringify({ medication: 'Aimovig', dose: '70mg' }),
+		recurrence: ['RRULE:FREQ=WEEKLY;INTERVAL=4'],
+		...overrides,
+	}) as unknown as RawEventResponse;
 
 function renderCalendarEvents() {
 	return renderHook(() => useCalendarEvents(FIRST_DAY, LAST_DAY, DAYS_IN_MONTH));
@@ -112,14 +119,21 @@ describe('useCalendarEvents', () => {
 
 		it('maps fetched prophylaxis events', async () => {
 			vi.mocked(fetchProphylaxisEvents).mockResolvedValue([
-				makeRawProphylaxisEvent('2026-01-12', 'Botox'),
+				makeRawProphylaxisEvent('2026-01-12', {
+					description: JSON.stringify({ medication: 'Aimovig', dose: '70mg' }),
+					recurrence: ['RRULE:FREQ=WEEKLY;INTERVAL=4'],
+				}),
 			]);
 
 			const { result } = renderCalendarEvents();
 
 			await waitFor(() => expect(result.current.isLoading).toBe(false));
 			expect(result.current.prophylaxisEvents).toEqual([
-				{ date: new Date('2026-01-12'), summary: 'Botox' },
+				{
+					date: new Date('2026-01-12'),
+					description: { medication: 'Aimovig', dose: '70mg' },
+					recurrence: ['RRULE:FREQ=WEEKLY;INTERVAL=4'],
+				},
 			]);
 		});
 

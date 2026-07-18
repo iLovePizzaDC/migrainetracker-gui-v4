@@ -87,6 +87,10 @@ describe('mapMigraineEvents', () => {
 });
 
 describe('mapProphylaxisEvents', () => {
+	beforeEach(() => {
+		vi.mocked(parseProphylaxisEventDescription).mockReturnValue({} as any);
+	});
+
 	it('maps raw events to ProphylaxisEvent objects', () => {
 		const description = { medication: 'aimovig', dose: '70mg' } as any;
 		vi.mocked(parseProphylaxisEventDescription).mockReturnValue(description);
@@ -95,6 +99,44 @@ describe('mapProphylaxisEvents', () => {
 
 		expect(result.date).toEqual(new Date('2026-01-10'));
 		expect(result.description).toBe(description);
+	});
+
+	it('calls parseProphylaxisEventDescription with the raw event', () => {
+		const event = makeRawProphylaxisEvent('2026-01-10');
+
+		mapProphylaxisEvents([event]);
+
+		expect(parseProphylaxisEventDescription).toHaveBeenCalledWith(event);
+	});
+
+	it('maps the recurrence field from the raw event', () => {
+		const event = makeRawProphylaxisEvent('2026-01-10', { recurrence: ['RRULE:FREQ=WEEKLY'] });
+
+		const [result] = mapProphylaxisEvents([event]);
+
+		expect(result.recurrence).toEqual(['RRULE:FREQ=WEEKLY']);
+	});
+
+	it('sets recurrence to undefined when the raw event has none', () => {
+		const event = makeRawProphylaxisEvent('2026-01-10', { recurrence: undefined });
+
+		const [result] = mapProphylaxisEvents([event]);
+
+		expect(result.recurrence).toBeUndefined();
+	});
+
+	it('drops events where parseProphylaxisEventDescription returns null', () => {
+		vi.mocked(parseProphylaxisEventDescription)
+			.mockReturnValueOnce(null)
+			.mockReturnValueOnce({} as any);
+
+		const result = mapProphylaxisEvents([
+			makeRawProphylaxisEvent('2026-01-10'),
+			makeRawProphylaxisEvent('2026-01-11'),
+		]);
+
+		expect(result).toHaveLength(1);
+		expect(result[0].date).toEqual(new Date('2026-01-11'));
 	});
 
 	it('sorts events by date ascending', () => {

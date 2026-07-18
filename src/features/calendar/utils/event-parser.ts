@@ -33,7 +33,6 @@ export const parseMigraineEventDescription = (
 	}
 };
 
-// TODO tests
 export const parseProphylaxisEventDescription = (
 	event: RawEventResponse,
 ): ProphylaxisDescription | null => {

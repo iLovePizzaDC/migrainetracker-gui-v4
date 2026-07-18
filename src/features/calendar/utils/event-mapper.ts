@@ -21,15 +21,17 @@ export function mapMigraineEvents(raw: RawEventResponse[]): MigraineEvent[] {
 		.sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
-// TODO tests bc recurrence
 export function mapProphylaxisEvents(raw: RawEventResponse[]): ProphylaxisEvent[] {
 	return raw
 		.map((event) => {
+			const description = parseProphylaxisEventDescription(event);
+			if (!description) return null;
 			return {
 				date: new Date(event.start.date),
-				description: parseProphylaxisEventDescription(event),
+				description,
 				recurrence: event.recurrence,
 			} satisfies ProphylaxisEvent;
 		})
+		.filter((e): e is ProphylaxisEvent => e !== null)
 		.sort((a, b) => a.date.getTime() - b.date.getTime());
 }
