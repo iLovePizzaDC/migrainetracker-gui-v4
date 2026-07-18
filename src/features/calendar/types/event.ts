@@ -39,4 +39,5 @@ export type ProphylaxisDescription = {
 export type ProphylaxisEvent = {
 	date: Date;
 	description: ProphylaxisDescription | null;
+	recurrence: string[] | null;
 };

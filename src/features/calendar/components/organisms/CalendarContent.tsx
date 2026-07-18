@@ -23,7 +23,13 @@ function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
 							</div>
 						))
 					: daysArray.map((day, index) => (
-							<CalendarDay day={day} index={index} openDate={openDate} onDayClick={onDayClick} />
+							<CalendarDay
+								key={index}
+								day={day}
+								index={index}
+								openDate={openDate}
+								onDayClick={onDayClick}
+							/>
 						))}
 			</div>
 		</div>

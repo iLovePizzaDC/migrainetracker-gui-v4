@@ -28,7 +28,8 @@ vi.mock('@/features/calendar/utils/event-mapper', () => ({
 	mapProphylaxisEvents: vi.fn((raw: RawEventResponse[]) =>
 		raw.map((event) => ({
 			date: new Date(event.start.date),
-			summary: event.summary ?? '',
+			description: event.description ?? '', // TODO adjusted type
+			recurrence: 'recurrence',
 		})),
 	),
 }));

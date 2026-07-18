@@ -57,7 +57,6 @@ function CalendarDay({ day, index, openDate, onDayClick }: ICalendarDay) {
 	return (
 		<div
 			data-testid={day ? `day-${day}` : `empty-day-${index}`}
-			key={index}
 			onClick={() => day && onDayClick(day)}
 			className={baseClasses.join(' ')}
 		>
