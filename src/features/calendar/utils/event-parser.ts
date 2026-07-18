@@ -1,13 +1,13 @@
 import type { Entry } from '@/features/calendar/types/calendar';
 import type {
 	DescriptionEffectiveness,
-	Event,
-	EventDescription,
+	MigraineDescription,
+	MigraineEvent,
 } from '@/features/calendar/types/event';
-import type { RawEventResponse } from '@/shared/api/types/migraine';
+import type { RawEventResponse } from '@/shared/api/types/event';
 import { parseDecimalToTime } from '@/shared/utils/date/date';
 
-export const parseEventDescription = (event: RawEventResponse): EventDescription | null => {
+export const parseEventDescription = (event: RawEventResponse): MigraineDescription | null => {
 	try {
 		const description =
 			typeof event.description === 'string' ? JSON.parse(event.description) : event.description;
@@ -52,7 +52,7 @@ export const parseMedicineData = (medicine: string, effectiveness: DescriptionEf
 	}));
 };
 
-export const createEntry = (event: Event): Entry => ({
+export const createEntry = (event: MigraineEvent): Entry => ({
 	durations: event.description.duration.map(({ start, end }, index: number) => ({
 		id: index,
 		startTime: parseDecimalToTime(start),

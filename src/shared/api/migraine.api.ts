@@ -1,5 +1,5 @@
 import { api } from '@/shared/api/api';
-import type { Filter, RawAreaChartResponse, RawEventResponse } from '@/shared/api/types/migraine';
+import type { Filter, RawAreaChartResponse, RawEventResponse } from '@/shared/api/types/event';
 import type { IntensityType, SymptomType } from '@/shared/constants/event/event-details';
 import type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar/calendar';
 import type { CardType, TimeFrameUnit } from '@/shared/types/cards/card';

@@ -1,5 +1,5 @@
 import type { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
-import type { Event } from '@/features/calendar/types/event';
+import type { MigraineEvent } from '@/features/calendar/types/event';
 import { filterEvents, isDefaultFilter } from '@/features/calendar/utils/filter';
 import {
 	ANY_FILTER_TYPE,
@@ -11,7 +11,7 @@ import {
 } from '@/shared/constants/event/event-details';
 import { describe, expect, it } from 'vitest';
 
-const makeEvent = (overrides: Partial<Event['description']> = {}): Event => ({
+const makeEvent = (overrides: Partial<MigraineEvent['description']> = {}): MigraineEvent => ({
 	date: new Date('2026-01-01'),
 	strength: 200 as keyof typeof STRENGTH_MAP,
 	description: {

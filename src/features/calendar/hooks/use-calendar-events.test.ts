@@ -1,22 +1,36 @@
 import { MIGRAINOSUS_FLAG_THRESHOLD } from '@/features/calendar/constants/calendar';
 import { useCalendarEvents } from '@/features/calendar/hooks/use-calendar-events';
 import { calculateMigrenosusFlags } from '@/features/calendar/utils/event-highlight';
+import { mapMigraineEvents, mapProphylaxisEvents } from '@/features/calendar/utils/event-mapper';
 import { isDefaultFilter } from '@/features/calendar/utils/filter';
 import { fetchMigraineEvents } from '@/shared/api/migraine.api';
-import type { RawEventResponse } from '@/shared/api/types/migraine';
+import { fetchProphylaxisEvents } from '@/shared/api/prophylaxis';
+import type { RawEventResponse } from '@/shared/api/types/event';
 import { INTENSITY_TYPES, SYMPTOM_TYPES } from '@/shared/constants/event/event-details';
+import { formatDateToUs } from '@/shared/utils/date/date';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/api/migraine.api');
-vi.mock('@/features/calendar/utils/event-highlight');
+vi.mock('@/shared/api/prophylaxis');
 vi.mock('@/features/calendar/utils/filter');
-vi.mock('@/features/calendar/utils/event-parser', () => ({
-	parseEventDescription: vi.fn((event) => event.description ?? null),
-}));
 vi.mock('@/features/calendar/utils/event-highlight', () => ({
 	calculateMigrenosusFlags: vi.fn(() => []),
-	determineStrength: vi.fn(() => 'moderate'),
+}));
+vi.mock('@/features/calendar/utils/event-mapper', () => ({
+	mapMigraineEvents: vi.fn((raw: RawEventResponse[]) =>
+		raw.map((event) => ({
+			date: new Date(event.start.date),
+			description: {},
+			strength: 200,
+		})),
+	),
+	mapProphylaxisEvents: vi.fn((raw: RawEventResponse[]) =>
+		raw.map((event) => ({
+			date: new Date(event.start.date),
+			summary: event.summary ?? '',
+		})),
+	),
 }));
 vi.mock('@/shared/utils/date/date', () => ({
 	formatDateToUs: vi.fn((d: Date) => d.toISOString().split('T')[0]),
@@ -29,10 +43,10 @@ const LAST_DAY = new Date('2026-01-31');
 const DAYS_IN_MONTH = 31;
 
 const makeRawEvent = (dateStr: string) =>
-	({
-		start: { date: dateStr },
-		description: { intensity: 3, symptom: [], medicine: [], effectiveness: null, midas: [] },
-	}) as unknown as RawEventResponse;
+	({ start: { date: dateStr } }) as unknown as RawEventResponse;
+
+const makeRawProphylaxisEvent = (dateStr: string, summary = 'Botox') =>
+	({ start: { date: dateStr }, summary }) as unknown as RawEventResponse;
 
 function renderCalendarEvents() {
 	return renderHook(() => useCalendarEvents(FIRST_DAY, LAST_DAY, DAYS_IN_MONTH));
@@ -41,6 +55,7 @@ function renderCalendarEvents() {
 describe('useCalendarEvents', () => {
 	beforeEach(() => {
 		vi.mocked(fetchMigraineEvents).mockResolvedValue([]);
+		vi.mocked(fetchProphylaxisEvents).mockResolvedValue([]);
 		vi.mocked(isDefaultFilter).mockReturnValue(true);
 		vi.mocked(calculateMigrenosusFlags).mockReturnValue([]);
 	});
@@ -59,6 +74,7 @@ describe('useCalendarEvents', () => {
 			expect(result.current.calendarEvents).toEqual([]);
 			expect(result.current.filteredEvents).toEqual([]);
 			expect(result.current.migrainosusFlags).toEqual([]);
+			expect(result.current.prophylaxisEvents).toEqual([]);
 		});
 
 		it('sets isLoading: false after fetch completes', async () => {
@@ -69,7 +85,7 @@ describe('useCalendarEvents', () => {
 	});
 
 	describe('fetch and parse', () => {
-		it('maps raw events to Event objects inside the month range', async () => {
+		it('maps fetched migraine events and narrows them to the month range', async () => {
 			vi.mocked(fetchMigraineEvents).mockResolvedValue([makeRawEvent('2026-01-15')]);
 
 			const { result } = renderCalendarEvents();
@@ -93,29 +109,63 @@ describe('useCalendarEvents', () => {
 			expect(result.current.calendarEvents[0].date).toEqual(new Date('2026-01-10'));
 		});
 
-		it('drops events where parseEventDescription returns null', async () => {
-			const { parseEventDescription } = await import('@/features/calendar/utils/event-parser');
-			vi.mocked(parseEventDescription).mockReturnValueOnce(null);
-			vi.mocked(fetchMigraineEvents).mockResolvedValue([makeRawEvent('2026-01-10')]);
-
-			const { result } = renderCalendarEvents();
-
-			await waitFor(() => expect(result.current.isLoading).toBe(false));
-			expect(result.current.calendarEvents).toHaveLength(0);
-		});
-
-		it('sorts events by date ascending', async () => {
-			vi.mocked(fetchMigraineEvents).mockResolvedValue([
-				makeRawEvent('2026-01-20'),
-				makeRawEvent('2026-01-05'),
-				makeRawEvent('2026-01-12'),
+		it('maps fetched prophylaxis events', async () => {
+			vi.mocked(fetchProphylaxisEvents).mockResolvedValue([
+				makeRawProphylaxisEvent('2026-01-12', 'Botox'),
 			]);
 
 			const { result } = renderCalendarEvents();
 
 			await waitFor(() => expect(result.current.isLoading).toBe(false));
-			const dates = result.current.calendarEvents.map((e) => e.date.toISOString());
-			expect(dates).toEqual([...dates].sort());
+			expect(result.current.prophylaxisEvents).toEqual([
+				{ date: new Date('2026-01-12'), summary: 'Botox' },
+			]);
+		});
+
+		it('calls fetchProphylaxisEvents with the visible month range', async () => {
+			renderCalendarEvents();
+
+			await waitFor(() =>
+				expect(fetchProphylaxisEvents).toHaveBeenCalledWith(
+					formatDateToUs(FIRST_DAY),
+					formatDateToUs(LAST_DAY),
+					expect.any(AbortSignal),
+				),
+			);
+		});
+
+		it('passes the fetched raw responses to the mapper functions', async () => {
+			const migraineRaw = [makeRawEvent('2026-01-10')];
+			const prophylaxisRaw = [makeRawProphylaxisEvent('2026-01-12')];
+			vi.mocked(fetchMigraineEvents).mockResolvedValue(migraineRaw);
+			vi.mocked(fetchProphylaxisEvents).mockResolvedValue(prophylaxisRaw);
+
+			renderCalendarEvents();
+
+			await waitFor(() => expect(mapMigraineEvents).toHaveBeenCalledWith(migraineRaw));
+			expect(mapProphylaxisEvents).toHaveBeenCalledWith(prophylaxisRaw);
+		});
+
+		it('does not update state when fetchMigraineEvents returns falsy', async () => {
+			vi.mocked(fetchMigraineEvents).mockResolvedValue(undefined as any);
+			vi.mocked(fetchProphylaxisEvents).mockResolvedValue([makeRawProphylaxisEvent('2026-01-12')]);
+
+			const { result } = renderCalendarEvents();
+
+			await waitFor(() => expect(result.current.isLoading).toBe(false));
+			expect(result.current.calendarEvents).toEqual([]);
+			expect(result.current.prophylaxisEvents).toEqual([]);
+		});
+
+		it('does not update state when fetchProphylaxisEvents returns falsy', async () => {
+			vi.mocked(fetchMigraineEvents).mockResolvedValue([makeRawEvent('2026-01-10')]);
+			vi.mocked(fetchProphylaxisEvents).mockResolvedValue(undefined as any);
+
+			const { result } = renderCalendarEvents();
+
+			await waitFor(() => expect(result.current.isLoading).toBe(false));
+			expect(result.current.calendarEvents).toEqual([]);
+			expect(result.current.prophylaxisEvents).toEqual([]);
 		});
 	});
 
@@ -176,6 +226,30 @@ describe('useCalendarEvents', () => {
 			expect(fetchMigraineEvents).toHaveBeenCalledTimes(2);
 			expect(result.current.calendarEvents).toHaveLength(1);
 		});
+
+		it('ignores a stale response once a newer fetch has started', async () => {
+			let resolveStale!: (value: RawEventResponse[]) => void;
+			vi.mocked(fetchMigraineEvents).mockReturnValueOnce(
+				new Promise((resolve) => {
+					resolveStale = resolve;
+				}),
+			);
+
+			const { result } = renderCalendarEvents();
+
+			vi.mocked(fetchMigraineEvents).mockResolvedValue([makeRawEvent('2026-01-20')]);
+			await act(async () => {
+				await result.current.refetchEvents();
+			});
+
+			await act(async () => {
+				resolveStale([makeRawEvent('2026-01-01')]);
+				await Promise.resolve();
+			});
+
+			expect(result.current.calendarEvents).toHaveLength(1);
+			expect(result.current.calendarEvents[0].date).toEqual(new Date('2026-01-20'));
+		});
 	});
 
 	describe('error cases', () => {
@@ -190,13 +264,14 @@ describe('useCalendarEvents', () => {
 			consoleSpy.mockRestore();
 		});
 
-		it('does not update state after unmount (AbortError wird ignoriert)', async () => {
+		it('does not log an error for an aborted fetch', async () => {
 			let rejectFetch!: (err: Error) => void;
 			vi.mocked(fetchMigraineEvents).mockReturnValue(
 				new Promise((_, reject) => {
 					rejectFetch = reject;
 				}),
 			);
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 			const { unmount } = renderCalendarEvents();
 			unmount();
@@ -205,6 +280,9 @@ describe('useCalendarEvents', () => {
 				rejectFetch(new DOMException('Aborted', 'AbortError'));
 				await Promise.resolve();
 			}).not.toThrow();
+
+			expect(consoleSpy).not.toHaveBeenCalled();
+			consoleSpy.mockRestore();
 		});
 	});
 

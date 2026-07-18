@@ -1,8 +1,20 @@
 import { STRENGTH_MAP, type StrengthKey } from '@/features/calendar/constants/calendar';
-import type { Event, EventDescription } from '@/features/calendar/types/event';
+import type {
+	DatedEvent,
+	MigraineDescription,
+	MigraineEvent,
+} from '@/features/calendar/types/event';
 import { INTENSITY_TYPES } from '@/shared/constants/event/event-details';
 
-export function determineStrength(description: EventDescription): Event['strength'] {
+export const getEventForDay = <T extends DatedEvent>(
+	day: number | null,
+	events: T[],
+): T | undefined => {
+	if (!day) return undefined;
+	return events.find((event) => event.date.getDate() === day);
+};
+
+export function determineStrength(description: MigraineDescription): MigraineEvent['strength'] {
 	const totalDuration = description.duration.reduce(
 		(sum, range) => sum + (range.end - range.start),
 		0,
@@ -37,7 +49,7 @@ export function determineStrength(description: EventDescription): Event['strengt
 }
 
 export function calculateMigrenosusFlags(
-	events: Event[],
+	events: MigraineEvent[],
 	firstDayOfMonth: Date,
 	daysInMonth: number,
 	minDays = 4,

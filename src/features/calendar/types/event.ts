@@ -1,9 +1,13 @@
 import type { StrengthKey } from '@/features/calendar/constants/calendar';
 import type { IntensityType, SymptomType } from '@/shared/constants/event/event-details';
 
+export type DatedEvent = {
+	date: Date;
+};
+
 export type DescriptionEffectiveness = 'yes' | 'no' | '';
 
-export type EventDescription = {
+export type MigraineDescription = {
 	duration: {
 		start: number;
 		end: number;
@@ -21,8 +25,13 @@ export type EventDescription = {
 	};
 };
 
-export type Event = {
+export type MigraineEvent = {
 	date: Date;
-	description: EventDescription;
+	description: MigraineDescription;
 	strength: StrengthKey;
+};
+
+export type ProphylaxisEvent = {
+	date: Date;
+	summary: string;
 };

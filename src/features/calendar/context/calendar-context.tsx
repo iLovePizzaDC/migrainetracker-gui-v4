@@ -1,4 +1,4 @@
-import type { Event } from '@/features/calendar/types/event';
+import type { MigraineEvent, ProphylaxisEvent } from '@/features/calendar/types/event';
 import type { EventFilter } from '@/shared/types/event/event';
 import { createContext } from 'react';
 
@@ -13,11 +13,12 @@ export interface ICalendarContext {
 	nextMonth: () => void;
 	refetchEvents: () => Promise<void>;
 	collectMedDays: () => Promise<void>;
-	calendarEvents: Event[];
-	filteredEvents: Event[];
+	calendarEvents: MigraineEvent[];
+	filteredEvents: MigraineEvent[];
 	medDaysCount: number;
 	maxMedDaysCount: number;
 	migrainosusFlags: boolean[];
+	prophylaxisEvents: ProphylaxisEvent[];
 	filter: EventFilter;
 	setFilter: React.Dispatch<React.SetStateAction<EventFilter>>;
 }

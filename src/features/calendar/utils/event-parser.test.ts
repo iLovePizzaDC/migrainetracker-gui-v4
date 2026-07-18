@@ -1,5 +1,5 @@
 import type { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
-import type { Event } from '@/features/calendar/types/event';
+import type { MigraineEvent } from '@/features/calendar/types/event';
 import {
 	createEntry,
 	enrichMedicineLabels,
@@ -20,7 +20,7 @@ const mockUserMedicineOptions = [
 	{ value: MEDICINE_TYPES.PAINKILLER, label: 'Test medicine 2' },
 ];
 
-const makeEvent = (overrides: Partial<Event['description']> = {}): Event => ({
+const makeEvent = (overrides: Partial<MigraineEvent['description']> = {}): MigraineEvent => ({
 	date: new Date('2026-01-01'),
 	strength: 200 as keyof typeof STRENGTH_MAP,
 	description: {
