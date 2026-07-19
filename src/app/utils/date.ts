@@ -1,7 +1,7 @@
-import autumnBackground from '@/assets/bg-autumn.jpg';
-import springBackground from '@/assets/bg-spring.jpg';
-import summerBackground from '@/assets/bg-summer.jpg';
-import winterBackground from '@/assets/bg-winter.jpg';
+import autumnBackground from '@/assets/bg-autumn.webp';
+import springBackground from '@/assets/bg-spring.webp';
+import summerBackground from '@/assets/bg-summer.webp';
+import winterBackground from '@/assets/bg-winter.webp';
 
 export const getSeasonBackground = (): string => {
   const month = new Date().getMonth();
