@@ -3,13 +3,10 @@ import type { RawEventResponse } from '@/shared/api/types/event';
 import axios from 'axios';
 
 export const fetchProphylaxisEvents = async (
-	start: string,
-	end: string,
 	signal?: AbortSignal,
 ): Promise<RawEventResponse[] | undefined> => {
 	try {
 		const response = await api.get('ProphylaxisEvents', {
-			params: { dateMin: start, dateMax: end },
 			signal,
 		});
 		return response.data;

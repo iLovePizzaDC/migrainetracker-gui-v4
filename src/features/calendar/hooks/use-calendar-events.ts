@@ -60,11 +60,7 @@ export function useCalendarEvents(
 						undefined,
 						abortController?.signal,
 					),
-					fetchProphylaxisEvents(
-						formatDateToUs(firstDayOfMonth),
-						formatDateToUs(lastDayOfMonth),
-						abortController?.signal,
-					),
+					fetchProphylaxisEvents(abortController?.signal),
 				]);
 
 				if (!migraineEventsRaw || !prophylaxisEventsRaw || id !== fetchIdRef.current) return;
