@@ -88,6 +88,10 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+          VITE_ENDPOINT_BASE_URL: ${{ secrets.VITE_ENDPOINT_BASE_URL }}
+          VITE_API_URL_SUFFIX: ${{ secrets.VITE_API_URL_SUFFIX }}
+          VITE_GOOGLE_REDIRECT_URL_SUFFIX: ${{ secrets.VITE_GOOGLE_REDIRECT_URL_SUFFIX }}
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_SENTRY_RELEASE: ${{ github.sha }}
