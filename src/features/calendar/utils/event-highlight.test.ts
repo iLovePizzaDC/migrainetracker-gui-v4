@@ -1,13 +1,14 @@
 import { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
-import type { EventDescription } from '@/features/calendar/types/event';
+import type { MigraineDescription } from '@/features/calendar/types/event';
 import {
 	calculateMigrenosusFlags,
 	determineStrength,
+	getEventForDay,
 } from '@/features/calendar/utils/event-highlight';
 import { INTENSITY_TYPES } from '@/shared/constants/event/event-details';
 import { describe, expect, it } from 'vitest';
 
-const makeDescription = (overrides: Partial<EventDescription> = {}): EventDescription => ({
+const makeDescription = (overrides: Partial<MigraineDescription> = {}): MigraineDescription => ({
 	duration: [],
 	intensity: INTENSITY_TYPES.LOW,
 	symptoms: [],
@@ -31,6 +32,44 @@ const makeEvent = (dateStr: string) => ({
 
 const FIRST_DAY_JAN = new Date('2026-01-01');
 const DAYS_IN_JAN = 31;
+
+describe('getEventForDay', () => {
+	it('returns undefined when day is null', () => {
+		expect(getEventForDay(null, [makeEvent('2026-01-01')])).toBeUndefined();
+	});
+
+	it('returns undefined when day is 0', () => {
+		expect(getEventForDay(0, [makeEvent('2026-01-01')])).toBeUndefined();
+	});
+
+	it('returns undefined when no event matches the day', () => {
+		expect(getEventForDay(2, [makeEvent('2026-01-01')])).toBeUndefined();
+	});
+
+	it('returns undefined for an empty events array', () => {
+		expect(getEventForDay(1, [])).toBeUndefined();
+	});
+
+	it('returns the event matching the day', () => {
+		const event = makeEvent('2026-01-03');
+		const events = [makeEvent('2026-01-01'), event, makeEvent('2026-01-05')];
+
+		expect(getEventForDay(3, events)).toBe(event);
+	});
+
+	it('returns the first matching event when multiple events share the day', () => {
+		const first = makeEvent('2026-01-03');
+		const second = makeEvent('2026-01-03');
+
+		expect(getEventForDay(3, [first, second])).toBe(first);
+	});
+
+	it('matches by day of month, ignoring month/year', () => {
+		const event = makeEvent('2025-06-03');
+
+		expect(getEventForDay(3, [event])).toBe(event);
+	});
+});
 
 describe('determineStrength', () => {
 	const validStrengths = Object.keys(STRENGTH_MAP)

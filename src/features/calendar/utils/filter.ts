@@ -1,4 +1,4 @@
-import type { Event, EventDescription } from '@/features/calendar/types/event';
+import type { MigraineDescription, MigraineEvent } from '@/features/calendar/types/event';
 import { ANY_FILTER_TYPE, EFFECTIVENESS_TYPES } from '@/shared/constants/event/event-details';
 import type { EventFilter } from '@/shared/types/event/event';
 
@@ -9,12 +9,12 @@ function getEventMedicines(medicine: string): string[] {
 		.filter(Boolean);
 }
 
-function matchesIntensity(description: EventDescription, filter: EventFilter): boolean {
+function matchesIntensity(description: MigraineDescription, filter: EventFilter): boolean {
 	if (!filter.intensity) return true;
 	return description.intensity === filter.intensity;
 }
 
-function matchesSymptoms(description: EventDescription, filter: EventFilter): boolean {
+function matchesSymptoms(description: MigraineDescription, filter: EventFilter): boolean {
 	if (filter.symptom.length === 0) return true;
 
 	return filter.symptom.every((symptom) => {
@@ -39,7 +39,7 @@ function matchesMedicine(eventMedicines: string[], filter: EventFilter): boolean
 }
 
 function matchesEffectiveness(
-	description: EventDescription,
+	description: MigraineDescription,
 	eventMedicines: string[],
 	filter: EventFilter,
 ): boolean {
@@ -67,7 +67,7 @@ function matchesEffectiveness(
 	return true;
 }
 
-function matchesMidas(description: EventDescription, filter: EventFilter): boolean {
+function matchesMidas(description: MigraineDescription, filter: EventFilter): boolean {
 	if (filter.midas.length === 0) return true;
 
 	return filter.midas.every((key) => {
@@ -76,7 +76,7 @@ function matchesMidas(description: EventDescription, filter: EventFilter): boole
 	});
 }
 
-export function filterEvents(parsedEvent: Event, filter: EventFilter) {
+export function filterEvents(parsedEvent: MigraineEvent, filter: EventFilter) {
 	const { description } = parsedEvent;
 	const eventMedicines = getEventMedicines(description.medicine);
 

@@ -6,7 +6,7 @@ import {
 	fetchMidasScore,
 	fetchMigraineAmount,
 } from '@/shared/api/migraine.api';
-import type { Filter } from '@/shared/api/types/migraine';
+import type { Filter } from '@/shared/api/types/event';
 import { CARD_TYPES } from '@/shared/constants/event/card';
 import {
 	ANY_FILTER_OPTIONS,

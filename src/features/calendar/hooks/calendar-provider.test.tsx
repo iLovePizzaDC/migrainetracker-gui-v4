@@ -7,7 +7,7 @@ import { CalendarProvider } from '@/features/calendar/hooks/calendar-provider';
 import { useCalendarDate } from '@/features/calendar/hooks/use-calendar-date';
 import { useCalendarEvents } from '@/features/calendar/hooks/use-calendar-events';
 import { useMedDays } from '@/features/calendar/hooks/use-med-days';
-import type { Event } from '@/features/calendar/types/event';
+import type { MigraineEvent, ProphylaxisEvent } from '@/features/calendar/types/event';
 import {
 	EFFECTIVENESS_TYPES,
 	INTENSITY_TYPES,
@@ -81,9 +81,10 @@ const defaultCalendarDate = {
 };
 
 const defaultCalendarEvents = {
-	calendarEvents: [] as Event[],
-	filteredEvents: [] as Event[],
+	calendarEvents: [] as MigraineEvent[],
+	filteredEvents: [] as MigraineEvent[],
 	migrainosusFlags: [] as boolean[],
+	prophylaxisEvents: [] as ProphylaxisEvent[],
 	filter: {
 		intensity: null,
 		symptom: [],

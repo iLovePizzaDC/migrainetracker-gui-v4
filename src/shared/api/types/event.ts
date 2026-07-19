@@ -45,7 +45,7 @@ export type RawEventResponse = {
 	eventType: string;
 	start: EventStartEnd;
 	end: EventStartEnd;
-	recurrence: unknown | null;
+	recurrence: string[] | null;
 	icalUID: string;
 };
 

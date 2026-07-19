@@ -22,6 +22,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 		calendarEvents,
 		filteredEvents,
 		migrainosusFlags,
+		prophylaxisEvents,
 		filter,
 		setFilter,
 		isLoading,
@@ -48,6 +49,7 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 				medDaysCount,
 				maxMedDaysCount,
 				migrainosusFlags,
+				prophylaxisEvents,
 				filter,
 				setFilter,
 			}}

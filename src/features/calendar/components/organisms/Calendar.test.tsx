@@ -34,6 +34,7 @@ vi.mock('@/shared/hooks/user/use-user', () => ({
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: vi.fn(),
 }));
+vi.mock('@/features/calendar/utils/event-highlight');
 vi.mock('@/features/calendar/components/molecules/Durations', () => ({
 	default: () => <div>durations</div>,
 }));

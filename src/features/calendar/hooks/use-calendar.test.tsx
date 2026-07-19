@@ -23,6 +23,7 @@ const fakeContext: ICalendarContext = {
 	medDaysCount: 3,
 	maxMedDaysCount: 10,
 	migrainosusFlags: [],
+	prophylaxisEvents: [],
 	filter: {
 		intensity: null,
 		symptom: [],
