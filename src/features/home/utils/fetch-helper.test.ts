@@ -1,7 +1,7 @@
 import { MAX_MIDAS_SCORE } from '@/features/home/constants/midas';
 import { fetchAreaData, fetchMidasPieData, fetchPieData } from '@/features/home/utils/fetch-helper';
 import * as migraineApi from '@/shared/api/migraine.api';
-import type { RawAreaChartResponse } from '@/shared/api/types/migraine';
+import type { RawAreaChartResponse } from '@/shared/api/types/event';
 import { CARD_TYPES, CHART_TYPES } from '@/shared/constants/event/card';
 import {
 	ANY_FILTER_OPTIONS,

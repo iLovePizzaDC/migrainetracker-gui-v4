@@ -1,7 +1,7 @@
+import NavigationLink from '@/app/components/atoms/navigation/NavigationLink';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import NavigationLink from './NavigationLink';
 
 vi.mock('react-router-dom', () => ({
 	useLocation: () => ({ pathname: '/' }),
