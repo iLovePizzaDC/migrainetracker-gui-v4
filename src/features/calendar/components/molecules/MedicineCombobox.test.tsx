@@ -10,202 +10,202 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mockMedLabel = 'test medicine';
 const mockMedValue = 'tst_med';
 const mockUserMedicines = [
-	{
-		name: `${mockMedLabel} 1`,
-		abbreviation: `${mockMedValue}_1`,
-		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
-	},
-	{
-		name: `${mockMedLabel} 2`,
-		abbreviation: `${mockMedValue}_2`,
-		type: MEDICINE_TYPES.PAINKILLER,
-	},
+  {
+    name: `${mockMedLabel} 1`,
+    abbreviation: `${mockMedValue}_1`,
+    type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+  },
+  {
+    name: `${mockMedLabel} 2`,
+    abbreviation: `${mockMedValue}_2`,
+    type: MEDICINE_TYPES.PAINKILLER,
+  },
 ];
 
 vi.mock('@/shared/hooks/user/use-user');
 vi.mock('@/shared/hooks/use-click-outside');
 vi.mock('@/shared/api/medicine.api');
 vi.mock('@/shared/components/atoms/Combobox', () => ({
-	default: vi.fn(({ selected, onChange, renderOptionActions, disabled }: any) => {
-		const firstOption = { label: `${mockMedLabel} 1`, value: `${mockMedValue}_1` };
+  default: vi.fn(({ selected, onChange, renderOptionActions, disabled }: any) => {
+    const firstOption = { label: `${mockMedLabel} 1`, value: `${mockMedValue}_1` };
 
-		return (
-			<div data-testid='combobox'>
-				<div data-testid='selected-medicines'>
-					{selected.map((option: any) => (
-						<span key={option.value} data-testid={`selected-${option.value}`}>
-							{option.label}
-						</span>
-					))}
-				</div>
-				<div data-testid='option-actions'>{renderOptionActions?.(firstOption)}</div>
-				<button data-testid='change-selection-btn' onClick={() => onChange([firstOption])}>
-					Select Medicine 1
-				</button>
-				{disabled && <span data-testid='disabled-indicator' />}
-			</div>
-		);
-	}),
+    return (
+      <div data-testid='combobox'>
+        <div data-testid='selected-medicines'>
+          {selected.map((option: any) => (
+            <span key={option.value} data-testid={`selected-${option.value}`}>
+              {option.label}
+            </span>
+          ))}
+        </div>
+        <div data-testid='option-actions'>{renderOptionActions?.(firstOption)}</div>
+        <button data-testid='change-selection-btn' onClick={() => onChange([firstOption])}>
+          Select Medicine 1
+        </button>
+        {disabled && <span data-testid='disabled-indicator' />}
+      </div>
+    );
+  }),
 }));
 
 const mockMedicines = [
-	{
-		medicine: {
-			abbreviation: `${mockMedValue}_1`,
-			label: `${mockMedLabel} 1`,
-		},
-		taken: 1,
-		effectiveness: 0,
-	},
-	{
-		medicine: {
-			abbreviation: `${mockMedValue}_2`,
-			label: `${mockMedLabel} 2`,
-		},
-		taken: 2,
-		effectiveness: 2,
-	},
+  {
+    medicine: {
+      abbreviation: `${mockMedValue}_1`,
+      label: `${mockMedLabel} 1`,
+    },
+    taken: 1,
+    effectiveness: 0,
+  },
+  {
+    medicine: {
+      abbreviation: `${mockMedValue}_2`,
+      label: `${mockMedLabel} 2`,
+    },
+    taken: 2,
+    effectiveness: 2,
+  },
 ];
 
 describe('<MedicineCombobox />', () => {
-	const user = userEvent.setup();
+  const user = userEvent.setup();
 
-	beforeEach(() => {
-		vi.mocked(useUser).mockReturnValue({
-			medicines: mockUserMedicines,
-			removeMedicine: vi.fn(),
-		} as any);
+  beforeEach(() => {
+    vi.mocked(useUser).mockReturnValue({
+      medicines: mockUserMedicines,
+      removeMedicine: vi.fn(),
+    } as any);
 
-		vi.mocked(useClickOutside).mockImplementation(() => {});
-		vi.mocked(fetchUserMedicinesDelete).mockResolvedValue([]);
+    vi.mocked(useClickOutside).mockImplementation(() => { });
+    vi.mocked(fetchUserMedicinesDelete).mockResolvedValue([]);
 
-		vi.clearAllMocks();
-	});
+    vi.clearAllMocks();
+  });
 
-	it('renders pre-selected medicines', () => {
-		render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
+  it('renders pre-selected medicines', () => {
+    render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
 
-		expect(screen.getByTestId(`selected-${mockMedValue}_1`)).toBeInTheDocument();
-		expect(screen.getByTestId(`selected-${mockMedValue}_2`)).toBeInTheDocument();
-	});
+    expect(screen.getByTestId(`selected-${mockMedValue}_1`)).toBeInTheDocument();
+    expect(screen.getByTestId(`selected-${mockMedValue}_2`)).toBeInTheDocument();
+  });
 
-	it('calls setMedicines with correct structure when selecting', async () => {
-		const mockSetMedicines = vi.fn();
-		render(<MedicineCombobox medicines={[]} setMedicines={mockSetMedicines} />);
+  it('calls setMedicines with correct structure when selecting', async () => {
+    const mockSetMedicines = vi.fn();
+    render(<MedicineCombobox medicines={[]} setMedicines={mockSetMedicines} />);
 
-		await user.click(screen.getByTestId('change-selection-btn'));
+    await user.click(screen.getByTestId('change-selection-btn'));
 
-		expect(mockSetMedicines).toHaveBeenCalledWith([
-			{
-				medicine: { label: `${mockMedLabel} 1`, abbreviation: `${mockMedValue}_1` },
-				taken: 1,
-				effectiveness: 0,
-			},
-		]);
-	});
+    expect(mockSetMedicines).toHaveBeenCalledWith([
+      {
+        medicine: { label: `${mockMedLabel} 1`, abbreviation: `${mockMedValue}_1` },
+        taken: 1,
+        effectiveness: 0,
+      },
+    ]);
+  });
 
-	it('resets deletion confirmation when changing selection', async () => {
-		const mockSetMedicines = vi.fn();
-		render(<MedicineCombobox medicines={mockMedicines} setMedicines={mockSetMedicines} />);
+  it('resets deletion confirmation when changing selection', async () => {
+    const mockSetMedicines = vi.fn();
+    render(<MedicineCombobox medicines={mockMedicines} setMedicines={mockSetMedicines} />);
 
-		const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
-		await user.click(deleteBtn);
+    const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
+    await user.click(deleteBtn);
 
-		expect(screen.getByTestId('confirm-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('confirm-icon')).toBeInTheDocument();
 
-		await user.click(screen.getByTestId('change-selection-btn'));
+    await user.click(screen.getByTestId('change-selection-btn'));
 
-		expect(screen.getByTestId('trash-icon')).toBeInTheDocument();
-		expect(screen.queryByTestId('confirm-icon')).not.toBeInTheDocument();
-	});
+    expect(screen.getByTestId('trash-icon')).toBeInTheDocument();
+    expect(screen.queryByTestId('confirm-icon')).not.toBeInTheDocument();
+  });
 
-	it('shows trash icon by default', () => {
-		render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
+  it('shows trash icon by default', () => {
+    render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
 
-		expect(screen.getByTestId('trash-icon')).toBeInTheDocument();
-	});
+    expect(screen.getByTestId('trash-icon')).toBeInTheDocument();
+  });
 
-	it('shows confirm icon after clicking trash icon', async () => {
-		render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
+  it('shows confirm icon after clicking trash icon', async () => {
+    render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
 
-		const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
-		await user.click(deleteBtn);
+    const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
+    await user.click(deleteBtn);
 
-		expect(screen.getByTestId('confirm-icon')).toBeInTheDocument();
-	});
+    expect(screen.getByTestId('confirm-icon')).toBeInTheDocument();
+  });
 
-	it('deletes medicine after confirming deletion', async () => {
-		render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
+  it('deletes medicine after confirming deletion', async () => {
+    render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
 
-		const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
+    const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
 
-		await user.click(deleteBtn);
-		expect(screen.getByTestId('confirm-icon')).toBeInTheDocument();
+    await user.click(deleteBtn);
+    expect(screen.getByTestId('confirm-icon')).toBeInTheDocument();
 
-		await user.click(deleteBtn);
+    await user.click(deleteBtn);
 
-		const mockUseUserResult = vi.mocked(useUser).mock.results[0].value;
-		expect(mockUseUserResult.removeMedicine).toHaveBeenCalledWith(`${mockMedValue}_1`);
-		expect(vi.mocked(fetchUserMedicinesDelete)).toHaveBeenCalledWith(
-			`${mockMedLabel} 1`,
-			`${mockMedValue}_1`,
-		);
-	});
+    const mockUseUserResult = vi.mocked(useUser).mock.results[0].value;
+    expect(mockUseUserResult.removeMedicine).toHaveBeenCalledWith(`${mockMedValue}_1`);
+    expect(vi.mocked(fetchUserMedicinesDelete)).toHaveBeenCalledWith(
+      `${mockMedLabel} 1`,
+      `${mockMedValue}_1`,
+    );
+  });
 
-	it('handles delete error gracefully', async () => {
-		vi.mocked(fetchUserMedicinesDelete).mockRejectedValueOnce(new Error('Delete failed'));
+  it('handles delete error gracefully', async () => {
+    vi.mocked(fetchUserMedicinesDelete).mockRejectedValueOnce(new Error('Delete failed'));
 
-		render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
+    render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
 
-		const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
+    const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
 
-		await user.click(deleteBtn);
-		await user.click(deleteBtn);
+    await user.click(deleteBtn);
+    await user.click(deleteBtn);
 
-		await waitFor(() => {
-			expect(vi.mocked(fetchUserMedicinesDelete)).toHaveBeenCalled();
-		});
+    await waitFor(() => {
+      expect(vi.mocked(fetchUserMedicinesDelete)).toHaveBeenCalled();
+    });
 
-		const mockUseUserResult = vi.mocked(useUser).mock.results[0].value;
-		expect(mockUseUserResult.removeMedicine).toHaveBeenCalledWith(`${mockMedValue}_1`);
-	});
+    const mockUseUserResult = vi.mocked(useUser).mock.results[0].value;
+    expect(mockUseUserResult.removeMedicine).toHaveBeenCalledWith(`${mockMedValue}_1`);
+  });
 
-	it('disables delete button while deleting', async () => {
-		vi.mocked(fetchUserMedicinesDelete).mockImplementation(
-			() => new Promise((resolve) => setTimeout(resolve, 100)),
-		);
+  it('disables delete button while deleting', async () => {
+    vi.mocked(fetchUserMedicinesDelete).mockImplementation(
+      () => new Promise((resolve) => setTimeout(resolve, 100)),
+    );
 
-		render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
+    render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
 
-		const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
+    const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
 
-		await user.click(deleteBtn);
-		await user.click(deleteBtn);
+    await user.click(deleteBtn);
+    await user.click(deleteBtn);
 
-		expect(deleteBtn).toBeDisabled();
+    expect(deleteBtn).toBeDisabled();
 
-		await waitFor(() => {
-			expect(deleteBtn).not.toBeDisabled();
-		});
-	});
+    await waitFor(() => {
+      expect(deleteBtn).not.toBeDisabled();
+    });
+  });
 
-	it('closes deletion confirmation when clicking outside', () => {
-		render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
+  it('closes deletion confirmation when clicking outside', () => {
+    render(<MedicineCombobox medicines={mockMedicines} setMedicines={vi.fn()} />);
 
-		const mockUseClickOutsideCall = vi.mocked(useClickOutside).mock.calls[0];
-		const callback = mockUseClickOutsideCall[1];
+    const mockUseClickOutsideCall = vi.mocked(useClickOutside).mock.calls[0];
+    const callback = mockUseClickOutsideCall[1];
 
-		const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
+    const deleteBtn = screen.getByRole('button', { name: 'Delete test medicine 1' });
 
-		userEvent.click(deleteBtn);
-		callback();
+    userEvent.click(deleteBtn);
+    callback();
 
-		expect(screen.getByTestId('trash-icon')).toBeInTheDocument();
-	});
+    expect(screen.getByTestId('trash-icon')).toBeInTheDocument();
+  });
 
-	it('disables combobox when disabled prop is true', () => {
-		render(<MedicineCombobox medicines={[]} setMedicines={vi.fn()} disabled={true} />);
+  it('disables combobox when disabled prop is true', () => {
+    render(<MedicineCombobox medicines={[]} setMedicines={vi.fn()} disabled={true} />);
 
-		expect(screen.getByTestId('disabled-indicator')).toBeInTheDocument();
-	});
+    expect(screen.getByTestId('disabled-indicator')).toBeInTheDocument();
+  });
 });

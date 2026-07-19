@@ -5,83 +5,83 @@ import { useUser } from '@/shared/hooks/user/use-user';
 import { useEffect, useState } from 'react';
 
 function MidasCard() {
-	const { user } = useUser();
+  const { user } = useUser();
 
-	const [midasScore, setMidasScore] = useState<number>(0);
-	const [pieData, setPieData] = useState<{ current: ChartData; previous: ChartData }>({
-		current: [],
-		previous: [],
-	});
-	const [isLoading, setIsLoading] = useState(true);
+  const [midasScore, setMidasScore] = useState<number>(0);
+  const [pieData, setPieData] = useState<{ current: ChartData; previous: ChartData }>({
+    current: [],
+    previous: [],
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
-	const getColorIndicator = () => {
-		if (midasScore >= 21)
-			return { color: 'bg-gradient-to-r from-red-500/0 to to-red-500/70', label: 'severe' };
-		if (midasScore >= 11)
-			return { color: 'bg-gradient-to-r from-orange-500/0 to-orange-500/70', label: 'moderate' };
-		if (midasScore >= 6)
-			return { color: 'bg-gradient-to-r from-yellow-500/0 to-yellow-500/70', label: 'mild' };
-		return { color: 'bg-gradient-to-r from-gray-500/0 to-gray-500/70', label: 'not/little' };
-	};
+  const getColorIndicator = () => {
+    if (midasScore >= 21)
+      return { color: 'bg-gradient-to-r from-red-500/0 to to-red-500/70', label: 'severe' };
+    if (midasScore >= 11)
+      return { color: 'bg-gradient-to-r from-orange-500/0 to-orange-500/70', label: 'moderate' };
+    if (midasScore >= 6)
+      return { color: 'bg-gradient-to-r from-yellow-500/0 to-yellow-500/70', label: 'mild' };
+    return { color: 'bg-gradient-to-r from-gray-500/0 to-gray-500/70', label: 'not/little' };
+  };
 
-	useEffect(() => {
-		if (!user) return;
+  useEffect(() => {
+    if (!user) return;
 
-		const collectChartData = async () => {
-			setIsLoading(true);
+    const collectChartData = async () => {
+      setIsLoading(true);
 
-			const pie = await fetchMidasPieData();
-			setMidasScore(pie.current.score);
-			setPieData({
-				current: pie.current.pieData,
-				previous: pie.previous.pieData,
-			});
+      const pie = await fetchMidasPieData();
+      setMidasScore(pie.current.score);
+      setPieData({
+        current: pie.current.pieData,
+        previous: pie.previous.pieData,
+      });
 
-			setIsLoading(false);
-		};
+      setIsLoading(false);
+    };
 
-		collectChartData();
-	}, [user]);
+    collectChartData();
+  }, [user]);
 
-	const { color, label } = getColorIndicator();
+  const { color, label } = getColorIndicator();
 
-	if (midasScore === 0) return null;
+  if (midasScore === 0) return null;
 
-	return (
-		<div
-			className='
+  return (
+    <div
+      className='
                 w-full self-start rounded-2xl p-3 relative
                 bg-transparent backdrop-blur-md
                 border border-white/20
                 shadow-lg shadow-black/20
                 transition hover:shadow-xl
             '
-		>
-			<div className='h-7 mb-2 flex justify-between items-start w-full'>
-				<div className='w-20 opacity-0 pointer-events-none'></div>
+    >
+      <div className='h-7 mb-2 flex justify-between items-start w-full'>
+        <div className='w-20 opacity-0 pointer-events-none'></div>
 
-				<h2 className='text-lg font-semibold text-center flex-1 leading-tight'>MIDAS Score</h2>
+        <h2 className='text-lg font-semibold text-center flex-1 leading-tight'>MIDAS Score</h2>
 
-				<p className={`w-20 px-1 text-sm font-medium text-right ${color}`}>{label}</p>
-			</div>
+        <p className={`w-20 px-1 text-sm font-medium text-right ${color}`}>{label}</p>
+      </div>
 
-			<div className='h-72 w-full flex items-center justify-center'>
-				{isLoading ? (
-					<div className='w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse' />
-				) : (
-					<PieChart outerData={pieData.current} innerData={pieData.previous} />
-				)}
-			</div>
+      <div className='h-72 w-full flex items-center justify-center'>
+        {isLoading ? (
+          <div className='w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse' />
+        ) : (
+          <PieChart outerData={pieData.current} innerData={pieData.previous} />
+        )}
+      </div>
 
-			<div className='text-center h-6'>
-				{isLoading ? (
-					<div className='h-6 w-20 mx-auto bg-white/10 backdrop-blur-sm rounded-md animate-pulse' />
-				) : (
-					<p className='text-lg font-medium'>{midasScore}/270</p>
-				)}
-			</div>
-		</div>
-	);
+      <div className='text-center h-6'>
+        {isLoading ? (
+          <div className='h-6 w-20 mx-auto bg-white/10 backdrop-blur-sm rounded-md animate-pulse' />
+        ) : (
+          <p className='text-lg font-medium'>{midasScore}/270</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default MidasCard;

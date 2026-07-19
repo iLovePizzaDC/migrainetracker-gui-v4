@@ -3,11 +3,11 @@ import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
 
 globalThis.ResizeObserver = class ResizeObserver {
-	observe() {}
-	unobserve() {}
-	disconnect() {}
+  observe() { }
+  unobserve() { }
+  disconnect() { }
 };
 
 afterEach(() => {
-	cleanup();
+  cleanup();
 });

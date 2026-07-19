@@ -8,140 +8,140 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 const mockMedLabel = 'test medicine';
 const mockMedValue = 'tst_med';
 const mockUserMedicines = [
-	{
-		name: `${mockMedLabel} 1`,
-		abbreviation: `${mockMedValue}_1`,
-		type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
-	},
-	{
-		name: `${mockMedLabel} 2`,
-		abbreviation: `${mockMedValue}_2`,
-		type: MEDICINE_TYPES.PAINKILLER,
-	},
+  {
+    name: `${mockMedLabel} 1`,
+    abbreviation: `${mockMedValue}_1`,
+    type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+  },
+  {
+    name: `${mockMedLabel} 2`,
+    abbreviation: `${mockMedValue}_2`,
+    type: MEDICINE_TYPES.PAINKILLER,
+  },
 ];
 
 vi.mock('@/shared/hooks/user/use-user', () => ({
-	useUser: () => ({
-		medicines: mockUserMedicines,
-	}),
+  useUser: () => ({
+    medicines: mockUserMedicines,
+  }),
 }));
 
 const mockDefaultFilter = {
-	intensity: null,
-	symptom: [],
-	medicine: [],
-	effectiveness: null,
-	midas: [],
+  intensity: null,
+  symptom: [],
+  medicine: [],
+  effectiveness: null,
+  midas: [],
 };
 
 describe('<FilterForm />', () => {
-	const user = userEvent.setup();
-	const defaultProps = {
-		variant: FILTER_FORM_VARIANTS.STANDARD,
-		filter: mockDefaultFilter,
-		setFilter: vi.fn(),
-	};
+  const user = userEvent.setup();
+  const defaultProps = {
+    variant: FILTER_FORM_VARIANTS.STANDARD,
+    filter: mockDefaultFilter,
+    setFilter: vi.fn(),
+  };
 
-	afterEach(() => vi.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
-	describe('rendering', () => {
-		it('renders filter form container', () => {
-			render(<FilterForm {...defaultProps} />);
+  describe('rendering', () => {
+    it('renders filter form container', () => {
+      render(<FilterForm {...defaultProps} />);
 
-			expect(screen.getByTestId('filter-form')).toBeInTheDocument();
-		});
+      expect(screen.getByTestId('filter-form')).toBeInTheDocument();
+    });
 
-		it('renders intensity dropdown', () => {
-			render(<FilterForm {...defaultProps} />);
+    it('renders intensity dropdown', () => {
+      render(<FilterForm {...defaultProps} />);
 
-			expect(screen.getByLabelText('Intensity')).toBeInTheDocument();
-		});
+      expect(screen.getByLabelText('Intensity')).toBeInTheDocument();
+    });
 
-		it('renders symptoms combobox', () => {
-			render(<FilterForm {...defaultProps} />);
+    it('renders symptoms combobox', () => {
+      render(<FilterForm {...defaultProps} />);
 
-			expect(screen.getByLabelText('Symptoms')).toBeInTheDocument();
-		});
+      expect(screen.getByLabelText('Symptoms')).toBeInTheDocument();
+    });
 
-		it('renders medicine combobox when medicineInputVisible is true', () => {
-			render(<FilterForm {...defaultProps} medicineInputVisible />);
+    it('renders medicine combobox when medicineInputVisible is true', () => {
+      render(<FilterForm {...defaultProps} medicineInputVisible />);
 
-			expect(screen.getByLabelText('Medicine')).toBeInTheDocument();
-			expect(screen.getByLabelText('Effectiveness')).toBeInTheDocument();
-		});
+      expect(screen.getByLabelText('Medicine')).toBeInTheDocument();
+      expect(screen.getByLabelText('Effectiveness')).toBeInTheDocument();
+    });
 
-		it('hides medicine combobox when medicineInputVisible is false', () => {
-			render(<FilterForm {...defaultProps} medicineInputVisible={false} />);
+    it('hides medicine combobox when medicineInputVisible is false', () => {
+      render(<FilterForm {...defaultProps} medicineInputVisible={false} />);
 
-			expect(screen.queryByLabelText('Medicine')).not.toBeInTheDocument();
-			expect(screen.queryByLabelText('Effectiveness')).not.toBeInTheDocument();
-		});
+      expect(screen.queryByLabelText('Medicine')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Effectiveness')).not.toBeInTheDocument();
+    });
 
-		it('renders midas combobox when midasInputVisible is true', () => {
-			render(<FilterForm {...defaultProps} midasInputVisible />);
+    it('renders midas combobox when midasInputVisible is true', () => {
+      render(<FilterForm {...defaultProps} midasInputVisible />);
 
-			expect(screen.getByLabelText('Midas')).toBeInTheDocument();
-		});
+      expect(screen.getByLabelText('Midas')).toBeInTheDocument();
+    });
 
-		it('hides midas combobox when midasInputVisible is false', () => {
-			render(<FilterForm {...defaultProps} midasInputVisible={false} />);
+    it('hides midas combobox when midasInputVisible is false', () => {
+      render(<FilterForm {...defaultProps} midasInputVisible={false} />);
 
-			expect(screen.queryByLabelText('Midas')).not.toBeInTheDocument();
-		});
-	});
+      expect(screen.queryByLabelText('Midas')).not.toBeInTheDocument();
+    });
+  });
 
-	describe('variants', () => {
-		it('applies compact classes for COMPACT variant', () => {
-			render(<FilterForm {...defaultProps} variant={FILTER_FORM_VARIANTS.COMPACT} />);
+  describe('variants', () => {
+    it('applies compact classes for COMPACT variant', () => {
+      render(<FilterForm {...defaultProps} variant={FILTER_FORM_VARIANTS.COMPACT} />);
 
-			expect(screen.getByTestId('filter-form')).toHaveClass('space-y-2');
-			expect(screen.getByTestId('filter-form')).not.toHaveClass('rounded-xl');
-		});
+      expect(screen.getByTestId('filter-form')).toHaveClass('space-y-2');
+      expect(screen.getByTestId('filter-form')).not.toHaveClass('rounded-xl');
+    });
 
-		it('applies standard classes for STANDARD variant', () => {
-			render(<FilterForm {...defaultProps} variant={FILTER_FORM_VARIANTS.STANDARD} />);
+    it('applies standard classes for STANDARD variant', () => {
+      render(<FilterForm {...defaultProps} variant={FILTER_FORM_VARIANTS.STANDARD} />);
 
-			expect(screen.getByTestId('filter-form')).toHaveClass('rounded-xl');
-		});
-	});
+      expect(screen.getByTestId('filter-form')).toHaveClass('rounded-xl');
+    });
+  });
 
-	describe('interactions', () => {
-		it('calls setFilter when intensity changes', async () => {
-			const setFilter = vi.fn();
+  describe('interactions', () => {
+    it('calls setFilter when intensity changes', async () => {
+      const setFilter = vi.fn();
 
-			render(<FilterForm {...defaultProps} setFilter={setFilter} />);
+      render(<FilterForm {...defaultProps} setFilter={setFilter} />);
 
-			await user.click(screen.getAllByTestId('dropdown-menu-trigger')[0]);
-			await user.click(screen.getByTestId('high'));
+      await user.click(screen.getAllByTestId('dropdown-menu-trigger')[0]);
+      await user.click(screen.getByTestId('high'));
 
-			expect(setFilter).toHaveBeenCalled();
-		});
+      expect(setFilter).toHaveBeenCalled();
+    });
 
-		it('calls setFilter when effectiveness changes', async () => {
-			const setFilter = vi.fn();
+    it('calls setFilter when effectiveness changes', async () => {
+      const setFilter = vi.fn();
 
-			render(<FilterForm {...defaultProps} setFilter={setFilter} medicineInputVisible />);
+      render(<FilterForm {...defaultProps} setFilter={setFilter} medicineInputVisible />);
 
-			await user.click(screen.getAllByTestId('dropdown-menu-trigger')[1]);
-			await user.click(screen.getByTestId('yes'));
+      await user.click(screen.getAllByTestId('dropdown-menu-trigger')[1]);
+      await user.click(screen.getByTestId('yes'));
 
-			expect(setFilter).toHaveBeenCalled();
-		});
+      expect(setFilter).toHaveBeenCalled();
+    });
 
-		it('calls setFilter with null when intensity is set to ANY', async () => {
-			const setFilter = vi.fn();
-			const filterWithIntensity = { ...mockDefaultFilter, intensity: 'high' as any };
+    it('calls setFilter with null when intensity is set to ANY', async () => {
+      const setFilter = vi.fn();
+      const filterWithIntensity = { ...mockDefaultFilter, intensity: 'high' as any };
 
-			render(<FilterForm {...defaultProps} filter={filterWithIntensity} setFilter={setFilter} />);
+      render(<FilterForm {...defaultProps} filter={filterWithIntensity} setFilter={setFilter} />);
 
-			await user.click(screen.getAllByTestId('dropdown-menu-trigger')[0]);
-			await user.click(screen.getByTestId('any'));
+      await user.click(screen.getAllByTestId('dropdown-menu-trigger')[0]);
+      await user.click(screen.getByTestId('any'));
 
-			expect(setFilter).toHaveBeenCalledWith(expect.any(Function));
+      expect(setFilter).toHaveBeenCalledWith(expect.any(Function));
 
-			const updater = setFilter.mock.calls[0][0];
-			const result = updater(filterWithIntensity);
-			expect(result.intensity).toBeNull();
-		});
-	});
+      const updater = setFilter.mock.calls[0][0];
+      const result = updater(filterWithIntensity);
+      expect(result.intensity).toBeNull();
+    });
+  });
 });

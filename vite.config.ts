@@ -5,21 +5,21 @@ import { defineConfig } from 'vitest/config';
 
 // https://vite.dev/config/
 export default defineConfig({
-	test: {
-		globals: true,
-		environment: 'jsdom',
-		setupFiles: ['./src/test/setup.ts'],
-	},
-	plugins: [
-		react({
-			babel: {
-				plugins: [['babel-plugin-react-compiler']],
-			},
-		}),
-	],
-	resolve: {
-		alias: {
-			'@': path.resolve(__dirname, 'src'),
-		},
-	},
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+  },
+  plugins: [
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
+  ],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
 });

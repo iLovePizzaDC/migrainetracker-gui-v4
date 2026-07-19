@@ -5,56 +5,56 @@ import { useMedDays } from '@/features/calendar/hooks/use-med-days';
 import { type ReactNode } from 'react';
 
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
-	const {
-		currentDate,
-		firstDayOfMonth,
-		lastDayOfMonth,
-		daysArray,
-		daysInMonth,
-		month,
-		year,
-		setMonth,
-		prevMonth,
-		nextMonth,
-	} = useCalendarDate();
+  const {
+    currentDate,
+    firstDayOfMonth,
+    lastDayOfMonth,
+    daysArray,
+    daysInMonth,
+    month,
+    year,
+    setMonth,
+    prevMonth,
+    nextMonth,
+  } = useCalendarDate();
 
-	const {
-		calendarEvents,
-		filteredEvents,
-		migrainosusFlags,
-		prophylaxisEvents,
-		filter,
-		setFilter,
-		isLoading,
-		refetchEvents,
-	} = useCalendarEvents(firstDayOfMonth, lastDayOfMonth, daysInMonth);
+  const {
+    calendarEvents,
+    filteredEvents,
+    migrainosusFlags,
+    prophylaxisEvents,
+    filter,
+    setFilter,
+    isLoading,
+    refetchEvents,
+  } = useCalendarEvents(firstDayOfMonth, lastDayOfMonth, daysInMonth);
 
-	const { medDaysCount, maxMedDaysCount, collectMedDays } = useMedDays(currentDate);
+  const { medDaysCount, maxMedDaysCount, collectMedDays } = useMedDays(currentDate);
 
-	return (
-		<CalendarContext.Provider
-			value={{
-				isLoading,
-				date: currentDate,
-				daysArray,
-				month,
-				year,
-				setMonth,
-				prevMonth,
-				nextMonth,
-				collectMedDays,
-				refetchEvents,
-				calendarEvents,
-				filteredEvents,
-				medDaysCount,
-				maxMedDaysCount,
-				migrainosusFlags,
-				prophylaxisEvents,
-				filter,
-				setFilter,
-			}}
-		>
-			{children}
-		</CalendarContext.Provider>
-	);
+  return (
+    <CalendarContext.Provider
+      value={{
+        isLoading,
+        date: currentDate,
+        daysArray,
+        month,
+        year,
+        setMonth,
+        prevMonth,
+        nextMonth,
+        collectMedDays,
+        refetchEvents,
+        calendarEvents,
+        filteredEvents,
+        medDaysCount,
+        maxMedDaysCount,
+        migrainosusFlags,
+        prophylaxisEvents,
+        filter,
+        setFilter,
+      }}
+    >
+      {children}
+    </CalendarContext.Provider>
+  );
 };

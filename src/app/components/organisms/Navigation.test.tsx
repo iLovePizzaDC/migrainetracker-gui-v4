@@ -6,97 +6,97 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/hooks/user/use-user');
 vi.mock('@/app/components/molecules/navigation/NavigationLinks', () => ({
-	default: () => <div data-testid='navigation-links' />,
+  default: () => <div data-testid='navigation-links' />,
 }));
 vi.mock('@/app/components/molecules/navigation/MobileNavigationLinks', () => ({
-	default: ({ toggleMenu }: any) => (
-		<div data-testid='mobile-navigation-links' onClick={toggleMenu} />
-	),
+  default: ({ toggleMenu }: any) => (
+    <div data-testid='mobile-navigation-links' onClick={toggleMenu} />
+  ),
 }));
 vi.mock('@/app/components/molecules/navigation/MobileNavigationOptions', () => ({
-	default: ({ toggleMenu, isOpen }: any) => (
-		<button data-testid='mobile-nav-toggle' onClick={toggleMenu}>
-			{isOpen ? 'close' : 'open'}
-		</button>
-	),
+  default: ({ toggleMenu, isOpen }: any) => (
+    <button data-testid='mobile-nav-toggle' onClick={toggleMenu}>
+      {isOpen ? 'close' : 'open'}
+    </button>
+  ),
 }));
 
 describe('<Navigation />', () => {
-	const user = userEvent.setup();
+  const user = userEvent.setup();
 
-	beforeEach(() => {
-		vi.mocked(useUser).mockReturnValue({ user: null } as any);
-	});
+  beforeEach(() => {
+    vi.mocked(useUser).mockReturnValue({ user: null } as any);
+  });
 
-	afterEach(() => vi.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
-	describe('rendering', () => {
-		it('renders greeting without name when user is null', () => {
-			render(<Navigation />);
+  describe('rendering', () => {
+    it('renders greeting without name when user is null', () => {
+      render(<Navigation />);
 
-			expect(screen.getByText('Sorry to see you')).toBeInTheDocument();
-		});
+      expect(screen.getByText('Sorry to see you')).toBeInTheDocument();
+    });
 
-		it('renders greeting with name when user is set', () => {
-			vi.mocked(useUser).mockReturnValue({
-				user: { given_name: 'John' },
-			} as any);
+    it('renders greeting with name when user is set', () => {
+      vi.mocked(useUser).mockReturnValue({
+        user: { given_name: 'John' },
+      } as any);
 
-			render(<Navigation />);
+      render(<Navigation />);
 
-			expect(screen.getByText('Sorry to see you, John')).toBeInTheDocument();
-		});
+      expect(screen.getByText('Sorry to see you, John')).toBeInTheDocument();
+    });
 
-		it('renders desktop/mobile nav when user is set', () => {
-			vi.mocked(useUser).mockReturnValue({
-				user: { given_name: 'John' },
-			} as any);
+    it('renders desktop/mobile nav when user is set', () => {
+      vi.mocked(useUser).mockReturnValue({
+        user: { given_name: 'John' },
+      } as any);
 
-			render(<Navigation />);
+      render(<Navigation />);
 
-			expect(screen.getByTestId('desktop-nav')).toBeInTheDocument();
-			expect(screen.getByTestId('mobile-nav')).toBeInTheDocument();
-		});
+      expect(screen.getByTestId('desktop-nav')).toBeInTheDocument();
+      expect(screen.getByTestId('mobile-nav')).toBeInTheDocument();
+    });
 
-		it('renders mobile nav closed by default', () => {
-			render(<Navigation />);
+    it('renders mobile nav closed by default', () => {
+      render(<Navigation />);
 
-			expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-0', 'opacity-0');
-		});
+      expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-0', 'opacity-0');
+    });
 
-		it('renders menu toggle when user is set', () => {
-			vi.mocked(useUser).mockReturnValue({
-				user: { given_name: 'John' },
-			} as any);
+    it('renders menu toggle when user is set', () => {
+      vi.mocked(useUser).mockReturnValue({
+        user: { given_name: 'John' },
+      } as any);
 
-			render(<Navigation />);
+      render(<Navigation />);
 
-			expect(screen.getByTestId('mobile-nav-toggle')).toBeInTheDocument();
-		});
+      expect(screen.getByTestId('mobile-nav-toggle')).toBeInTheDocument();
+    });
 
-		it('renders menu toggle when user is null', () => {
-			render(<Navigation />);
+    it('renders menu toggle when user is null', () => {
+      render(<Navigation />);
 
-			expect(screen.getByTestId('mobile-nav-toggle')).toBeInTheDocument();
-		});
-	});
+      expect(screen.getByTestId('mobile-nav-toggle')).toBeInTheDocument();
+    });
+  });
 
-	describe('mobile menu toggle', () => {
-		it('opens mobile nav on toggle click', async () => {
-			render(<Navigation />);
+  describe('mobile menu toggle', () => {
+    it('opens mobile nav on toggle click', async () => {
+      render(<Navigation />);
 
-			await user.click(screen.getByTestId('mobile-nav-toggle'));
+      await user.click(screen.getByTestId('mobile-nav-toggle'));
 
-			expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-60', 'opacity-100');
-		});
+      expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-60', 'opacity-100');
+    });
 
-		it('closes mobile nav on second toggle click', async () => {
-			render(<Navigation />);
+    it('closes mobile nav on second toggle click', async () => {
+      render(<Navigation />);
 
-			await user.click(screen.getByTestId('mobile-nav-toggle'));
-			await user.click(screen.getByTestId('mobile-nav-toggle'));
+      await user.click(screen.getByTestId('mobile-nav-toggle'));
+      await user.click(screen.getByTestId('mobile-nav-toggle'));
 
-			expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-0', 'opacity-0');
-		});
-	});
+      expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-0', 'opacity-0');
+    });
+  });
 });

@@ -1,37 +1,37 @@
 import type { MigraineEvent, ProphylaxisEvent } from '@/features/calendar/types/event';
 import { determineStrength } from '@/features/calendar/utils/event-highlight';
 import {
-	parseMigraineEventDescription,
-	parseProphylaxisEventDescription,
+  parseMigraineEventDescription,
+  parseProphylaxisEventDescription,
 } from '@/features/calendar/utils/event-parser';
 import type { RawEventResponse } from '@/shared/api/types/event';
 
 export function mapMigraineEvents(raw: RawEventResponse[]): MigraineEvent[] {
-	return raw
-		.map((event) => {
-			const description = parseMigraineEventDescription(event);
-			if (!description) return null;
-			return {
-				date: new Date(event.start.date),
-				description,
-				strength: determineStrength(description),
-			} satisfies MigraineEvent;
-		})
-		.filter((e): e is MigraineEvent => e !== null)
-		.sort((a, b) => a.date.getTime() - b.date.getTime());
+  return raw
+    .map((event) => {
+      const description = parseMigraineEventDescription(event);
+      if (!description) return null;
+      return {
+        date: new Date(event.start.date),
+        description,
+        strength: determineStrength(description),
+      } satisfies MigraineEvent;
+    })
+    .filter((e): e is MigraineEvent => e !== null)
+    .sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
 export function mapProphylaxisEvents(raw: RawEventResponse[]): ProphylaxisEvent[] {
-	return raw
-		.map((event) => {
-			const description = parseProphylaxisEventDescription(event);
-			if (!description) return null;
-			return {
-				date: new Date(event.start.date),
-				description,
-				recurrence: event.recurrence,
-			} satisfies ProphylaxisEvent;
-		})
-		.filter((e): e is ProphylaxisEvent => e !== null)
-		.sort((a, b) => a.date.getTime() - b.date.getTime());
+  return raw
+    .map((event) => {
+      const description = parseProphylaxisEventDescription(event);
+      if (!description) return null;
+      return {
+        date: new Date(event.start.date),
+        description,
+        recurrence: event.recurrence,
+      } satisfies ProphylaxisEvent;
+    })
+    .filter((e): e is ProphylaxisEvent => e !== null)
+    .sort((a, b) => a.date.getTime() - b.date.getTime());
 }

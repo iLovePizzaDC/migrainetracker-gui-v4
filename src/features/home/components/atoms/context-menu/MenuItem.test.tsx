@@ -4,31 +4,31 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('<MenuItem />', () => {
-	const user = userEvent.setup();
-	const defaultProps = {
-		label: 'Test label',
-		onClick: vi.fn(),
-	};
+  const user = userEvent.setup();
+  const defaultProps = {
+    label: 'Test label',
+    onClick: vi.fn(),
+  };
 
-	it('renders button with text', () => {
-		render(<MenuItem {...defaultProps} />);
+  it('renders button with text', () => {
+    render(<MenuItem {...defaultProps} />);
 
-		expect(screen.getByRole('button')).toBeInTheDocument();
-		expect(screen.getByText('Test label')).toBeInTheDocument();
-	});
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByText('Test label')).toBeInTheDocument();
+  });
 
-	it('calls onClick on button click', async () => {
-		const mockOnClick = vi.fn();
-		render(<MenuItem {...defaultProps} onClick={mockOnClick} />);
+  it('calls onClick on button click', async () => {
+    const mockOnClick = vi.fn();
+    render(<MenuItem {...defaultProps} onClick={mockOnClick} />);
 
-		await user.click(screen.getByText('Test label'));
+    await user.click(screen.getByText('Test label'));
 
-		expect(mockOnClick).toHaveBeenCalled();
-	});
+    expect(mockOnClick).toHaveBeenCalled();
+  });
 
-	it('passes down className correctly', async () => {
-		render(<MenuItem {...defaultProps} className='text-purple-500' />);
+  it('passes down className correctly', async () => {
+    render(<MenuItem {...defaultProps} className='text-purple-500' />);
 
-		expect(screen.getByText('Test label')).toHaveClass('text-purple-500');
-	});
+    expect(screen.getByText('Test label')).toHaveClass('text-purple-500');
+  });
 });
