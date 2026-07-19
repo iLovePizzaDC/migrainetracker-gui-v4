@@ -7,93 +7,93 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('@/shared/api/user.api');
 
 const mockUser = {
-	id: 1,
-	email: 'test@test.com',
-	name: 'Test User',
-	given_name: 'Test',
-	family_name: 'User',
+  id: 1,
+  email: 'test@test.com',
+  name: 'Test User',
+  given_name: 'Test',
+  family_name: 'User',
 } as unknown as User;
 
 describe('useAuthCheck', () => {
-	const setUser = vi.fn();
+  const setUser = vi.fn();
 
-	beforeEach(() => {
-		vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser });
-		vi.mocked(userApi.fetchUserInformation).mockResolvedValue({ user: mockUser });
+  beforeEach(() => {
+    vi.mocked(userApi.fetchUserLogin).mockResolvedValue({ user: mockUser });
+    vi.mocked(userApi.fetchUserInformation).mockResolvedValue({ user: mockUser });
 
-		Object.defineProperty(window, 'location', {
-			value: {
-				search: '',
-				href: 'https://example.com/home?code=abc123',
-				origin: 'https://example.com',
-			},
-			writable: true,
-		});
-		window.history.replaceState = vi.fn();
-	});
+    Object.defineProperty(window, 'location', {
+      value: {
+        search: '',
+        href: 'https://example.com/home?code=abc123',
+        origin: 'https://example.com',
+      },
+      writable: true,
+    });
+    window.history.replaceState = vi.fn();
+  });
 
-	afterEach(() => vi.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
-	describe('code in URL', () => {
-		it('calls fetchUserLogin when code is in URL', async () => {
-			window.location.search = '?code=abc123';
+  describe('code in URL', () => {
+    it('calls fetchUserLogin when code is in URL', async () => {
+      window.location.search = '?code=abc123';
 
-			renderHook(() => useAuthCheck(setUser));
+      renderHook(() => useAuthCheck(setUser));
 
-			await waitFor(() => expect(userApi.fetchUserLogin).toHaveBeenCalledWith('abc123'));
-		});
+      await waitFor(() => expect(userApi.fetchUserLogin).toHaveBeenCalledWith('abc123'));
+    });
 
-		it('calls setUser with response user after login', async () => {
-			window.location.search = '?code=abc123';
+    it('calls setUser with response user after login', async () => {
+      window.location.search = '?code=abc123';
 
-			renderHook(() => useAuthCheck(setUser));
+      renderHook(() => useAuthCheck(setUser));
 
-			await waitFor(() => expect(setUser).toHaveBeenCalledWith(mockUser));
-		});
+      await waitFor(() => expect(setUser).toHaveBeenCalledWith(mockUser));
+    });
 
-		it('replaces URL history after login with absolute URL', async () => {
-			window.location.search = '?code=abc123';
-			window.location.href = 'https://example.com/home?code=abc123';
+    it('replaces URL history after login with absolute URL', async () => {
+      window.location.search = '?code=abc123';
+      window.location.href = 'https://example.com/home?code=abc123';
 
-			renderHook(() => useAuthCheck(setUser));
+      renderHook(() => useAuthCheck(setUser));
 
-			await waitFor(() =>
-				expect(window.history.replaceState).toHaveBeenCalledWith(
-					{},
-					'',
-					'https://example.com/home',
-				),
-			);
-		});
-	});
+      await waitFor(() =>
+        expect(window.history.replaceState).toHaveBeenCalledWith(
+          {},
+          '',
+          'https://example.com/home',
+        ),
+      );
+    });
+  });
 
-	describe('no code in URL', () => {
-		it('calls fetchUserInformation when no code in URL', async () => {
-			window.location.search = '';
+  describe('no code in URL', () => {
+    it('calls fetchUserInformation when no code in URL', async () => {
+      window.location.search = '';
 
-			renderHook(() => useAuthCheck(setUser));
+      renderHook(() => useAuthCheck(setUser));
 
-			await waitFor(() => expect(userApi.fetchUserInformation).toHaveBeenCalled());
-		});
+      await waitFor(() => expect(userApi.fetchUserInformation).toHaveBeenCalled());
+    });
 
-		it('calls setUser with result of fetchUserInformation', async () => {
-			window.location.search = '';
+    it('calls setUser with result of fetchUserInformation', async () => {
+      window.location.search = '';
 
-			renderHook(() => useAuthCheck(setUser));
+      renderHook(() => useAuthCheck(setUser));
 
-			await waitFor(() => expect(setUser).toHaveBeenCalledWith(mockUser));
-		});
-	});
+      await waitFor(() => expect(setUser).toHaveBeenCalledWith(mockUser));
+    });
+  });
 
-	describe('login failure', () => {
-		it('sets user to null if fetchUserLogin fails', async () => {
-			window.location.search = '?code=abc123';
-			vi.mocked(userApi.fetchUserLogin).mockRejectedValue(new Error('fail'));
-			vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('unauthorized'));
+  describe('login failure', () => {
+    it('sets user to null if fetchUserLogin fails', async () => {
+      window.location.search = '?code=abc123';
+      vi.mocked(userApi.fetchUserLogin).mockRejectedValue(new Error('fail'));
+      vi.mocked(userApi.fetchUserInformation).mockRejectedValue(new Error('unauthorized'));
 
-			renderHook(() => useAuthCheck(setUser));
+      renderHook(() => useAuthCheck(setUser));
 
-			await waitFor(() => expect(setUser).toHaveBeenCalledWith(null));
-		});
-	});
+      await waitFor(() => expect(setUser).toHaveBeenCalledWith(null));
+    });
+  });
 });

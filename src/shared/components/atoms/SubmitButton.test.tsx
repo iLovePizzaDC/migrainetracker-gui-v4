@@ -5,34 +5,34 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 describe('<SubmitButton />', () => {
-	const user = userEvent.setup();
+  const user = userEvent.setup();
 
-	it('renders button and label', () => {
-		render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' />);
+  it('renders button and label', () => {
+    render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' />);
 
-		expect(screen.getByText('Test label')).toBeInTheDocument();
-		expect(screen.getByRole('button')).toBeInTheDocument();
-	});
+    expect(screen.getByText('Test label')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
 
-	it('calls onClick on button click', async () => {
-		const mockOnClick = vi.fn();
+  it('calls onClick on button click', async () => {
+    const mockOnClick = vi.fn();
 
-		render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' onClick={mockOnClick} />);
+    render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' onClick={mockOnClick} />);
 
-		await user.click(screen.getByText('Test label'));
+    await user.click(screen.getByText('Test label'));
 
-		expect(mockOnClick).toHaveBeenCalled();
-	});
+    expect(mockOnClick).toHaveBeenCalled();
+  });
 
-	it('is disabled if prop is true', () => {
-		render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' disabled />);
+  it('is disabled if prop is true', () => {
+    render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' disabled />);
 
-		expect(screen.getByText('Test label')).toBeDisabled();
-	});
+    expect(screen.getByText('Test label')).toBeDisabled();
+  });
 
-	it('passes classNames down correctly', () => {
-		render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' className='testclass' />);
+  it('passes classNames down correctly', () => {
+    render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' className='testclass' />);
 
-		expect(screen.getByText('Test label')).toHaveClass('testclass');
-	});
+    expect(screen.getByText('Test label')).toHaveClass('testclass');
+  });
 });

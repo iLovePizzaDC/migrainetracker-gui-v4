@@ -3,7 +3,7 @@ name: CI & Deploy
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
   pull_request:
     branches: [main, develop]
 

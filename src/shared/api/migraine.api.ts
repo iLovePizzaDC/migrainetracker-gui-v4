@@ -8,165 +8,165 @@ import { formatEffectiveness, formatMedicine } from '@/shared/utils/formatter/ev
 import axios from 'axios';
 
 const buildFilterObject = (filter?: Filter): { [key: string]: string } => {
-	const filterObject: { [key: string]: string } = {};
+  const filterObject: { [key: string]: string } = {};
 
-	if (filter?.duration !== undefined && filter.duration !== 'all')
-		filterObject.duration = filter.duration;
-	if (filter?.intensity !== undefined && filter.intensity !== 'all')
-		filterObject.intensity = filter.intensity;
-	if (filter?.symptoms !== undefined && filter.symptoms !== 'all')
-		filterObject.symptoms = filter.symptoms;
-	if (filter?.medicines !== undefined && filter.medicines !== 'all')
-		filterObject.medicines = filter.medicines;
-	if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all')
-		filterObject.effectiveness = filter.effectiveness;
+  if (filter?.duration !== undefined && filter.duration !== 'all')
+    filterObject.duration = filter.duration;
+  if (filter?.intensity !== undefined && filter.intensity !== 'all')
+    filterObject.intensity = filter.intensity;
+  if (filter?.symptoms !== undefined && filter.symptoms !== 'all')
+    filterObject.symptoms = filter.symptoms;
+  if (filter?.medicines !== undefined && filter.medicines !== 'all')
+    filterObject.medicines = filter.medicines;
+  if (filter?.effectiveness !== undefined && filter.effectiveness !== 'all')
+    filterObject.effectiveness = filter.effectiveness;
 
-	return filterObject;
+  return filterObject;
 };
 
 export const fetchMigraineEvents = async (
-	start: string,
-	end: string,
-	filter?: Filter,
-	signal?: AbortSignal,
+  start: string,
+  end: string,
+  filter?: Filter,
+  signal?: AbortSignal,
 ): Promise<RawEventResponse[] | undefined> => {
-	const filterString = JSON.stringify(buildFilterObject(filter));
+  const filterString = JSON.stringify(buildFilterObject(filter));
 
-	try {
-		const response = await api.get('MigraineEvents', {
-			params: { dateMin: start, dateMax: end, filter: filterString },
-			signal,
-		});
-		return response.data;
-	} catch (err) {
-		if (axios.isCancel?.(err)) return;
-		if (err instanceof DOMException && err.name === 'AbortError') return;
-		throw new Error('Failed to fetch migraine events');
-	}
+  try {
+    const response = await api.get('MigraineEvents', {
+      params: { dateMin: start, dateMax: end, filter: filterString },
+      signal,
+    });
+    return response.data;
+  } catch (err) {
+    if (axios.isCancel?.(err)) return;
+    if (err instanceof DOMException && err.name === 'AbortError') return;
+    throw new Error('Failed to fetch migraine events');
+  }
 };
 
 export const fetchMigraineAmount = async (
-	start: string,
-	end: string,
-	filter?: Filter,
+  start: string,
+  end: string,
+  filter?: Filter,
 ): Promise<number> => {
-	const filterObject: { [key: string]: string } = {};
+  const filterObject: { [key: string]: string } = {};
 
-	if (filter) {
-		Object.entries(filter).forEach(([key, value]) => {
-			if (value !== undefined) {
-				filterObject[key] = value;
-			}
-		});
-	}
+  if (filter) {
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value !== undefined) {
+        filterObject[key] = value;
+      }
+    });
+  }
 
-	const filterString = JSON.stringify(filterObject);
+  const filterString = JSON.stringify(filterObject);
 
-	try {
-		const response = await api.get('MigraineAmount', {
-			params: { dateMin: start, dateMax: end, filter: filterString },
-		});
-		return response.data;
-	} catch {
-		throw new Error('Failed to fetch migraine amount');
-	}
+  try {
+    const response = await api.get('MigraineAmount', {
+      params: { dateMin: start, dateMax: end, filter: filterString },
+    });
+    return response.data;
+  } catch {
+    throw new Error('Failed to fetch migraine amount');
+  }
 };
 
 export const fetchDurationAmount = async (
-	start: string,
-	end: string,
-	filter?: Filter,
+  start: string,
+  end: string,
+  filter?: Filter,
 ): Promise<number> => {
-	const filterString = JSON.stringify(buildFilterObject(filter));
+  const filterString = JSON.stringify(buildFilterObject(filter));
 
-	try {
-		const response = await api.get('DurationAmount', {
-			params: { dateMin: start, dateMax: end, filter: filterString },
-		});
-		return response.data;
-	} catch {
-		throw new Error('Failed to fetch duration amount');
-	}
+  try {
+    const response = await api.get('DurationAmount', {
+      params: { dateMin: start, dateMax: end, filter: filterString },
+    });
+    return response.data;
+  } catch {
+    throw new Error('Failed to fetch duration amount');
+  }
 };
 
 export const fetchMedicineAmount = async (
-	start: string,
-	end: string,
-	filter?: Filter,
+  start: string,
+  end: string,
+  filter?: Filter,
 ): Promise<number> => {
-	const filterString = JSON.stringify(buildFilterObject(filter));
+  const filterString = JSON.stringify(buildFilterObject(filter));
 
-	try {
-		const response = await api.get('MedicineAmount', {
-			params: { dateMin: start, dateMax: end, filter: filterString },
-		});
-		return response.data;
-	} catch {
-		throw new Error('Failed to fetch medicine amount');
-	}
+  try {
+    const response = await api.get('MedicineAmount', {
+      params: { dateMin: start, dateMax: end, filter: filterString },
+    });
+    return response.data;
+  } catch {
+    throw new Error('Failed to fetch medicine amount');
+  }
 };
 
 export const fetchAreaChart = async (
-	type: CardType,
-	end: string,
-	timeFrameCount: number,
-	timeFrameUnit: TimeFrameUnit,
-	filter?: Filter,
+  type: CardType,
+  end: string,
+  timeFrameCount: number,
+  timeFrameUnit: TimeFrameUnit,
+  filter?: Filter,
 ): Promise<RawAreaChartResponse> => {
-	const filterString = JSON.stringify(buildFilterObject(filter));
+  const filterString = JSON.stringify(buildFilterObject(filter));
 
-	try {
-		const response = await api.get('AreaChart', {
-			params: { type, end, timeFrameCount, timeFrameUnit, filter: filterString },
-		});
-		return response.data;
-	} catch {
-		throw new Error('Failed to fetch AreaChart');
-	}
+  try {
+    const response = await api.get('AreaChart', {
+      params: { type, end, timeFrameCount, timeFrameUnit, filter: filterString },
+    });
+    return response.data;
+  } catch {
+    throw new Error('Failed to fetch AreaChart');
+  }
 };
 
 export const fetchNewEntry = async (
-	date: string,
-	durations: AppendDuration[],
-	intensity: IntensityType,
-	symptoms: SymptomType[],
-	medicines: AppendMedicine[],
-	midas: AppendMidas,
+  date: string,
+  durations: AppendDuration[],
+  intensity: IntensityType,
+  symptoms: SymptomType[],
+  medicines: AppendMedicine[],
+  midas: AppendMidas,
 ): Promise<RawEventResponse> => {
-	const medicineString: string = formatMedicine(medicines);
-	const effectivenessString: string = formatEffectiveness(medicines);
+  const medicineString: string = formatMedicine(medicines);
+  const effectivenessString: string = formatEffectiveness(medicines);
 
-	const formattedDurations = durations.map((duration) => ({
-		start: parseTimeToDecimal(duration.startTime).toString(),
-		end: parseTimeToDecimal(duration.endTime).toString(),
-	}));
+  const formattedDurations = durations.map((duration) => ({
+    start: parseTimeToDecimal(duration.startTime).toString(),
+    end: parseTimeToDecimal(duration.endTime).toString(),
+  }));
 
-	const newEntry = {
-		duration: formattedDurations,
-		intensity,
-		symptoms,
-		medicine: medicineString,
-		effectiveness: effectivenessString,
-		midas,
-	};
+  const newEntry = {
+    duration: formattedDurations,
+    intensity,
+    symptoms,
+    medicine: medicineString,
+    effectiveness: effectivenessString,
+    midas,
+  };
 
-	try {
-		const response = await api.post('MigraineEvent', newEntry, {
-			params: { date },
-		});
-		return response.data;
-	} catch {
-		throw new Error('Failed to fetch new entry');
-	}
+  try {
+    const response = await api.post('MigraineEvent', newEntry, {
+      params: { date },
+    });
+    return response.data;
+  } catch {
+    throw new Error('Failed to fetch new entry');
+  }
 };
 
 export const fetchMidasScore = async (end: string) => {
-	try {
-		const response = await api.get('MidasScore', {
-			params: { end },
-		});
-		return response.data;
-	} catch {
-		throw new Error('Failed to fetch midas score');
-	}
+  try {
+    const response = await api.get('MidasScore', {
+      params: { end },
+    });
+    return response.data;
+  } catch {
+    throw new Error('Failed to fetch midas score');
+  }
 };

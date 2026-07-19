@@ -2,12 +2,12 @@ import CalendarNavigation from '@/features/calendar/components/atoms/CalendarNav
 import Weekdays from '@/features/calendar/components/atoms/Weekdays';
 
 function CalendarHeader() {
-	return (
-		<div data-testid='calendar-header'>
-			<CalendarNavigation />
-			<Weekdays />
-		</div>
-	);
+  return (
+    <div data-testid='calendar-header'>
+      <CalendarNavigation />
+      <Weekdays />
+    </div>
+  );
 }
 
 export default CalendarHeader;
