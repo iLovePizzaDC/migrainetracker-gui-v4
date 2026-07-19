@@ -7,7 +7,6 @@ import { fetchMigraineEvents } from '@/shared/api/migraine.api';
 import { fetchProphylaxisEvents } from '@/shared/api/prophylaxis';
 import type { RawEventResponse } from '@/shared/api/types/event';
 import { INTENSITY_TYPES, SYMPTOM_TYPES } from '@/shared/constants/event/event-details';
-import { formatDateToUs } from '@/shared/utils/date/date';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -137,15 +136,11 @@ describe('useCalendarEvents', () => {
 			]);
 		});
 
-		it('calls fetchProphylaxisEvents with the visible month range', async () => {
+		it('calls fetchProphylaxisEvents', async () => {
 			renderCalendarEvents();
 
 			await waitFor(() =>
-				expect(fetchProphylaxisEvents).toHaveBeenCalledWith(
-					formatDateToUs(FIRST_DAY),
-					formatDateToUs(LAST_DAY),
-					expect.any(AbortSignal),
-				),
+				expect(fetchProphylaxisEvents).toHaveBeenCalledWith(expect.any(AbortSignal)),
 			);
 		});
 
