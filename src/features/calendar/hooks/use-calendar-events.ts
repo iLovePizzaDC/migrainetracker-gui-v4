@@ -53,18 +53,19 @@ export function useCalendarEvents(
 				const fetchStart = getDateBeforeDays(firstDayOfMonth, MIGRAINOSUS_FLAG_THRESHOLD);
 				const fetchEnd = getDateAfterDays(lastDayOfMonth, MIGRAINOSUS_FLAG_THRESHOLD);
 
-				const migraineEventsRaw = await fetchMigraineEvents(
-					formatDateToUs(fetchStart),
-					formatDateToUs(fetchEnd),
-					undefined,
-					abortController?.signal,
-				);
-
-				const prophylaxisEventsRaw = await fetchProphylaxisEvents(
-					formatDateToUs(firstDayOfMonth),
-					formatDateToUs(lastDayOfMonth),
-					abortController?.signal,
-				);
+				const [migraineEventsRaw, prophylaxisEventsRaw] = await Promise.all([
+					fetchMigraineEvents(
+						formatDateToUs(fetchStart),
+						formatDateToUs(fetchEnd),
+						undefined,
+						abortController?.signal,
+					),
+					fetchProphylaxisEvents(
+						formatDateToUs(firstDayOfMonth),
+						formatDateToUs(lastDayOfMonth),
+						abortController?.signal,
+					),
+				]);
 
 				if (!migraineEventsRaw || !prophylaxisEventsRaw || id !== fetchIdRef.current) return;
 

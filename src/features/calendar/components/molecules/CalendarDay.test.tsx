@@ -15,6 +15,12 @@ const mockEvent1 = {
 	strength: 200 as keyof typeof STRENGTH_MAP,
 };
 
+const mockProphylaxisEvent = {
+	date: new Date('2026-01-03'),
+	description: { medication: 'Aimovig', dose: '70mg' },
+	recurrence: ['RRULE:FREQ=WEEKLY;INTERVAL=4'],
+};
+
 const mockUseCalendar = (overrides = {}) =>
 	({
 		date: new Date('2026-01-01'),
@@ -124,7 +130,7 @@ describe('<CalendarDay />', () => {
 
 		it('shows a prophylaxis dot when a prophylaxis event exists for the day', () => {
 			vi.mocked(useCalendar).mockReturnValue(
-				mockUseCalendar({ prophylaxisEvents: [{ date: new Date('2026-01-03') }] }),
+				mockUseCalendar({ prophylaxisEvents: [mockProphylaxisEvent] }),
 			);
 
 			render(<CalendarDay day={3} index={0} openDate={null} onDayClick={mockOnDayClick} />);
@@ -138,6 +144,46 @@ describe('<CalendarDay />', () => {
 			render(<CalendarDay day={3} index={0} openDate={null} onDayClick={mockOnDayClick} />);
 
 			expect(screen.queryByTestId('prophylaxis-indicator-3')).not.toBeInTheDocument();
+		});
+	});
+
+	describe('prophylaxis tooltip', () => {
+		it('does not show tooltip content by default', () => {
+			vi.mocked(useCalendar).mockReturnValue(
+				mockUseCalendar({ prophylaxisEvents: [mockProphylaxisEvent] }),
+			);
+
+			render(<CalendarDay day={3} index={0} openDate={null} onDayClick={mockOnDayClick} />);
+
+			expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+		});
+
+		it('shows medication, dose and formatted recurrence when the dot is clicked', async () => {
+			const user = userEvent.setup();
+			vi.mocked(useCalendar).mockReturnValue(
+				mockUseCalendar({ prophylaxisEvents: [mockProphylaxisEvent] }),
+			);
+
+			render(<CalendarDay day={3} index={0} openDate={null} onDayClick={mockOnDayClick} />);
+
+			await user.click(screen.getByTestId('prophylaxis-indicator-3'));
+
+			const tooltip = screen.getByRole('tooltip');
+			expect(tooltip).toHaveTextContent('Aimovig 70mg');
+			expect(tooltip).toHaveTextContent('every 4 weeks');
+		});
+
+		it('does not call onDayClick when the prophylaxis dot is clicked', async () => {
+			const user = userEvent.setup();
+			vi.mocked(useCalendar).mockReturnValue(
+				mockUseCalendar({ prophylaxisEvents: [mockProphylaxisEvent] }),
+			);
+
+			render(<CalendarDay day={3} index={0} openDate={null} onDayClick={mockOnDayClick} />);
+
+			await user.click(screen.getByTestId('prophylaxis-indicator-3'));
+
+			expect(mockOnDayClick).not.toHaveBeenCalled();
 		});
 	});
 

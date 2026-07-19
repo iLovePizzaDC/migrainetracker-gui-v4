@@ -1,7 +1,9 @@
 import Dot from '@/features/calendar/components/atoms/Dot';
+import Tooltip from '@/features/calendar/components/atoms/Tooltip';
 import { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { getEventForDay } from '@/features/calendar/utils/event-highlight';
+import { formatRecurrence } from '@/features/calendar/utils/format-recurrence';
 
 interface ICalendarDay {
 	day: number | null;
@@ -67,7 +69,21 @@ function CalendarDay({ day, index, openDate, onDayClick }: ICalendarDay) {
 					color={migraineEvent ? STRENGTH_MAP[migraineEvent.strength] : 'bg-transparent'}
 					ring={!!(day && migrainosusFlags[day - 1])}
 				/>
-				{prophylaxisEvent && <Dot testId={`prophylaxis-indicator-${day}`} color='bg-cyan-400' />}
+				{prophylaxisEvent && (
+					<Tooltip
+						className='-m-2 p-2'
+						content={
+							<>
+								<p>
+									{prophylaxisEvent.description.medication} {prophylaxisEvent.description.dose}
+								</p>
+								<p>{formatRecurrence(prophylaxisEvent.recurrence) ?? 'No recurrence'}</p>
+							</>
+						}
+					>
+						<Dot testId={`prophylaxis-indicator-${day}`} color='bg-cyan-400' />
+					</Tooltip>
+				)}
 			</div>
 		</div>
 	);
