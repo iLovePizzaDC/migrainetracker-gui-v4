@@ -18,14 +18,14 @@ jobs:
 
       - name: Rebase develop onto main
         run: |
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-            git fetch origin
+          git fetch origin
 
-            git checkout develop
-            git reset --hard origin/develop
+          git checkout develop
+          git reset --hard origin/develop
 
-            git rebase origin/main
+          git rebase origin/main
 
-            git push --force origin develop
+          git push --force origin develop

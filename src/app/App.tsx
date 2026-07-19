@@ -12,45 +12,45 @@ import ProtectedRoute from '@/shared/routing/protected-route';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 function App() {
-	const { user, setUser } = useUser();
-	const { authChecked } = useAuthCheck(setUser);
+  const { user, setUser } = useUser();
+  const { authChecked } = useAuthCheck(setUser);
 
-	return (
-		<div onContextMenu={(e) => e.preventDefault()} className='flex flex-col relative'>
-			<div className='fixed inset-0 -z-10'>
-				<img src={getSeasonBackground()} alt='background' className='w-full h-full object-cover' />
-			</div>
-			<Navigation />
-			<main>
-				{authChecked ? (
-					<div className='mt-10'>
-						<Routes>
-							<Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
-							<Route
-								path='/home'
-								element={
-									<ProtectedRoute user={user}>
-										<OverviewPage />
-									</ProtectedRoute>
-								}
-							/>
-							<Route
-								path='/calendar'
-								element={
-									<ProtectedRoute user={user}>
-										<CalendarPage />
-									</ProtectedRoute>
-								}
-							/>
-						</Routes>
-					</div>
-				) : (
-					<LoadingBox />
-				)}
-			</main>
-			<Footer />
-		</div>
-	);
+  return (
+    <div onContextMenu={(e) => e.preventDefault()} className='flex flex-col relative'>
+      <div className='fixed inset-0 -z-10'>
+        <img src={getSeasonBackground()} alt='background' className='w-full h-full object-cover' />
+      </div>
+      <Navigation />
+      <main>
+        {authChecked ? (
+          <div className='mt-10'>
+            <Routes>
+              <Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
+              <Route
+                path='/home'
+                element={
+                  <ProtectedRoute user={user}>
+                    <OverviewPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path='/calendar'
+                element={
+                  <ProtectedRoute user={user}>
+                    <CalendarPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </div>
+        ) : (
+          <LoadingBox />
+        )}
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
 export default App;

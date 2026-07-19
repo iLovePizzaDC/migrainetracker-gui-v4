@@ -12,50 +12,50 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 
 interface IChartCard {
-	index: number;
-	title: string;
-	cardType: CardType;
-	chartType: ChartType;
-	filter: EventFilter;
-	timeframeCount: number;
-	timeframeUnit: TimeFrameUnit;
+  index: number;
+  title: string;
+  cardType: CardType;
+  chartType: ChartType;
+  filter: EventFilter;
+  timeframeCount: number;
+  timeframeUnit: TimeFrameUnit;
 }
 
 function ChartCard({
-	index,
-	title,
-	cardType,
-	chartType,
-	filter,
-	timeframeCount,
-	timeframeUnit,
+  index,
+  title,
+  cardType,
+  chartType,
+  filter,
+  timeframeCount,
+  timeframeUnit,
 }: IChartCard) {
-	const contextButtonRef = useRef<HTMLButtonElement | null>(null);
+  const contextButtonRef = useRef<HTMLButtonElement | null>(null);
 
-	const { removeSetupByIndex, updateSetupByIndex } = useCardSetups();
-	const { isLoading, areaData, pieData, currentPieValue, totalPieValue } = useChartData(
-		cardType,
-		chartType,
-		filter,
-		timeframeCount,
-		timeframeUnit,
-	);
+  const { removeSetupByIndex, updateSetupByIndex } = useCardSetups();
+  const { isLoading, areaData, pieData, currentPieValue, totalPieValue } = useChartData(
+    cardType,
+    chartType,
+    filter,
+    timeframeCount,
+    timeframeUnit,
+  );
 
-	const [contextOpen, setContextOpen] = useState(false);
-	const [isEditing, setIsEditing] = useState(false);
+  const [contextOpen, setContextOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
-	const onEdit = (setup: CardSetup) => {
-		updateSetupByIndex(setup);
-		setIsEditing(false);
-	};
+  const onEdit = (setup: CardSetup) => {
+    updateSetupByIndex(setup);
+    setIsEditing(false);
+  };
 
-	const onRemove = () => {
-		removeSetupByIndex(index);
-	};
+  const onRemove = () => {
+    removeSetupByIndex(index);
+  };
 
-	return (
-		<div
-			className='
+  return (
+    <div
+      className='
                 w-full self-start
                 rounded-2xl p-3 relative
                 bg-transparent backdrop-blur-md
@@ -63,110 +63,110 @@ function ChartCard({
                 shadow-lg shadow-black/20
                 transition hover:shadow-xl
             '
-		>
-			<div className='h-7 mb-2 flex items-center w-full relative'>
-				<div className='w-7 opacity-0 pointer-events-none' />
+    >
+      <div className='h-7 mb-2 flex items-center w-full relative'>
+        <div className='w-7 opacity-0 pointer-events-none' />
 
-				<h2 className='flex-1 text-lg font-semibold text-center'>{title}</h2>
+        <h2 className='flex-1 text-lg font-semibold text-center'>{title}</h2>
 
-				<button
-					ref={contextButtonRef}
-					data-testid='context-button'
-					onClick={() => {
-						setContextOpen((v) => !v);
-					}}
-					className='hover:opacity-80 transition-opacity'
-				>
-					<EllipsisVerticalIcon className='h-7 w-7' />
-				</button>
+        <button
+          ref={contextButtonRef}
+          data-testid='context-button'
+          onClick={() => {
+            setContextOpen((v) => !v);
+          }}
+          className='hover:opacity-80 transition-opacity'
+        >
+          <EllipsisVerticalIcon className='h-7 w-7' />
+        </button>
 
-				<ContextMenu
-					contextButtonRef={contextButtonRef}
-					open={contextOpen}
-					setOpen={setContextOpen}
-					isEditing={isEditing}
-					setIsEditing={setIsEditing}
-					onRemoveClick={onRemove}
-				/>
-			</div>
+        <ContextMenu
+          contextButtonRef={contextButtonRef}
+          open={contextOpen}
+          setOpen={setContextOpen}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          onRemoveClick={onRemove}
+        />
+      </div>
 
-			<div
-				className={`
+      <div
+        className={`
                     grid overflow-hidden
                     transition-[grid-template-rows] duration-300 ease-out
                     ${isEditing ? 'grid-rows-[0fr_1fr]' : 'grid-rows-[1fr_0fr]'}
                 `}
-			>
-				<div className='overflow-hidden transition-all duration-300'>
-					<div className='h-72 w-full flex items-center justify-center'>
-						{/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
-						{/* TODO add average line to areachart? */}
-						{isLoading ? (
-							<div
-								data-testid='loading-skeleton'
-								className='w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse'
-							/>
-						) : chartType === CHART_TYPES.AREA ? (
-							<AreaChart
-								data={areaData}
-								showThresholdLine={cardType === CARD_TYPES.MOH}
-								thresholdY={cardType === CARD_TYPES.MOH ? 10 : undefined}
-							/>
-						) : (
-							<PieChart outerData={pieData} />
-						)}
-					</div>
+      >
+        <div className='overflow-hidden transition-all duration-300'>
+          <div className='h-72 w-full flex items-center justify-center'>
+            {/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
+            {/* TODO add average line to areachart? */}
+            {isLoading ? (
+              <div
+                data-testid='loading-skeleton'
+                className='w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse'
+              />
+            ) : chartType === CHART_TYPES.AREA ? (
+              <AreaChart
+                data={areaData}
+                showThresholdLine={cardType === CARD_TYPES.MOH}
+                thresholdY={cardType === CARD_TYPES.MOH ? 10 : undefined}
+              />
+            ) : (
+              <PieChart outerData={pieData} />
+            )}
+          </div>
 
-					{!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 && (
-						<div className='text-center h-6'>
-							<p className='text-lg font-medium'>
-								{cardType !== CARD_TYPES.MEDICINE ? (
-									<>
-										{currentPieValue.toLocaleString('en-US')}/
-										{totalPieValue.toLocaleString('en-US')}{' '}
-										{cardType === CARD_TYPES.DURATION ? 'hours' : 'days'}
-									</>
-								) : (
-									<>
-										{currentPieValue.toLocaleString('en-US')} {'medicines'}
-									</>
-								)}
-							</p>
-						</div>
-					)}
-				</div>
-				<div
-					data-testid='card-form-wrapper'
-					className={`
+          {!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 && (
+            <div className='text-center h-6'>
+              <p className='text-lg font-medium'>
+                {cardType !== CARD_TYPES.MEDICINE ? (
+                  <>
+                    {currentPieValue.toLocaleString('en-US')}/
+                    {totalPieValue.toLocaleString('en-US')}{' '}
+                    {cardType === CARD_TYPES.DURATION ? 'hours' : 'days'}
+                  </>
+                ) : (
+                  <>
+                    {currentPieValue.toLocaleString('en-US')} {'medicines'}
+                  </>
+                )}
+              </p>
+            </div>
+          )}
+        </div>
+        <div
+          data-testid='card-form-wrapper'
+          className={`
                         overflow-hidden
                         transition-[opacity,max-height] duration-300 ease-out
                         ${isEditing ? 'opacity-100 max-h-[1000px] visible pointer-events-auto' : 'opacity-0 max-h-0 invisible pointer-events-none'}
                     `}
-				>
-					<CardForm
-						key={JSON.stringify({
-							index,
-							title,
-							cardType,
-							chartType,
-							filter,
-							timeframeCount,
-							timeframeUnit,
-							isEditing,
-						})}
-						onButtonClick={onEdit}
-						defaultIndex={index}
-						defaultTitle={title}
-						defaultCardType={cardType}
-						defaultChartType={chartType}
-						defaultFilter={filter}
-						defaultCount={timeframeCount}
-						defaultUnit={timeframeUnit}
-					/>
-				</div>
-			</div>
-		</div>
-	);
+        >
+          <CardForm
+            key={JSON.stringify({
+              index,
+              title,
+              cardType,
+              chartType,
+              filter,
+              timeframeCount,
+              timeframeUnit,
+              isEditing,
+            })}
+            onButtonClick={onEdit}
+            defaultIndex={index}
+            defaultTitle={title}
+            defaultCardType={cardType}
+            defaultChartType={chartType}
+            defaultFilter={filter}
+            defaultCount={timeframeCount}
+            defaultUnit={timeframeUnit}
+          />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ChartCard;

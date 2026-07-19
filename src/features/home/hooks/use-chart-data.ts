@@ -9,67 +9,67 @@ import type { EventFilter } from '@/shared/types/event/event';
 import { useEffect, useState } from 'react';
 
 export function useChartData(
-	cardType: CardType,
-	chartType: ChartType,
-	filter: EventFilter,
-	timeframeCount: number,
-	timeframeUnit: TimeFrameUnit,
+  cardType: CardType,
+  chartType: ChartType,
+  filter: EventFilter,
+  timeframeCount: number,
+  timeframeUnit: TimeFrameUnit,
 ) {
-	const { user, medicines } = useUser();
+  const { user, medicines } = useUser();
 
-	const [areaData, setAreaData] = useState<ChartData>([]);
-	const [pieData, setPieData] = useState<ChartData>([]);
-	const [currentPieValue, setCurrentPieValue] = useState(0);
-	const [totalPieValue, setTotalPieValue] = useState(0);
-	const [isLoading, setIsLoading] = useState(true);
+  const [areaData, setAreaData] = useState<ChartData>([]);
+  const [pieData, setPieData] = useState<ChartData>([]);
+  const [currentPieValue, setCurrentPieValue] = useState(0);
+  const [totalPieValue, setTotalPieValue] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
-		const collectChartData = async () => {
-			if (!user || !medicines) return;
+  useEffect(() => {
+    const collectChartData = async () => {
+      if (!user || !medicines) return;
 
-			setIsLoading(true);
+      setIsLoading(true);
 
-			const { startDate, endDate, totalDays } = getDateRange(timeframeCount, timeframeUnit);
+      const { startDate, endDate, totalDays } = getDateRange(timeframeCount, timeframeUnit);
 
-			if (chartType === CHART_TYPES.AREA) {
-				const response = await fetchAreaData(
-					cardType,
-					endDate,
-					timeframeCount,
-					timeframeUnit,
-					filter,
-					medicines,
-				);
-				setAreaData(mapAreaResponse(response));
-				setIsLoading(false);
-				return;
-			}
+      if (chartType === CHART_TYPES.AREA) {
+        const response = await fetchAreaData(
+          cardType,
+          endDate,
+          timeframeCount,
+          timeframeUnit,
+          filter,
+          medicines,
+        );
+        setAreaData(mapAreaResponse(response));
+        setIsLoading(false);
+        return;
+      }
 
-			if (chartType === CHART_TYPES.PIE) {
-				const { data, value } = await fetchPieData(
-					cardType,
-					startDate,
-					endDate,
-					totalDays,
-					filter,
-					medicines,
-				);
-				setPieData(data);
-				setCurrentPieValue(value);
-				setTotalPieValue(cardType === CARD_TYPES.DURATION ? totalDays * 24 : totalDays);
-				setIsLoading(false);
-				return;
-			}
-		};
+      if (chartType === CHART_TYPES.PIE) {
+        const { data, value } = await fetchPieData(
+          cardType,
+          startDate,
+          endDate,
+          totalDays,
+          filter,
+          medicines,
+        );
+        setPieData(data);
+        setCurrentPieValue(value);
+        setTotalPieValue(cardType === CARD_TYPES.DURATION ? totalDays * 24 : totalDays);
+        setIsLoading(false);
+        return;
+      }
+    };
 
-		collectChartData();
-	}, [cardType, chartType, timeframeCount, timeframeUnit, user, filter, medicines]);
+    collectChartData();
+  }, [cardType, chartType, timeframeCount, timeframeUnit, user, filter, medicines]);
 
-	return {
-		isLoading,
-		areaData,
-		pieData,
-		currentPieValue,
-		totalPieValue,
-	};
+  return {
+    isLoading,
+    areaData,
+    pieData,
+    currentPieValue,
+    totalPieValue,
+  };
 }

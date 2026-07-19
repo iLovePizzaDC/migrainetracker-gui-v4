@@ -7,43 +7,43 @@ const mockPrevMonth = vi.fn();
 const mockNextMonth = vi.fn();
 
 vi.mock('@/features/calendar/hooks/use-calendar', () => ({
-	useCalendar: () => ({
-		month: 'January',
-		year: '2026',
-		prevMonth: mockPrevMonth,
-		nextMonth: mockNextMonth,
-	}),
+  useCalendar: () => ({
+    month: 'January',
+    year: '2026',
+    prevMonth: mockPrevMonth,
+    nextMonth: mockNextMonth,
+  }),
 }));
 
 describe('<CalendarNavigation />', () => {
-	const user = userEvent.setup();
+  const user = userEvent.setup();
 
-	beforeEach(() => {
-		mockPrevMonth.mockClear();
-		mockNextMonth.mockClear();
-	});
+  beforeEach(() => {
+    mockPrevMonth.mockClear();
+    mockNextMonth.mockClear();
+  });
 
-	it('renders navigation and date', () => {
-		render(<CalendarNavigation />);
+  it('renders navigation and date', () => {
+    render(<CalendarNavigation />);
 
-		expect(screen.getByText('January 2026')).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Previous month' })).toBeInTheDocument();
-		expect(screen.getByRole('button', { name: 'Next month' })).toBeInTheDocument();
-	});
+    expect(screen.getByText('January 2026')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Previous month' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next month' })).toBeInTheDocument();
+  });
 
-	it('calls prevMonth on button click', async () => {
-		render(<CalendarNavigation />);
+  it('calls prevMonth on button click', async () => {
+    render(<CalendarNavigation />);
 
-		await user.click(screen.getByRole('button', { name: 'Previous month' }));
+    await user.click(screen.getByRole('button', { name: 'Previous month' }));
 
-		expect(mockPrevMonth).toHaveBeenCalled();
-	});
+    expect(mockPrevMonth).toHaveBeenCalled();
+  });
 
-	it('calls nextMonth on button click', async () => {
-		render(<CalendarNavigation />);
+  it('calls nextMonth on button click', async () => {
+    render(<CalendarNavigation />);
 
-		await user.click(screen.getByRole('button', { name: 'Next month' }));
+    await user.click(screen.getByRole('button', { name: 'Next month' }));
 
-		expect(mockNextMonth).toHaveBeenCalled();
-	});
+    expect(mockNextMonth).toHaveBeenCalled();
+  });
 });

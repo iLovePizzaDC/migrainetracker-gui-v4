@@ -12,92 +12,92 @@ import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 function Calendar() {
-	const { isLoading, date, calendarEvents, setMonth } = useCalendar();
-	const { medicines } = useUser();
+  const { isLoading, date, calendarEvents, setMonth } = useCalendar();
+  const { medicines } = useUser();
 
-	const [isPanelOpen, setIsPanelOpen] = useState(false);
-	const [entry, setEntry] = useState<Entry | null>(null);
-	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-	const [isStoredEntryDisplaying, setIsStoredEntryDisplaying] = useState(false);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [entry, setEntry] = useState<Entry | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isStoredEntryDisplaying, setIsStoredEntryDisplaying] = useState(false);
 
-	const medicineOptions: DropdownOption[] =
-		medicines === null
-			? []
-			: medicines.map((m) => ({
-					label: m.name,
-					value: m.abbreviation,
-				}));
+  const medicineOptions: DropdownOption[] =
+    medicines === null
+      ? []
+      : medicines.map((m) => ({
+        label: m.name,
+        value: m.abbreviation,
+      }));
 
-	const onDayClick = (day: number) => {
-		const selected = new Date(date);
-		selected.setDate(day);
+  const onDayClick = (day: number) => {
+    const selected = new Date(date);
+    selected.setDate(day);
 
-		const foundEvent = calendarEvents.find(
-			(event) => normalizeDate(event.date).getTime() === normalizeDate(selected).getTime(),
-		);
+    const foundEvent = calendarEvents.find(
+      (event) => normalizeDate(event.date).getTime() === normalizeDate(selected).getTime(),
+    );
 
-		const entry: Entry | null = foundEvent ? createEntry(foundEvent) : null;
+    const entry: Entry | null = foundEvent ? createEntry(foundEvent) : null;
 
-		if (entry) {
-			entry.medicines = enrichMedicineLabels(entry.medicines, medicineOptions);
-		}
+    if (entry) {
+      entry.medicines = enrichMedicineLabels(entry.medicines, medicineOptions);
+    }
 
-		setIsStoredEntryDisplaying(false);
-		setEntry(entry);
-		setSelectedDate(selected);
-		setIsPanelOpen(true);
-	};
+    setIsStoredEntryDisplaying(false);
+    setEntry(entry);
+    setSelectedDate(selected);
+    setIsPanelOpen(true);
+  };
 
-	const onLoadEntryClick = () => {
-		const rawStoredEntry = localStorage.getItem('MT_NE');
+  const onLoadEntryClick = () => {
+    const rawStoredEntry = localStorage.getItem('MT_NE');
 
-		if (rawStoredEntry) {
-			const entry: StoredEntry = JSON.parse(rawStoredEntry);
-			const entryDate: Date = normalizeDate(new Date(entry.date));
+    if (rawStoredEntry) {
+      const entry: StoredEntry = JSON.parse(rawStoredEntry);
+      const entryDate: Date = normalizeDate(new Date(entry.date));
 
-			setIsStoredEntryDisplaying(true);
-			setMonth(entryDate);
-			setEntry(entry);
-			setSelectedDate(entryDate);
-			setIsPanelOpen(true);
-		}
-	};
+      setIsStoredEntryDisplaying(true);
+      setMonth(entryDate);
+      setEntry(entry);
+      setSelectedDate(entryDate);
+      setIsPanelOpen(true);
+    }
+  };
 
-	return (
-		<>
-			<div className='relative rounded-2xl p-6 bg-transparent backdrop-blur-xl border border-white/20 shadow-lg shadow-black/30 w-full max-w-md min-h-96 mx-auto flex flex-col'>
-				<div className='flex-1 flex flex-col'>
-					<CalendarHeader />
-					<CalendarContent openDate={selectedDate} onDayClick={onDayClick} />
-				</div>
+  return (
+    <>
+      <div className='relative rounded-2xl p-6 bg-transparent backdrop-blur-xl border border-white/20 shadow-lg shadow-black/30 w-full max-w-md min-h-96 mx-auto flex flex-col'>
+        <div className='flex-1 flex flex-col'>
+          <CalendarHeader />
+          <CalendarContent openDate={selectedDate} onDayClick={onDayClick} />
+        </div>
 
-				<div className='mt-2 flex justify-end'>
-					<button
-						data-testid='load-entry'
-						onClick={onLoadEntryClick}
-						className='flex items-center justify-center disabled:opacity-80 transition-opacity'
-						disabled={isLoading}
-					>
-						<ArrowDownTrayIcon className='h-5 w-5' />
-					</button>
-				</div>
-			</div>
-			<FilterCard />
-			<div className='mt-4'>
-				<MigrainePanel
-					date={selectedDate ?? date}
-					onClose={() => {
-						setIsPanelOpen(false);
-						setSelectedDate(null);
-						setEntry(null);
-					}}
-					isOpen={!!isPanelOpen}
-					prefilled={entry}
-					disabled={!!entry && !isStoredEntryDisplaying}
-				/>
-			</div>
-		</>
-	);
+        <div className='mt-2 flex justify-end'>
+          <button
+            data-testid='load-entry'
+            onClick={onLoadEntryClick}
+            className='flex items-center justify-center disabled:opacity-80 transition-opacity'
+            disabled={isLoading}
+          >
+            <ArrowDownTrayIcon className='h-5 w-5' />
+          </button>
+        </div>
+      </div>
+      <FilterCard />
+      <div className='mt-4'>
+        <MigrainePanel
+          date={selectedDate ?? date}
+          onClose={() => {
+            setIsPanelOpen(false);
+            setSelectedDate(null);
+            setEntry(null);
+          }}
+          isOpen={!!isPanelOpen}
+          prefilled={entry}
+          disabled={!!entry && !isStoredEntryDisplaying}
+        />
+      </div>
+    </>
+  );
 }
 
 export default Calendar;
