@@ -5,7 +5,10 @@ import { defineConfig } from 'vitest/config';
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  build: {
+    sourcemap: "hidden",
+  },
   test: {
     globals: true,
     environment: 'jsdom',
@@ -17,17 +20,17 @@ export default defineConfig({
         plugins: [['babel-plugin-react-compiler']],
       },
     }),
-    sentryVitePlugin({
-      org: "<dein-org-slug>",
-      project: "<dein-project-slug>",
+    command === 'build' && sentryVitePlugin({
+      org: "unrealpizza",
+      project: "migrainetracker-gui-v4",
       authToken: process.env.SENTRY_AUTH_TOKEN,
       release: { name: process.env.SENTRY_RELEASE },
       sourcemaps: { filesToDeleteAfterUpload: ["./dist/**/*.map"] },
     }),
-  ],
+  ].filter(Boolean),
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
   },
-});
+}));
