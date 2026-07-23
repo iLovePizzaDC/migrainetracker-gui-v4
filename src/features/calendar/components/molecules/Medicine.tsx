@@ -88,7 +88,6 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
 
       <MedicineCombobox medicines={medicines} setMedicines={setMedicines} disabled={disabled} />
 
-      {/* TODO if medicine gets removed/added -> value of taken and effectiveness resets */}
       {medicines.map((medicine, index) => (
         <div key={index} className='p-3 rounded-lg bg-transparent border border-white/25 space-y-3'>
           <p className='text-sm font-medium'>{medicine.medicine.label}</p>

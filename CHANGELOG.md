@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.7.4](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.3...v1.7.4) (2026-07-19)
+
+
+### Bug Fixes
+
+* outsource secrets to github env ([#123](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/123)) ([47d4f30](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/47d4f30d2afd2d2577a627ef8176ca766096397f))
+
+## [1.7.3](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.2...v1.7.3) (2026-07-19)
+
+
+### Bug Fixes
+
+* minify background images ([#119](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/119)) ([5af042c](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/5af042c70b2909c521527288e0d425df2550298b))
+
 ## [1.7.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.1...v1.7.2) (2026-07-04)
 
 
