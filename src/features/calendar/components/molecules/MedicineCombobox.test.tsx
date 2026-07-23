@@ -28,6 +28,7 @@ vi.mock('@/shared/api/medicine.api');
 vi.mock('@/shared/components/atoms/Combobox', () => ({
   default: vi.fn(({ selected, onChange, renderOptionActions, disabled }: any) => {
     const firstOption = { label: `${mockMedLabel} 1`, value: `${mockMedValue}_1` };
+    const secondOption = { label: `${mockMedLabel} 2`, value: `${mockMedValue}_2` };
 
     return (
       <div data-testid='combobox'>
@@ -41,6 +42,12 @@ vi.mock('@/shared/components/atoms/Combobox', () => ({
         <div data-testid='option-actions'>{renderOptionActions?.(firstOption)}</div>
         <button data-testid='change-selection-btn' onClick={() => onChange([firstOption])}>
           Select Medicine 1
+        </button>
+        <button
+          data-testid='select-both-btn'
+          onClick={() => onChange([firstOption, secondOption])}
+        >
+          Select Medicine 1 and 2
         </button>
         {disabled && <span data-testid='disabled-indicator' />}
       </div>
@@ -98,6 +105,51 @@ describe('<MedicineCombobox />', () => {
     expect(mockSetMedicines).toHaveBeenCalledWith([
       {
         medicine: { label: `${mockMedLabel} 1`, abbreviation: `${mockMedValue}_1` },
+        taken: 1,
+        effectiveness: 0,
+      },
+    ]);
+  });
+
+  it('preserves taken and effectiveness for medicines that remain selected', async () => {
+    const customMedicines = [
+      {
+        medicine: {
+          abbreviation: `${mockMedValue}_1`,
+          label: `${mockMedLabel} 1`,
+        },
+        taken: 4,
+        effectiveness: 3,
+      },
+    ];
+    const mockSetMedicines = vi.fn();
+    render(<MedicineCombobox medicines={customMedicines} setMedicines={mockSetMedicines} />);
+
+    await user.click(screen.getByTestId('change-selection-btn'));
+
+    expect(mockSetMedicines).toHaveBeenCalledWith(customMedicines);
+  });
+
+  it('keeps existing values while defaulting newly added medicines', async () => {
+    const customMedicines = [
+      {
+        medicine: {
+          abbreviation: `${mockMedValue}_1`,
+          label: `${mockMedLabel} 1`,
+        },
+        taken: 4,
+        effectiveness: 3,
+      },
+    ];
+    const mockSetMedicines = vi.fn();
+    render(<MedicineCombobox medicines={customMedicines} setMedicines={mockSetMedicines} />);
+
+    await user.click(screen.getByTestId('select-both-btn'));
+
+    expect(mockSetMedicines).toHaveBeenCalledWith([
+      customMedicines[0],
+      {
+        medicine: { label: `${mockMedLabel} 2`, abbreviation: `${mockMedValue}_2` },
         taken: 1,
         effectiveness: 0,
       },

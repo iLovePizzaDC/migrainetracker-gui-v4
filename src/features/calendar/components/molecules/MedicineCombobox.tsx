@@ -61,14 +61,22 @@ function MedicineCombobox({ medicines, setMedicines, disabled }: IMedicineCombob
       onChange={(selectedMedicines) => {
         setDeletionConfirmedFor(null);
         setMedicines(
-          selectedMedicines.map((medicine) => ({
-            medicine: {
-              label: medicine.label,
-              abbreviation: medicine.value,
-            },
-            taken: 1,
-            effectiveness: 0,
-          })),
+          selectedMedicines.map((medicine) => {
+            const existing = medicines.find(
+              (m) => m.medicine.abbreviation === medicine.value,
+            );
+
+            return (
+              existing ?? {
+                medicine: {
+                  label: medicine.label,
+                  abbreviation: medicine.value,
+                },
+                taken: 1,
+                effectiveness: 0,
+              }
+            );
+          }),
         );
       }}
       placeholder='Add medicine...'
