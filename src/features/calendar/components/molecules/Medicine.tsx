@@ -48,10 +48,10 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
           <span
             data-testid='med-days-count'
             className={`${medDaysCount === maxMedDaysCount
-                ? 'text-yellow-500'
-                : medDaysCount > maxMedDaysCount
-                  ? 'text-red-500'
-                  : 'text-green-500'
+              ? 'text-yellow-500'
+              : medDaysCount > maxMedDaysCount
+                ? 'text-red-500'
+                : 'text-green-500'
               }`}
           >
             {medDaysCount}
