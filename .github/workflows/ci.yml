@@ -7,6 +7,17 @@ on:
   pull_request:
     branches: [main, develop]
 
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag/Ref for build (empty = current branch)'
+        required: false
+        type: string
+      deploy:
+        description: 'Deploy after build?'
+        required: true
+        type: boolean
+        default: false
 permissions:
   contents: read
   pull-requests: read
@@ -80,6 +91,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -107,7 +120,7 @@ jobs:
   deploy:
     needs: build
     runs-on: self-hosted
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.deploy)
     steps:
       - uses: actions/download-artifact@v4
         with:
