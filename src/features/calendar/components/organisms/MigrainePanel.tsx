@@ -5,8 +5,8 @@ import Midas from '@/features/calendar/components/molecules/Midas';
 import Symptoms from '@/features/calendar/components/molecules/Symptoms';
 import type { Entry } from '@/features/calendar/types/calendar';
 import { useMigrainePanel } from '@/features/calendar/hooks/use-migraine-panel';
-import MigrainePanelHeader from '@/features/calendar/components/organisms/MigrainePanelHeader';
-import MigrainePanelActions from '@/features/calendar/components/organisms/MigrainePanelActions';
+import MigrainePanelHeader from '@/features/calendar/components/molecules/MigrainePanelHeader';
+import MigrainePanelActions from '@/features/calendar/components/molecules/MigrainePanelActions';
 
 interface IMigrainePanel {
   date: Date;
@@ -36,7 +36,7 @@ function MigrainePanel({ date, onClose, isOpen, prefilled = null, disabled = fal
     showMedicine,
     submitNewEntry,
     saveNewEntry,
-  } = useMigrainePanel({ date, prefilled, disabled, onClose });
+  } = useMigrainePanel(date, onClose, disabled, prefilled);
 
   return (
     <div

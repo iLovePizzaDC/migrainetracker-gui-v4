@@ -12,14 +12,12 @@ import {
 import type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar/calendar';
 import type { Entry } from '@/features/calendar/types/calendar';
 
-type UseMigrainePanelParams = {
-  date: Date;
-  prefilled?: Entry | null;
-  disabled?: boolean;
-  onClose: () => void;
-};
-
-export function useMigrainePanel({ date, prefilled = null, disabled = false, onClose }: UseMigrainePanelParams) {
+export function useMigrainePanel(
+  date: Date,
+  onClose: () => void,
+  disabled: boolean,
+  prefilled?: Entry | null,
+) {
   const { refetchEvents } = useCalendar();
 
   const [areInputsDisabled, setAreInputsDisabled] = useState(disabled);
@@ -45,12 +43,12 @@ export function useMigrainePanel({ date, prefilled = null, disabled = false, onC
     prefilled
       ? prefilled.midas
       : {
-          workMissed: false,
-          workImpaired: false,
-          choresMissed: false,
-          choresImpaired: false,
-          socialMissed: false,
-        },
+        workMissed: false,
+        workImpaired: false,
+        choresMissed: false,
+        choresImpaired: false,
+        socialMissed: false,
+      },
   );
 
   const showMedicine = !prefilled || !areInputsDisabled || medicines.length > 0;
@@ -100,12 +98,12 @@ export function useMigrainePanel({ date, prefilled = null, disabled = false, onC
       prefilled
         ? prefilled.midas
         : {
-            workMissed: false,
-            workImpaired: false,
-            choresMissed: false,
-            choresImpaired: false,
-            socialMissed: false,
-          },
+          workMissed: false,
+          workImpaired: false,
+          choresMissed: false,
+          choresImpaired: false,
+          socialMissed: false,
+        },
     );
   }, [date, disabled, prefilled]);
 
