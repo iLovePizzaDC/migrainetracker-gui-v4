@@ -1,31 +1,33 @@
-import AppendCard from "@/features/home/components/molecules/AppendCard";
-import ChartCard from "@/features/home/components/molecules/ChartCard";
-import MidasCard from "@/features/home/components/molecules/MidasCard";
-import { useCardSetups } from "@/features/home/hooks/use-card-setups";
+import AppendCard from '@/features/home/components/molecules/AppendCard';
+import ChartCard from '@/features/home/components/molecules/ChartCard';
+import MidasCard from '@/features/home/components/molecules/MidasCard';
+import { useCardSetups } from '@/features/home/hooks/use-card-setups';
 
 function CardSection() {
-  const { cardSetups } = useCardSetups();
+	const { cardSetups } = useCardSetups();
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center">
-      {cardSetups.sort((a, b) => a.index - b.index).map(cardSetup => (
-        <ChartCard
-          key={cardSetup.index}
-          index={cardSetup.index}
-          title={cardSetup.title}
-          cardType={cardSetup.cardType}
-          chartType={cardSetup.chartType}
-          filter={cardSetup.filter}
-          timeframeCount={cardSetup.timeframe.count}
-          timeframeUnit={cardSetup.timeframe.unit}
-        />
-      ))}
+	return (
+		<div className='grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center'>
+			{cardSetups
+				.sort((a, b) => a.index - b.index)
+				.map((cardSetup) => (
+					<ChartCard
+						key={cardSetup.index}
+						index={cardSetup.index}
+						title={cardSetup.title}
+						cardType={cardSetup.cardType}
+						chartType={cardSetup.chartType}
+						filter={cardSetup.filter}
+						timeframeCount={cardSetup.timeframe.count}
+						timeframeUnit={cardSetup.timeframe.unit}
+					/>
+				))}
 
-      <MidasCard />
+			<MidasCard />
 
-      <AppendCard />
-    </div>
-  );
+			<AppendCard />
+		</div>
+	);
 }
 
 export default CardSection;

@@ -5,86 +5,74 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockMidasFalse = {
-  workMissed: false,
-  workImpaired: false,
-  choresMissed: false,
-  choresImpaired: false,
-  socialMissed: false,
+	workMissed: false,
+	workImpaired: false,
+	choresMissed: false,
+	choresImpaired: false,
+	socialMissed: false,
 };
 
-const setMidas = vi.fn();
+const mockOnChange = vi.fn();
 
 describe('<Midas />', () => {
-  const user = userEvent.setup();
+	const user = userEvent.setup();
 
-  beforeEach(() => {
-    setMidas.mockClear();
-  });
+	beforeEach(() => {
+		mockOnChange.mockClear();
+	});
 
-  it('renders the heading', () => {
-    render(<Midas midas={mockMidasFalse} setMidas={setMidas} />);
+	it('renders the heading', () => {
+		render(<Midas midas={mockMidasFalse} onChange={mockOnChange} />);
 
-    expect(screen.getByText('MIDAS')).toBeInTheDocument();
-  });
+		expect(screen.getByText('MIDAS')).toBeInTheDocument();
+	});
 
-  it('renders pre checked midas', () => {
-    const midasWithWork = {
-      ...mockMidasFalse,
-      [MIDAS_TYPES.WORK_MISSED]: true,
-      [MIDAS_TYPES.WORK_IMPAIRED]: true,
-    };
+	it('renders pre checked midas', () => {
+		const midasWithWork = {
+			...mockMidasFalse,
+			[MIDAS_TYPES.WORK_MISSED]: true,
+			[MIDAS_TYPES.WORK_IMPAIRED]: true,
+		};
 
-    render(<Midas midas={midasWithWork} setMidas={setMidas} />);
+		render(<Midas midas={midasWithWork} onChange={mockOnChange} />);
 
-    expect(screen.getByLabelText('I missed work')).toBeChecked();
-    expect(screen.getByLabelText('my work performance was reduced')).toBeChecked();
-    expect(screen.getByLabelText('I missed household chores')).not.toBeChecked();
-    expect(
-      screen.getByLabelText('my ability to do household chores was reduced'),
-    ).not.toBeChecked();
-    expect(screen.getByLabelText('I missed social activities')).not.toBeChecked();
-  });
+		expect(screen.getByLabelText('I missed work')).toBeChecked();
+		expect(screen.getByLabelText('my work performance was reduced')).toBeChecked();
+		expect(screen.getByLabelText('I missed household chores')).not.toBeChecked();
+		expect(
+			screen.getByLabelText('my ability to do household chores was reduced'),
+		).not.toBeChecked();
+		expect(screen.getByLabelText('I missed social activities')).not.toBeChecked();
+	});
 
-  it('calls setMidas with true when clicking an unchecked option', async () => {
-    let result: typeof mockMidasFalse | undefined;
+	it('calls onChange with true when clicking an unchecked option', async () => {
+		render(<Midas midas={mockMidasFalse} onChange={mockOnChange} />);
 
-    setMidas.mockImplementation(
-      (updater: (prev: typeof mockMidasFalse) => typeof mockMidasFalse) => {
-        result = updater(mockMidasFalse);
-      },
-    );
+		await user.click(screen.getByLabelText('I missed work'));
 
-    render(<Midas midas={mockMidasFalse} setMidas={setMidas} />);
+		expect(mockOnChange).toHaveBeenCalledWith({ ...mockMidasFalse, [MIDAS_TYPES.WORK_MISSED]: true });
+	});
 
-    await user.click(screen.getByLabelText('I missed work'));
+	it('calls onChange with false when clicking a checked option', async () => {
+		const midasWithWork = { ...mockMidasFalse, [MIDAS_TYPES.WORK_MISSED]: true };
 
-    expect(result).toMatchObject({ [MIDAS_TYPES.WORK_MISSED]: true });
-  });
+		render(<Midas midas={midasWithWork} onChange={mockOnChange} />);
 
-  it('calls setMidas with false when clicking a checked option', async () => {
-    const midasWithWork = { ...mockMidasFalse, [MIDAS_TYPES.WORK_MISSED]: true };
-    let result: typeof mockMidasFalse | undefined;
+		await user.click(screen.getByLabelText('I missed work'));
 
-    setMidas.mockImplementation(
-      (updater: (prev: typeof mockMidasFalse) => typeof mockMidasFalse) => {
-        result = updater(midasWithWork);
-      },
-    );
+		expect(mockOnChange).toHaveBeenLastCalledWith({
+			...midasWithWork,
+			[MIDAS_TYPES.WORK_MISSED]: false,
+		});
+	});
 
-    render(<Midas midas={midasWithWork} setMidas={setMidas} />);
+	it('is disabled if prop is true', () => {
+		render(<Midas midas={mockMidasFalse} onChange={mockOnChange} disabled />);
 
-    await user.click(screen.getByLabelText('I missed work'));
-
-    expect(result).toMatchObject({ [MIDAS_TYPES.WORK_MISSED]: false });
-  });
-
-  it('is disabled if prop is true', () => {
-    render(<Midas midas={mockMidasFalse} setMidas={setMidas} disabled />);
-
-    expect(screen.getByLabelText('I missed work')).toBeDisabled();
-    expect(screen.getByLabelText('my work performance was reduced')).toBeDisabled();
-    expect(screen.getByLabelText('I missed household chores')).toBeDisabled();
-    expect(screen.getByLabelText('my ability to do household chores was reduced')).toBeDisabled();
-    expect(screen.getByLabelText('I missed social activities')).toBeDisabled();
-  });
+		expect(screen.getByLabelText('I missed work')).toBeDisabled();
+		expect(screen.getByLabelText('my work performance was reduced')).toBeDisabled();
+		expect(screen.getByLabelText('I missed household chores')).toBeDisabled();
+		expect(screen.getByLabelText('my ability to do household chores was reduced')).toBeDisabled();
+		expect(screen.getByLabelText('I missed social activities')).toBeDisabled();
+	});
 });
