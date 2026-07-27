@@ -91,23 +91,46 @@ function CardForm({
 				placeholder='Enter a title'
 				required
 			/>
-			<DropdownInput
-				id='appendCardType'
-				label='Card Type'
-				value={cardType}
-				options={CARD_OPTIONS}
-				onChange={(value) => setCardType(value as CardType)}
-				required
-			/>
+			<div className='grid gap-6 lg:grid-cols-2'>
+				<DropdownInput
+					id='appendCardType'
+					label='Card Type'
+					value={cardType}
+					options={CARD_OPTIONS}
+					onChange={(value) => setCardType(value as CardType)}
+					required
+				/>
 
-			<DropdownInput
-				id='appendChartType'
-				label='Chart Type'
-				value={chartType}
-				options={CHART_OPTIONS}
-				onChange={(value) => setChartType(value as ChartType)}
-				required
-			/>
+				<DropdownInput
+					id='appendChartType'
+					label='Chart Type'
+					value={chartType}
+					options={CHART_OPTIONS}
+					onChange={(value) => setChartType(value as ChartType)}
+					required
+				/>
+
+				<div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
+					<Input
+						id='appendValue'
+						label='Value'
+						type={INPUT_TYPES.NUMBER}
+						value={count.toString()}
+						onChange={(event) => setCount(Number(event.target.value))}
+						placeholder='Enter number'
+						required
+					/>
+
+					<DropdownInput
+						id='appendUnit'
+						label='Unit'
+						value={unit}
+						options={TIME_FRAME_UNIT_OPTIONS}
+						onChange={(value) => setUnit(value as TimeFrameUnit)}
+						required
+					/>
+				</div>
+			</div>
 
 			<FilterForm
 				variant={FILTER_FORM_VARIANTS.STANDARD}
@@ -116,27 +139,6 @@ function CardForm({
 				medicineInputVisible={defaultCardType !== CARD_TYPES.MOH}
 				midasInputVisible={false}
 			/>
-
-			<div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-				<Input
-					id='appendValue'
-					label='Value'
-					type={INPUT_TYPES.NUMBER}
-					value={count.toString()}
-					onChange={(event) => setCount(Number(event.target.value))}
-					placeholder='Enter number'
-					required
-				/>
-
-				<DropdownInput
-					id='appendUnit'
-					label='Unit'
-					value={unit}
-					options={TIME_FRAME_UNIT_OPTIONS}
-					onChange={(value) => setUnit(value as TimeFrameUnit)}
-					required
-				/>
-			</div>
 
 			<SubmitButton type={BUTTON_TYPES.SUBMIT} label='Submit' />
 		</form>

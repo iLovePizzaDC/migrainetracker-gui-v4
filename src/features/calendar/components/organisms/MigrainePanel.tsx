@@ -83,13 +83,11 @@ function MigrainePanel({
 							disabled={inputsDisabled}
 						/>
 
-						<div className='lg:col-span-2'>
-							<Symptoms
-								symptoms={form.symptoms}
-								onChange={(symptoms) => updateForm('symptoms', symptoms)}
-								disabled={inputsDisabled}
-							/>
-						</div>
+						<Symptoms
+							symptoms={form.symptoms}
+							onChange={(symptoms) => updateForm('symptoms', symptoms)}
+							disabled={inputsDisabled}
+						/>
 
 						{showMedicine && (
 							<Medicine
