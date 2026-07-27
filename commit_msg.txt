@@ -1,0 +1,7 @@
+﻿Refactor: extract migraine panel logic into hook + header/actions
+
+- Add use-migraine-panel hook
+- Add MigrainePanelHeader and MigrainePanelActions
+- Simplify MigrainePanel to layout + bindings
+
+Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>
