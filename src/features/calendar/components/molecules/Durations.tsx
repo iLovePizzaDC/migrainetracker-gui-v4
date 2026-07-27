@@ -20,7 +20,7 @@ function Durations({ durations, setDurations, disabled = false }: IDurations) {
   return (
     <div
       data-testid='durations'
-      className='p-4 rounded-xl bg-white/5 border border-white/10 space-y-3'
+      className='self-start p-4 rounded-xl bg-white/5 border border-white/10 space-y-3'
     >
       <div className='flex w-full items-center justify-between'>
         <div className='w-5'></div>

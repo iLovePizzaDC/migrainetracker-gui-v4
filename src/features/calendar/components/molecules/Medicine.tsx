@@ -27,7 +27,7 @@ function Medicine({ medicines, setMedicines, disabled }: IMedicine) {
   });
 
   return (
-    <div className='p-4 rounded-xl bg-white/5 border border-white/10 space-y-3'>
+    <div className='self-start p-4 rounded-xl bg-white/5 border border-white/10 space-y-3'>
       <div className='flex w-full items-center justify-between'>
         <div className='w-5'></div>
         <h3 className='text-sm font-medium text-purple-300 text-center flex-1'>Medicines</h3>
