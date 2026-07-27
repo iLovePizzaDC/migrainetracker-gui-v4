@@ -1,130 +1,97 @@
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { fetchNewEntry } from '@/shared/api/migraine.api';
-import { useEffect, useState } from 'react';
 import { formatDateToUs } from '@/shared/utils/date/date';
 import { FEEDBACK_TYPES, type FeedbackType } from '@/shared/constants/button/feedback';
-import {
-  INTENSITY_TYPES,
-  SYMPTOM_TYPES,
-  type IntensityType,
-  type SymptomType,
-} from '@/shared/constants/event/event-details';
-import type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar/calendar';
 import type { Entry } from '@/features/calendar/types/calendar';
+import { useEffect, useState } from 'react';
+import { getInitialFormState } from '@/features/calendar/utils/migraine-panel';
 
 export function useMigrainePanel(
-  date: Date,
-  onClose: () => void,
-  disabled: boolean,
-  prefilled?: Entry | null,
+	date: Date,
+	onClose: () => void,
+	disabled: boolean,
+	prefilled?: Entry | null,
 ) {
-  const { refetchEvents } = useCalendar();
+	const { refetchEvents } = useCalendar();
 
-  const [areInputsDisabled, setAreInputsDisabled] = useState(disabled);
-  const [cacheFeedback, setCacheFeedback] = useState<FeedbackType>(FEEDBACK_TYPES.NULL);
-  const [saveFeedback, setSaveFeedback] = useState<FeedbackType>(FEEDBACK_TYPES.NULL);
-  const [isLoading, setIsLoading] = useState(false);
+	const [form, setForm] = useState<Entry>(() => getInitialFormState(prefilled));
 
-  const [durations, setDurations] = useState<AppendDuration[]>(
-    prefilled ? prefilled.durations : [{ id: 0, startTime: '12:00', endTime: '13:00' }],
-  );
+	const [areInputsDisabled, setAreInputsDisabled] = useState(disabled);
+	const [cacheFeedback, setCacheFeedback] = useState<FeedbackType>(FEEDBACK_TYPES.NULL);
+	const [saveFeedback, setSaveFeedback] = useState<FeedbackType>(FEEDBACK_TYPES.NULL);
+	const [isLoading, setIsLoading] = useState(false);
 
-  const [intensity, setIntensity] = useState<IntensityType>(
-    prefilled ? prefilled.intensity : INTENSITY_TYPES.MEDIUM,
-  );
+	useEffect(() => {
+		setAreInputsDisabled(disabled);
+		setCacheFeedback(FEEDBACK_TYPES.NULL);
+		setSaveFeedback(FEEDBACK_TYPES.NULL);
+		setForm(getInitialFormState(prefilled));
+	}, [date, disabled, prefilled]);
 
-  const [symptoms, setSymptoms] = useState<SymptomType[]>(
-    prefilled ? prefilled.symptoms : [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT],
-  );
+	const showMedicine = !prefilled || !areInputsDisabled || form.medicines.length > 0;
 
-  const [medicines, setMedicines] = useState<AppendMedicine[]>(prefilled ? prefilled.medicines : []);
+	const updateForm = <K extends keyof Entry>(key: K, value: Entry[K]) => {
+		setForm((prev) => ({
+			...prev,
+			[key]: value,
+		}));
+	};
 
-  const [midas, setMidas] = useState<AppendMidas>(
-    prefilled
-      ? prefilled.midas
-      : {
-        workMissed: false,
-        workImpaired: false,
-        choresMissed: false,
-        choresImpaired: false,
-        socialMissed: false,
-      },
-  );
+	const submitNewEntry = async () => {
+		try {
+			setIsLoading(true);
 
-  const showMedicine = !prefilled || !areInputsDisabled || medicines.length > 0;
+			await fetchNewEntry(
+				formatDateToUs(date),
+				form.durations,
+				form.intensity,
+				form.symptoms,
+				form.medicines,
+				form.midas,
+			);
 
-  const submitNewEntry = async () => {
-    try {
-      setIsLoading(true);
+			setSaveFeedback(FEEDBACK_TYPES.SUCCESS);
 
-      await fetchNewEntry(formatDateToUs(date), durations, intensity, symptoms, medicines, midas);
+			await refetchEvents();
 
-      setSaveFeedback(FEEDBACK_TYPES.SUCCESS);
+			onClose();
+		} catch (err) {
+			console.error(err);
+			setSaveFeedback(FEEDBACK_TYPES.ERROR);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-      await refetchEvents();
+	const saveNewEntry = () => {
+		try {
+			localStorage.setItem(
+				'MT_NE',
+				JSON.stringify({
+					date,
+					...form,
+				}),
+			);
 
-      onClose();
-    } catch (err) {
-      console.error(err);
-      setSaveFeedback(FEEDBACK_TYPES.ERROR);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+			setCacheFeedback(FEEDBACK_TYPES.SUCCESS);
 
-  const saveNewEntry = () => {
-    try {
-      localStorage.setItem('MT_NE', JSON.stringify({ date, durations, intensity, symptoms, medicines, midas }));
-      setCacheFeedback(FEEDBACK_TYPES.SUCCESS);
-      setTimeout(() => onClose(), 500);
-    } catch (err) {
-      console.error(err);
-      setCacheFeedback(FEEDBACK_TYPES.ERROR);
-    }
-  };
+			setTimeout(() => onClose(), 500);
+		} catch (err) {
+			console.error(err);
+			setCacheFeedback(FEEDBACK_TYPES.ERROR);
+		}
+	};
 
-  useEffect(() => setAreInputsDisabled(disabled), [date, disabled]);
-
-  useEffect(() => {
-    setAreInputsDisabled(disabled);
-    setSaveFeedback(FEEDBACK_TYPES.NULL);
-    setCacheFeedback(FEEDBACK_TYPES.NULL);
-
-    setDurations(prefilled ? prefilled.durations : [{ id: 0, startTime: '12:00', endTime: '13:00' }]);
-    setIntensity(prefilled ? prefilled.intensity : INTENSITY_TYPES.MEDIUM);
-    setSymptoms(prefilled ? prefilled.symptoms : [SYMPTOM_TYPES.NOISE, SYMPTOM_TYPES.LIGHT]);
-    setMedicines(prefilled ? prefilled.medicines : []);
-    setMidas(
-      prefilled
-        ? prefilled.midas
-        : {
-          workMissed: false,
-          workImpaired: false,
-          choresMissed: false,
-          choresImpaired: false,
-          socialMissed: false,
-        },
-    );
-  }, [date, disabled, prefilled]);
-
-  return {
-    areInputsDisabled,
-    setAreInputsDisabled,
-    cacheFeedback,
-    saveFeedback,
-    isLoading,
-    durations,
-    setDurations,
-    intensity,
-    setIntensity,
-    symptoms,
-    setSymptoms,
-    medicines,
-    setMedicines,
-    midas,
-    setMidas,
-    showMedicine,
-    submitNewEntry,
-    saveNewEntry,
-  } as const;
+	return {
+		areInputsDisabled,
+		setAreInputsDisabled,
+		cacheFeedback,
+		saveFeedback,
+		isLoading,
+		form,
+		updateForm,
+		showMedicine,
+		submitNewEntry,
+		saveNewEntry,
+	} as const;
 }

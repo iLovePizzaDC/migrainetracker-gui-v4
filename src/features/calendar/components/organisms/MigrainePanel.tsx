@@ -9,122 +9,116 @@ import MigrainePanelHeader from '@/features/calendar/components/molecules/Migrai
 import MigrainePanelActions from '@/features/calendar/components/molecules/MigrainePanelActions';
 
 interface IMigrainePanel {
-  date: Date;
-  onClose: () => void;
-  isOpen: boolean;
-  prefilled?: Entry | null;
-  disabled?: boolean;
+	date: Date;
+	onClose: () => void;
+	isOpen: boolean;
+	prefilled?: Entry | null;
+	disabled?: boolean;
 }
 
 function MigrainePanel({
-  date,
-  onClose,
-  isOpen,
-  prefilled = null,
-  disabled = false,
+	date,
+	onClose,
+	isOpen,
+	prefilled = null,
+	disabled = false,
 }: IMigrainePanel) {
-  const {
-    areInputsDisabled,
-    setAreInputsDisabled,
-    cacheFeedback,
-    saveFeedback,
-    isLoading,
-    durations,
-    setDurations,
-    intensity,
-    setIntensity,
-    symptoms,
-    setSymptoms,
-    medicines,
-    setMedicines,
-    midas,
-    setMidas,
-    showMedicine,
-    submitNewEntry,
-    saveNewEntry,
-  } = useMigrainePanel(date, onClose, disabled, prefilled);
+	const {
+		areInputsDisabled,
+		setAreInputsDisabled,
+		cacheFeedback,
+		saveFeedback,
+		isLoading,
+		form,
+		updateForm,
+		showMedicine,
+		submitNewEntry,
+		saveNewEntry,
+	} = useMigrainePanel(date, onClose, disabled, prefilled);
 
-  const inputsDisabled = areInputsDisabled || isLoading;
+	const inputsDisabled = areInputsDisabled || isLoading;
 
-  return (
-    <div
-      data-testid='migraine-panel'
-      className={`
+	return (
+		<div
+			data-testid='migraine-panel'
+			className={`
 				overflow-hidden transition-all duration-300 ease-out
 				will-change-transform
-				${isOpen
-          ? 'opacity-100 translate-y-0 max-h-[2000px]'
-          : 'opacity-0 translate-y-2 max-h-0 pointer-events-none'}
+				${
+					isOpen
+						? 'opacity-100 translate-y-0 max-h-[2000px]'
+						: 'opacity-0 translate-y-2 max-h-0 pointer-events-none'
+				}
 			`}
-    >
-      <div
-        className='
+		>
+			<div
+				className='
 					mx-auto mt-4 max-w-5xl
 					rounded-2xl border border-white/20
 					bg-transparent p-4 sm:p-6
 					shadow-lg shadow-black/30
 					backdrop-blur-xl
 				'
-      >
-        <div className='space-y-6'>
-          <MigrainePanelHeader
-            date={date}
-            onClose={onClose}
-            prefilled={prefilled}
-            areInputsDisabled={areInputsDisabled}
-            setAreInputsDisabled={setAreInputsDisabled}
-            isLoading={isLoading}
-          />
+			>
+				<div className='space-y-6'>
+					<MigrainePanelHeader
+						date={date}
+						onClose={onClose}
+						prefilled={prefilled}
+						areInputsDisabled={areInputsDisabled}
+						setAreInputsDisabled={setAreInputsDisabled}
+						isLoading={isLoading}
+					/>
 
-          <div className='grid gap-6 lg:grid-cols-2'>
-            <Durations
-              durations={durations}
-              setDurations={setDurations}
-              disabled={inputsDisabled}
-            />
+					<div className='grid gap-6 lg:grid-cols-2'>
+						<Durations
+							durations={form.durations}
+							onChange={(durations) => updateForm('durations', durations)}
+							disabled={inputsDisabled}
+						/>
 
-            <Intensity
-              intensity={intensity}
-              setIntensity={setIntensity}
-              disabled={inputsDisabled}
-            />
+						<Intensity
+							intensity={form.intensity}
+							onChange={(intensity) => updateForm('intensity', intensity)}
+							disabled={inputsDisabled}
+						/>
 
-            <div className='lg:col-span-2'>
-              <Symptoms
-                symptoms={symptoms}
-                setSymptoms={setSymptoms}
-                disabled={inputsDisabled}
-              />
-            </div>
+						<div className='lg:col-span-2'>
+							<Symptoms
+								symptoms={form.symptoms}
+								onChange={(symptoms) => updateForm('symptoms', symptoms)}
+								disabled={inputsDisabled}
+							/>
+						</div>
 
-            {showMedicine && (
-              <Medicine
-                medicines={medicines}
-                setMedicines={setMedicines}
-                disabled={inputsDisabled}
-              />
-            )}
+						{showMedicine && (
+							<Medicine
+								medicines={form.medicines}
+								onChange={(medicines) => updateForm('medicines', medicines)}
+								disabled={inputsDisabled}
+							/>
+						)}
 
-            <Midas
-              midas={midas}
-              setMidas={setMidas}
-              disabled={inputsDisabled}
-            />
-          </div>
+						<Midas
+							midas={form.midas}
+							onChange={(midas) => updateForm('midas', midas)}
+							disabled={inputsDisabled}
+						/>
+					</div>
 
-          {!areInputsDisabled && (
-            <MigrainePanelActions
-              cacheFeedback={cacheFeedback}
-              saveFeedback={saveFeedback}
-              isLoading={isLoading}
-              saveNewEntry={saveNewEntry}
-              submitNewEntry={submitNewEntry}
-            />
-          )}
-        </div>
-      </div>
-    </div>
-  );
+					{!areInputsDisabled && (
+						<MigrainePanelActions
+							cacheFeedback={cacheFeedback}
+							saveFeedback={saveFeedback}
+							isLoading={isLoading}
+							saveNewEntry={saveNewEntry}
+							submitNewEntry={submitNewEntry}
+						/>
+					)}
+				</div>
+			</div>
+		</div>
+	);
 }
 
 export default MigrainePanel;

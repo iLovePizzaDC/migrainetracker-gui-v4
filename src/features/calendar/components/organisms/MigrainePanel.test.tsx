@@ -23,7 +23,7 @@ vi.mock('@/features/calendar/components/molecules/Medicine', () => ({
 vi.mock('@/features/calendar/components/molecules/Midas', () => ({
 	default: ({ disabled }: any) => <div data-testid='midas' data-disabled={String(disabled)} />,
 }));
-vi.mock('@/features/calendar/components/organisms/MigrainePanelHeader', () => ({
+vi.mock('@/features/calendar/components/molecules/MigrainePanelHeader', () => ({
 	default: ({ date, prefilled, onClose, areInputsDisabled, setAreInputsDisabled }: any) => (
 		<div data-testid='header' data-date={date?.toISOString()} data-prefilled={String(!!prefilled)}>
 			<button data-testid='header-close-trigger' onClick={onClose} />
@@ -34,7 +34,7 @@ vi.mock('@/features/calendar/components/organisms/MigrainePanelHeader', () => ({
 		</div>
 	),
 }));
-vi.mock('@/features/calendar/components/organisms/MigrainePanelActions', () => ({
+vi.mock('@/features/calendar/components/molecules/MigrainePanelActions', () => ({
 	default: ({ cacheFeedback, saveFeedback, isLoading, saveNewEntry, submitNewEntry }: any) => (
 		<div
 			data-testid='actions'
@@ -56,17 +56,15 @@ const baseHookReturn = {
 	setAreInputsDisabled: vi.fn(),
 	cacheFeedback: null,
 	saveFeedback: null,
-	isLoading: false,
-	durations: [],
-	setDurations: vi.fn(),
-	intensity: null,
-	setIntensity: vi.fn(),
-	symptoms: [],
-	setSymptoms: vi.fn(),
-	medicines: [],
-	setMedicines: vi.fn(),
-	midas: {},
-	setMidas: vi.fn(),
+  isLoading: false,
+  form: {
+  	durations: [],
+  	intensity: null,
+  	symptoms: [],
+  	medicines: [],
+  	midas: {},
+  },
+	updateForm: vi.fn(),
 	showMedicine: true,
 	submitNewEntry: vi.fn(),
 	saveNewEntry: vi.fn(),
