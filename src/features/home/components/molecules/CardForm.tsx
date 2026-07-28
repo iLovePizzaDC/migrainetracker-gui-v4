@@ -26,6 +26,7 @@ interface ICardForm {
 	defaultUnit?: TimeFrameUnit;
 }
 
+// TODO save form in object?
 function CardForm({
 	onButtonClick,
 	defaultIndex,
