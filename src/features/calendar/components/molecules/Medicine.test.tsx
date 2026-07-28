@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mockMedLabel = 'test medicine';
 const mockMedValue = 'tst_med';
 
-vi.mock('@/shared/hooks/user/use-user', () => ({
+vi.mock('@/shared/hooks/use-user', () => ({
 	useUser: () => ({
 		addMedicine: vi.fn(),
 	}),

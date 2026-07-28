@@ -1,4 +1,4 @@
-import type { DropdownOption } from '@/shared/types/input/input';
+import type { DropdownOption } from '@/shared/types/input';
 
 export const MEDICINE_TYPES = {
 	PAINKILLER: 'painkiller',

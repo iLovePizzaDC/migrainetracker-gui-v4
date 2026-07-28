@@ -1,5 +1,5 @@
-import type { Medicine } from '@/shared/types/user/medicine';
-import type { User } from '@/shared/types/user/user';
+import type { Medicine } from '@/shared/types/medicine';
+import type { User } from '@/shared/types/user';
 import { createContext } from 'react';
 
 interface IUserContext {

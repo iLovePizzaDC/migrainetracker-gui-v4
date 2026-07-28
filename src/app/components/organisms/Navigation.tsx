@@ -1,7 +1,7 @@
 import MobileNavigationLinks from '@/app/components/molecules/navigation/MobileNavigationLinks';
 import MobileNavigationOptions from '@/app/components/molecules/navigation/MobileNavigationOptions';
 import NavigationLinks from '@/app/components/molecules/navigation/NavigationLinks';
-import { useUser } from '@/shared/hooks/user/use-user';
+import { useUser } from '@/shared/hooks/use-user';
 import { useState } from 'react';
 
 function Navigation() {

@@ -5,8 +5,8 @@ import MigrainePanel from '@/features/calendar/components/organisms/MigrainePane
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import type { Entry, StoredEntry } from '@/features/calendar/types/calendar';
 import { createEntry, enrichMedicineLabels } from '@/features/calendar/utils/event-parser';
-import { useUser } from '@/shared/hooks/user/use-user';
-import type { DropdownOption } from '@/shared/types/input/input';
+import { useUser } from '@/shared/hooks/use-user';
+import type { DropdownOption } from '@/shared/types/input';
 import { normalizeDate } from '@/shared/utils/date/date';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';

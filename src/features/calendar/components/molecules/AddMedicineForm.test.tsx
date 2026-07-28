@@ -22,7 +22,7 @@ const mockUserMedicines = [
 
 const mockAddMedicine = vi.fn();
 
-vi.mock('@/shared/hooks/user/use-user', () => ({
+vi.mock('@/shared/hooks/use-user', () => ({
 	useUser: () => ({
 		medicines: mockUserMedicines,
 		addMedicine: mockAddMedicine,

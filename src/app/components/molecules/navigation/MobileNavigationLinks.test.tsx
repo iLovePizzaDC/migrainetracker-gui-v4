@@ -1,11 +1,11 @@
 import MobileNavigationLinks from '@/app/components/molecules/navigation/MobileNavigationLinks';
 import { NAVIGATION_LINKS } from '@/app/constants/navigation/links';
-import { useUser } from '@/shared/hooks/user/use-user';
+import { useUser } from '@/shared/hooks/use-user';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/shared/hooks/user/use-user');
+vi.mock('@/shared/hooks/use-user');
 vi.mock('react-router-dom', () => ({
 	useLocation: () => ({ pathname: '/' }),
 	Link: ({ children, href, onClick }: any) => (

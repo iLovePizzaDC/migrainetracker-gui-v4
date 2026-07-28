@@ -2,9 +2,9 @@ import { fetchUserMedicinesDelete } from '@/shared/api/medicine.api';
 import Combobox from '@/shared/components/atoms/Combobox';
 import { BUTTON_TYPES } from '@/shared/constants/input/button';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
-import { useUser } from '@/shared/hooks/user/use-user';
-import type { AppendMedicine } from '@/shared/types/calendar/calendar';
-import type { DropdownOption } from '@/shared/types/input/input';
+import { useUser } from '@/shared/hooks/use-user';
+import type { AppendMedicine } from '@/shared/types/calendar';
+import type { DropdownOption } from '@/shared/types/input';
 import { CheckBadgeIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 

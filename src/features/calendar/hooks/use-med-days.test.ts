@@ -23,7 +23,7 @@ const mockUserMedicines = [
 	},
 ];
 
-vi.mock('@/shared/hooks/user/use-user', () => ({
+vi.mock('@/shared/hooks/use-user', () => ({
 	useUser: () => ({
 		medicines: mockUserMedicines,
 	}),

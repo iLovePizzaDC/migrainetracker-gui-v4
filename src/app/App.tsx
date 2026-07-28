@@ -6,8 +6,8 @@ import { getSeasonBackground } from '@/app/utils/date';
 import CalendarPage from '@/pages/CalendarPage';
 import OverviewPage from '@/pages/OverviewPage';
 import LandingPage from '@/pages/LandingPage';
-import { useAuthCheck } from '@/shared/auth/use-auth-check';
-import { useUser } from '@/shared/hooks/user/use-user';
+import { useAuthCheck } from '@/app/auth/use-auth-check';
+import { useUser } from '@/shared/hooks/use-user';
 import ProtectedRoute from '@/shared/routing/protected-route';
 import { Navigate, Route, Routes } from 'react-router-dom';
 

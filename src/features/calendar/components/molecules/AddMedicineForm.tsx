@@ -8,7 +8,7 @@ import {
 	MEDICINE_TYPES,
 	type MedicineType,
 } from '@/shared/constants/user/medicine';
-import { useUser } from '@/shared/hooks/user/use-user';
+import { useUser } from '@/shared/hooks/use-user';
 import { useEffect, useRef, useState } from 'react';
 
 interface IAddMedicineForm {

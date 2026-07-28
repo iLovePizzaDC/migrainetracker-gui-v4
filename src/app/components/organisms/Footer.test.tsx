@@ -1,6 +1,6 @@
 import Footer from '@/app/components/organisms/Footer';
 import * as userApi from '@/shared/api/user.api';
-import * as useUserHook from '@/shared/hooks/user/use-user';
+import * as useUserHook from '@/shared/hooks/use-user';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -12,7 +12,7 @@ const mockUser = {
 	given_name: 'John',
 	family_name: 'Doe',
 };
-vi.mock('@/shared/hooks/user/use-user');
+vi.mock('@/shared/hooks/use-user');
 vi.mock('@/shared/api/user.api');
 
 describe('<Footer />', () => {
