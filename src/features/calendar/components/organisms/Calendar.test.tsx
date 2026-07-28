@@ -35,7 +35,7 @@ vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: vi.fn(),
 }));
 vi.mock('@/features/calendar/utils/event-highlight');
-vi.mock('@/features/calendar/components/molecules/Durations', () => ({
+vi.mock('@/features/calendar/components/molecules/forms/Durations', () => ({
 	default: () => <div>durations</div>,
 }));
 vi.mock('@/shared/components/atoms/Combobox', () => ({

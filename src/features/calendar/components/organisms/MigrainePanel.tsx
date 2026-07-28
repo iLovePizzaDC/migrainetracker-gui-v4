@@ -1,12 +1,12 @@
-import Durations from '@/features/calendar/components/molecules/Durations';
-import Intensity from '@/features/calendar/components/molecules/Intensity';
-import Medicine from '@/features/calendar/components/molecules/Medicine';
-import Midas from '@/features/calendar/components/molecules/Midas';
-import Symptoms from '@/features/calendar/components/molecules/Symptoms';
 import type { Entry } from '@/features/calendar/types/calendar';
 import { useMigrainePanel } from '@/features/calendar/hooks/use-migraine-panel';
-import MigrainePanelHeader from '@/features/calendar/components/molecules/MigrainePanelHeader';
-import MigrainePanelActions from '@/features/calendar/components/molecules/MigrainePanelActions';
+import MigrainePanelHeader from '@/features/calendar/components/molecules/content/MigrainePanelHeader';
+import Durations from '@/features/calendar/components/molecules/forms/Durations';
+import Intensity from '@/features/calendar/components/molecules/forms/Intensity';
+import Symptoms from '@/features/calendar/components/molecules/forms/Symptoms';
+import Medicine from '@/features/calendar/components/molecules/forms/Medicine';
+import Midas from '@/features/calendar/components/molecules/forms/Midas';
+import MigrainePanelActions from '@/features/calendar/components/molecules/inputs/MigrainePanelActions';
 
 interface IMigrainePanel {
 	date: Date;

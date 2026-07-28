@@ -1,5 +1,5 @@
-import CalendarDay from '@/features/calendar/components/molecules/CalendarDay';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
+import CalendarDay from '@/features/calendar/components/molecules/content/CalendarDay';
 
 interface ICalendarContent {
 	openDate: Date | null;

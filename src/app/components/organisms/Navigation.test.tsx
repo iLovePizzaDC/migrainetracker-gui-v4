@@ -5,15 +5,15 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/hooks/use-user');
-vi.mock('@/app/components/molecules/NavigationLinks', () => ({
+vi.mock('@/app/components/molecules/navigation/NavigationLinks', () => ({
 	default: () => <div data-testid='navigation-links' />,
 }));
-vi.mock('@/app/components/molecules/MobileNavigationLinks', () => ({
+vi.mock('@/app/components/molecules/navigation/MobileNavigationLinks', () => ({
 	default: ({ toggleMenu }: any) => (
 		<div data-testid='mobile-navigation-links' onClick={toggleMenu} />
 	),
 }));
-vi.mock('@/app/components/molecules/MobileNavigationOptions', () => ({
+vi.mock('@/app/components/molecules/navigation/MobileNavigationOptions', () => ({
 	default: ({ toggleMenu, isOpen }: any) => (
 		<button data-testid='mobile-nav-toggle' onClick={toggleMenu}>
 			{isOpen ? 'close' : 'open'}

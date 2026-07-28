@@ -1,5 +1,3 @@
-import CalendarHeader from '@/features/calendar/components/molecules/CalendarHeader';
-import FilterCard from '@/features/calendar/components/molecules/FilterCard';
 import CalendarContent from '@/features/calendar/components/organisms/CalendarContent';
 import MigrainePanel from '@/features/calendar/components/organisms/MigrainePanel';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
@@ -10,7 +8,9 @@ import type { DropdownOption } from '@/shared/types/input';
 import { normalizeDate } from '@/shared/utils/date';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { ENTRY_STORAGE_KEY } from '../../constants/calendar';
+import { ENTRY_STORAGE_KEY } from '@/features/calendar/constants/calendar';
+import CalendarHeader from '@/features/calendar/components/molecules/content/CalendarHeader';
+import FilterCard from '@/features/calendar/components/molecules/forms/FilterCard';
 
 function Calendar() {
 	const { isLoading, date, calendarEvents, setMonth } = useCalendar();
