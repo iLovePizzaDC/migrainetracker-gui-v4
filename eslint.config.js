@@ -19,11 +19,10 @@ export default defineConfig([
 			prettier,
 		],
 		languageOptions: {
-			ecmaVersion: 2020,
+			ecmaVersion: 'latest',
 			globals: globals.browser,
 		},
 		rules: {
-			'no-trailing-spaces': 'error',
 			'react/react-in-jsx-scope': 'off',
 		},
 	},
