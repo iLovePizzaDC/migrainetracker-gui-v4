@@ -122,10 +122,10 @@ function setupMocks(
 }
 
 function renderWithProvider() {
-	const { result } = renderHook(() => useContext(CalendarContext), {
+	const { result, rerender } = renderHook(() => useContext(CalendarContext), {
 		wrapper: ({ children }) => <CalendarProvider>{children}</CalendarProvider>,
 	});
-	return result as { current: ICalendarContext };
+	return { result: result as { current: ICalendarContext }, rerender };
 }
 
 describe('CalendarProvider', () => {
@@ -134,7 +134,7 @@ describe('CalendarProvider', () => {
 
 	describe('context values', () => {
 		it('provides date values from useCalendarDate', () => {
-			const result = renderWithProvider();
+			const { result } = renderWithProvider();
 
 			expect(result.current.date).toEqual(new Date('2026-05-01'));
 			expect(result.current.month).toBe('May');
@@ -145,7 +145,7 @@ describe('CalendarProvider', () => {
 		it('provides event values from useCalendarEvents', () => {
 			setupMocks({ calendarEvents: { calendarEvents: [mockEvent], isLoading: true } });
 
-			const result = renderWithProvider();
+			const { result } = renderWithProvider();
 
 			expect(result.current.calendarEvents).toEqual([mockEvent]);
 			expect(result.current.isLoading).toBe(true);
@@ -154,14 +154,14 @@ describe('CalendarProvider', () => {
 		it('provides medDaysCount and maxMedDaysCount from useMedDays', () => {
 			setupMocks({ medDays: { medDaysCount: 7, maxMedDaysCount: 15 } });
 
-			const result = renderWithProvider();
+			const { result } = renderWithProvider();
 
 			expect(result.current.medDaysCount).toBe(7);
 			expect(result.current.maxMedDaysCount).toBe(15);
 		});
 
 		it('forwards setMonth, prevMonth, nextMonth from useCalendarDate', () => {
-			const result = renderWithProvider();
+			const { result } = renderWithProvider();
 
 			result.current.setMonth(new Date('2026-06-01'));
 			result.current.prevMonth();
@@ -173,7 +173,7 @@ describe('CalendarProvider', () => {
 		});
 
 		it('forwards setFilter from useCalendarEvents', () => {
-			const result = renderWithProvider();
+			const { result } = renderWithProvider();
 			const newFilter = {
 				intensity: INTENSITY_TYPES.HIGH,
 				symptom: [],
@@ -190,7 +190,7 @@ describe('CalendarProvider', () => {
 
 	describe('refetchEvents', () => {
 		it('refetchEvents calls the hook refetchEvents function', async () => {
-			const result = renderWithProvider();
+			const { result } = renderWithProvider();
 
 			await act(async () => {
 				await result.current.refetchEvents();
@@ -202,13 +202,48 @@ describe('CalendarProvider', () => {
 
 	describe('collectMedDays', () => {
 		it('collectMedDays calls the hook collectMedDays function', async () => {
-			const result = renderWithProvider();
+			const { result } = renderWithProvider();
 
 			await act(async () => {
 				await result.current.collectMedDays();
 			});
 
 			expect(defaultMedDays.collectMedDays).toHaveBeenCalled();
+		});
+	});
+
+	describe('collectMedDays effect (refetch on calendarEvents change)', () => {
+		it('calls collectMedDays on mount', () => {
+			renderWithProvider();
+
+			expect(defaultMedDays.collectMedDays).toHaveBeenCalledTimes(1);
+		});
+
+		it('calls collectMedDays again when calendarEvents reference changes', () => {
+			const { rerender } = renderWithProvider();
+			expect(defaultMedDays.collectMedDays).toHaveBeenCalledTimes(1);
+
+			vi.mocked(useCalendarEvents).mockReturnValue({
+				...defaultCalendarEvents,
+				calendarEvents: [mockEvent],
+			});
+
+			act(() => {
+				rerender();
+			});
+
+			expect(defaultMedDays.collectMedDays).toHaveBeenCalledTimes(2);
+		});
+
+		it('does not call collectMedDays again when calendarEvents stays referentially stable', () => {
+			const { rerender } = renderWithProvider();
+			expect(defaultMedDays.collectMedDays).toHaveBeenCalledTimes(1);
+
+			act(() => {
+				rerender();
+			});
+
+			expect(defaultMedDays.collectMedDays).toHaveBeenCalledTimes(1);
 		});
 	});
 
