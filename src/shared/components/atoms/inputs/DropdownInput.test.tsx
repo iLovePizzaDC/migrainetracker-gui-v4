@@ -1,4 +1,4 @@
-import DropdownInput from '@/shared/components/atoms/DropdownInput';
+import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

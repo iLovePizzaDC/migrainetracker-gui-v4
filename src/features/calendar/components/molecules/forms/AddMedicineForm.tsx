@@ -1,7 +1,7 @@
 import { fetchUserMedicinesPost } from '@/shared/api/medicine.api';
-import DropdownInput from '@/shared/components/atoms/DropdownInput';
+import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
 import SubmitButton from '@/shared/components/atoms/SubmitButton';
-import TextInput from '@/shared/components/atoms/TextInput';
+import TextInput from '@/shared/components/atoms/inputs/TextInput';
 import { BUTTON_TYPES } from '@/shared/constants/input/button';
 import {
 	MEDICINE_OPTIONS,

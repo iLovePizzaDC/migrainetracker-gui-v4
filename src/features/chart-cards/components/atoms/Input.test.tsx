@@ -2,7 +2,7 @@ import { INPUT_TYPES } from '@/shared/constants/input/input';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import Input from '@/features/chart-cards/components/atoms/inputs/Input';
+import Input from '@/features/chart-cards/components/atoms/Input';
 
 describe('<Input />', () => {
 	const defaultProps = {

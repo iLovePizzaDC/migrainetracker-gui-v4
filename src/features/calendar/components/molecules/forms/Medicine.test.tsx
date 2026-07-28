@@ -13,7 +13,7 @@ vi.mock('@/shared/hooks/use-user', () => ({
 vi.mock('@/shared/hooks/use-click-outside', () => ({
 	useClickOutside: vi.fn(),
 }));
-vi.mock('@/features/calendar/components/molecules/inputs/MedicineCombobox', () => ({
+vi.mock('@/features/calendar/components/molecules/MedicineCombobox', () => ({
 	default: ({ medicines, disabled }: any) => (
 		<div data-testid='medicine-combobox'>
 			{medicines.map((m: any) => (

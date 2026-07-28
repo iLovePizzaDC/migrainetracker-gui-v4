@@ -1,5 +1,5 @@
 import { fetchUserMedicinesDelete } from '@/shared/api/medicine.api';
-import Combobox from '@/shared/components/atoms/Combobox';
+import Combobox from '@/shared/components/atoms/inputs/Combobox';
 import { BUTTON_TYPES } from '@/shared/constants/input/button';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
 import { useUser } from '@/shared/hooks/use-user';

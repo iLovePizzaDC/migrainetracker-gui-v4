@@ -1,5 +1,5 @@
-import Combobox from '@/shared/components/atoms/Combobox';
-import DropdownInput from '@/shared/components/atoms/DropdownInput';
+import Combobox from '@/shared/components/atoms/inputs/Combobox';
+import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
 import {
 	ANY_FILTER_OPTIONS,
 	ANY_FILTER_TYPE,

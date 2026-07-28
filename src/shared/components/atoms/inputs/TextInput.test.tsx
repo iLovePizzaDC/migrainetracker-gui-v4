@@ -1,4 +1,4 @@
-import TextInput from '@/shared/components/atoms/TextInput';
+import TextInput from '@/shared/components/atoms/inputs/TextInput';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';

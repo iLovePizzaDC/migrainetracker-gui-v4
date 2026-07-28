@@ -34,7 +34,7 @@ vi.mock('@/features/calendar/components/molecules/content/MigrainePanelHeader', 
 		</div>
 	),
 }));
-vi.mock('@/features/calendar/components/molecules/inputs/MigrainePanelActions', () => ({
+vi.mock('@/features/calendar/components/molecules/MigrainePanelActions', () => ({
 	default: ({ cacheFeedback, saveFeedback, isLoading, saveNewEntry, submitNewEntry }: any) => (
 		<div
 			data-testid='actions'

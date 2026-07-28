@@ -1,4 +1,4 @@
-import Combobox from '@/shared/components/atoms/Combobox';
+import Combobox from '@/shared/components/atoms/inputs/Combobox';
 import type { DropdownOption } from '@/shared/types/input';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

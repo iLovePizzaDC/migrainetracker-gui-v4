@@ -6,7 +6,7 @@ import Intensity from '@/features/calendar/components/molecules/forms/Intensity'
 import Symptoms from '@/features/calendar/components/molecules/forms/Symptoms';
 import Medicine from '@/features/calendar/components/molecules/forms/Medicine';
 import Midas from '@/features/calendar/components/molecules/forms/Midas';
-import MigrainePanelActions from '@/features/calendar/components/molecules/inputs/MigrainePanelActions';
+import MigrainePanelActions from '@/features/calendar/components/molecules/MigrainePanelActions';
 
 interface IMigrainePanel {
 	date: Date;
