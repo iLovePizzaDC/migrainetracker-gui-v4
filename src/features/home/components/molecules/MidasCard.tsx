@@ -1,3 +1,4 @@
+import CardShell from '@/features/home/components/atoms/card/CardShell';
 import PieChart from '@/features/home/components/atoms/card/PieChart';
 import type { ChartData } from '@/features/home/types/chart';
 import { fetchMidasPieData } from '@/features/home/utils/fetch-helper';
@@ -29,7 +30,6 @@ function MidasCard() {
 
 		const collectChartData = async () => {
 			setIsLoading(true);
-
 			const pie = await fetchMidasPieData();
 			setMidasScore(pie.current.score);
 			setPieData({
@@ -48,23 +48,12 @@ function MidasCard() {
 	if (midasScore === 0) return null;
 
 	return (
-		<div
-			className='
-                w-full self-start rounded-2xl p-3 relative
-                bg-transparent backdrop-blur-md
-                border border-white/20
-                shadow-lg shadow-black/20
-                transition hover:shadow-xl
-            '
-		>
+		<CardShell>
 			<div className='h-7 mb-2 flex justify-between items-start w-full'>
 				<div className='w-20 opacity-0 pointer-events-none'></div>
-
 				<h2 className='text-lg font-semibold text-center flex-1 leading-tight'>MIDAS Score</h2>
-
 				<p className={`w-20 px-1 text-sm font-medium text-right ${color}`}>{label}</p>
 			</div>
-
 			<div className='h-72 w-full flex items-center justify-center'>
 				{isLoading ? (
 					<div className='w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse' />
@@ -72,7 +61,6 @@ function MidasCard() {
 					<PieChart outerData={pieData.current} innerData={pieData.previous} />
 				)}
 			</div>
-
 			<div className='text-center h-6'>
 				{isLoading ? (
 					<div className='h-6 w-20 mx-auto bg-white/10 backdrop-blur-sm rounded-md animate-pulse' />
@@ -80,8 +68,7 @@ function MidasCard() {
 					<p className='text-lg font-medium'>{midasScore}/270</p>
 				)}
 			</div>
-		</div>
+		</CardShell>
 	);
 }
-
 export default MidasCard;
