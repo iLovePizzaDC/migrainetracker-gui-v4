@@ -2,17 +2,10 @@ import { useState, type Dispatch, type SetStateAction } from 'react';
 import type { CardFormDefaults, CardFormState, CardSetup } from '@/features/home/types/chart';
 import type { CardType, ChartType, TimeFrameUnit } from '@/shared/types/cards/card';
 import type { EventFilter } from '@/shared/types/event/event';
-
-const toState = (defaults: CardFormDefaults): CardFormState => ({
-	title: defaults.title,
-	cardType: defaults.cardType,
-	chartType: defaults.chartType,
-	filter: defaults.filter,
-	timeframe: { count: defaults.count, unit: defaults.unit },
-});
+import { toCardFormState } from '@/features/home/utils/card-form';
 
 export function useCardForm(defaults: CardFormDefaults) {
-	const [form, setForm] = useState<CardFormState>(() => toState(defaults));
+	const [form, setForm] = useState<CardFormState>(() => toCardFormState(defaults));
 
 	const setTitle = (title: string) => setForm((prev) => ({ ...prev, title }));
 	const setCardType = (cardType: CardType) => setForm((prev) => ({ ...prev, cardType }));
@@ -31,7 +24,7 @@ export function useCardForm(defaults: CardFormDefaults) {
 					: value,
 		}));
 
-	const reset = () => setForm(toState(defaults));
+	const reset = () => setForm(toCardFormState(defaults));
 	const buildSetup = (index: number): CardSetup => ({ index, ...form });
 
 	return {
