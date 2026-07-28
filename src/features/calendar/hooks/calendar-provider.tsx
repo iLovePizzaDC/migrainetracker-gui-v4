@@ -2,7 +2,7 @@ import { CalendarContext } from '@/features/calendar/context/calendar-context';
 import { useCalendarDate } from '@/features/calendar/hooks/use-calendar-date';
 import { useCalendarEvents } from '@/features/calendar/hooks/use-calendar-events';
 import { useMedDays } from '@/features/calendar/hooks/use-med-days';
-import { type ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 
 export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 	const {
@@ -30,6 +30,10 @@ export const CalendarProvider = ({ children }: { children: ReactNode }) => {
 	} = useCalendarEvents(firstDayOfMonth, lastDayOfMonth, daysInMonth);
 
 	const { medDaysCount, maxMedDaysCount, collectMedDays } = useMedDays(currentDate);
+
+	useEffect(() => {
+		collectMedDays();
+	}, [collectMedDays, calendarEvents]);
 
 	return (
 		<CalendarContext.Provider
