@@ -50,7 +50,10 @@ describe('<Midas />', () => {
 
 		await user.click(screen.getByLabelText('I missed work'));
 
-		expect(mockOnChange).toHaveBeenCalledWith({ ...mockMidasFalse, [MIDAS_TYPES.WORK_MISSED]: true });
+		expect(mockOnChange).toHaveBeenCalledWith({
+			...mockMidasFalse,
+			[MIDAS_TYPES.WORK_MISSED]: true,
+		});
 	});
 
 	it('calls onChange with false when clicking a checked option', async () => {

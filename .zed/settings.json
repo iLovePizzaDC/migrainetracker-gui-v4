@@ -3,27 +3,29 @@
 		"TypeScript": {
 			"formatter": {
 				"external": {
-					"command": "npx",
-					"arguments": ["prettier", "--stdin-filepath", "{buffer_path}"]
+					"command": "./node_modules/.bin/prettier",
+					"arguments": ["--stdin-filepath", "{buffer_path}"]
 				}
 			},
 			"format_on_save": "on",
 			"code_actions_on_format": {
 				"source.addMissingImports.ts": true,
-				"source.organizeImports.ts": true
+				"source.organizeImports.ts": true,
+				"source.fixAll.eslint": true
 			}
 		},
 		"TSX": {
 			"formatter": {
 				"external": {
-					"command": "npx",
-					"arguments": ["prettier", "--stdin-filepath", "{buffer_path}"]
+					"command": "./node_modules/.bin/prettier",
+					"arguments": ["--stdin-filepath", "{buffer_path}"]
 				}
 			},
 			"format_on_save": "on",
 			"code_actions_on_format": {
 				"source.addMissingImports.ts": true,
-				"source.organizeImports.ts": true
+				"source.organizeImports.ts": true,
+				"source.fixAll.eslint": true
 			}
 		}
 	},
