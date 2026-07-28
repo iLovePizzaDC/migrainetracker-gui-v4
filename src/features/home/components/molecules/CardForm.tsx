@@ -2,6 +2,7 @@ import Input from '@/features/home/components/atoms/card/Input';
 import { CARD_OPTIONS } from '@/features/home/constants/card';
 import { CHART_OPTIONS } from '@/features/home/constants/chart';
 import { TIME_FRAME_UNIT_OPTIONS } from '@/features/home/constants/time-frame';
+import { useCardForm } from '@/features/home/hooks/use-card-form';
 import { useCardSetups } from '@/features/home/hooks/use-card-setups';
 import type { CardSetup } from '@/features/home/types/chart';
 import DropdownInput from '@/shared/components/atoms/DropdownInput';
@@ -13,7 +14,6 @@ import { INPUT_TYPES } from '@/shared/constants/input/input';
 import { FILTER_FORM_VARIANTS } from '@/shared/constants/variants/filter-form';
 import type { CardType, ChartType, TimeFrameUnit } from '@/shared/types/cards/card';
 import type { EventFilter } from '@/shared/types/event/event';
-import { useState } from 'react';
 
 interface ICardForm {
 	onButtonClick: (setup: CardSetup) => void;
@@ -43,35 +43,28 @@ function CardForm({
 	defaultUnit = TIME_FRAME_UNITS.MONTHS,
 }: ICardForm) {
 	const { cardSetups } = useCardSetups();
-
-	const [title, setTitle] = useState(defaultTitle);
-	const [cardType, setCardType] = useState<CardType>(defaultCardType);
-	const [chartType, setChartType] = useState<ChartType>(defaultChartType);
-	const [filter, setFilter] = useState<EventFilter>(defaultFilter);
-	const [count, setCount] = useState(defaultCount);
-	const [unit, setUnit] = useState<TimeFrameUnit>(defaultUnit);
+	const {
+		form,
+		setTitle,
+		setCardType,
+		setChartType,
+		setCount,
+		setUnit,
+		setFilter,
+		reset,
+		buildSetup,
+	} = useCardForm({
+		title: defaultTitle,
+		cardType: defaultCardType,
+		chartType: defaultChartType,
+		filter: defaultFilter,
+		count: defaultCount,
+		unit: defaultUnit,
+	});
 
 	const onSubmit = () => {
-		const cardSetup: CardSetup = {
-			index: defaultIndex ?? cardSetups.length,
-			title,
-			cardType,
-			chartType,
-			filter,
-			timeframe: {
-				count,
-				unit,
-			},
-		};
-
-		setTitle(defaultTitle);
-		setCardType(defaultCardType);
-		setChartType(defaultChartType);
-		setFilter(defaultFilter);
-		setCount(defaultCount);
-		setUnit(defaultUnit);
-
-		onButtonClick(cardSetup);
+		onButtonClick(buildSetup(defaultIndex ?? cardSetups.length));
+		reset();
 	};
 
 	return (
@@ -86,7 +79,7 @@ function CardForm({
 				id='appendTitle'
 				label='Title'
 				type={INPUT_TYPES.TEXT}
-				value={title}
+				value={form.title}
 				onChange={(event) => setTitle(event.target.value)}
 				placeholder='Enter a title'
 				required
@@ -95,7 +88,7 @@ function CardForm({
 				<DropdownInput
 					id='appendCardType'
 					label='Card Type'
-					value={cardType}
+					value={form.cardType}
 					options={CARD_OPTIONS}
 					onChange={(value) => setCardType(value as CardType)}
 					required
@@ -104,7 +97,7 @@ function CardForm({
 				<DropdownInput
 					id='appendChartType'
 					label='Chart Type'
-					value={chartType}
+					value={form.chartType}
 					options={CHART_OPTIONS}
 					onChange={(value) => setChartType(value as ChartType)}
 					required
@@ -115,7 +108,7 @@ function CardForm({
 						id='appendValue'
 						label='Value'
 						type={INPUT_TYPES.NUMBER}
-						value={count.toString()}
+						value={form.timeframe.count.toString()}
 						onChange={(event) => setCount(Number(event.target.value))}
 						placeholder='Enter number'
 						required
@@ -124,7 +117,7 @@ function CardForm({
 					<DropdownInput
 						id='appendUnit'
 						label='Unit'
-						value={unit}
+						value={form.timeframe.unit}
 						options={TIME_FRAME_UNIT_OPTIONS}
 						onChange={(value) => setUnit(value as TimeFrameUnit)}
 						required
@@ -134,9 +127,9 @@ function CardForm({
 
 			<FilterForm
 				variant={FILTER_FORM_VARIANTS.STANDARD}
-				filter={filter}
+				filter={form.filter}
 				setFilter={setFilter}
-				medicineInputVisible={defaultCardType !== CARD_TYPES.MOH}
+				medicineInputVisible={form.cardType !== CARD_TYPES.MOH}
 				midasInputVisible={false}
 			/>
 

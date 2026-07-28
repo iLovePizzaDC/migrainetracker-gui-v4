@@ -17,3 +17,14 @@ export type CardSetup = {
 		unit: TimeFrameUnit;
 	};
 };
+
+export type CardFormDefaults = {
+	title: string;
+	cardType: CardType;
+	chartType: ChartType;
+	filter: EventFilter;
+	count: number;
+	unit: TimeFrameUnit;
+};
+
+export type CardFormState = Omit<CardSetup, 'index'>;
