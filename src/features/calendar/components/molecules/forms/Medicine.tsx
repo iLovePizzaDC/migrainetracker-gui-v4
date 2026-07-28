@@ -37,25 +37,9 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 			</div>
 
 			<div className='relative inline-flex w-fit items-center p-1 rounded-xl bg-black/10 gap-1 group'>
-				<p className='text-xs font-medium'>
-					<span
-						data-testid='med-days-count'
-						className={`${
-							medDaysCount === maxMedDaysCount
-								? 'text-yellow-500'
-								: medDaysCount > maxMedDaysCount
-									? 'text-red-500'
-									: 'text-green-500'
-						}`}
-					>
-						{medDaysCount}
-					</span>
-					/{maxMedDaysCount} Med-Days this month
-				</p>
-
 				<Tooltip
 					content={
-						<div className='max-w-40'>
+						<div className='max-w-xs text-xs leading-relaxed'>
 							<p>
 								A “Med-Day” is any day on which you've taken acute medication (either medication of
 								type "migraine-painkiller" or "painkiller"). When this occurs on 10 or more days per
@@ -72,7 +56,25 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 						</div>
 					}
 				>
-					<InformationCircleIcon className='w-4 h-4' data-testid='info-toggle' />
+					<div className='flex items-center gap-1'>
+						<p className='text-xs font-medium'>
+							<span
+								data-testid='med-days-count'
+								className={`${
+									medDaysCount === maxMedDaysCount
+										? 'text-yellow-500'
+										: medDaysCount > maxMedDaysCount
+											? 'text-red-500'
+											: 'text-green-500'
+								}`}
+							>
+								{medDaysCount}
+							</span>
+							/{maxMedDaysCount} Med-Days this month
+						</p>
+
+						<InformationCircleIcon className='w-4 h-4' data-testid='info-toggle' />
+					</div>
 				</Tooltip>
 			</div>
 

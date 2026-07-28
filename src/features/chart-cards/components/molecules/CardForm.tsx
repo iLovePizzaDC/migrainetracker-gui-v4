@@ -1,4 +1,4 @@
-import Input from '@/features/chart-cards/components/atoms/card/Input';
+import Input from '@/features/chart-cards/components/atoms/inputs/Input';
 import { CARD_OPTIONS } from '@/features/chart-cards/constants/card';
 import { CHART_OPTIONS } from '@/features/chart-cards/constants/chart';
 import { TIME_FRAME_UNIT_OPTIONS } from '@/features/chart-cards/constants/time-frame';
