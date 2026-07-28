@@ -7,12 +7,14 @@ import { useEffect, useState } from 'react';
 
 function MidasCard() {
 	const { user } = useUser();
+
 	const [midasScore, setMidasScore] = useState<number>(0);
 	const [pieData, setPieData] = useState<{ current: ChartData; previous: ChartData }>({
 		current: [],
 		previous: [],
 	});
 	const [isLoading, setIsLoading] = useState(true);
+
 	const getColorIndicator = () => {
 		if (midasScore >= 21)
 			return { color: 'bg-gradient-to-r from-red-500/0 to to-red-500/70', label: 'severe' };
@@ -22,8 +24,10 @@ function MidasCard() {
 			return { color: 'bg-gradient-to-r from-yellow-500/0 to-yellow-500/70', label: 'mild' };
 		return { color: 'bg-gradient-to-r from-gray-500/0 to-gray-500/70', label: 'not/little' };
 	};
+
 	useEffect(() => {
 		if (!user) return;
+
 		const collectChartData = async () => {
 			setIsLoading(true);
 			const pie = await fetchMidasPieData();
@@ -32,12 +36,17 @@ function MidasCard() {
 				current: pie.current.pieData,
 				previous: pie.previous.pieData,
 			});
+
 			setIsLoading(false);
 		};
+
 		collectChartData();
 	}, [user]);
+
 	const { color, label } = getColorIndicator();
+
 	if (midasScore === 0) return null;
+
 	return (
 		<CardShell>
 			<div className='h-7 mb-2 flex justify-between items-start w-full'>
