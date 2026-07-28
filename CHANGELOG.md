@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.5](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.4...v1.7.5) (2026-07-28)
+
+
+### Bug Fixes
+
+* refetch med day on entry submit ([#134](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/134)) ([a116cb5](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/a116cb53251ee39151d5026f33d817e99f148afb))
+
 ## [1.7.4](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.3...v1.7.4) (2026-07-19)
 
 ### Bug Fixes
