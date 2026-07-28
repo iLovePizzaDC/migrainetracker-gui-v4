@@ -12,7 +12,7 @@ vi.mock('react-router-dom', () => ({
 		</a>
 	),
 }));
-vi.mock('@/app/constants/navigation/links', () => ({
+vi.mock('@/app/constants/navigation-links', () => ({
 	NAVIGATION_LINKS: [
 		{ label: 'Public', to: '/public', allowAnonymous: true },
 		{ label: 'Private', to: '/private', allowAnonymous: false },

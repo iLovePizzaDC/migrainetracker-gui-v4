@@ -8,7 +8,7 @@ import {
 } from '@/shared/utils/date';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/shared/utils/date/date');
+vi.mock('@/shared/utils/date');
 
 describe('getDateRange', () => {
 	beforeEach(() => {

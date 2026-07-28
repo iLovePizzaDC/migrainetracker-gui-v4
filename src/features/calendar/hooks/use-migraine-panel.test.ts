@@ -9,11 +9,11 @@ import { FEEDBACK_TYPES } from '@/shared/constants/button/feedback';
 import type { Entry } from '@/features/calendar/types/calendar';
 import { useMigrainePanel } from '@/features/calendar/hooks/use-migraine-panel';
 import { INTENSITY_TYPES } from '@/shared/constants/event/event-details';
-import { ENTRY_STORAGE_KEY } from '../constants/calendar';
+import { ENTRY_STORAGE_KEY } from '@/features/calendar/constants/calendar';
 
 vi.mock('@/features/calendar/hooks/use-calendar');
 vi.mock('@/shared/api/migraine.api');
-vi.mock('@/shared/utils/date/date');
+vi.mock('@/shared/utils/date');
 vi.mock('@/features/calendar/utils/migraine-panel');
 
 const emptyForm: Entry = {
