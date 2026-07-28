@@ -28,7 +28,7 @@ export function useMigrainePanel(
 		setForm(getInitialFormState(prefilled));
 	}, [date, disabled, prefilled]);
 
-  const showMedicine = !prefilled || !areInputsDisabled || form.medicines.length > 0;
+	const showMedicine = !prefilled || !areInputsDisabled || form.medicines.length > 0;
 
 	const updateForm = <K extends keyof Entry>(key: K, value: Entry[K]) => {
 		setForm((prev) => ({
