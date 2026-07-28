@@ -1,5 +1,5 @@
 import Combobox from '@/shared/components/atoms/Combobox';
-import type { DropdownOption } from '@/shared/types/input/input';
+import type { DropdownOption } from '@/shared/types/input';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';

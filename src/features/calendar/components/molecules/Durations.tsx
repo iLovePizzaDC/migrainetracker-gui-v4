@@ -1,5 +1,5 @@
 import TimePicker from '@/features/calendar/components/atoms/TimePicker';
-import type { AppendDuration } from '@/shared/types/calendar/calendar';
+import type { AppendDuration } from '@/shared/types/calendar';
 import { PlusCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 interface IDurations {

@@ -1,5 +1,5 @@
 import { api } from '@/shared/api/api';
-import type { Medicine } from '@/shared/types/user/medicine';
+import type { Medicine } from '@/shared/types/medicine';
 
 export const fetchUserMedicinesGet = async (): Promise<Medicine[]> => {
 	const response = await api.get('UserMedicine');

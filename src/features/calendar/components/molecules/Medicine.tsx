@@ -4,7 +4,7 @@ import AddMedicineForm from '@/features/calendar/components/molecules/AddMedicin
 import MedicineCombobox from '@/features/calendar/components/molecules/MedicineCombobox';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
-import type { AppendMedicine } from '@/shared/types/calendar/calendar';
+import type { AppendMedicine } from '@/shared/types/calendar';
 import { InformationCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 

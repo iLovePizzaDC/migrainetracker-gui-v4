@@ -6,7 +6,7 @@ import type {
 	MidasType,
 	SymptomType,
 } from '@/shared/constants/event/event-details';
-import type { InputContent } from '@/shared/types/calendar/calendar';
+import type { InputContent } from '@/shared/types/calendar';
 
 export type EventFilter = {
 	intensity: IntensityType | null;

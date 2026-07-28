@@ -5,8 +5,8 @@ import { mapMigraineEvents, mapProphylaxisEvents } from '@/features/calendar/uti
 import { filterEvents, isDefaultFilter } from '@/features/calendar/utils/filter';
 import { fetchMigraineEvents } from '@/shared/api/migraine.api';
 import { fetchProphylaxisEvents } from '@/shared/api/prophylaxis';
-import type { EventFilter } from '@/shared/types/event/event';
-import { formatDateToUs, getDateAfterDays, getDateBeforeDays } from '@/shared/utils/date/date';
+import type { EventFilter } from '@/shared/types/event';
+import { formatDateToUs, getDateAfterDays, getDateBeforeDays } from '@/shared/utils/date';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export function useCalendarEvents(

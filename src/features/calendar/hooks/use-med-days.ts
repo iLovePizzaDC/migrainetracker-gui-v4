@@ -1,6 +1,6 @@
 import { fetchMigraineAmount } from '@/shared/api/migraine.api';
 import { useUser } from '@/shared/hooks/use-user';
-import { formatDateToUs, getEndOfMonth, getStartOfMonth } from '@/shared/utils/date/date';
+import { formatDateToUs, getEndOfMonth, getStartOfMonth } from '@/shared/utils/date';
 import { getMohMedicineFilter } from '@/shared/utils/fetch-helper';
 import { useCallback, useEffect, useState } from 'react';
 

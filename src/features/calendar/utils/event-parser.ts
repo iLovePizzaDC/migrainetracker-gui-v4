@@ -6,7 +6,7 @@ import type {
 	ProphylaxisDescription,
 } from '@/features/calendar/types/event';
 import type { RawEventResponse } from '@/shared/api/types/event';
-import { parseDecimalToTime } from '@/shared/utils/date/date';
+import { parseDecimalToTime } from '@/shared/utils/date';
 
 export const parseMigraineEventDescription = (
 	event: RawEventResponse,

@@ -1,6 +1,6 @@
-import MobileNavigationLinks from '@/app/components/molecules/navigation/MobileNavigationLinks';
-import MobileNavigationOptions from '@/app/components/molecules/navigation/MobileNavigationOptions';
-import NavigationLinks from '@/app/components/molecules/navigation/NavigationLinks';
+import MobileNavigationLinks from '@/app/components/molecules/MobileNavigationLinks';
+import MobileNavigationOptions from '@/app/components/molecules/MobileNavigationOptions';
+import NavigationLinks from '@/app/components/molecules/NavigationLinks';
 import { useUser } from '@/shared/hooks/use-user';
 import { useState } from 'react';
 

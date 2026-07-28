@@ -1,6 +1,6 @@
 import type { MigraineDescription, MigraineEvent } from '@/features/calendar/types/event';
 import { ANY_FILTER_TYPE, EFFECTIVENESS_TYPES } from '@/shared/constants/event/event-details';
-import type { EventFilter } from '@/shared/types/event/event';
+import type { EventFilter } from '@/shared/types/event';
 
 function getEventMedicines(medicine: string): string[] {
 	return medicine

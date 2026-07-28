@@ -7,9 +7,10 @@ import type { Entry, StoredEntry } from '@/features/calendar/types/calendar';
 import { createEntry, enrichMedicineLabels } from '@/features/calendar/utils/event-parser';
 import { useUser } from '@/shared/hooks/use-user';
 import type { DropdownOption } from '@/shared/types/input';
-import { normalizeDate } from '@/shared/utils/date/date';
+import { normalizeDate } from '@/shared/utils/date';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { ENTRY_STORAGE_KEY } from '../../constants/calendar';
 
 function Calendar() {
 	const { isLoading, date, calendarEvents, setMonth } = useCalendar();
@@ -49,7 +50,7 @@ function Calendar() {
 	};
 
 	const onLoadEntryClick = () => {
-		const rawStoredEntry = localStorage.getItem('MT_NE');
+		const rawStoredEntry = localStorage.getItem(ENTRY_STORAGE_KEY);
 
 		if (rawStoredEntry) {
 			const entry: StoredEntry = JSON.parse(rawStoredEntry);

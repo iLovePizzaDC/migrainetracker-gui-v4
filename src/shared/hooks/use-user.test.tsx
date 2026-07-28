@@ -1,4 +1,4 @@
-import { UserContext } from '@/shared/context/user/user-context';
+import { UserContext } from '@/shared/context/user-context';
 import { useUser } from '@/shared/hooks/use-user';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';

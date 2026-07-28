@@ -1,5 +1,5 @@
 import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
-import type { Medicine } from '@/shared/types/user/medicine';
+import type { Medicine } from '@/shared/types/medicine';
 
 export async function getMohMedicineFilter(medicines: Medicine[] | null) {
 	return medicines === null

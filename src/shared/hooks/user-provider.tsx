@@ -1,7 +1,7 @@
 import { fetchUserMedicinesGet } from '@/shared/api/medicine.api';
-import { UserContext } from '@/shared/context/user/user-context';
-import type { Medicine } from '@/shared/types/user/medicine';
-import type { User } from '@/shared/types/user/user';
+import { UserContext } from '@/shared/context/user-context';
+import type { Medicine } from '@/shared/types/medicine';
+import type { User } from '@/shared/types/user';
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {

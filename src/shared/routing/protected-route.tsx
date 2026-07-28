@@ -1,4 +1,4 @@
-import type { User } from '@/shared/types/user/user';
+import type { User } from '@/shared/types/user';
 import type { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
 

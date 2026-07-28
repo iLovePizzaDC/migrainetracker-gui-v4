@@ -1,5 +1,5 @@
 import { fetchUserMedicinesGet } from '@/shared/api/medicine.api';
-import { UserContext } from '@/shared/context/user/user-context';
+import { UserContext } from '@/shared/context/user-context';
 import { UserProvider } from '@/shared/hooks/user-provider';
 import type { Medicine } from '@/shared/types/medicine';
 import { act, render, renderHook, screen, waitFor } from '@testing-library/react';

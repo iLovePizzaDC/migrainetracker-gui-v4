@@ -1,4 +1,6 @@
-import type { AppendDuration, AppendMidas } from '@/shared/types/calendar/calendar';
+import type { AppendDuration, AppendMidas } from '@/shared/types/calendar';
+
+export const ENTRY_STORAGE_KEY = 'MT_NE';
 
 export const STRENGTH_MAP = {
 	200: 'bg-purple-200',

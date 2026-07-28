@@ -1,8 +1,8 @@
 import Footer from '@/app/components/organisms/Footer';
-import LoadingBox from '@/app/components/organisms/LoadingBox';
+import LoadingBox from '@/app/components/molecules/LoadingBox';
 import Navigation from '@/app/components/organisms/Navigation';
 import '@/app/styles/App.css';
-import { getSeasonBackground } from '@/app/utils/date';
+import { getSeasonBackground } from '@/app/utils/season-background';
 import CalendarPage from '@/pages/CalendarPage';
 import OverviewPage from '@/pages/OverviewPage';
 import LandingPage from '@/pages/LandingPage';

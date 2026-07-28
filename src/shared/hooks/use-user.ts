@@ -1,4 +1,4 @@
-import { UserContext } from '@/shared/context/user/user-context';
+import { UserContext } from '@/shared/context/user-context';
 import { useContext } from 'react';
 
 export const useUser = () => {

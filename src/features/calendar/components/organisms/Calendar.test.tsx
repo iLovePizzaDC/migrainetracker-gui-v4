@@ -1,5 +1,5 @@
 import Calendar from '@/features/calendar/components/organisms/Calendar';
-import type { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
+import { ENTRY_STORAGE_KEY, type STRENGTH_MAP } from '@/features/calendar/constants/calendar';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import {
 	EFFECTIVENESS_TYPES,
@@ -198,7 +198,7 @@ describe('<Calendar />', () => {
 					socialMissed: false,
 				},
 			};
-			localStorage.setItem('MT_NE', JSON.stringify(storedEntry));
+			localStorage.setItem(ENTRY_STORAGE_KEY, JSON.stringify(storedEntry));
 
 			const setMonthMock = vi.fn();
 			vi.mocked(useCalendar).mockReturnValue(
@@ -216,7 +216,7 @@ describe('<Calendar />', () => {
 		});
 
 		it('does not change state when clicking load entry button if no entry in localStorage', async () => {
-			localStorage.removeItem('MT_NE');
+			localStorage.removeItem(ENTRY_STORAGE_KEY);
 			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar());
 
 			render(<Calendar />);

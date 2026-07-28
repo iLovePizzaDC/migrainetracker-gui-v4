@@ -1,5 +1,5 @@
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
-import type { DropdownOption } from '@/shared/types/input/input';
+import type { DropdownOption } from '@/shared/types/input';
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 

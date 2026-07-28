@@ -1,4 +1,4 @@
-import type { DropdownOption } from '@/shared/types/input/input';
+import type { DropdownOption } from '@/shared/types/input';
 import {
 	ComboboxButton,
 	ComboboxInput,

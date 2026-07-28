@@ -1,10 +1,11 @@
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { fetchNewEntry } from '@/shared/api/migraine.api';
-import { formatDateToUs } from '@/shared/utils/date/date';
+import { formatDateToUs } from '@/shared/utils/date';
 import { FEEDBACK_TYPES, type FeedbackType } from '@/shared/constants/button/feedback';
 import type { Entry } from '@/features/calendar/types/calendar';
 import { useEffect, useState } from 'react';
 import { getInitialFormState } from '@/features/calendar/utils/migraine-panel';
+import { ENTRY_STORAGE_KEY } from '../constants/calendar';
 
 export function useMigrainePanel(
 	date: Date,
@@ -66,7 +67,7 @@ export function useMigrainePanel(
 	const saveNewEntry = () => {
 		try {
 			localStorage.setItem(
-				'MT_NE',
+				ENTRY_STORAGE_KEY,
 				JSON.stringify({
 					date,
 					...form,
