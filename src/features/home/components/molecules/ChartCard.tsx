@@ -1,4 +1,5 @@
 import AreaChart from '@/features/home/components/atoms/card/AreaChart';
+import CardShell from '@/features/home/components/atoms/card/CardShell';
 import PieChart from '@/features/home/components/atoms/card/PieChart';
 import ContextMenu from '@/features/home/components/atoms/context-menu/ContextMenu';
 import CardForm from '@/features/home/components/molecules/CardForm';
@@ -54,16 +55,7 @@ function ChartCard({
 	};
 
 	return (
-		<div
-			className='
-                w-full self-start
-                rounded-2xl p-3 relative
-                bg-transparent backdrop-blur-md
-                border border-white/20
-                shadow-lg shadow-black/20
-                transition hover:shadow-xl
-            '
-		>
+		<CardShell>
 			<div className='h-7 mb-2 flex items-center w-full relative'>
 				<div className='w-7 opacity-0 pointer-events-none' />
 
@@ -92,10 +84,10 @@ function ChartCard({
 
 			<div
 				className={`
-                    grid overflow-hidden
-                    transition-[grid-template-rows] duration-300 ease-out
-                    ${isEditing ? 'grid-rows-[0fr_1fr]' : 'grid-rows-[1fr_0fr]'}
-                `}
+          grid overflow-hidden
+          transition-[grid-template-rows] duration-300 ease-out
+          ${isEditing ? 'grid-rows-[0fr_1fr]' : 'grid-rows-[1fr_0fr]'}
+	      `}
 			>
 				<div className='overflow-hidden transition-all duration-300'>
 					<div className='h-72 w-full flex items-center justify-center'>
@@ -138,10 +130,10 @@ function ChartCard({
 				<div
 					data-testid='card-form-wrapper'
 					className={`
-                        overflow-hidden
-                        transition-[opacity,max-height] duration-300 ease-out
-                        ${isEditing ? 'opacity-100 max-h-[1000px] visible pointer-events-auto' : 'opacity-0 max-h-0 invisible pointer-events-none'}
-                    `}
+	          overflow-hidden
+	          transition-[opacity,max-height] duration-300 ease-out
+	          ${isEditing ? 'opacity-100 max-h-[1000px] visible pointer-events-auto' : 'opacity-0 max-h-0 invisible pointer-events-none'}
+          `}
 				>
 					<CardForm
 						key={JSON.stringify({
@@ -165,7 +157,7 @@ function ChartCard({
 					/>
 				</div>
 			</div>
-		</div>
+		</CardShell>
 	);
 }
 
