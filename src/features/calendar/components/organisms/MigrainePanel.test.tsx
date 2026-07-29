@@ -186,7 +186,7 @@ describe('<MigrainePanel />', () => {
 
 		expect(screen.getByTestId('migraine-panel')).toHaveClass(
 			'opacity-0',
-			'max-h-0',
+			'translate-y-2',
 			'pointer-events-none',
 		);
 	});
