@@ -44,7 +44,7 @@ function CalendarDay({ day, index, openDate, onDayClick }: ICalendarDay) {
 			date.getMonth() === openDate?.getMonth() &&
 			isInSelectedMonth
 		) {
-			baseClasses.push('bg-white/10');
+			baseClasses.push('bg-white/10', 'cursor-pointer');
 		} else if (day === today.getDate() && isInSelectedMonth) {
 			baseClasses.push('bg-white/5', 'hover:bg-white/10', 'cursor-pointer');
 		} else {
@@ -71,7 +71,7 @@ function CalendarDay({ day, index, openDate, onDayClick }: ICalendarDay) {
 				/>
 				{prophylaxisEvent && (
 					<Tooltip
-						className='-m-2 p-2'
+						className='-m-3 p-3'
 						content={
 							<>
 								<p>

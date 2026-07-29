@@ -33,6 +33,13 @@ function Calendar() {
 		const selected = new Date(date);
 		selected.setDate(day);
 
+		if (day === selectedDate?.getDate()) {
+			setIsPanelOpen(false);
+			setSelectedDate(null);
+			setEntry(null);
+			return;
+		}
+
 		const foundEvent = calendarEvents.find(
 			(event) => normalizeDate(event.date).getTime() === normalizeDate(selected).getTime(),
 		);
