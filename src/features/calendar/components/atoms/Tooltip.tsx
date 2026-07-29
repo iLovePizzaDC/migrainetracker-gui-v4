@@ -1,6 +1,7 @@
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { useTooltip } from '@/features/calendar/hooks/use-tooltip';
 
 interface ITooltip {
 	content: ReactNode;
@@ -8,37 +9,17 @@ interface ITooltip {
 	className?: string;
 }
 
-// TODO refactor
 function Tooltip({ content, children, className = '' }: ITooltip) {
-	const [open, setOpen] = useState(false);
-	const [coords, setCoords] = useState({ top: 0, left: 0 });
 	const anchorRef = useRef<HTMLSpanElement>(null);
 	const popupRef = useRef<HTMLDivElement>(null);
+
+	const [open, setOpen] = useState(false);
+
+	const { coords } = useTooltip(anchorRef, open);
 
 	useClickOutside([anchorRef, popupRef], () => {
 		setOpen(false);
 	});
-
-	useEffect(() => {
-		if (!open || !anchorRef.current) return;
-
-		function updatePosition() {
-			const rect = anchorRef.current!.getBoundingClientRect();
-
-			setCoords({
-				top: rect.bottom + window.scrollY + 4,
-				left: rect.left + window.scrollX + rect.width / 2,
-			});
-		}
-
-		updatePosition();
-		window.addEventListener('scroll', updatePosition, true);
-		window.addEventListener('resize', updatePosition);
-		return () => {
-			window.removeEventListener('scroll', updatePosition, true);
-			window.removeEventListener('resize', updatePosition);
-		};
-	}, [open]);
 
 	return (
 		<span ref={anchorRef} className={`relative ${className}`}>

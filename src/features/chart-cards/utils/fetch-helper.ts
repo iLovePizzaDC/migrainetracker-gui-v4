@@ -1,11 +1,5 @@
 import { MAX_MIDAS_SCORE } from '@/features/chart-cards/constants/midas';
-import {
-	fetchAreaChart,
-	fetchDurationAmount,
-	fetchMedicineAmount,
-	fetchMidasScore,
-	fetchMigraineAmount,
-} from '@/shared/api/migraine.api';
+import { fetchAreaChart, fetchMidasScore } from '@/shared/api/migraine.api';
 import type { Filter } from '@/shared/api/types/event';
 import { CARD_TYPES } from '@/shared/constants/chart-cards/cards';
 import {
@@ -18,41 +12,42 @@ import type { EventFilter } from '@/shared/types/event';
 import type { Medicine } from '@/shared/types/medicine';
 import { formatDateToUs } from '@/shared/utils/date';
 import { getMohMedicineFilter } from '@/shared/utils/fetch-helper';
+import type { PieDataResult } from '@/features/chart-cards/types/card';
+import { PIE_AMOUNT_FETCHERS, PIE_DATA_BUILDERS } from '@/features/chart-cards/constants/chart';
+
+const mapMedicines = (filter: EventFilter, userMedicines: Medicine[]): string | undefined => {
+	if (filter.medicine.length === 0) return undefined;
+
+	const hasAny = filter.medicine.some(
+		(medicine) => medicine.abbreviation === ANY_FILTER_OPTIONS.value,
+	);
+
+	return (hasAny ? userMedicines : filter.medicine)
+		.map((medicine) => medicine.abbreviation)
+		.join(',');
+};
+
+const mapSymptoms = (filter: EventFilter): string | undefined => {
+	if (filter.symptom.length === 0) return undefined;
+
+	return filter.symptom.includes(ANY_FILTER_TYPE.ANY)
+		? SYMPTOM_OPTIONS.map((symptomOption) => symptomOption.value).join(',')
+		: filter.symptom.join(',');
+};
 
 const mapEventFilterToFilter = async (
 	userMedicines: Medicine[],
 	filter: EventFilter,
 	isMoh: boolean = false,
-): Promise<Filter> => {
-	const mohMedFilter = isMoh ? await getMohMedicineFilter(userMedicines) : undefined;
+): Promise<Filter> => ({
+	intensity: filter.intensity ?? undefined,
+	symptoms: mapSymptoms(filter),
+	medicines: isMoh
+		? await getMohMedicineFilter(userMedicines)
+		: mapMedicines(filter, userMedicines),
+	effectiveness: filter.effectiveness ?? undefined,
+});
 
-	const medHasAny = filter.medicine.some(
-		(medicine) => medicine.abbreviation === ANY_FILTER_OPTIONS.value,
-	);
-
-	let mappedMedicines: string | undefined = undefined;
-	if (filter.medicine.length > 0) {
-		mappedMedicines = medHasAny
-			? userMedicines.map((medicine) => medicine.abbreviation).join(',')
-			: filter.medicine.map((medicine) => medicine.abbreviation).join(',');
-	}
-
-	let mappedSymptoms: string | undefined = undefined;
-	if (filter.symptom.length > 0) {
-		mappedSymptoms = filter.symptom.includes(ANY_FILTER_TYPE.ANY)
-			? SYMPTOM_OPTIONS.map((symptomOption) => symptomOption.value).join(',')
-			: filter.symptom.join(',');
-	}
-
-	return {
-		intensity: filter.intensity ?? undefined,
-		symptoms: mappedSymptoms,
-		medicines: isMoh ? mohMedFilter : mappedMedicines,
-		effectiveness: filter.effectiveness ?? undefined,
-	};
-};
-
-// TODO refactor
 // TODO also add midas only for area charts which displays the score over the months
 export async function fetchAreaData(
 	cardType: CardType,
@@ -62,23 +57,15 @@ export async function fetchAreaData(
 	filter: EventFilter,
 	userMedicines: Medicine[],
 ) {
-	if (cardType === CARD_TYPES.MOH) {
-		return await fetchAreaChart(
-			cardType,
-			endDate,
-			count,
-			unit,
-			await mapEventFilterToFilter(userMedicines, filter, true),
-		);
-	} else {
-		return await fetchAreaChart(
-			cardType,
-			endDate,
-			count,
-			unit,
-			await mapEventFilterToFilter(userMedicines, filter),
-		);
-	}
+	const isMoh = cardType === CARD_TYPES.MOH;
+
+	return await fetchAreaChart(
+		cardType,
+		endDate,
+		count,
+		unit,
+		await mapEventFilterToFilter(userMedicines, filter, isMoh),
+	);
 }
 
 export async function fetchPieData(
@@ -88,77 +75,28 @@ export async function fetchPieData(
 	totalDays: number,
 	filter: EventFilter,
 	userMedicines: Medicine[],
-) {
-	switch (cardType) {
-		case CARD_TYPES.MIGRAINE: {
-			const migraineDays = await fetchMigraineAmount(
-				startDate,
-				endDate,
-				await mapEventFilterToFilter(userMedicines, filter),
-			);
+): Promise<PieDataResult> {
+	const fetchAmount = PIE_AMOUNT_FETCHERS[cardType];
+	const buildPieData = PIE_DATA_BUILDERS[cardType];
 
-			return {
-				data: [
-					{ name: 'Migraine', value: migraineDays },
-					{ name: 'No Migraine', value: totalDays - migraineDays },
-				],
-				value: migraineDays,
-			};
-		}
-
-		case CARD_TYPES.DURATION: {
-			const duration = await fetchDurationAmount(
-				startDate,
-				endDate,
-				await mapEventFilterToFilter(userMedicines, filter),
-			);
-
-			return {
-				data: [
-					{ name: 'Migraine Duration', value: duration },
-					{ name: 'No Migraine', value: totalDays * 24 - duration },
-				],
-				value: duration,
-			};
-		}
-
-		case CARD_TYPES.MEDICINE: {
-			const med = await fetchMedicineAmount(
-				startDate,
-				endDate,
-				await mapEventFilterToFilter(userMedicines, filter),
-			);
-
-			return {
-				data: [{ name: 'Medicine', value: med }],
-				value: med,
-			};
-		}
-
-		case CARD_TYPES.MOH: {
-			const medDays = await fetchMigraineAmount(
-				startDate,
-				endDate,
-				await mapEventFilterToFilter(userMedicines, filter, true),
-			);
-			const noMedDays = Math.max(totalDays - medDays, 0);
-
-			return {
-				data: [
-					{ name: 'Med-Days', value: medDays },
-					{ name: 'No Med-Days', value: noMedDays },
-				],
-				value: medDays,
-			};
-		}
-
-		default:
-			return {
-				data: [],
-				value: 0,
-			};
+	if (!fetchAmount || !buildPieData) {
+		return { data: [], value: 0 };
 	}
+
+	const isMoh = cardType === CARD_TYPES.MOH;
+	const value = await fetchAmount(
+		startDate,
+		endDate,
+		await mapEventFilterToFilter(userMedicines, filter, isMoh),
+	);
+
+	return buildPieData(value, totalDays);
 }
+
+const buildMidasPieData = (score: number, label: string) => [
+	{ name: label, value: score },
+	{ name: 'Remaining', value: MAX_MIDAS_SCORE - score },
+];
 
 export async function fetchMidasPieData() {
 	const previousMonth = new Date();
@@ -173,19 +111,10 @@ export async function fetchMidasPieData() {
 	]);
 
 	return {
-		current: {
-			score: currentScore,
-			pieData: [
-				{ name: 'Current Score', value: currentScore },
-				{ name: 'Remaining', value: MAX_MIDAS_SCORE - currentScore },
-			],
-		},
+		current: { score: currentScore, pieData: buildMidasPieData(currentScore, 'Current Score') },
 		previous: {
 			score: previousScore,
-			pieData: [
-				{ name: 'Previous Score', value: previousScore },
-				{ name: 'Remaining', value: MAX_MIDAS_SCORE - previousScore },
-			],
+			pieData: buildMidasPieData(previousScore, 'Previous Score'),
 		},
 	};
 }

@@ -31,12 +31,13 @@ function FilterCard() {
 				<div
 					data-testid='filter-card'
 					ref={cardRef}
-					className={`absolute bottom-full right-0 mb-2 w-64 p-4
-                        rounded-2xl bg-transparent backdrop-blur-xl border
-                        border-white/20 shadow-lg shadow-black/30
-                        origin-bottom-right transition-all duration-300 ease-out
-                        ${filterOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-2 pointer-events-none'}
-                    `}
+					className={`
+						absolute bottom-full right-0 mb-2 w-64 p-4
+            rounded-2xl bg-transparent backdrop-blur-xl border
+            border-white/20 shadow-lg shadow-black/30
+            origin-bottom-right transition-all duration-300 ease-out
+            ${filterOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-2 pointer-events-none'}
+          `}
 				>
 					<div className='flex justify-between items-center mb-2'>
 						<h3 className='font-semibold'>Filter</h3>
