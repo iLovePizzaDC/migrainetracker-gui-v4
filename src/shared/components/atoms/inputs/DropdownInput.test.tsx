@@ -1,6 +1,6 @@
 import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -123,11 +123,11 @@ describe('<DropdownInput />', () => {
 			await user.click(screen.getByTestId('dropdown-menu-trigger'));
 			expect(screen.getByTestId('banana')).toBeInTheDocument();
 
-			clickOutsideCallback();
-
-			await waitFor(() => {
-				expect(screen.queryByTestId('banana')).not.toBeInTheDocument();
+			act(() => {
+				clickOutsideCallback();
 			});
+
+			expect(screen.queryByTestId('banana')).not.toBeInTheDocument();
 		});
 	});
 
