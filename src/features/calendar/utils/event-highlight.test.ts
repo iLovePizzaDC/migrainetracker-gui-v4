@@ -1,7 +1,7 @@
 import { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
 import type { MigraineDescription } from '@/features/calendar/types/event';
 import {
-	calculateMigrenosusFlags,
+	calculateMigrainosusFlags,
 	determineStrength,
 	getEventForDay,
 } from '@/features/calendar/utils/event-highlight';
@@ -148,21 +148,21 @@ describe('determineStrength', () => {
 	});
 });
 
-describe('calculateMigrenosusFlags', () => {
+describe('calculateMigrainosusFlags', () => {
 	it('returns an array with length equal to daysInMonth', () => {
-		const flags = calculateMigrenosusFlags([], FIRST_DAY_JAN, DAYS_IN_JAN);
+		const flags = calculateMigrainosusFlags([], FIRST_DAY_JAN, DAYS_IN_JAN);
 		expect(flags).toHaveLength(DAYS_IN_JAN);
 	});
 
 	it('returns all false when events array is empty', () => {
-		const flags = calculateMigrenosusFlags([], FIRST_DAY_JAN, DAYS_IN_JAN);
+		const flags = calculateMigrainosusFlags([], FIRST_DAY_JAN, DAYS_IN_JAN);
 		expect(flags.every((f) => f === false)).toBe(true);
 	});
 
 	describe('streak detection', () => {
 		it('flags days when streak meets the minimum (default 4)', () => {
 			const events = ['2026-01-01', '2026-01-02', '2026-01-03', '2026-01-04'].map(makeEvent);
-			const flags = calculateMigrenosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
+			const flags = calculateMigrainosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
 
 			expect(flags[0]).toBe(true);
 			expect(flags[1]).toBe(true);
@@ -172,7 +172,7 @@ describe('calculateMigrenosusFlags', () => {
 
 		it('does not flag days when streak is below minimum', () => {
 			const events = ['2026-01-01', '2026-01-02', '2026-01-03'].map(makeEvent);
-			const flags = calculateMigrenosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
+			const flags = calculateMigrainosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
 
 			expect(flags[0]).toBe(false);
 			expect(flags[1]).toBe(false);
@@ -181,7 +181,7 @@ describe('calculateMigrenosusFlags', () => {
 
 		it('respects a custom minDays value', () => {
 			const events = ['2026-01-01', '2026-01-02'].map(makeEvent);
-			const flags = calculateMigrenosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN, 2);
+			const flags = calculateMigrainosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN, 2);
 
 			expect(flags[0]).toBe(true);
 			expect(flags[1]).toBe(true);
@@ -197,7 +197,7 @@ describe('calculateMigrenosusFlags', () => {
 				'2026-01-07',
 				'2026-01-08',
 			].map(makeEvent);
-			const flags = calculateMigrenosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
+			const flags = calculateMigrainosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
 
 			expect(flags[0]).toBe(true);
 			expect(flags[5]).toBe(false);
@@ -216,7 +216,7 @@ describe('calculateMigrenosusFlags', () => {
 				'2026-01-12',
 				'2026-01-13',
 			].map(makeEvent);
-			const flags = calculateMigrenosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
+			const flags = calculateMigrainosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
 
 			expect(flags[0]).toBe(true);
 			expect(flags[3]).toBe(true);
@@ -232,7 +232,7 @@ describe('calculateMigrenosusFlags', () => {
 				makeEvent('2026-01-02'),
 				makeEvent('2026-01-03'),
 			];
-			const flags = calculateMigrenosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN, 4);
+			const flags = calculateMigrainosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN, 4);
 
 			expect(flags[0]).toBe(false);
 		});
@@ -241,7 +241,7 @@ describe('calculateMigrenosusFlags', () => {
 	describe('edge-cases', () => {
 		it('does not flag days outside the month range', () => {
 			const events = ['2025-12-29', '2025-12-30', '2025-12-31', '2026-01-01'].map(makeEvent);
-			const flags = calculateMigrenosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
+			const flags = calculateMigrainosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
 
 			expect(flags[0]).toBe(true);
 			expect(flags.slice(1).every((f) => f === false)).toBe(true);
@@ -249,7 +249,7 @@ describe('calculateMigrenosusFlags', () => {
 
 		it('flags the last day of the month correctly', () => {
 			const events = ['2026-01-28', '2026-01-29', '2026-01-30', '2026-01-31'].map(makeEvent);
-			const flags = calculateMigrenosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
+			const flags = calculateMigrainosusFlags(events, FIRST_DAY_JAN, DAYS_IN_JAN);
 
 			expect(flags[30]).toBe(true);
 		});

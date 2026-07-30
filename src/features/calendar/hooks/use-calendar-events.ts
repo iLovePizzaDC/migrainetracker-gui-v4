@@ -1,6 +1,5 @@
 import { MIGRAINOSUS_FLAG_THRESHOLD } from '@/features/calendar/constants/calendar';
 import type { MigraineEvent, ProphylaxisEvent } from '@/features/calendar/types/event';
-import { calculateMigrenosusFlags } from '@/features/calendar/utils/event-highlight';
 import { mapMigraineEvents, mapProphylaxisEvents } from '@/features/calendar/utils/event-mapper';
 import { filterEvents, isDefaultFilter } from '@/features/calendar/utils/filter';
 import { fetchMigraineEvents } from '@/shared/api/migraine.api';
@@ -8,14 +7,16 @@ import { fetchProphylaxisEvents } from '@/shared/api/prophylaxis';
 import type { EventFilter } from '@/shared/types/event';
 import { formatDateToUs, getDateAfterDays, getDateBeforeDays } from '@/shared/utils/date';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { calculateMigrainosusFlags } from '@/features/calendar/utils/event-highlight';
 
 export function useCalendarEvents(
 	firstDayOfMonth: Date,
 	lastDayOfMonth: Date,
 	daysInMonth: number,
 ) {
+	const fetchIdRef = useRef(0);
+
 	const [rawEvents, setRawEvents] = useState<MigraineEvent[]>([]);
-	const [migrainosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
 	const [prophylaxisEvents, setProphylaxisEvents] = useState<ProphylaxisEvent[]>([]);
 	const [filter, setFilter] = useState<EventFilter>({
 		intensity: null,
@@ -25,8 +26,6 @@ export function useCalendarEvents(
 		midas: [],
 	});
 	const [isLoading, setIsLoading] = useState(true);
-
-	const fetchIdRef = useRef(0);
 
 	const calendarEvents = useMemo(() => {
 		const start = new Date(firstDayOfMonth);
@@ -43,6 +42,17 @@ export function useCalendarEvents(
 
 		return calendarEvents.filter((event) => filterEvents(event, filter));
 	}, [calendarEvents, filter]);
+
+	const migrainosusFlags = useMemo(
+		() =>
+			calculateMigrainosusFlags(
+				rawEvents,
+				firstDayOfMonth,
+				daysInMonth,
+				MIGRAINOSUS_FLAG_THRESHOLD,
+			),
+		[rawEvents, firstDayOfMonth, daysInMonth],
+	);
 
 	const loadEvents = useCallback(
 		async (abortController?: AbortController) => {
@@ -84,12 +94,6 @@ export function useCalendarEvents(
 
 		return () => abortController.abort();
 	}, [loadEvents]);
-
-	useEffect(() => {
-		setMigrenosusFlags(
-			calculateMigrenosusFlags(rawEvents, firstDayOfMonth, daysInMonth, MIGRAINOSUS_FLAG_THRESHOLD),
-		);
-	}, [rawEvents, filter, daysInMonth, firstDayOfMonth, lastDayOfMonth]);
 
 	const refetchEvents = useCallback(async () => loadEvents(new AbortController()), [loadEvents]);
 
