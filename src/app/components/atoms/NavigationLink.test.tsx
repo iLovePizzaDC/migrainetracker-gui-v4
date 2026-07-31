@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('react-router-dom', () => ({
+vi.mock('react-router', () => ({
 	useLocation: () => ({ pathname: '/' }),
 	Link: ({ children, to, className, onClick }: any) => (
 		<a

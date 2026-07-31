@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/shared/hooks/use-user');
-vi.mock('react-router-dom', () => ({
+vi.mock('react-router', () => ({
 	useLocation: () => ({ pathname: '/' }),
 	Link: ({ children, href, onClick }: any) => (
 		<a href={href} onClick={onClick}>
