@@ -16,7 +16,7 @@ function App() {
 	const { authChecked } = useAuthCheck(setUser);
 
 	return (
-		<div onContextMenu={(e) => e.preventDefault()} className='flex flex-col relative'>
+		<div className='flex flex-col relative'>
 			<div className='fixed inset-0 -z-10'>
 				<img src={getSeasonBackground()} alt='background' className='w-full h-full object-cover' />
 			</div>

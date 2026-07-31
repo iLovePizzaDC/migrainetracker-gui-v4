@@ -1,6 +1,6 @@
 import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
