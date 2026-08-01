@@ -5,7 +5,6 @@ import { useClickOutside } from '@/shared/hooks/use-click-outside';
 import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useRef, useState } from 'react';
 
-// TODO same styled as other component contextmenu?
 function FilterCard() {
 	const { filter, setFilter } = useCalendar();
 

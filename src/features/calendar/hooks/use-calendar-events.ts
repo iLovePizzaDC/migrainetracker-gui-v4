@@ -87,8 +87,6 @@ export function useCalendarEvents(
 					return;
 				}
 
-				console.log(mapMigraineEvents(migraineEventsRaw));
-
 				setRawEvents(mapMigraineEvents(migraineEventsRaw));
 				setProphylaxisEvents(mapProphylaxisEvents(prophylaxisEventsRaw));
 			} catch (err) {
