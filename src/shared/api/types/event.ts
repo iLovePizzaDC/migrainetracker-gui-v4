@@ -1,4 +1,4 @@
-import type { ChartType } from '@/shared/types/cards/card';
+import type { ChartType } from '@/shared/types/chart';
 
 type EventCreator = {
 	email: string;

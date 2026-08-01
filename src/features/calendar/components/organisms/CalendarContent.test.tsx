@@ -8,7 +8,7 @@ vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: vi.fn(),
 }));
 
-vi.mock('@/features/calendar/components/molecules/CalendarDay', () => ({
+vi.mock('@/features/calendar/components/molecules/content/CalendarDay', () => ({
 	default: ({ day, index, onDayClick }: any) => (
 		<div
 			data-testid={day ? `day-${day}` : `empty-day-${index}`}

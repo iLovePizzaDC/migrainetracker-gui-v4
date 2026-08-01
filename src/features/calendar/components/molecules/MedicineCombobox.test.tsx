@@ -1,11 +1,11 @@
-import MedicineCombobox from '@/features/calendar/components/molecules/MedicineCombobox';
 import { fetchUserMedicinesDelete } from '@/shared/api/medicine.api';
 import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
-import { useUser } from '@/shared/hooks/user/use-user';
+import { useUser } from '@/shared/hooks/use-user';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import MedicineCombobox from '@/features/calendar/components/molecules/MedicineCombobox';
 
 const mockOnChange = vi.fn();
 const mockMedLabel = 'test medicine';
@@ -23,10 +23,10 @@ const mockUserMedicines = [
 	},
 ];
 
-vi.mock('@/shared/hooks/user/use-user');
+vi.mock('@/shared/hooks/use-user');
 vi.mock('@/shared/hooks/use-click-outside');
 vi.mock('@/shared/api/medicine.api');
-vi.mock('@/shared/components/atoms/Combobox', () => ({
+vi.mock('@/shared/components/atoms/inputs/Combobox', () => ({
 	default: vi.fn(({ selected, onChange, renderOptionActions, disabled }: any) => {
 		const firstOption = { label: `${mockMedLabel} 1`, value: `${mockMedValue}_1` };
 		const secondOption = { label: `${mockMedLabel} 2`, value: `${mockMedValue}_2` };

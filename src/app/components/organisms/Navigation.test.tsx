@@ -1,10 +1,10 @@
 import Navigation from '@/app/components/organisms/Navigation';
-import { useUser } from '@/shared/hooks/user/use-user';
+import { useUser } from '@/shared/hooks/use-user';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/shared/hooks/user/use-user');
+vi.mock('@/shared/hooks/use-user');
 vi.mock('@/app/components/molecules/navigation/NavigationLinks', () => ({
 	default: () => <div data-testid='navigation-links' />,
 }));

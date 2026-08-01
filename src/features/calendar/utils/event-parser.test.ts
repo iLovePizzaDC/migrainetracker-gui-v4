@@ -9,10 +9,10 @@ import {
 } from '@/features/calendar/utils/event-parser';
 import { INTENSITY_TYPES, SYMPTOM_TYPES } from '@/shared/constants/event/event-details';
 import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
-import { parseDecimalToTime } from '@/shared/utils/date/date';
+import { parseDecimalToTime } from '@/shared/utils/date';
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('@/shared/utils/date/date', () => ({
+vi.mock('@/shared/utils/date', () => ({
 	parseDecimalToTime: vi.fn((n: number) => `${n}:00`),
 }));
 

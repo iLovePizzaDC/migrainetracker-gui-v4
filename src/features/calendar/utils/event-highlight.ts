@@ -48,7 +48,7 @@ export function determineStrength(description: MigraineDescription): MigraineEve
 	) as StrengthKey;
 }
 
-export function calculateMigrenosusFlags(
+export function calculateMigrainosusFlags(
 	events: MigraineEvent[],
 	firstDayOfMonth: Date,
 	daysInMonth: number,

@@ -1,5 +1,5 @@
 import type { IntensityType, SymptomType } from '@/shared/constants/event/event-details';
-import type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar/calendar';
+import type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar';
 
 export type Entry = {
 	durations: AppendDuration[];

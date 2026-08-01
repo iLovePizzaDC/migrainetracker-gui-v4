@@ -35,19 +35,17 @@ A modern web application for tracking, logging, and analyzing migraine episodes 
 ```text
 src/
 ├── app/
-│   ├── components/
-│   │   └── organisms/        # App-level components (Navigation, Footer)
+│   ├── components/           # App-level components (Navigation, Footer)
 │   ├── styles/
 │   └── utils/
 ├── features/                 # Feature modules (self-contained)
+│   ├── auth/                 # Authentication entry point
 │   ├── calendar/             # Migraine logging and calendar view
-│   ├── home/                 # Dashboard with analytics cards
-│   └── landing-page/         # Authentication entry point
+│   └── chart-cards/          # Dashboard with analytics cards
 ├── shared/
 │   ├── api/                  # API communication (axios-based)
 │   ├── auth/                 # Google OAuth & session management
-│   ├── components/
-│   │   └── atoms/            # Reusable UI components
+│   ├── components/           # Reusable UI components
 │   ├── constants/            # App-wide constants
 │   ├── hooks/                # Custom React hooks
 │   ├── routing/              # Route protection logic

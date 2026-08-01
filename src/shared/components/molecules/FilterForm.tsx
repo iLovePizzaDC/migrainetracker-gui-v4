@@ -1,5 +1,5 @@
-import Combobox from '@/shared/components/atoms/Combobox';
-import DropdownInput from '@/shared/components/atoms/DropdownInput';
+import Combobox from '@/shared/components/atoms/inputs/Combobox';
+import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
 import {
 	ANY_FILTER_OPTIONS,
 	ANY_FILTER_TYPE,
@@ -17,9 +17,9 @@ import {
 	FILTER_FORM_VARIANTS,
 	type FilterFormVariant,
 } from '@/shared/constants/variants/filter-form';
-import { useUser } from '@/shared/hooks/user/use-user';
-import type { EventFilter } from '@/shared/types/event/event';
-import type { DropdownOption } from '@/shared/types/input/input';
+import { useUser } from '@/shared/hooks/use-user';
+import type { EventFilter } from '@/shared/types/event';
+import type { DropdownOption } from '@/shared/types/input';
 
 interface IFilterForm {
 	variant: FilterFormVariant;

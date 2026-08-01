@@ -1,12 +1,12 @@
 import { MIGRAINOSUS_FLAG_THRESHOLD } from '@/features/calendar/constants/calendar';
 import type { MigraineEvent, ProphylaxisEvent } from '@/features/calendar/types/event';
-import { calculateMigrenosusFlags } from '@/features/calendar/utils/event-highlight';
+import { calculateMigrainosusFlags } from '@/features/calendar/utils/event-highlight';
 import { mapMigraineEvents, mapProphylaxisEvents } from '@/features/calendar/utils/event-mapper';
 import { filterEvents, isDefaultFilter } from '@/features/calendar/utils/filter';
 import { fetchMigraineEvents } from '@/shared/api/migraine.api';
 import { fetchProphylaxisEvents } from '@/shared/api/prophylaxis';
-import type { EventFilter } from '@/shared/types/event/event';
-import { formatDateToUs, getDateAfterDays, getDateBeforeDays } from '@/shared/utils/date/date';
+import type { EventFilter } from '@/shared/types/event';
+import { formatDateToUs, getDateAfterDays, getDateBeforeDays } from '@/shared/utils/date';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export function useCalendarEvents(
@@ -14,8 +14,9 @@ export function useCalendarEvents(
 	lastDayOfMonth: Date,
 	daysInMonth: number,
 ) {
+	const fetchIdRef = useRef(0);
+
 	const [rawEvents, setRawEvents] = useState<MigraineEvent[]>([]);
-	const [migrainosusFlags, setMigrenosusFlags] = useState<boolean[]>([]);
 	const [prophylaxisEvents, setProphylaxisEvents] = useState<ProphylaxisEvent[]>([]);
 	const [filter, setFilter] = useState<EventFilter>({
 		intensity: null,
@@ -25,8 +26,17 @@ export function useCalendarEvents(
 		midas: [],
 	});
 	const [isLoading, setIsLoading] = useState(true);
+	const [prevFirstDayOfMonth, setPrevFirstDayOfMonth] = useState(firstDayOfMonth);
+	const [prevLastDayOfMonth, setPrevLastDayOfMonth] = useState(lastDayOfMonth);
 
-	const fetchIdRef = useRef(0);
+	if (
+		firstDayOfMonth.getTime() !== prevFirstDayOfMonth.getTime() ||
+		lastDayOfMonth.getTime() !== prevLastDayOfMonth.getTime()
+	) {
+		setPrevFirstDayOfMonth(firstDayOfMonth);
+		setPrevLastDayOfMonth(lastDayOfMonth);
+		setIsLoading(true);
+	}
 
 	const calendarEvents = useMemo(() => {
 		const start = new Date(firstDayOfMonth);
@@ -44,10 +54,20 @@ export function useCalendarEvents(
 		return calendarEvents.filter((event) => filterEvents(event, filter));
 	}, [calendarEvents, filter]);
 
+	const migrainosusFlags = useMemo(
+		() =>
+			calculateMigrainosusFlags(
+				rawEvents,
+				firstDayOfMonth,
+				daysInMonth,
+				MIGRAINOSUS_FLAG_THRESHOLD,
+			),
+		[rawEvents, firstDayOfMonth, daysInMonth],
+	);
+
 	const loadEvents = useCallback(
 		async (abortController?: AbortController) => {
 			const id = ++fetchIdRef.current;
-			setIsLoading(true);
 
 			try {
 				const fetchStart = getDateBeforeDays(firstDayOfMonth, MIGRAINOSUS_FLAG_THRESHOLD);
@@ -63,7 +83,9 @@ export function useCalendarEvents(
 					fetchProphylaxisEvents(abortController?.signal),
 				]);
 
-				if (!migraineEventsRaw || !prophylaxisEventsRaw || id !== fetchIdRef.current) return;
+				if (!migraineEventsRaw || !prophylaxisEventsRaw || id !== fetchIdRef.current) {
+					return;
+				}
 
 				setRawEvents(mapMigraineEvents(migraineEventsRaw));
 				setProphylaxisEvents(mapProphylaxisEvents(prophylaxisEventsRaw));
@@ -80,18 +102,17 @@ export function useCalendarEvents(
 
 	useEffect(() => {
 		const abortController = new AbortController();
+
+		// eslint-disable-next-line react-hooks/set-state-in-effect
 		loadEvents(abortController);
 
 		return () => abortController.abort();
 	}, [loadEvents]);
 
-	useEffect(() => {
-		setMigrenosusFlags(
-			calculateMigrenosusFlags(rawEvents, firstDayOfMonth, daysInMonth, MIGRAINOSUS_FLAG_THRESHOLD),
-		);
-	}, [rawEvents, filter, daysInMonth, firstDayOfMonth, lastDayOfMonth]);
-
-	const refetchEvents = useCallback(async () => loadEvents(new AbortController()), [loadEvents]);
+	const refetchEvents = useCallback(async () => {
+		setIsLoading(true);
+		await loadEvents(new AbortController());
+	}, [loadEvents]);
 
 	return {
 		calendarEvents,

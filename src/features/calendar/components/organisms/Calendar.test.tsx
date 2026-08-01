@@ -1,5 +1,5 @@
 import Calendar from '@/features/calendar/components/organisms/Calendar';
-import type { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
+import { ENTRY_STORAGE_KEY, type STRENGTH_MAP } from '@/features/calendar/constants/calendar';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import {
 	EFFECTIVENESS_TYPES,
@@ -26,7 +26,7 @@ const mockUserMedicines = [
 	},
 ];
 
-vi.mock('@/shared/hooks/user/use-user', () => ({
+vi.mock('@/shared/hooks/use-user', () => ({
 	useUser: () => ({
 		medicines: mockUserMedicines,
 	}),
@@ -35,7 +35,7 @@ vi.mock('@/features/calendar/hooks/use-calendar', () => ({
 	useCalendar: vi.fn(),
 }));
 vi.mock('@/features/calendar/utils/event-highlight');
-vi.mock('@/features/calendar/components/molecules/Durations', () => ({
+vi.mock('@/features/calendar/components/molecules/forms/Durations', () => ({
 	default: () => <div>durations</div>,
 }));
 vi.mock('@/shared/components/atoms/Combobox', () => ({
@@ -143,7 +143,7 @@ describe('<Calendar />', () => {
 
 			expect(screen.getByTestId('migraine-panel')).toHaveClass(
 				'opacity-0',
-				'max-h-0',
+				'translate-y-2',
 				'pointer-events-none',
 			);
 		});
@@ -173,7 +173,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('1'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'max-h-[2000px]');
+			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
 		});
 
 		it('opens panel clicking a day with event', async () => {
@@ -183,7 +183,25 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'max-h-[2000px]');
+			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+		});
+
+		it('closes panel when clicking the same day twice', async () => {
+			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar());
+
+			render(<Calendar />);
+
+			await user.click(screen.getByText('3'));
+
+			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+
+			await user.click(screen.getByText('3'));
+
+			expect(screen.getByTestId('migraine-panel')).toHaveClass(
+				'opacity-0',
+				'translate-y-2',
+				'pointer-events-none',
+			);
 		});
 
 		it('loads entry from localStorage when clicking load entry button', async () => {
@@ -198,7 +216,7 @@ describe('<Calendar />', () => {
 					socialMissed: false,
 				},
 			};
-			localStorage.setItem('MT_NE', JSON.stringify(storedEntry));
+			localStorage.setItem(ENTRY_STORAGE_KEY, JSON.stringify(storedEntry));
 
 			const setMonthMock = vi.fn();
 			vi.mocked(useCalendar).mockReturnValue(
@@ -212,18 +230,18 @@ describe('<Calendar />', () => {
 			await user.click(screen.getByTestId('load-entry'));
 
 			expect(setMonthMock).toHaveBeenCalled();
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'max-h-[2000px]');
+			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
 		});
 
 		it('does not change state when clicking load entry button if no entry in localStorage', async () => {
-			localStorage.removeItem('MT_NE');
+			localStorage.removeItem(ENTRY_STORAGE_KEY);
 			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar());
 
 			render(<Calendar />);
 
 			await user.click(screen.getByTestId('load-entry'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-0', 'max-h-0');
+			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-0', 'translate-y-2');
 		});
 
 		it('closes panel and resets state when onClose is called', async () => {
@@ -253,7 +271,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('1'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'max-h-[2000px]');
+			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
 		});
 
 		it('keeps entry.medicines unchanged when userMedicineOptions is empty', async () => {
@@ -267,7 +285,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'max-h-[2000px]');
+			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
 		});
 	});
 

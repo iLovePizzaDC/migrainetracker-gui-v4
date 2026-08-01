@@ -1,5 +1,5 @@
 import type { MigraineEvent, ProphylaxisEvent } from '@/features/calendar/types/event';
-import type { EventFilter } from '@/shared/types/event/event';
+import type { EventFilter } from '@/shared/types/event';
 import { createContext } from 'react';
 
 export interface ICalendarContext {

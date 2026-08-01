@@ -1,6 +1,6 @@
-import NavigationLink from '@/app/components/atoms/navigation/NavigationLink';
-import { NAVIGATION_LINKS } from '@/app/constants/navigation/links';
-import { useUser } from '@/shared/hooks/user/use-user';
+import NavigationLink from '@/app/components/atoms/NavigationLink';
+import { NAVIGATION_LINKS } from '@/app/constants/navigation-links';
+import { useUser } from '@/shared/hooks/use-user';
 
 interface IMobileNavigationLinks {
 	toggleMenu: () => void;

@@ -1,6 +1,6 @@
 import { MIGRAINOSUS_FLAG_THRESHOLD } from '@/features/calendar/constants/calendar';
 import { useCalendarEvents } from '@/features/calendar/hooks/use-calendar-events';
-import { calculateMigrenosusFlags } from '@/features/calendar/utils/event-highlight';
+import { calculateMigrainosusFlags } from '@/features/calendar/utils/event-highlight';
 import { mapMigraineEvents, mapProphylaxisEvents } from '@/features/calendar/utils/event-mapper';
 import { isDefaultFilter } from '@/features/calendar/utils/filter';
 import { fetchMigraineEvents } from '@/shared/api/migraine.api';
@@ -14,7 +14,7 @@ vi.mock('@/shared/api/migraine.api');
 vi.mock('@/shared/api/prophylaxis');
 vi.mock('@/features/calendar/utils/filter');
 vi.mock('@/features/calendar/utils/event-highlight', () => ({
-	calculateMigrenosusFlags: vi.fn(() => []),
+	calculateMigrainosusFlags: vi.fn(() => []),
 }));
 vi.mock('@/features/calendar/utils/event-mapper', () => ({
 	mapMigraineEvents: vi.fn((raw: RawEventResponse[]) =>
@@ -33,7 +33,7 @@ vi.mock('@/features/calendar/utils/event-mapper', () => ({
 		})),
 	),
 }));
-vi.mock('@/shared/utils/date/date', () => ({
+vi.mock('@/shared/utils/date', () => ({
 	formatDateToUs: vi.fn((d: Date) => d.toISOString().split('T')[0]),
 	getDateAfterDays: vi.fn((d: Date) => d),
 	getDateBeforeDays: vi.fn((d: Date) => d),
@@ -64,7 +64,7 @@ describe('useCalendarEvents', () => {
 		vi.mocked(fetchMigraineEvents).mockResolvedValue([]);
 		vi.mocked(fetchProphylaxisEvents).mockResolvedValue([]);
 		vi.mocked(isDefaultFilter).mockReturnValue(true);
-		vi.mocked(calculateMigrenosusFlags).mockReturnValue([]);
+		vi.mocked(calculateMigrainosusFlags).mockReturnValue([]);
 	});
 
 	afterEach(() => {
@@ -88,6 +88,25 @@ describe('useCalendarEvents', () => {
 			const { result } = renderCalendarEvents();
 
 			await waitFor(() => expect(result.current.isLoading).toBe(false));
+		});
+	});
+
+	describe('fetch window', () => {
+		it('fetches migraine events using a threshold-widened window', async () => {
+			const { getDateBeforeDays, getDateAfterDays } = await import('@/shared/utils/date');
+
+			renderCalendarEvents();
+
+			await waitFor(() => expect(fetchMigraineEvents).toHaveBeenCalled());
+
+			expect(getDateBeforeDays).toHaveBeenCalledWith(FIRST_DAY, MIGRAINOSUS_FLAG_THRESHOLD);
+			expect(getDateAfterDays).toHaveBeenCalledWith(LAST_DAY, MIGRAINOSUS_FLAG_THRESHOLD);
+			expect(fetchMigraineEvents).toHaveBeenCalledWith(
+				FIRST_DAY.toISOString().split('T')[0],
+				LAST_DAY.toISOString().split('T')[0],
+				undefined,
+				expect.any(AbortSignal),
+			);
 		});
 	});
 
@@ -204,20 +223,35 @@ describe('useCalendarEvents', () => {
 	});
 
 	describe('migrainosus flags', () => {
-		it('calls calculateMigrenosusFlags with the correct arguments', async () => {
+		it('calls calculateMigrainosusFlags with the correct arguments', async () => {
 			vi.mocked(fetchMigraineEvents).mockResolvedValue([makeRawEvent('2026-01-10')]);
-			vi.mocked(calculateMigrenosusFlags).mockReturnValue([true, false]);
+			vi.mocked(calculateMigrainosusFlags).mockReturnValue([true, false]);
 
 			const { result } = renderCalendarEvents();
 
 			await waitFor(() => expect(result.current.isLoading).toBe(false));
-			expect(calculateMigrenosusFlags).toHaveBeenCalledWith(
+			expect(calculateMigrainosusFlags).toHaveBeenCalledWith(
 				expect.any(Array),
 				FIRST_DAY,
 				DAYS_IN_MONTH,
 				MIGRAINOSUS_FLAG_THRESHOLD,
 			);
 			expect(result.current.migrainosusFlags).toEqual([true, false]);
+		});
+
+		it('passes the full raw event set (not just the visible month) to calculateMigrainosusFlags', async () => {
+			vi.mocked(fetchMigraineEvents).mockResolvedValue([
+				makeRawEvent('2025-12-30'),
+				makeRawEvent('2026-01-10'),
+			]);
+
+			const { result } = renderCalendarEvents();
+
+			await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+			const calls = vi.mocked(calculateMigrainosusFlags).mock.calls;
+			const [passedEvents] = calls[calls.length - 1];
+			expect(passedEvents).toHaveLength(2);
 		});
 	});
 
