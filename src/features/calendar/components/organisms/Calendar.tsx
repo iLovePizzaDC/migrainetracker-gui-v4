@@ -1,15 +1,16 @@
-import CalendarHeader from '@/features/calendar/components/molecules/CalendarHeader';
-import FilterCard from '@/features/calendar/components/molecules/FilterCard';
 import CalendarContent from '@/features/calendar/components/organisms/CalendarContent';
 import MigrainePanel from '@/features/calendar/components/organisms/MigrainePanel';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import type { Entry, StoredEntry } from '@/features/calendar/types/calendar';
 import { createEntry, enrichMedicineLabels } from '@/features/calendar/utils/event-parser';
-import { useUser } from '@/shared/hooks/user/use-user';
-import type { DropdownOption } from '@/shared/types/input/input';
-import { normalizeDate } from '@/shared/utils/date/date';
+import { useUser } from '@/shared/hooks/use-user';
+import type { DropdownOption } from '@/shared/types/input';
+import { normalizeDate } from '@/shared/utils/date';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { ENTRY_STORAGE_KEY } from '@/features/calendar/constants/calendar';
+import CalendarHeader from '@/features/calendar/components/molecules/content/CalendarHeader';
+import FilterCard from '@/features/calendar/components/molecules/forms/FilterCard';
 
 function Calendar() {
 	const { isLoading, date, calendarEvents, setMonth } = useCalendar();
@@ -32,6 +33,13 @@ function Calendar() {
 		const selected = new Date(date);
 		selected.setDate(day);
 
+		if (day === selectedDate?.getDate()) {
+			setIsPanelOpen(false);
+			setSelectedDate(null);
+			setEntry(null);
+			return;
+		}
+
 		const foundEvent = calendarEvents.find(
 			(event) => normalizeDate(event.date).getTime() === normalizeDate(selected).getTime(),
 		);
@@ -49,7 +57,7 @@ function Calendar() {
 	};
 
 	const onLoadEntryClick = () => {
-		const rawStoredEntry = localStorage.getItem('MT_NE');
+		const rawStoredEntry = localStorage.getItem(ENTRY_STORAGE_KEY);
 
 		if (rawStoredEntry) {
 			const entry: StoredEntry = JSON.parse(rawStoredEntry);

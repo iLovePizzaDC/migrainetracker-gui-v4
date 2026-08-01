@@ -3,6 +3,12 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+vi.mock('@/features/calendar/hooks/use-tooltip', () => ({
+	useTooltip: () => ({
+		coords: { top: 0, left: 0 },
+	}),
+}));
+
 describe('<Tooltip />', () => {
 	afterEach(() => {
 		vi.restoreAllMocks();
@@ -154,33 +160,6 @@ describe('<Tooltip />', () => {
 		expect(document.body.contains(tooltip)).toBe(true);
 	});
 
-	it('positions the tooltip based on the anchor bounding rect', async () => {
-		const user = userEvent.setup();
-
-		vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
-			top: 100,
-			bottom: 120,
-			left: 50,
-			right: 150,
-			width: 100,
-			height: 20,
-			x: 50,
-			y: 100,
-			toJSON: () => {},
-		});
-
-		render(
-			<Tooltip content='tooltip content'>
-				<span>trigger</span>
-			</Tooltip>,
-		);
-
-		await user.click(screen.getByRole('button'));
-
-		const tooltip = screen.getByRole('tooltip');
-		expect(tooltip).toHaveStyle({ top: '124px', left: '100px' });
-	});
-
 	it('applies a custom className to the anchor wrapper', () => {
 		const { container } = render(
 			<Tooltip content='tooltip content' className='custom-class'>
@@ -208,45 +187,38 @@ describe('<Tooltip />', () => {
 		expect(parentOnClick).not.toHaveBeenCalled();
 	});
 
-	it('adds scroll and resize listeners while open and removes them when closed', async () => {
+	it('opens the tooltip when clicking the trigger', async () => {
 		const user = userEvent.setup();
-		const addEventListenerSpy = vi.spyOn(window, 'addEventListener');
-		const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
 
 		render(
-			<Tooltip content='tooltip content'>
-				<span>trigger</span>
+			<Tooltip content='Tooltip content'>
+				<span>Trigger</span>
+			</Tooltip>,
+		);
+
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+		await user.click(screen.getByRole('button'));
+
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
+		expect(screen.getByText('Tooltip content')).toBeInTheDocument();
+	});
+
+	it('closes the tooltip when clicking the trigger again', async () => {
+		const user = userEvent.setup();
+
+		render(
+			<Tooltip content='Tooltip content'>
+				<span>Trigger</span>
 			</Tooltip>,
 		);
 
 		const trigger = screen.getByRole('button');
-		await user.click(trigger);
-
-		expect(addEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function), true);
-		expect(addEventListenerSpy).toHaveBeenCalledWith('resize', expect.any(Function));
 
 		await user.click(trigger);
+		expect(screen.getByRole('tooltip')).toBeInTheDocument();
 
-		expect(removeEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function), true);
-		expect(removeEventListenerSpy).toHaveBeenCalledWith('resize', expect.any(Function));
-	});
-
-	it('removes scroll and resize listeners on unmount while open', async () => {
-		const user = userEvent.setup();
-
-		const { unmount } = render(
-			<Tooltip content='tooltip content'>
-				<span>trigger</span>
-			</Tooltip>,
-		);
-
-		await user.click(screen.getByRole('button'));
-
-		const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener');
-
-		unmount();
-
-		expect(removeEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function), true);
-		expect(removeEventListenerSpy).toHaveBeenCalledWith('resize', expect.any(Function));
+		await user.click(trigger);
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 	});
 });

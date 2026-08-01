@@ -8,22 +8,22 @@ vi.mock('@/features/calendar/hooks/use-migraine-panel', () => ({
 	useMigrainePanel: vi.fn(),
 }));
 
-vi.mock('@/features/calendar/components/molecules/Durations', () => ({
+vi.mock('@/features/calendar/components/molecules/forms/Durations', () => ({
 	default: ({ disabled }: any) => <div data-testid='durations' data-disabled={String(disabled)} />,
 }));
-vi.mock('@/features/calendar/components/molecules/Intensity', () => ({
+vi.mock('@/features/calendar/components/molecules/forms/Intensity', () => ({
 	default: ({ disabled }: any) => <div data-testid='intensity' data-disabled={String(disabled)} />,
 }));
-vi.mock('@/features/calendar/components/molecules/Symptoms', () => ({
+vi.mock('@/features/calendar/components/molecules/forms/Symptoms', () => ({
 	default: ({ disabled }: any) => <div data-testid='symptoms' data-disabled={String(disabled)} />,
 }));
-vi.mock('@/features/calendar/components/molecules/Medicine', () => ({
+vi.mock('@/features/calendar/components/molecules/forms/Medicine', () => ({
 	default: ({ disabled }: any) => <div data-testid='medicine' data-disabled={String(disabled)} />,
 }));
-vi.mock('@/features/calendar/components/molecules/Midas', () => ({
+vi.mock('@/features/calendar/components/molecules/forms/Midas', () => ({
 	default: ({ disabled }: any) => <div data-testid='midas' data-disabled={String(disabled)} />,
 }));
-vi.mock('@/features/calendar/components/molecules/MigrainePanelHeader', () => ({
+vi.mock('@/features/calendar/components/molecules/content/MigrainePanelHeader', () => ({
 	default: ({ date, prefilled, onClose, areInputsDisabled, setAreInputsDisabled }: any) => (
 		<div data-testid='header' data-date={date?.toISOString()} data-prefilled={String(!!prefilled)}>
 			<button data-testid='header-close-trigger' onClick={onClose} />
@@ -186,7 +186,7 @@ describe('<MigrainePanel />', () => {
 
 		expect(screen.getByTestId('migraine-panel')).toHaveClass(
 			'opacity-0',
-			'max-h-0',
+			'translate-y-2',
 			'pointer-events-none',
 		);
 	});

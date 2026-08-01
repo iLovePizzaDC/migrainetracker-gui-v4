@@ -1,5 +1,5 @@
-import CardSection from '@/features/home/components/organisms/CardSection';
-import { CardSetupsProvider } from '@/features/home/hooks/card-setups-provider';
+import CardSection from '@/features/chart-cards/components/organisms/CardSection';
+import { CardSetupsProvider } from '@/features/chart-cards/hooks/card-setups-provider';
 
 function OverviewPage() {
 	return (

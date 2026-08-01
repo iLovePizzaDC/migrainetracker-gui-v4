@@ -3,16 +3,17 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { fetchNewEntry } from '@/shared/api/migraine.api';
-import { formatDateToUs } from '@/shared/utils/date/date';
+import { formatDateToUs } from '@/shared/utils/date';
 import { getInitialFormState } from '@/features/calendar/utils/migraine-panel';
 import { FEEDBACK_TYPES } from '@/shared/constants/button/feedback';
 import type { Entry } from '@/features/calendar/types/calendar';
 import { useMigrainePanel } from '@/features/calendar/hooks/use-migraine-panel';
 import { INTENSITY_TYPES } from '@/shared/constants/event/event-details';
+import { ENTRY_STORAGE_KEY } from '@/features/calendar/constants/calendar';
 
 vi.mock('@/features/calendar/hooks/use-calendar');
 vi.mock('@/shared/api/migraine.api');
-vi.mock('@/shared/utils/date/date');
+vi.mock('@/shared/utils/date');
 vi.mock('@/features/calendar/utils/migraine-panel');
 
 const emptyForm: Entry = {
@@ -229,7 +230,7 @@ describe('useMigrainePanel', () => {
 			});
 
 			expect(setItemSpy).toHaveBeenCalledWith(
-				'MT_NE',
+				ENTRY_STORAGE_KEY,
 				JSON.stringify({ date: testDate, ...prefilledEntry }),
 			);
 			expect(result.current.cacheFeedback).toBe(FEEDBACK_TYPES.SUCCESS);

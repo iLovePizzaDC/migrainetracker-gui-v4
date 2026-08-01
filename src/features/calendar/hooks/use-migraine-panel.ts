@@ -1,10 +1,11 @@
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { fetchNewEntry } from '@/shared/api/migraine.api';
-import { formatDateToUs } from '@/shared/utils/date/date';
+import { formatDateToUs } from '@/shared/utils/date';
 import { FEEDBACK_TYPES, type FeedbackType } from '@/shared/constants/button/feedback';
 import type { Entry } from '@/features/calendar/types/calendar';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getInitialFormState } from '@/features/calendar/utils/migraine-panel';
+import { ENTRY_STORAGE_KEY } from '../constants/calendar';
 
 export function useMigrainePanel(
 	date: Date,
@@ -15,18 +16,27 @@ export function useMigrainePanel(
 	const { refetchEvents } = useCalendar();
 
 	const [form, setForm] = useState<Entry>(() => getInitialFormState(prefilled));
-
 	const [areInputsDisabled, setAreInputsDisabled] = useState(disabled);
 	const [cacheFeedback, setCacheFeedback] = useState<FeedbackType>(FEEDBACK_TYPES.NULL);
 	const [saveFeedback, setSaveFeedback] = useState<FeedbackType>(FEEDBACK_TYPES.NULL);
 	const [isLoading, setIsLoading] = useState(false);
+	const [prevDate, setPrevDate] = useState(date);
+	const [prevDisabled, setPrevDisabled] = useState(disabled);
+	const [prevPrefilled, setPrevPrefilled] = useState(prefilled);
 
-	useEffect(() => {
+	if (
+		date.getTime() !== prevDate.getTime() ||
+		disabled !== prevDisabled ||
+		prefilled !== prevPrefilled
+	) {
+		setPrevDate(date);
+		setPrevDisabled(disabled);
+		setPrevPrefilled(prefilled);
 		setAreInputsDisabled(disabled);
 		setCacheFeedback(FEEDBACK_TYPES.NULL);
 		setSaveFeedback(FEEDBACK_TYPES.NULL);
 		setForm(getInitialFormState(prefilled));
-	}, [date, disabled, prefilled]);
+	}
 
 	const showMedicine = !prefilled || !areInputsDisabled || form.medicines.length > 0;
 
@@ -66,7 +76,7 @@ export function useMigrainePanel(
 	const saveNewEntry = () => {
 		try {
 			localStorage.setItem(
-				'MT_NE',
+				ENTRY_STORAGE_KEY,
 				JSON.stringify({
 					date,
 					...form,

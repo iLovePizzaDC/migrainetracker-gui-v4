@@ -1,11 +1,11 @@
 import { api } from '@/shared/api/api';
 import type { Filter, RawAreaChartResponse, RawEventResponse } from '@/shared/api/types/event';
 import type { IntensityType, SymptomType } from '@/shared/constants/event/event-details';
-import type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar/calendar';
-import type { CardType, TimeFrameUnit } from '@/shared/types/cards/card';
-import { parseTimeToDecimal } from '@/shared/utils/date/date';
-import { formatEffectiveness, formatMedicine } from '@/shared/utils/formatter/event-parser';
+import type { AppendDuration, AppendMedicine, AppendMidas } from '@/shared/types/calendar';
+import { parseTimeToDecimal } from '@/shared/utils/date';
+import { formatEffectiveness, formatMedicine } from '@/shared/utils/event-parser';
 import axios from 'axios';
+import type { CardType, TimeFrameUnit } from '@/shared/types/card';
 
 const buildFilterObject = (filter?: Filter): { [key: string]: string } => {
 	const filterObject: { [key: string]: string } = {};
@@ -39,7 +39,7 @@ export const fetchMigraineEvents = async (
 		});
 		return response.data;
 	} catch (err) {
-		if (axios.isCancel?.(err)) return;
+		if (axios.isCancel?.(err)) return [];
 		if (err instanceof DOMException && err.name === 'AbortError') return;
 		throw new Error('Failed to fetch migraine events');
 	}

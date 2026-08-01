@@ -1,22 +1,22 @@
 import Footer from '@/app/components/organisms/Footer';
-import LoadingBox from '@/app/components/organisms/LoadingBox';
+import LoadingBox from '@/app/components/molecules/LoadingBox';
 import Navigation from '@/app/components/organisms/Navigation';
 import '@/app/styles/App.css';
-import { getSeasonBackground } from '@/app/utils/date';
+import { getSeasonBackground } from '@/app/utils/season-background';
 import CalendarPage from '@/pages/CalendarPage';
 import OverviewPage from '@/pages/OverviewPage';
 import LandingPage from '@/pages/LandingPage';
-import { useAuthCheck } from '@/shared/auth/use-auth-check';
-import { useUser } from '@/shared/hooks/user/use-user';
+import { useAuthCheck } from '@/app/hooks/use-auth-check';
+import { useUser } from '@/shared/hooks/use-user';
 import ProtectedRoute from '@/shared/routing/protected-route';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 
 function App() {
 	const { user, setUser } = useUser();
 	const { authChecked } = useAuthCheck(setUser);
 
 	return (
-		<div onContextMenu={(e) => e.preventDefault()} className='flex flex-col relative'>
+		<div className='flex flex-col relative'>
 			<div className='fixed inset-0 -z-10'>
 				<img src={getSeasonBackground()} alt='background' className='w-full h-full object-cover' />
 			</div>

@@ -1,7 +1,7 @@
 import { useMedDays } from '@/features/calendar/hooks/use-med-days';
 import * as api from '@/shared/api/migraine.api';
 import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
-import * as dateUtils from '@/shared/utils/date/date';
+import * as dateUtils from '@/shared/utils/date';
 import * as fetchHelper from '@/shared/utils/fetch-helper';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -23,7 +23,7 @@ const mockUserMedicines = [
 	},
 ];
 
-vi.mock('@/shared/hooks/user/use-user', () => ({
+vi.mock('@/shared/hooks/use-user', () => ({
 	useUser: () => ({
 		medicines: mockUserMedicines,
 	}),

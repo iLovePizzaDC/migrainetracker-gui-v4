@@ -1,5 +1,5 @@
-import type { InputContent } from '@/shared/types/calendar/calendar';
-import type { DropdownOption } from '@/shared/types/input/input';
+import type { InputContent } from '@/shared/types/calendar';
+import type { DropdownOption } from '@/shared/types/input';
 
 // --- INTENSITY START ---
 
