@@ -33,3 +33,13 @@ export type PieAmountFetcher = (
 ) => Promise<number>;
 
 export type PieDataResult = { data: { name: string; value: number }[]; value: number };
+
+export type MidasPieData = { name: string; value: number };
+
+export type MidasComparison = {
+	current: { score: number; pieData: MidasPieData[] };
+	previous: {
+		score: number;
+		pieData: MidasPieData[];
+	};
+};
