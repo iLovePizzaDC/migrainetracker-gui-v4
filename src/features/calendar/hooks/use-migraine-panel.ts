@@ -5,7 +5,7 @@ import { FEEDBACK_TYPES, type FeedbackType } from '@/shared/constants/button/fee
 import type { Entry } from '@/features/calendar/types/calendar';
 import { useState } from 'react';
 import { getInitialFormState } from '@/features/calendar/utils/migraine-panel';
-import { ENTRY_STORAGE_KEY } from '../constants/calendar';
+import { ENTRY_STORAGE_KEY } from '@/features/calendar/constants/calendar';
 
 export function useMigrainePanel(
 	date: Date,

@@ -3,7 +3,7 @@ import { STRENGTH_MAP } from '@/features/calendar/constants/calendar';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import { getEventForDay } from '@/features/calendar/utils/event-highlight';
 import { formatRecurrence } from '@/features/calendar/utils/format-recurrence';
-import Tooltip from '../../atoms/Tooltip';
+import Tooltip from '@/features/calendar/components/atoms/Tooltip';
 
 interface ICalendarDay {
 	day: number | null;

@@ -12,7 +12,11 @@ import type { EventFilter } from '@/shared/types/event';
 import type { Medicine } from '@/shared/types/medicine';
 import { formatDateToUs } from '@/shared/utils/date';
 import { getMohMedicineFilter } from '@/shared/utils/fetch-helper';
-import type { PieDataResult } from '@/features/chart-cards/types/card';
+import type {
+	MidasComparison,
+	MidasPieData,
+	PieDataResult,
+} from '@/features/chart-cards/types/card';
 import { PIE_AMOUNT_FETCHERS, PIE_DATA_BUILDERS } from '@/features/chart-cards/constants/chart';
 
 const mapMedicines = (filter: EventFilter, userMedicines: Medicine[]): string | undefined => {
@@ -93,12 +97,12 @@ export async function fetchPieData(
 	return buildPieData(value, totalDays);
 }
 
-const buildMidasPieData = (score: number, label: string) => [
+const buildMidasPieData = (score: number, label: string): MidasPieData[] => [
 	{ name: label, value: score },
 	{ name: 'Remaining', value: MAX_MIDAS_SCORE - score },
 ];
 
-export async function fetchMidasPieData() {
+export async function fetchMidasPieData(): Promise<MidasComparison> {
 	const previousMonth = new Date();
 	previousMonth.setMonth(previousMonth.getMonth() - 1);
 
