@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.SYNC_PAT }}
 
-      - name: Rebase develop onto main
+      - name: Merge main into develop
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -24,8 +24,8 @@ jobs:
           git fetch origin
 
           git checkout develop
-          git reset --hard origin/develop
+          git pull origin develop
 
-          git rebase origin/main
+          git merge origin/main --no-edit
 
-          git push --force origin develop
+          git push origin develop
