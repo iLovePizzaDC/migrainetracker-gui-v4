@@ -16,7 +16,7 @@ export function useChartData(
 	timeframeCount: number,
 	timeframeUnit: TimeFrameUnit,
 ) {
-	const { user, medicines } = useUser();
+	const { medicines } = useUser();
 
 	const [areaData, setAreaData] = useState<ChartData>([]);
 	const [pieData, setPieData] = useState<ChartData>([]);
@@ -26,7 +26,7 @@ export function useChartData(
 
 	useEffect(() => {
 		const collectChartData = async () => {
-			if (!user || !medicines) return;
+			if (!medicines) return;
 
 			setIsLoading(true);
 
@@ -64,7 +64,7 @@ export function useChartData(
 		};
 
 		collectChartData();
-	}, [cardType, chartType, timeframeCount, timeframeUnit, user, filter, medicines]);
+	}, [cardType, chartType, timeframeCount, timeframeUnit, filter, medicines]);
 
 	return {
 		isLoading,
