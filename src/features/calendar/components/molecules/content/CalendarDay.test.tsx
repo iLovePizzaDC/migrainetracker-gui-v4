@@ -74,6 +74,22 @@ describe('<CalendarDay />', () => {
 			expect(screen.getByText('2')).toHaveClass('bg-white/5');
 		});
 
+		it('does not highlight today when viewing a month that only matches openDate, not the real current month', () => {
+			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar({ date: new Date('2026-03-01') }));
+
+			render(
+				<CalendarDay
+					day={2}
+					index={0}
+					openDate={new Date('2026-03-15')}
+					onDayClick={mockOnDayClick}
+				/>,
+			);
+
+			expect(screen.getByText('2')).not.toHaveClass('bg-white/5');
+			expect(screen.getByText('2')).not.toHaveClass('bg-white/10');
+		});
+
 		it('selected day overrides today styling', () => {
 			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar());
 

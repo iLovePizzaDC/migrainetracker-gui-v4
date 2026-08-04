@@ -15,13 +15,15 @@ interface ICalendarDay {
 function CalendarDay({ day, index, openDate, onDayClick }: ICalendarDay) {
 	const { date, calendarEvents, filteredEvents, migrainosusFlags, prophylaxisEvents } =
 		useCalendar();
-
 	const today = new Date();
-	const isInSelectedMonth =
-		(openDate &&
-			date.getMonth() === openDate.getMonth() &&
-			date.getFullYear() === openDate.getFullYear()) ||
-		(date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear());
+
+	const isViewingOpenDateMonth =
+		!!openDate &&
+		date.getMonth() === openDate.getMonth() &&
+		date.getFullYear() === openDate.getFullYear();
+
+	const isViewingCurrentMonth =
+		date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
 
 	const migraineEvent = getEventForDay(day, calendarEvents);
 	const prophylaxisEvent = getEventForDay(day, prophylaxisEvents);
@@ -39,13 +41,9 @@ function CalendarDay({ day, index, openDate, onDayClick }: ICalendarDay) {
 	];
 
 	if (day) {
-		if (
-			day === openDate?.getDate() &&
-			date.getMonth() === openDate?.getMonth() &&
-			isInSelectedMonth
-		) {
+		if (day === openDate?.getDate() && isViewingOpenDateMonth) {
 			baseClasses.push('bg-white/10', 'cursor-pointer');
-		} else if (day === today.getDate() && isInSelectedMonth) {
+		} else if (day === today.getDate() && isViewingCurrentMonth) {
 			baseClasses.push('bg-white/5', 'hover:bg-white/10', 'cursor-pointer');
 		} else {
 			baseClasses.push('hover:bg-white/10', 'cursor-pointer');
