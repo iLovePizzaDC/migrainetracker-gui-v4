@@ -1,4 +1,4 @@
-import type { Entry } from '@/features/calendar/types/calendar';
+import type { Entry, StoredEntry } from '@/features/calendar/types/calendar';
 import type {
 	DescriptionEffectiveness,
 	MigraineDescription,
@@ -100,4 +100,13 @@ export const enrichMedicineLabels = (
 
 		return match ? { ...med, medicine: { abbreviation, label: match.label } } : med;
 	});
+};
+
+export const isSavedEntryRaw = (obj: unknown): obj is StoredEntry => {
+	if (!obj || typeof obj !== 'object') return false;
+
+	const record = obj as Record<string, unknown>;
+	if (typeof record.date !== 'string') return false;
+
+	return true;
 };
