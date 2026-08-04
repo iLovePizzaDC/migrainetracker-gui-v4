@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.6](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.5...v1.7.6) (2026-08-04)
+
+
+### Bug Fixes
+
+* does not highlight today for other months in calendar ([#145](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/145)) ([b5b9e35](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/b5b9e3537457da95a3bc58146b2ff84359bddf85))
+
 ## [1.7.5](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.4...v1.7.5) (2026-07-28)
 
 ### Bug Fixes
