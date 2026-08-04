@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.7](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.6...v1.7.7) (2026-08-04)
+
+
+### Bug Fixes
+
+* fast month switch disables skeleton in calendar ([#149](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/149)) ([46980e3](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/46980e34139bbf324d8aea222130359b7d5a7afa))
+
 ## [1.7.6](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.5...v1.7.6) (2026-08-04)
 
 
