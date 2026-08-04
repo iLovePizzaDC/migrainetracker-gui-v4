@@ -56,6 +56,7 @@ function Tooltip({ content, children, className = '' }: ITooltip) {
 				{children}
 			</span>
 			{open &&
+				typeof document !== 'undefined' &&
 				createPortal(
 					<div
 						ref={popupRef}

@@ -31,7 +31,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 		[name, abbreviation],
 	);
 
-	const handleTypeChange = useCallback((value: string) => setType(value), []);
+	const handleTypeChange = useCallback((value: string) => setType(value as MedicineType), []);
 
 	const handleNameChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
