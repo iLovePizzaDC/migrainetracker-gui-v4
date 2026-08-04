@@ -2,12 +2,16 @@ import CalendarContent from '@/features/calendar/components/organisms/CalendarCo
 import MigrainePanel from '@/features/calendar/components/organisms/MigrainePanel';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import type { Entry, StoredEntry } from '@/features/calendar/types/calendar';
-import { createEntry, enrichMedicineLabels } from '@/features/calendar/utils/event-parser';
+import {
+	createEntry,
+	enrichMedicineLabels,
+	isSavedEntryRaw,
+} from '@/features/calendar/utils/event-parser';
 import { useUser } from '@/shared/hooks/use-user';
 import type { DropdownOption } from '@/shared/types/input';
 import { normalizeDate } from '@/shared/utils/date';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ENTRY_STORAGE_KEY } from '@/features/calendar/constants/calendar';
 import CalendarHeader from '@/features/calendar/components/molecules/content/CalendarHeader';
 import FilterCard from '@/features/calendar/components/molecules/forms/FilterCard';
@@ -21,55 +25,70 @@ function Calendar() {
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	const [isStoredEntryDisplaying, setIsStoredEntryDisplaying] = useState(false);
 
-	const medicineOptions: DropdownOption[] =
-		medicines === null
-			? []
-			: medicines.map((m) => ({
-					label: m.name,
-					value: m.abbreviation,
-				}));
+	const medicineOptions: DropdownOption[] = useMemo(
+		() =>
+			medicines === null
+				? []
+				: medicines.map((m) => ({
+						label: m.name,
+						value: m.abbreviation,
+					})),
+		[medicines],
+	);
 
-	const onDayClick = (day: number) => {
-		const selected = new Date(date);
-		selected.setDate(day);
+	const onDayClick = useCallback(
+		(day: number) => {
+			const selected = new Date(date);
+			selected.setDate(day);
+			const isSameDate =
+				selectedDate !== null &&
+				normalizeDate(selected).getTime() === normalizeDate(selectedDate).getTime();
 
-		if (day === selectedDate?.getDate()) {
-			setIsPanelOpen(false);
-			setSelectedDate(null);
-			setEntry(null);
-			return;
-		}
+			if (isSameDate) {
+				setIsPanelOpen(false);
+				setSelectedDate(null);
+				setEntry(null);
+				return;
+			}
 
-		const foundEvent = calendarEvents.find(
-			(event) => normalizeDate(event.date).getTime() === normalizeDate(selected).getTime(),
-		);
+			const foundEvent = calendarEvents.find(
+				(event) => normalizeDate(event.date).getTime() === normalizeDate(selected).getTime(),
+			);
 
-		const entry: Entry | null = foundEvent ? createEntry(foundEvent) : null;
+			const newEntry: Entry | null = foundEvent ? createEntry(foundEvent) : null;
 
-		if (entry) {
-			entry.medicines = enrichMedicineLabels(entry.medicines, medicineOptions);
-		}
+			if (newEntry) {
+				newEntry.medicines = enrichMedicineLabels(newEntry.medicines, medicineOptions);
+			}
 
-		setIsStoredEntryDisplaying(false);
-		setEntry(entry);
-		setSelectedDate(selected);
-		setIsPanelOpen(true);
-	};
+			setIsStoredEntryDisplaying(false);
+			setEntry(newEntry);
+			setSelectedDate(selected);
+			setIsPanelOpen(true);
+		},
+		[date, selectedDate, calendarEvents, medicineOptions],
+	);
 
-	const onLoadEntryClick = () => {
-		const rawStoredEntry = localStorage.getItem(ENTRY_STORAGE_KEY);
+	const onLoadEntryClick = useCallback(() => {
+		try {
+			const rawStoredEntry = localStorage.getItem(ENTRY_STORAGE_KEY);
+			if (!rawStoredEntry) return;
 
-		if (rawStoredEntry) {
-			const entry: StoredEntry = JSON.parse(rawStoredEntry);
-			const entryDate: Date = normalizeDate(new Date(entry.date));
+			const parsed = JSON.parse(rawStoredEntry) as unknown;
+			if (!isSavedEntryRaw(parsed)) return;
+
+			const entryDate = normalizeDate(new Date(parsed.date));
+			const entryToSet: StoredEntry = { ...parsed, date: entryDate };
 
 			setIsStoredEntryDisplaying(true);
 			setMonth(entryDate);
-			setEntry(entry);
+			setEntry(entryToSet);
 			setSelectedDate(entryDate);
 			setIsPanelOpen(true);
+		} catch (err) {
+			console.error('Failed to load cached entry', err);
 		}
-	};
+	}, [setMonth]);
 
 	return (
 		<>

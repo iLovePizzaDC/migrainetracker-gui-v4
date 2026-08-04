@@ -9,7 +9,7 @@ import {
 	type MedicineType,
 } from '@/shared/constants/user/medicine';
 import { useUser } from '@/shared/hooks/use-user';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 interface IAddMedicineForm {
 	show: boolean;
@@ -26,7 +26,22 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 	const [height, setHeight] = useState(0);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const isFormValid = name.length > 0 && abbreviation.length > 0;
+	const isFormValid = useMemo(
+		() => name.length > 0 && abbreviation.length > 0,
+		[name, abbreviation],
+	);
+
+	const handleTypeChange = useCallback((value: string) => setType(value as MedicineType), []);
+
+	const handleNameChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
+		[],
+	);
+
+	const handleAbbrevChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => setAbbreviation(e.target.value),
+		[],
+	);
 
 	useEffect(() => {
 		const updateHeight = () => {
@@ -38,7 +53,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 		updateHeight();
 	}, [show]);
 
-	const submitForm = async () => {
+	const submitForm = useCallback(async () => {
 		if (!isFormValid || isSubmitting) return;
 
 		try {
@@ -56,7 +71,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 		} finally {
 			setIsSubmitting(false);
 		}
-	};
+	}, [isFormValid, isSubmitting, addMedicine, name, abbreviation, type]);
 
 	return (
 		<div
@@ -70,9 +85,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 					label='Type'
 					value={type}
 					options={MEDICINE_OPTIONS}
-					onChange={(value) => {
-						setType(value as MedicineType);
-					}}
+					onChange={handleTypeChange}
 					disabled={isSubmitting}
 					required
 				/>
@@ -80,7 +93,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 					id='medicineName'
 					label='Name'
 					value={name}
-					onChange={(event) => setName(event.target.value)}
+					onChange={handleNameChange}
 					placeholder='Name'
 					disabled={isSubmitting}
 					required
@@ -89,7 +102,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 					id='medicineAbbreviation'
 					label='Abbreviation'
 					value={abbreviation}
-					onChange={(event) => setAbbreviation(event.target.value)}
+					onChange={handleAbbrevChange}
 					placeholder='Abbreviation'
 					disabled={isSubmitting}
 					required

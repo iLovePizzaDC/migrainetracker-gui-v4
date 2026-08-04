@@ -9,7 +9,7 @@ import type { CardType, TimeFrameUnit } from '@/shared/types/card';
 import type { ChartType } from '@/shared/types/chart';
 import type { EventFilter } from '@/shared/types/event';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { CardSetup } from '@/features/chart-cards/types/card';
 import { CHART_TYPES } from '@/shared/constants/chart-cards/charts';
 import { CARD_TYPES } from '@/shared/constants/chart-cards/cards';
@@ -47,14 +47,19 @@ function ChartCard({
 	const [contextOpen, setContextOpen] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 
-	const onEdit = (setup: CardSetup) => {
-		updateSetupByIndex(setup);
-		setIsEditing(false);
-	};
+	const onEdit = useCallback(
+		(setup: CardSetup) => {
+			updateSetupByIndex(setup);
+			setIsEditing(false);
+		},
+		[updateSetupByIndex],
+	);
 
-	const onRemove = () => {
+	const onRemove = useCallback(() => {
 		removeSetupByIndex(index);
-	};
+	}, [removeSetupByIndex, index]);
+
+	const toggleContext = useCallback(() => setContextOpen((v) => !v), []);
 
 	return (
 		<CardShell>
@@ -66,9 +71,7 @@ function ChartCard({
 				<button
 					ref={contextButtonRef}
 					data-testid='context-button'
-					onClick={() => {
-						setContextOpen((v) => !v);
-					}}
+					onClick={toggleContext}
 					className='hover:opacity-80 transition-opacity'
 				>
 					<EllipsisVerticalIcon className='h-7 w-7' />

@@ -94,7 +94,9 @@ export function useCalendarEvents(
 					console.error('Failed to load events:', err);
 				}
 			} finally {
-				setIsLoading(false);
+				if (id === fetchIdRef.current) {
+					setIsLoading(false);
+				}
 			}
 		},
 		[firstDayOfMonth, lastDayOfMonth],
