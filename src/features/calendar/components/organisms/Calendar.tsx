@@ -2,7 +2,11 @@ import CalendarContent from '@/features/calendar/components/organisms/CalendarCo
 import MigrainePanel from '@/features/calendar/components/organisms/MigrainePanel';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import type { Entry, StoredEntry } from '@/features/calendar/types/calendar';
-import { createEntry, enrichMedicineLabels } from '@/features/calendar/utils/event-parser';
+import {
+	createEntry,
+	enrichMedicineLabels,
+	isSavedEntryRaw,
+} from '@/features/calendar/utils/event-parser';
 import { useUser } from '@/shared/hooks/use-user';
 import type { DropdownOption } from '@/shared/types/input';
 import { normalizeDate } from '@/shared/utils/date';
@@ -71,11 +75,10 @@ function Calendar() {
 			if (!rawStoredEntry) return;
 
 			const parsed = JSON.parse(rawStoredEntry) as unknown;
+			if (!isSavedEntryRaw(parsed)) return;
 
-			if (!parsed || typeof (parsed as any).date !== 'string') return;
-
-			const entryDate = normalizeDate(new Date((parsed as any).date));
-			const entryToSet = { ...parsed, date: entryDate } as StoredEntry;
+			const entryDate = normalizeDate(new Date(parsed.date));
+			const entryToSet: StoredEntry = { ...parsed, date: entryDate };
 
 			setIsStoredEntryDisplaying(true);
 			setMonth(entryDate);

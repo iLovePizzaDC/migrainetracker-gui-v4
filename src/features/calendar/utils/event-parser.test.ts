@@ -3,6 +3,7 @@ import type { MigraineEvent } from '@/features/calendar/types/event';
 import {
 	createEntry,
 	enrichMedicineLabels,
+	isSavedEntryRaw,
 	parseMedicineData,
 	parseMigraineEventDescription,
 	parseProphylaxisEventDescription,
@@ -334,5 +335,60 @@ describe('enrichMedicineLabels', () => {
 		enrichMedicineLabels(medicines, mockUserMedicineOptions);
 
 		expect(medicines[0].medicine.label).toBe(MEDICINE_TYPES.MIGRAINE_PAINKILLER);
+	});
+});
+
+describe('isSavedEntryRaw', () => {
+	it('returns true for an object with a date string', () => {
+		const obj = {
+			date: '2026-01-01',
+			durations: [],
+			intensity: 'low',
+			symptoms: [],
+			medicines: [],
+			midas: {
+				workMissed: false,
+				workImpaired: false,
+				choresMissed: false,
+				choresImpaired: false,
+				socialMissed: false,
+			},
+		};
+
+		expect(isSavedEntryRaw(obj)).toBe(true);
+	});
+
+	it('returns false when date is missing', () => {
+		const obj = {
+			durations: [],
+			intensity: 'low',
+		};
+
+		expect(isSavedEntryRaw(obj)).toBe(false);
+	});
+
+	it('returns false when date is not a string', () => {
+		const obj = {
+			date: 12345,
+			durations: [],
+		};
+
+		expect(isSavedEntryRaw(obj)).toBe(false);
+	});
+
+	it('returns false for null or non-object', () => {
+		expect(isSavedEntryRaw(null)).toBe(false);
+		expect(isSavedEntryRaw(undefined)).toBe(false);
+		expect(isSavedEntryRaw('2026-01-01')).toBe(false);
+	});
+
+	it('works with parsed JSON (unknown) and rejects invalid shapes', () => {
+		const raw = JSON.stringify({ date: '2026-12-31', foo: 'bar' });
+		const parsed = JSON.parse(raw);
+
+		expect(isSavedEntryRaw(parsed)).toBe(true);
+
+		const parsedInvalid = { date: null };
+		expect(isSavedEntryRaw(parsedInvalid)).toBe(false);
 	});
 });
