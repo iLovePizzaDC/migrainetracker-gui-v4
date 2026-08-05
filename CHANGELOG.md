@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.8](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.7...v1.7.8) (2026-08-05)
+
+
+### Bug Fixes
+
+* prophylaxis recurrence calculation ([a86dd95](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/a86dd952454fc78d7e3e8edf37593dcc99efb8be))
+* prophylaxis recurrence calculation ([85dcd59](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/85dcd59b50559aecf592d11bae13996099c4bf70))
+
 ## [1.7.7](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.6...v1.7.7) (2026-08-04)
 
 
