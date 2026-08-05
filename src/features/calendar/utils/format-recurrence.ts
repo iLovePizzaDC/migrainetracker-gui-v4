@@ -1,31 +1,45 @@
-import { type Freq, FREQ_LABELS, WEEKDAY_LABELS } from '@/features/calendar/constants/recurrence';
-
-function isFreq(value: string | undefined): value is Freq {
-	return !!value && value in FREQ_LABELS;
-}
-
-function parseRRuleParams(rrule: string): Record<string, string> {
-	return Object.fromEntries(
-		rrule
-			.replace(/^RRULE:/, '')
-			.split(';')
-			.map((pair) => pair.split('=') as [string, string]),
-	);
-}
+import { RRule } from 'rrule';
 
 export function formatRecurrence(rrules: string[] | null): string | null {
 	if (!rrules?.length) return null;
 
-	const params = parseRRuleParams(rrules[0]);
-	if (!isFreq(params.FREQ)) return null;
+	const rrule = rrules[0].replace(/^RRULE:/, '');
 
-	const interval = Number(params.INTERVAL ?? 1);
-	const { every, interval: intervalLabel } = FREQ_LABELS[params.FREQ];
-	const base = interval > 1 ? intervalLabel(interval) : every;
+	if (!/\bFREQ=/.test(rrule)) {
+		return null;
+	}
 
-	const byDay = params.BYDAY?.split(',')
-		.map((day) => WEEKDAY_LABELS[day] ?? day)
-		.join(', ');
+	try {
+		return RRule.fromString(rrule).toText();
+	} catch {
+		return null;
+	}
+}
 
-	return byDay ? `${base} (${byDay})` : base;
+export function getNextRecurrenceDate(
+	startDate: Date,
+	recurrence: string[] | null | undefined,
+	now: Date = new Date(),
+): Date | null {
+	if (!recurrence?.length) {
+		return startDate <= now ? startDate : null;
+	}
+
+	try {
+		const rule = RRule.fromString(recurrence[0].replace(/^RRULE:/, ''));
+
+		const ruleWithStartDate = new RRule({
+			...rule.origOptions,
+			dtstart: startDate,
+		});
+
+		const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+		const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+
+		const occurrences = ruleWithStartDate.between(monthStart, monthEnd, true);
+
+		return occurrences[0] ?? null;
+	} catch {
+		return startDate;
+	}
 }
