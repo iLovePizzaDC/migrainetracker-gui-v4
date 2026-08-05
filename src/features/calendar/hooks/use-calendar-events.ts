@@ -88,7 +88,7 @@ export function useCalendarEvents(
 				}
 
 				setRawEvents(mapMigraineEvents(migraineEventsRaw));
-				setProphylaxisEvents(mapProphylaxisEvents(prophylaxisEventsRaw));
+				setProphylaxisEvents(mapProphylaxisEvents(prophylaxisEventsRaw, firstDayOfMonth));
 			} catch (err) {
 				if (!(err instanceof DOMException && err.name === 'AbortError')) {
 					console.error('Failed to load events:', err);

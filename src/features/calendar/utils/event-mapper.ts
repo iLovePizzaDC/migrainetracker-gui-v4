@@ -4,13 +4,16 @@ import {
 	parseMigraineEventDescription,
 	parseProphylaxisEventDescription,
 } from '@/features/calendar/utils/event-parser';
+import { getNextRecurrenceDate } from '@/features/calendar/utils/format-recurrence';
 import type { RawEventResponse } from '@/shared/api/types/event';
 
 export function mapMigraineEvents(raw: RawEventResponse[]): MigraineEvent[] {
 	return raw
 		.map((event) => {
 			const description = parseMigraineEventDescription(event);
+
 			if (!description) return null;
+
 			return {
 				date: new Date(event.start.date),
 				description,
@@ -21,13 +24,15 @@ export function mapMigraineEvents(raw: RawEventResponse[]): MigraineEvent[] {
 		.sort((a, b) => a.date.getTime() - b.date.getTime());
 }
 
-export function mapProphylaxisEvents(raw: RawEventResponse[]): ProphylaxisEvent[] {
+export function mapProphylaxisEvents(raw: RawEventResponse[], now?: Date): ProphylaxisEvent[] {
 	return raw
 		.map((event) => {
 			const description = parseProphylaxisEventDescription(event);
-			if (!description) return null;
+			const date = getNextRecurrenceDate(new Date(event.start.date), event.recurrence, now);
+			if (!description || !date) return null;
+
 			return {
-				date: new Date(event.start.date),
+				date: date,
 				description,
 				recurrence: event.recurrence,
 			} satisfies ProphylaxisEvent;
