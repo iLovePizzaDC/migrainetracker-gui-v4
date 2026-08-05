@@ -4,6 +4,7 @@ import {
 	parseMigraineEventDescription,
 	parseProphylaxisEventDescription,
 } from '@/features/calendar/utils/event-parser';
+import { getNextRecurrenceDate } from '@/features/calendar/utils/format-recurrence';
 import type { RawEventResponse } from '@/shared/api/types/event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -13,6 +14,9 @@ vi.mock('@/features/calendar/utils/event-parser', () => ({
 }));
 vi.mock('@/features/calendar/utils/event-highlight', () => ({
 	determineStrength: vi.fn(),
+}));
+vi.mock('@/features/calendar/utils/format-recurrence', () => ({
+	getNextRecurrenceDate: vi.fn(),
 }));
 
 const makeRawMigraineEvent = (dateStr: string, overrides: Partial<RawEventResponse> = {}) =>
@@ -89,15 +93,18 @@ describe('mapMigraineEvents', () => {
 describe('mapProphylaxisEvents', () => {
 	beforeEach(() => {
 		vi.mocked(parseProphylaxisEventDescription).mockReturnValue({} as any);
+		vi.mocked(getNextRecurrenceDate).mockImplementation((startDate) => startDate);
 	});
 
-	it('maps raw events to ProphylaxisEvent objects', () => {
+	it('maps raw events to ProphylaxisEvent objects using the resolved recurrence date', () => {
 		const description = { medication: 'aimovig', dose: '70mg' } as any;
+		const resolvedDate = new Date('2026-01-15');
 		vi.mocked(parseProphylaxisEventDescription).mockReturnValue(description);
+		vi.mocked(getNextRecurrenceDate).mockReturnValue(resolvedDate);
 
 		const [result] = mapProphylaxisEvents([makeRawProphylaxisEvent('2026-01-10')]);
 
-		expect(result.date).toEqual(new Date('2026-01-10'));
+		expect(result.date).toEqual(resolvedDate);
 		expect(result.description).toBe(description);
 	});
 
@@ -107,6 +114,31 @@ describe('mapProphylaxisEvents', () => {
 		mapProphylaxisEvents([event]);
 
 		expect(parseProphylaxisEventDescription).toHaveBeenCalledWith(event);
+	});
+
+	it('calls getNextRecurrenceDate with the start date, recurrence and now', () => {
+		const event = makeRawProphylaxisEvent('2026-01-10', { recurrence: ['RRULE:FREQ=WEEKLY'] });
+		const now = new Date('2026-01-01');
+
+		mapProphylaxisEvents([event], now);
+
+		expect(getNextRecurrenceDate).toHaveBeenCalledWith(
+			new Date('2026-01-10'),
+			['RRULE:FREQ=WEEKLY'],
+			now,
+		);
+	});
+
+	it('calls getNextRecurrenceDate with undefined now when not provided', () => {
+		const event = makeRawProphylaxisEvent('2026-01-10');
+
+		mapProphylaxisEvents([event]);
+
+		expect(getNextRecurrenceDate).toHaveBeenCalledWith(
+			new Date('2026-01-10'),
+			undefined,
+			undefined,
+		);
 	});
 
 	it('maps the recurrence field from the raw event', () => {
@@ -136,10 +168,27 @@ describe('mapProphylaxisEvents', () => {
 		]);
 
 		expect(result).toHaveLength(1);
+	});
+
+	it('drops events where getNextRecurrenceDate returns null (no occurrence in range)', () => {
+		vi.mocked(getNextRecurrenceDate)
+			.mockReturnValueOnce(null)
+			.mockReturnValueOnce(new Date('2026-01-11'));
+
+		const result = mapProphylaxisEvents([
+			makeRawProphylaxisEvent('2026-01-10'),
+			makeRawProphylaxisEvent('2026-01-11'),
+		]);
+
+		expect(result).toHaveLength(1);
 		expect(result[0].date).toEqual(new Date('2026-01-11'));
 	});
 
-	it('sorts events by date ascending', () => {
+	it('sorts events by the resolved date ascending', () => {
+		vi.mocked(getNextRecurrenceDate)
+			.mockReturnValueOnce(new Date('2026-01-20'))
+			.mockReturnValueOnce(new Date('2026-01-05'));
+
 		const result = mapProphylaxisEvents([
 			makeRawProphylaxisEvent('2026-01-20'),
 			makeRawProphylaxisEvent('2026-01-05'),

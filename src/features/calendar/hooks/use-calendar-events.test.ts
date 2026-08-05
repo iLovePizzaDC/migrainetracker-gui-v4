@@ -172,7 +172,7 @@ describe('useCalendarEvents', () => {
 			renderCalendarEvents();
 
 			await waitFor(() => expect(mapMigraineEvents).toHaveBeenCalledWith(migraineRaw));
-			expect(mapProphylaxisEvents).toHaveBeenCalledWith(prophylaxisRaw);
+			expect(mapProphylaxisEvents).toHaveBeenCalledWith(prophylaxisRaw, FIRST_DAY);
 		});
 
 		it('does not update state when fetchMigraineEvents returns falsy', async () => {
