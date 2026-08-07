@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.8...v1.8.0) (2026-08-07)
+
+
+### Features
+
+* minimize standard filterform ([#157](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/157)) ([1f4e720](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/1f4e720086ebf5ef1ffb2ec227b10f8e84526380))
+* minimize standard filterform ([#157](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/157)) ([d73111c](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/d73111cbc64b704355922774584675228bb5f16f))
+
 ## [1.7.8](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.7...v1.7.8) (2026-08-05)
 
 
