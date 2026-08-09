@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.8.0...v1.8.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* cards refreshing after remove ([#160](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/160)) ([6f6a142](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/6f6a1424436d4ab2463c6a4ea267ca053bf5d4f3))
+* cards refreshing after remove ([#160](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/160)) ([c01744e](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/c01744e0e18db095f864979803c72fad60c3d665))
+
 ## [1.8.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.8...v1.8.0) (2026-08-07)
 
 
