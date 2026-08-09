@@ -1,7 +1,7 @@
+import AppendCard from '@/features/chart-cards/components/molecules/AppendCard';
 import ChartCard from '@/features/chart-cards/components/molecules/ChartCard';
 import MidasCard from '@/features/chart-cards/components/molecules/MidasCard';
 import { useCardSetups } from '@/features/chart-cards/hooks/use-card-setups';
-import AppendCard from '@/features/chart-cards/components/molecules/AppendCard';
 
 function CardSection() {
 	const { cardSetups } = useCardSetups();
@@ -12,7 +12,7 @@ function CardSection() {
 				.sort((a, b) => a.index - b.index)
 				.map((cardSetup) => (
 					<ChartCard
-						key={cardSetup.index}
+						key={JSON.stringify(cardSetup)}
 						index={cardSetup.index}
 						title={cardSetup.title}
 						cardType={cardSetup.cardType}
