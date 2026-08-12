@@ -6,6 +6,7 @@ import {
 import { useScrollSnapPicker } from '@/features/calendar/hooks/use-scroll-snap-picker';
 import { normalizeTime } from '@/features/calendar/utils/scroll-snap-helper';
 import { useClickOutside } from '@/shared/hooks/use-click-outside';
+import { finalizeTime } from '@/shared/utils/date';
 import { useState } from 'react';
 
 interface ITimePicker {
@@ -64,6 +65,9 @@ function TimePicker({
 				disabled={disabled}
 				onFocus={() => setOpen(true)}
 				onChange={(e) => onChange(normalizeTime(e.target.value))}
+				onBlur={() => {
+					if (value) onChange(finalizeTime(value));
+				}}
 				className='w-full p-2 rounded-lg bg-black/10 border border-white/20 text-white text-sm'
 			/>
 

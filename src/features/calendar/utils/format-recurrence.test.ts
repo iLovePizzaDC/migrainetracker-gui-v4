@@ -41,77 +41,93 @@ describe('formatRecurrence', () => {
 
 describe('getNextRecurrenceDate', () => {
 	describe('without recurrence', () => {
-		it('returns the start date when it is not in the future', () => {
-			const start = new Date('2026-01-10');
-			const now = new Date('2026-01-15');
+		it('returns the start date when it is in the same month as viewDate', () => {
+			const start = new Date(2026, 0, 10);
+			const viewDate = new Date(2026, 0, 1);
 
-			expect(getNextRecurrenceDate(start, null, now)).toEqual(start);
+			expect(getNextRecurrenceDate(start, null, viewDate)).toEqual(start);
 		});
 
-		it('returns null when the start date is in the future', () => {
-			const start = new Date('2026-02-10');
-			const now = new Date('2026-01-15');
+		it('returns null when the start date is in a different month', () => {
+			const start = new Date(2026, 1, 10);
+			const viewDate = new Date(2026, 0, 15);
 
-			expect(getNextRecurrenceDate(start, null, now)).toBeNull();
+			expect(getNextRecurrenceDate(start, null, viewDate)).toBeNull();
+		});
+
+		it('returns null for a past event outside the viewed month (no ghost dots)', () => {
+			const start = new Date(2026, 0, 15);
+			const viewDate = new Date(2026, 1, 1);
+
+			expect(getNextRecurrenceDate(start, null, viewDate)).toBeNull();
 		});
 
 		it('treats an empty recurrence array the same as no recurrence', () => {
-			const start = new Date('2026-01-10');
-			const now = new Date('2026-01-15');
+			const start = new Date(2026, 0, 10);
+			const viewDate = new Date(2026, 0, 15);
 
-			expect(getNextRecurrenceDate(start, [], now)).toEqual(start);
+			expect(getNextRecurrenceDate(start, [], viewDate)).toEqual(start);
 		});
 	});
 
 	describe('with recurrence', () => {
-		it('returns the occurrence that falls within the month of "now"', () => {
+		it('returns the occurrence that falls within the month of viewDate', () => {
 			const start = new Date('2026-01-01');
-			const now = new Date('2026-02-15');
+			const viewDate = new Date('2026-02-15');
 
-			expect(getNextRecurrenceDate(start, ['RRULE:FREQ=WEEKLY;INTERVAL=4'], now)).toEqual(
+			expect(getNextRecurrenceDate(start, ['RRULE:FREQ=WEEKLY;INTERVAL=4'], viewDate)).toEqual(
 				new Date('2026-02-26'),
 			);
 		});
 
 		it('returns the first occurrence when a month contains more than one', () => {
 			const start = new Date('2026-01-01');
-			const now = new Date('2026-01-20');
+			const viewDate = new Date('2026-01-20');
 
-			expect(getNextRecurrenceDate(start, ['RRULE:FREQ=WEEKLY;INTERVAL=4'], now)).toEqual(
+			expect(getNextRecurrenceDate(start, ['RRULE:FREQ=WEEKLY;INTERVAL=4'], viewDate)).toEqual(
 				new Date('2026-01-01'),
 			);
 		});
 
-		it('returns null when the recurrence has no occurrence in the month of "now"', () => {
+		it('returns null when the recurrence has no occurrence in the month of viewDate', () => {
 			const start = new Date('2026-01-31');
-			const now = new Date('2026-04-10');
+			const viewDate = new Date('2026-04-10');
 
-			expect(getNextRecurrenceDate(start, ['RRULE:FREQ=MONTHLY;BYMONTHDAY=31'], now)).toBeNull();
+			expect(
+				getNextRecurrenceDate(start, ['RRULE:FREQ=MONTHLY;BYMONTHDAY=31'], viewDate),
+			).toBeNull();
 		});
 
 		it('uses the given start date as dtstart, not the original event date embedded in the rule', () => {
 			const start = new Date('2026-01-05');
-			const now = new Date('2026-01-15');
+			const viewDate = new Date('2026-01-15');
 
-			expect(getNextRecurrenceDate(start, ['RRULE:FREQ=WEEKLY'], now)).toEqual(
+			expect(getNextRecurrenceDate(start, ['RRULE:FREQ=WEEKLY'], viewDate)).toEqual(
 				new Date('2026-01-05'),
 			);
 		});
 
-		it('falls back to the start date when the recurrence string is invalid', () => {
-			const start = new Date('2026-01-10');
-			const now = new Date('2026-01-15');
+		it('falls back to the start date when the recurrence string is invalid and same month', () => {
+			const start = new Date(2026, 0, 10);
+			const viewDate = new Date(2026, 0, 15);
 
-			expect(getNextRecurrenceDate(start, ['not-a-valid-rrule'], now)).toEqual(start);
+			expect(getNextRecurrenceDate(start, ['not-a-valid-rrule'], viewDate)).toEqual(start);
+		});
+
+		it('returns null for invalid recurrence when start is outside the viewed month', () => {
+			const start = new Date(2026, 0, 10);
+			const viewDate = new Date(2026, 1, 1);
+
+			expect(getNextRecurrenceDate(start, ['not-a-valid-rrule'], viewDate)).toBeNull();
 		});
 	});
 
-	describe('default "now"', () => {
+	describe('default viewDate', () => {
 		it('defaults to the current date when not provided', () => {
 			vi.useFakeTimers();
-			vi.setSystemTime(new Date('2026-01-15'));
+			vi.setSystemTime(new Date(2026, 0, 15));
 
-			const start = new Date('2026-01-10');
+			const start = new Date(2026, 0, 10);
 
 			expect(getNextRecurrenceDate(start, null)).toEqual(start);
 

@@ -11,6 +11,7 @@ vi.mock('@/features/calendar/hooks/use-scroll-snap-picker', () => ({
 		minuteRef: { current: null },
 		scrollToIndex: vi.fn(),
 		handleScroll: vi.fn(),
+		flushPendingScroll: vi.fn(),
 	}),
 }));
 vi.mock('@/shared/hooks/use-click-outside', () => ({
@@ -60,6 +61,15 @@ describe('<TimePicker />', () => {
 			render(<TimePicker id='time' label='Time' value='10:00' onChange={mockOnChange} required />);
 
 			expect(screen.getByLabelText('Time')).toBeRequired();
+		});
+
+		it('finalizes incomplete time on blur', async () => {
+			render(<TimePicker id='time' label='Time' value='12' onChange={mockOnChange} />);
+
+			await user.click(screen.getByLabelText('Time'));
+			await user.tab();
+
+			expect(mockOnChange).toHaveBeenCalledWith('12:00');
 		});
 	});
 

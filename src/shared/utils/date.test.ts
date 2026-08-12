@@ -1,4 +1,5 @@
 import {
+	finalizeTime,
 	formatDateToUs,
 	getDateAfterDays,
 	getDateBeforeDays,
@@ -18,6 +19,29 @@ describe('parseTimeToDecimal', () => {
 	it('converts "10:30" to 10.5', () => expect(parseTimeToDecimal('10:30')).toBe(10.5));
 	it('converts "00:00" to 0', () => expect(parseTimeToDecimal('00:00')).toBe(0));
 	it('converts "23:59" correctly', () => expect(parseTimeToDecimal('23:59')).toBe(23.98));
+	it('finalizes incomplete times instead of returning NaN', () => {
+		expect(parseTimeToDecimal('12')).toBe(12);
+		expect(Number.isNaN(parseTimeToDecimal('12'))).toBe(false);
+	});
+});
+
+describe('finalizeTime', () => {
+	it('pads incomplete HH:mm values', () => {
+		expect(finalizeTime('9:5')).toBe('09:05');
+	});
+
+	it('treats digit-only hour as HH:00', () => {
+		expect(finalizeTime('12')).toBe('12:00');
+	});
+
+	it('parses 3-digit and 4-digit times', () => {
+		expect(finalizeTime('930')).toBe('09:30');
+		expect(finalizeTime('1234')).toBe('12:34');
+	});
+
+	it('defaults empty input to 00:00', () => {
+		expect(finalizeTime('')).toBe('00:00');
+	});
 });
 
 describe('parseDecimalToTime', () => {
