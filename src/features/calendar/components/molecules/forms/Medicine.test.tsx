@@ -158,11 +158,41 @@ describe('<Medicine />', () => {
 			await import('@/features/calendar/components/molecules/forms/Medicine');
 		render(<Medicine medicines={mockMedicines} onChange={mockOnChange} />);
 
-		fireEvent.change(screen.getByRole('slider', { name: /Taken/ }), { target: { value: 8 } });
+		fireEvent.change(screen.getByRole('slider', { name: /Taken/ }), { target: { value: 3 } });
 
-		const updated = [...mockMedicines];
-		updated[0].taken = 8;
-		expect(mockOnChange).toHaveBeenCalledWith(updated);
+		expect(mockOnChange).toHaveBeenCalledWith([
+			{
+				...mockMedicines[0],
+				taken: 3,
+				effectiveness: 0,
+			},
+		]);
+	});
+
+	it('clamps effectiveness when taken is lowered below it', async () => {
+		mockUseCalendar(5, 10);
+		const { default: Medicine } =
+			await import('@/features/calendar/components/molecules/forms/Medicine');
+
+		const medicinesWithHighEffectiveness = [
+			{
+				...mockMedicines[0],
+				taken: 4,
+				effectiveness: 3,
+			},
+		];
+
+		render(<Medicine medicines={medicinesWithHighEffectiveness} onChange={mockOnChange} />);
+
+		fireEvent.change(screen.getByRole('slider', { name: /Taken/ }), { target: { value: 2 } });
+
+		expect(mockOnChange).toHaveBeenCalledWith([
+			{
+				...medicinesWithHighEffectiveness[0],
+				taken: 2,
+				effectiveness: 2,
+			},
+		]);
 	});
 
 	it('calls onChange with correct effectiveness value on slider change', async () => {
@@ -175,9 +205,13 @@ describe('<Medicine />', () => {
 			target: { value: 1 },
 		});
 
-		const updated = [...mockMedicines];
-		updated[0].taken = 1;
-		expect(mockOnChange).toHaveBeenCalledWith(updated);
+		expect(mockOnChange).toHaveBeenCalledWith([
+			{
+				...mockMedicines[0],
+				taken: 1,
+				effectiveness: 1,
+			},
+		]);
 	});
 
 	it('adapts effectiveness max value on taken slider change', async () => {

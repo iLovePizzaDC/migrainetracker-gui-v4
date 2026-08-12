@@ -59,9 +59,8 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 		try {
 			setIsSubmitting(true);
 
-			addMedicine({ name, abbreviation, type });
-
 			await fetchUserMedicinesPost(name, abbreviation, type);
+			addMedicine({ name, abbreviation, type });
 
 			setName('');
 			setAbbreviation('');

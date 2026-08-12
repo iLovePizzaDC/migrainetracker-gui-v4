@@ -370,6 +370,14 @@ describe('filterEvents', () => {
 			);
 			expect(result).toBe(true);
 		});
+
+		it('returns false when midas is null', () => {
+			const result = filterEvents(makeEvent({ midas: null as any }), {
+				...defaultFilter,
+				midas: [MIDAS_TYPES.WORK_MISSED],
+			});
+			expect(result).toBe(false);
+		});
 	});
 });
 

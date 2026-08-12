@@ -48,4 +48,8 @@ describe('formatEffectiveness', () => {
 	it('returns empty string for empty array', () => {
 		expect(formatEffectiveness([])).toBe('');
 	});
+
+	it('clamps effectiveness that exceeds taken', () => {
+		expect(formatEffectiveness([makeMedicine('ibu', 2, 5)])).toBe('yes,yes');
+	});
 });

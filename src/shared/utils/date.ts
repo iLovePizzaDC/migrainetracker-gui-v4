@@ -18,6 +18,14 @@ export const formatDateToUs = (date: Date): string => {
 	return `${year}-${month}-${day}`;
 };
 
+export const parseDateOnlyLocal = (dateStr: string): Date => {
+	const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+	if (!match) return new Date(dateStr);
+
+	const [, year, month, day] = match;
+	return new Date(Number(year), Number(month) - 1, Number(day));
+};
+
 const adjustDate = (date: Date, adjustment: number, isMonth: boolean = false): Date => {
 	const newDate = new Date(date);
 	if (isMonth) {
