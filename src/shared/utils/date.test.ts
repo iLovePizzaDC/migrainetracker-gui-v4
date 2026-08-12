@@ -1,4 +1,5 @@
 import {
+	finalizeTime,
 	formatDateToUs,
 	getDateAfterDays,
 	getDateBeforeDays,
@@ -7,6 +8,7 @@ import {
 	getEndOfMonth,
 	getStartOfMonth,
 	normalizeDate,
+	parseDateOnlyLocal,
 	parseDecimalToTime,
 	parseTimeToDecimal,
 } from '@/shared/utils/date';
@@ -17,6 +19,29 @@ describe('parseTimeToDecimal', () => {
 	it('converts "10:30" to 10.5', () => expect(parseTimeToDecimal('10:30')).toBe(10.5));
 	it('converts "00:00" to 0', () => expect(parseTimeToDecimal('00:00')).toBe(0));
 	it('converts "23:59" correctly', () => expect(parseTimeToDecimal('23:59')).toBe(23.98));
+	it('finalizes incomplete times instead of returning NaN', () => {
+		expect(parseTimeToDecimal('12')).toBe(12);
+		expect(Number.isNaN(parseTimeToDecimal('12'))).toBe(false);
+	});
+});
+
+describe('finalizeTime', () => {
+	it('pads incomplete HH:mm values', () => {
+		expect(finalizeTime('9:5')).toBe('09:05');
+	});
+
+	it('treats digit-only hour as HH:00', () => {
+		expect(finalizeTime('12')).toBe('12:00');
+	});
+
+	it('parses 3-digit and 4-digit times', () => {
+		expect(finalizeTime('930')).toBe('09:30');
+		expect(finalizeTime('1234')).toBe('12:34');
+	});
+
+	it('defaults empty input to 00:00', () => {
+		expect(finalizeTime('')).toBe('00:00');
+	});
 });
 
 describe('parseDecimalToTime', () => {
@@ -29,11 +54,26 @@ describe('parseDecimalToTime', () => {
 
 describe('formatDateToUs', () => {
 	it('formats date as YYYY-MM-DD', () => {
-		expect(formatDateToUs(new Date('2026-01-05'))).toBe('2026-01-05');
+		expect(formatDateToUs(new Date(2026, 0, 5))).toBe('2026-01-05');
 	});
 
 	it('pads month and day with leading zeros', () => {
-		expect(formatDateToUs(new Date('2026-03-07'))).toBe('2026-03-07');
+		expect(formatDateToUs(new Date(2026, 2, 7))).toBe('2026-03-07');
+	});
+});
+
+describe('parseDateOnlyLocal', () => {
+	it('parses YYYY-MM-DD as local midnight', () => {
+		const result = parseDateOnlyLocal('2026-01-15');
+		expect(result.getFullYear()).toBe(2026);
+		expect(result.getMonth()).toBe(0);
+		expect(result.getDate()).toBe(15);
+		expect(result.getHours()).toBe(0);
+	});
+
+	it('falls back to Date parsing for non date-only strings', () => {
+		const result = parseDateOnlyLocal('2026-01-15T12:00:00');
+		expect(result.getFullYear()).toBe(2026);
 	});
 });
 

@@ -8,6 +8,75 @@ import type {
 import type { RawEventResponse } from '@/shared/api/types/event';
 import { parseDecimalToTime } from '@/shared/utils/date';
 
+const EMPTY_MIDAS: MigraineDescription['midas'] = {
+	workMissed: false,
+	workImpaired: false,
+	choresMissed: false,
+	choresImpaired: false,
+	socialMissed: false,
+};
+
+const toFiniteNumber = (value: unknown): number | null => {
+	if (typeof value === 'number' && Number.isFinite(value)) return value;
+	if (typeof value === 'string' && value.trim() !== '') {
+		const parsed = Number(value);
+		if (Number.isFinite(parsed)) return parsed;
+	}
+	return null;
+};
+
+const normalizeDurationRange = (value: unknown): { start: number; end: number } | null => {
+	if (!value || typeof value !== 'object') return null;
+	const range = value as Record<string, unknown>;
+	const start = toFiniteNumber(range.start);
+	const end = toFiniteNumber(range.end);
+	if (start === null || end === null) return null;
+	return { start, end };
+};
+
+const normalizeMigraineDescription = (raw: unknown): MigraineDescription | null => {
+	if (!raw || typeof raw !== 'object') return null;
+
+	const description = raw as Record<string, unknown>;
+	if (!Array.isArray(description.duration)) return null;
+
+	const duration = description.duration.map(normalizeDurationRange);
+	if (duration.some((range) => range === null)) return null;
+
+	let effectiveness: DescriptionEffectiveness[] = [];
+	if (typeof description.effectiveness === 'string') {
+		effectiveness = description.effectiveness.split(',') as DescriptionEffectiveness[];
+	} else if (Array.isArray(description.effectiveness)) {
+		effectiveness = description.effectiveness as DescriptionEffectiveness[];
+	}
+
+	let symptoms: MigraineDescription['symptoms'] = [];
+	if (typeof description.symptoms === 'string') {
+		symptoms = description.symptoms
+			.split(',')
+			.map((symptom: string) => symptom.trim()) as MigraineDescription['symptoms'];
+	} else if (Array.isArray(description.symptoms)) {
+		symptoms = description.symptoms as MigraineDescription['symptoms'];
+	}
+
+	const midas =
+		description.midas && typeof description.midas === 'object'
+			? ({
+					...EMPTY_MIDAS,
+					...(description.midas as MigraineDescription['midas']),
+				} as MigraineDescription['midas'])
+			: EMPTY_MIDAS;
+
+	return {
+		duration: duration as { start: number; end: number }[],
+		intensity: description.intensity as MigraineDescription['intensity'],
+		symptoms,
+		medicine: typeof description.medicine === 'string' ? description.medicine : '',
+		effectiveness,
+		midas,
+	};
+};
+
 export const parseMigraineEventDescription = (
 	event: RawEventResponse,
 ): MigraineDescription | null => {
@@ -15,19 +84,7 @@ export const parseMigraineEventDescription = (
 		const description =
 			typeof event.description === 'string' ? JSON.parse(event.description) : event.description;
 
-		if (typeof description.effectiveness === 'string') {
-			description.effectiveness = description.effectiveness.split(
-				',',
-			) as DescriptionEffectiveness[];
-		}
-
-		if (typeof description.symptoms === 'string') {
-			description.symptoms = description.symptoms
-				.split(',')
-				.map((symptom: string) => symptom.trim());
-		}
-
-		return description;
+		return normalizeMigraineDescription(description);
 	} catch {
 		return null;
 	}
@@ -107,6 +164,7 @@ export const isSavedEntryRaw = (obj: unknown): obj is StoredEntry => {
 
 	const record = obj as Record<string, unknown>;
 	if (typeof record.date !== 'string') return false;
+	if (!Array.isArray(record.durations)) return false;
 
 	return true;
 };

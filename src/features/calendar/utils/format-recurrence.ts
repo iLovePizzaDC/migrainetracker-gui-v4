@@ -16,13 +16,17 @@ export function formatRecurrence(rrules: string[] | null): string | null {
 	}
 }
 
+function isSameMonth(a: Date, b: Date): boolean {
+	return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
+}
+
 export function getNextRecurrenceDate(
 	startDate: Date,
 	recurrence: string[] | null | undefined,
-	now: Date = new Date(),
+	viewDate: Date = new Date(),
 ): Date | null {
 	if (!recurrence?.length) {
-		return startDate <= now ? startDate : null;
+		return isSameMonth(startDate, viewDate) ? startDate : null;
 	}
 
 	try {
@@ -33,13 +37,13 @@ export function getNextRecurrenceDate(
 			dtstart: startDate,
 		});
 
-		const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-		const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+		const monthStart = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
+		const monthEnd = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 0, 23, 59, 59);
 
 		const occurrences = ruleWithStartDate.between(monthStart, monthEnd, true);
 
 		return occurrences[0] ?? null;
 	} catch {
-		return startDate;
+		return isSameMonth(startDate, viewDate) ? startDate : null;
 	}
 }

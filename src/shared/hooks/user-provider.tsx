@@ -12,8 +12,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 		if (!user) return;
 
 		const loadMedicines = async () => {
-			const medicines = await fetchUserMedicinesGet();
-			setMedicines(medicines);
+			try {
+				const medicines = await fetchUserMedicinesGet();
+				setMedicines(medicines);
+			} catch (error) {
+				console.error('Failed to load medicines:', error);
+				setMedicines([]);
+			}
 		};
 
 		loadMedicines();

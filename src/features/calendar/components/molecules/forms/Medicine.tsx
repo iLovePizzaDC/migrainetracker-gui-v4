@@ -92,7 +92,11 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 						value={medicine.taken}
 						onChange={(value) => {
 							const updated = [...medicines];
-							updated[index].taken = value;
+							updated[index] = {
+								...updated[index],
+								taken: value,
+								effectiveness: Math.min(updated[index].effectiveness, value),
+							};
 							onChange(updated);
 						}}
 						disabled={disabled}
@@ -106,7 +110,10 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 						value={medicine.effectiveness}
 						onChange={(value) => {
 							const updated = [...medicines];
-							updated[index].effectiveness = value;
+							updated[index] = {
+								...updated[index],
+								effectiveness: Math.min(value, updated[index].taken),
+							};
 							onChange(updated);
 						}}
 						disabled={disabled}

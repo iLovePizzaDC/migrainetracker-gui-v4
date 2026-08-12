@@ -5,6 +5,7 @@ import {
 	getDateBeforeDays,
 	getDateBeforeMonths,
 	getDayDifference,
+	parseDateOnlyLocal,
 } from '@/shared/utils/date';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -16,6 +17,7 @@ describe('getDateRange', () => {
 		vi.mocked(getDateBeforeMonths).mockReturnValue(new Date('2026-01-01'));
 		vi.mocked(formatDateToUs).mockReturnValue('2026-01-01');
 		vi.mocked(getDayDifference).mockReturnValue(30);
+		vi.mocked(parseDateOnlyLocal).mockImplementation((value) => new Date(value));
 	});
 
 	afterEach(() => vi.clearAllMocks());
@@ -82,10 +84,15 @@ describe('getDateRange', () => {
 
 		it('calls getDayDifference with parsed startDate and endDate', () => {
 			vi.mocked(formatDateToUs).mockReturnValueOnce('2025-12-01').mockReturnValueOnce('2025-12-31');
+			vi.mocked(parseDateOnlyLocal)
+				.mockReturnValueOnce(new Date(2025, 11, 1))
+				.mockReturnValueOnce(new Date(2025, 11, 31));
 
 			getDateRange(30, TIME_FRAME_UNITS.DAYS);
 
-			expect(getDayDifference).toHaveBeenCalledWith(new Date('2025-12-01'), new Date('2025-12-31'));
+			expect(parseDateOnlyLocal).toHaveBeenCalledWith('2025-12-01');
+			expect(parseDateOnlyLocal).toHaveBeenCalledWith('2025-12-31');
+			expect(getDayDifference).toHaveBeenCalledWith(new Date(2025, 11, 1), new Date(2025, 11, 31));
 		});
 	});
 });

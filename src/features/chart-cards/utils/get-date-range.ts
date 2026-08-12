@@ -5,6 +5,7 @@ import {
 	getDateBeforeDays,
 	getDateBeforeMonths,
 	getDayDifference,
+	parseDateOnlyLocal,
 } from '@/shared/utils/date';
 
 export function getDateRange(count: number, unit: TimeFrameUnit) {
@@ -20,7 +21,7 @@ export function getDateRange(count: number, unit: TimeFrameUnit) {
 
 	const startDate = formatDateToUs(start);
 	const endDate = formatDateToUs(end);
-	const totalDays = getDayDifference(new Date(startDate), new Date(endDate));
+	const totalDays = getDayDifference(parseDateOnlyLocal(startDate), parseDateOnlyLocal(endDate));
 
 	return { startDate, endDate, totalDays };
 }

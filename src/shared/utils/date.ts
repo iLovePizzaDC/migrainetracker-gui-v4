@@ -1,5 +1,5 @@
 export function parseTimeToDecimal(time: string): number {
-	const [hours, minutes] = time.split(':').map(Number);
+	const [hours, minutes] = finalizeTime(time).split(':').map(Number);
 	const decimalTime = hours + minutes / 60;
 
 	return parseFloat(decimalTime.toFixed(2));
@@ -11,11 +11,47 @@ export const parseDecimalToTime = (time: number) => {
 	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 };
 
+const clampTimePart = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
+
+export const finalizeTime = (input: string): string => {
+	const cleaned = input.replace(/[^\d:]/g, '');
+
+	if (!cleaned) return '00:00';
+
+	let hours: number;
+	let minutes: number;
+
+	if (cleaned.includes(':')) {
+		const [h = '0', m = '0'] = cleaned.split(':');
+		hours = clampTimePart(Number(h || 0), 0, 23);
+		minutes = clampTimePart(Number(m || 0), 0, 59);
+	} else if (cleaned.length <= 2) {
+		hours = clampTimePart(Number(cleaned), 0, 23);
+		minutes = 0;
+	} else if (cleaned.length === 3) {
+		hours = clampTimePart(Number(cleaned[0]), 0, 23);
+		minutes = clampTimePart(Number(cleaned.slice(1)), 0, 59);
+	} else {
+		hours = clampTimePart(Number(cleaned.slice(0, 2)), 0, 23);
+		minutes = clampTimePart(Number(cleaned.slice(2, 4)), 0, 59);
+	}
+
+	return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+};
+
 export const formatDateToUs = (date: Date): string => {
 	const year = date.getFullYear();
 	const month = String(date.getMonth() + 1).padStart(2, '0');
 	const day = String(date.getDate()).padStart(2, '0');
 	return `${year}-${month}-${day}`;
+};
+
+export const parseDateOnlyLocal = (dateStr: string): Date => {
+	const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+	if (!match) return new Date(dateStr);
+
+	const [, year, month, day] = match;
+	return new Date(Number(year), Number(month) - 1, Number(day));
 };
 
 const adjustDate = (date: Date, adjustment: number, isMonth: boolean = false): Date => {

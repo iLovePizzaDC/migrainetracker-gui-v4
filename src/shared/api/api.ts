@@ -40,10 +40,12 @@ api.interceptors.response.use(
 			return Promise.reject(error);
 		}
 
-		const isRefreshOrMeRequest =
-			originalRequest.url?.includes('auth/refresh') || originalRequest.url?.includes('auth/me');
+		const isAuthSessionRequest =
+			originalRequest.url?.includes('auth/refresh') ||
+			originalRequest.url?.includes('auth/me') ||
+			originalRequest.url?.includes('auth/logout');
 
-		if (error.response?.status === 401 && !originalRequest._retry && !isRefreshOrMeRequest) {
+		if (error.response?.status === 401 && !originalRequest._retry && !isAuthSessionRequest) {
 			if (isRefreshing) {
 				return new Promise((onSuccess, onError) => {
 					failedQueue.push({ onSuccess, onError });
@@ -64,8 +66,10 @@ api.interceptors.response.use(
 						processQueue(null);
 						resolve(api(originalRequest));
 					})
-					.catch((err) => {
+					.catch(async (err) => {
 						processQueue(err);
+						isRefreshing = false;
+						await fetchUserLogout();
 						reject(err);
 					})
 					.finally(() => {

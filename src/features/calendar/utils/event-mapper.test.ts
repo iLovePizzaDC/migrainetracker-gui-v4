@@ -46,7 +46,7 @@ describe('mapMigraineEvents', () => {
 
 		const [result] = mapMigraineEvents([makeRawMigraineEvent('2026-01-10')]);
 
-		expect(result.date).toEqual(new Date('2026-01-10'));
+		expect(result.date).toEqual(new Date(2026, 0, 10));
 		expect(result.description).toBe(description);
 		expect(result.strength).toBe(500);
 	});
@@ -71,7 +71,21 @@ describe('mapMigraineEvents', () => {
 		]);
 
 		expect(result).toHaveLength(1);
-		expect(result[0].date).toEqual(new Date('2026-01-11'));
+		expect(result[0].date).toEqual(new Date(2026, 0, 11));
+	});
+
+	it('drops events where determineStrength throws', () => {
+		vi.mocked(determineStrength).mockImplementationOnce(() => {
+			throw new Error('bad description');
+		});
+
+		const result = mapMigraineEvents([
+			makeRawMigraineEvent('2026-01-10'),
+			makeRawMigraineEvent('2026-01-11'),
+		]);
+
+		expect(result).toHaveLength(1);
+		expect(result[0].date).toEqual(new Date(2026, 0, 11));
 	});
 
 	it('sorts events by date ascending', () => {
@@ -81,8 +95,11 @@ describe('mapMigraineEvents', () => {
 			makeRawMigraineEvent('2026-01-12'),
 		]);
 
-		const dates = result.map((e) => e.date.toISOString());
-		expect(dates).toEqual([...dates].sort());
+		expect(result.map((e) => e.date.getTime())).toEqual([
+			new Date(2026, 0, 5).getTime(),
+			new Date(2026, 0, 12).getTime(),
+			new Date(2026, 0, 20).getTime(),
+		]);
 	});
 
 	it('returns an empty array for no events', () => {
@@ -123,7 +140,7 @@ describe('mapProphylaxisEvents', () => {
 		mapProphylaxisEvents([event], now);
 
 		expect(getNextRecurrenceDate).toHaveBeenCalledWith(
-			new Date('2026-01-10'),
+			new Date(2026, 0, 10),
 			['RRULE:FREQ=WEEKLY'],
 			now,
 		);
@@ -134,11 +151,7 @@ describe('mapProphylaxisEvents', () => {
 
 		mapProphylaxisEvents([event]);
 
-		expect(getNextRecurrenceDate).toHaveBeenCalledWith(
-			new Date('2026-01-10'),
-			undefined,
-			undefined,
-		);
+		expect(getNextRecurrenceDate).toHaveBeenCalledWith(new Date(2026, 0, 10), undefined, undefined);
 	});
 
 	it('maps the recurrence field from the raw event', () => {
