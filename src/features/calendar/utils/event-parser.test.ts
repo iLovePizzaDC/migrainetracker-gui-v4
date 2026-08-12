@@ -43,25 +43,47 @@ const makeEvent = (overrides: Partial<MigraineEvent['description']> = {}): Migra
 });
 
 describe('parseMigraineEventDescription', () => {
+	const validDuration = [{ start: 10, end: 15 }];
+
 	it('parses a valid object description', () => {
 		const result = parseMigraineEventDescription({
-			description: { intensity: INTENSITY_TYPES.HIGH, symptoms: [SYMPTOM_TYPES.NOISE] },
+			description: {
+				duration: validDuration,
+				intensity: INTENSITY_TYPES.HIGH,
+				symptoms: [SYMPTOM_TYPES.NOISE],
+			},
 		} as any);
 
-		expect(result).toEqual({ intensity: INTENSITY_TYPES.HIGH, symptoms: [SYMPTOM_TYPES.NOISE] });
+		expect(result).toMatchObject({
+			duration: validDuration,
+			intensity: INTENSITY_TYPES.HIGH,
+			symptoms: [SYMPTOM_TYPES.NOISE],
+			medicine: '',
+			effectiveness: [],
+		});
+		expect(result?.midas).toEqual({
+			workMissed: false,
+			workImpaired: false,
+			choresMissed: false,
+			choresImpaired: false,
+			socialMissed: false,
+		});
 	});
 
 	it('parses a JSON string description', () => {
 		const result = parseMigraineEventDescription({
-			description: JSON.stringify({ intensity: INTENSITY_TYPES.LOW }),
+			description: JSON.stringify({
+				duration: validDuration,
+				intensity: INTENSITY_TYPES.LOW,
+			}),
 		} as any);
 
-		expect(result).toEqual({ intensity: INTENSITY_TYPES.LOW });
+		expect(result).toMatchObject({ duration: validDuration, intensity: INTENSITY_TYPES.LOW });
 	});
 
 	it('splits effectiveness string into array', () => {
 		const result = parseMigraineEventDescription({
-			description: { effectiveness: 'yes,no,yes' },
+			description: { duration: validDuration, effectiveness: 'yes,no,yes' },
 		} as any);
 
 		expect(result?.effectiveness).toEqual(['yes', 'no', 'yes']);
@@ -69,7 +91,7 @@ describe('parseMigraineEventDescription', () => {
 
 	it('leaves effectiveness array unchanged', () => {
 		const result = parseMigraineEventDescription({
-			description: { effectiveness: ['yes', 'no'] },
+			description: { duration: validDuration, effectiveness: ['yes', 'no'] },
 		} as any);
 
 		expect(result?.effectiveness).toEqual(['yes', 'no']);
@@ -77,7 +99,7 @@ describe('parseMigraineEventDescription', () => {
 
 	it('splits symptoms string into trimmed array', () => {
 		const result = parseMigraineEventDescription({
-			description: { symptoms: 'noi, lig , sme' },
+			description: { duration: validDuration, symptoms: 'noi, lig , sme' },
 		} as any);
 
 		expect(result?.symptoms).toEqual(['noi', 'lig', 'sme']);
@@ -85,7 +107,7 @@ describe('parseMigraineEventDescription', () => {
 
 	it('leaves symptoms array unchanged', () => {
 		const result = parseMigraineEventDescription({
-			description: { symptoms: [SYMPTOM_TYPES.NOISE] },
+			description: { duration: validDuration, symptoms: [SYMPTOM_TYPES.NOISE] },
 		} as any);
 
 		expect(result?.symptoms).toEqual([SYMPTOM_TYPES.NOISE]);
@@ -103,6 +125,44 @@ describe('parseMigraineEventDescription', () => {
 		const result = parseMigraineEventDescription({ description: null } as any);
 
 		expect(result).toBeNull();
+	});
+
+	it('returns null when duration is missing', () => {
+		const result = parseMigraineEventDescription({
+			description: { intensity: INTENSITY_TYPES.HIGH },
+		} as any);
+
+		expect(result).toBeNull();
+	});
+
+	it('coerces string duration start/end to numbers', () => {
+		const result = parseMigraineEventDescription({
+			description: { duration: [{ start: '10.5', end: '15' }] },
+		} as any);
+
+		expect(result?.duration).toEqual([{ start: 10.5, end: 15 }]);
+	});
+
+	it('returns null when duration entries are malformed', () => {
+		const result = parseMigraineEventDescription({
+			description: { duration: [{ start: 'morning', end: 15 }] },
+		} as any);
+
+		expect(result).toBeNull();
+	});
+
+	it('normalizes null midas to all-false defaults', () => {
+		const result = parseMigraineEventDescription({
+			description: { duration: validDuration, midas: null },
+		} as any);
+
+		expect(result?.midas).toEqual({
+			workMissed: false,
+			workImpaired: false,
+			choresMissed: false,
+			choresImpaired: false,
+			socialMissed: false,
+		});
 	});
 });
 
@@ -382,8 +442,12 @@ describe('isSavedEntryRaw', () => {
 		expect(isSavedEntryRaw('2026-01-01')).toBe(false);
 	});
 
+	it('returns false when durations is missing', () => {
+		expect(isSavedEntryRaw({ date: '2026-01-01' })).toBe(false);
+	});
+
 	it('works with parsed JSON (unknown) and rejects invalid shapes', () => {
-		const raw = JSON.stringify({ date: '2026-12-31', foo: 'bar' });
+		const raw = JSON.stringify({ date: '2026-12-31', durations: [], foo: 'bar' });
 		const parsed = JSON.parse(raw);
 
 		expect(isSavedEntryRaw(parsed)).toBe(true);

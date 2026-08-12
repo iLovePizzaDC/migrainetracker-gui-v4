@@ -64,8 +64,9 @@ api.interceptors.response.use(
 						processQueue(null);
 						resolve(api(originalRequest));
 					})
-					.catch((err) => {
+					.catch(async (err) => {
 						processQueue(err);
+						await fetchUserLogout();
 						reject(err);
 					})
 					.finally(() => {

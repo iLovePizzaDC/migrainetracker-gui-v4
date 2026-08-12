@@ -207,6 +207,7 @@ describe('<Calendar />', () => {
 		it('loads entry from localStorage when clicking load entry button', async () => {
 			const storedEntry = {
 				date: '2026-01-05',
+				durations: [],
 				medicines: [],
 				midas: {
 					workMissed: false,

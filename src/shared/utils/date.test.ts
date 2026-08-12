@@ -7,6 +7,7 @@ import {
 	getEndOfMonth,
 	getStartOfMonth,
 	normalizeDate,
+	parseDateOnlyLocal,
 	parseDecimalToTime,
 	parseTimeToDecimal,
 } from '@/shared/utils/date';
@@ -29,11 +30,26 @@ describe('parseDecimalToTime', () => {
 
 describe('formatDateToUs', () => {
 	it('formats date as YYYY-MM-DD', () => {
-		expect(formatDateToUs(new Date('2026-01-05'))).toBe('2026-01-05');
+		expect(formatDateToUs(new Date(2026, 0, 5))).toBe('2026-01-05');
 	});
 
 	it('pads month and day with leading zeros', () => {
-		expect(formatDateToUs(new Date('2026-03-07'))).toBe('2026-03-07');
+		expect(formatDateToUs(new Date(2026, 2, 7))).toBe('2026-03-07');
+	});
+});
+
+describe('parseDateOnlyLocal', () => {
+	it('parses YYYY-MM-DD as local midnight', () => {
+		const result = parseDateOnlyLocal('2026-01-15');
+		expect(result.getFullYear()).toBe(2026);
+		expect(result.getMonth()).toBe(0);
+		expect(result.getDate()).toBe(15);
+		expect(result.getHours()).toBe(0);
+	});
+
+	it('falls back to Date parsing for non date-only strings', () => {
+		const result = parseDateOnlyLocal('2026-01-15T12:00:00');
+		expect(result.getFullYear()).toBe(2026);
 	});
 });
 

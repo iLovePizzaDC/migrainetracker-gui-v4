@@ -81,6 +81,8 @@ describe('<AddMedicineForm />', () => {
 	});
 
 	it('submits form correctly when valid', async () => {
+		vi.mocked(fetchUserMedicinesPost).mockResolvedValueOnce(undefined as any);
+
 		render(<AddMedicineForm show />);
 
 		await user.type(screen.getByLabelText('Name'), 'Test medicine');
@@ -88,17 +90,17 @@ describe('<AddMedicineForm />', () => {
 
 		await user.click(screen.getByRole('button', { name: 'Save' }));
 
-		expect(mockAddMedicine).toHaveBeenCalledWith({
-			name: 'Test medicine',
-			abbreviation: 'tst_med',
-			type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
-		});
-
 		expect(fetchUserMedicinesPost).toHaveBeenCalledWith(
 			'Test medicine',
 			'tst_med',
 			MEDICINE_TYPES.MIGRAINE_PAINKILLER,
 		);
+
+		expect(mockAddMedicine).toHaveBeenCalledWith({
+			name: 'Test medicine',
+			abbreviation: 'tst_med',
+			type: MEDICINE_TYPES.MIGRAINE_PAINKILLER,
+		});
 
 		expect(screen.getByLabelText('Name')).toHaveValue('');
 		expect(screen.getByLabelText('Abbreviation')).toHaveValue('');
@@ -114,6 +116,7 @@ describe('<AddMedicineForm />', () => {
 
 		await user.click(screen.getByRole('button', { name: 'Save' }));
 
+		expect(mockAddMedicine).not.toHaveBeenCalled();
 		expect(screen.getByLabelText('Name')).toHaveValue('Test medicine');
 		expect(screen.getByLabelText('Abbreviation')).toHaveValue('tst_med');
 	});

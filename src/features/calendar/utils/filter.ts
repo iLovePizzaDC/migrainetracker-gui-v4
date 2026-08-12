@@ -69,10 +69,11 @@ function matchesEffectiveness(
 
 function matchesMidas(description: MigraineDescription, filter: EventFilter): boolean {
 	if (filter.midas.length === 0) return true;
+	if (!description.midas) return false;
 
 	return filter.midas.every((key) => {
 		if (key === ANY_FILTER_TYPE.ANY) return true;
-		return description.midas[key];
+		return Boolean(description.midas[key]);
 	});
 }
 

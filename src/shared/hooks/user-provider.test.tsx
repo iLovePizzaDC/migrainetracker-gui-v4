@@ -110,6 +110,20 @@ describe('UserProvider', () => {
 				expect(vi.mocked(fetchUserMedicinesGet)).toHaveBeenCalledTimes(2);
 			});
 		});
+
+		it('sets medicines to empty array when fetch fails', async () => {
+			vi.mocked(fetchUserMedicinesGet).mockRejectedValueOnce(new Error('network'));
+
+			const result = renderWithProvider();
+
+			await act(async () => {
+				result.current.setUser(mockUser);
+			});
+
+			await waitFor(() => {
+				expect(result.current.medicines).toEqual([]);
+			});
+		});
 	});
 
 	describe('addMedicine', () => {

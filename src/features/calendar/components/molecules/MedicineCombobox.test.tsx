@@ -76,15 +76,16 @@ describe('<MedicineCombobox />', () => {
 	const user = userEvent.setup();
 
 	beforeEach(() => {
+		vi.clearAllMocks();
+
 		vi.mocked(useUser).mockReturnValue({
 			medicines: mockUserMedicines,
+			addMedicine: vi.fn(),
 			removeMedicine: vi.fn(),
 		} as any);
 
 		vi.mocked(useClickOutside).mockImplementation(() => {});
 		vi.mocked(fetchUserMedicinesDelete).mockResolvedValue([]);
-
-		vi.clearAllMocks();
 	});
 
 	it('renders pre-selected medicines', () => {
@@ -214,6 +215,7 @@ describe('<MedicineCombobox />', () => {
 
 		const mockUseUserResult = vi.mocked(useUser).mock.results[0].value;
 		expect(mockUseUserResult.removeMedicine).toHaveBeenCalledWith(`${mockMedValue}_1`);
+		expect(mockUseUserResult.addMedicine).toHaveBeenCalledWith(mockUserMedicines[0]);
 	});
 
 	it('disables delete button while deleting', async () => {

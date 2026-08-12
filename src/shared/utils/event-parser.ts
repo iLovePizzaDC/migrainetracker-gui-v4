@@ -12,11 +12,13 @@ export const formatEffectiveness = (medicine: AppendMedicine[]) => {
 	let effectivenessString: string = '';
 
 	medicine.map(({ taken, effectiveness }) => {
-		for (let i = 0; i < taken - effectiveness; i++) {
+		const clampedEffectiveness = Math.max(0, Math.min(effectiveness, taken));
+
+		for (let i = 0; i < taken - clampedEffectiveness; i++) {
 			effectivenessString += 'no,';
 		}
 
-		for (let i = 0; i < effectiveness; i++) {
+		for (let i = 0; i < clampedEffectiveness; i++) {
 			effectivenessString += 'yes,';
 		}
 	});

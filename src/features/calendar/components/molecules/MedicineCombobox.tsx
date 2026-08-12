@@ -17,7 +17,7 @@ interface IMedicineCombobox {
 function MedicineCombobox({ medicines, onChange, disabled }: IMedicineCombobox) {
 	const comboboxRef = useRef<HTMLDivElement | null>(null);
 
-	const { medicines: userMedicines, removeMedicine } = useUser();
+	const { medicines: userMedicines, addMedicine, removeMedicine } = useUser();
 
 	const [deletionConfirmedFor, setDeletionConfirmedFor] = useState<string | null>(null);
 	const [deletingMedicine, setDeletingMedicine] = useState<string | null>(null);
@@ -35,6 +35,8 @@ function MedicineCombobox({ medicines, onChange, disabled }: IMedicineCombobox) 
 				}));
 
 	const deleteMedicine = async (name: string, abbreviation: string) => {
+		const medicineToRestore = userMedicines?.find((m) => m.abbreviation === abbreviation);
+
 		try {
 			setDeletingMedicine(abbreviation);
 
@@ -45,6 +47,9 @@ function MedicineCombobox({ medicines, onChange, disabled }: IMedicineCombobox) 
 			setDeletionConfirmedFor(null);
 		} catch (error) {
 			console.error('Failed to delete medicine:', error);
+			if (medicineToRestore) {
+				addMedicine(medicineToRestore);
+			}
 		} finally {
 			setDeletingMedicine(null);
 		}
