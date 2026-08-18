@@ -4,11 +4,13 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/features/calendar/hooks/use-scroll-snap-picker', () => ({
-	useScrollSnapPicker: () => ({
+	useScrollSnapPicker: (_open: boolean, selectedHour: string, selectedMinute: string) => ({
 		inputRef: { current: null },
 		pickerRef: { current: null },
 		hourRef: { current: null },
 		minuteRef: { current: null },
+		composeTime: ({ hour, minute }: { hour?: string; minute?: string }) =>
+			`${hour ?? selectedHour}:${minute ?? selectedMinute}`,
 		scrollToIndex: vi.fn(),
 		handleScroll: vi.fn(),
 		flushPendingScroll: vi.fn(),

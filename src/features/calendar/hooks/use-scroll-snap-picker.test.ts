@@ -120,4 +120,117 @@ describe('useScrollSnapPicker', () => {
 
 		expect(result.current.pickerRef.current).toBe(picker);
 	});
+
+	it('commits hour and minute independently when both columns scroll', () => {
+		vi.useFakeTimers();
+
+		const onSelectHour = vi.fn();
+		const onSelectMinute = vi.fn();
+		const { result } = renderHook(() => useScrollSnapPicker(false, '00', '00'));
+
+		const hourEl = document.createElement('div');
+		const minuteEl = document.createElement('div');
+		hourEl.scrollTop = 3 * ITEM_HEIGHT;
+		minuteEl.scrollTop = 2 * ITEM_HEIGHT;
+		hourEl.scrollTo = vi.fn();
+		minuteEl.scrollTo = vi.fn();
+
+		act(() => {
+			result.current.handleScroll(
+				{ currentTarget: hourEl } as React.UIEvent<HTMLDivElement>,
+				PICKER_HOURS,
+				onSelectHour,
+			);
+			result.current.handleScroll(
+				{ currentTarget: minuteEl } as React.UIEvent<HTMLDivElement>,
+				PICKER_MINUTES,
+				onSelectMinute,
+			);
+		});
+
+		act(() => {
+			vi.advanceTimersByTime(100);
+		});
+
+		expect(onSelectHour).toHaveBeenCalled();
+		expect(onSelectMinute).toHaveBeenCalled();
+	});
+
+	it('does not reset hour scroll while that column is still scrolling', () => {
+		vi.useFakeTimers();
+
+		const { result, rerender } = renderHook(({ open, h, m }) => useScrollSnapPicker(open, h, m), {
+			initialProps: { open: true, h: '01', m: '05' },
+		});
+
+		const hourEl = document.createElement('div');
+		const minuteEl = document.createElement('div');
+		result.current.hourRef.current = hourEl;
+		result.current.minuteRef.current = minuteEl;
+
+		const userHourScroll = 5 * ITEM_HEIGHT;
+		hourEl.scrollTop = userHourScroll;
+
+		act(() => {
+			result.current.handleScroll(
+				{ currentTarget: hourEl } as React.UIEvent<HTMLDivElement>,
+				PICKER_HOURS,
+				vi.fn(),
+			);
+		});
+
+		rerender({ open: true, h: '01', m: '10' });
+
+		expect(hourEl.scrollTop).toBe(userHourScroll);
+	});
+
+	it('composeTime keeps the latest hour and minute together', () => {
+		const { result } = renderHook(() => useScrollSnapPicker(false, '10', '00'));
+
+		let time = '';
+		act(() => {
+			time = result.current.composeTime({ hour: '15' });
+		});
+		expect(time).toBe('15:00');
+
+		act(() => {
+			time = result.current.composeTime({ minute: '30' });
+		});
+		expect(time).toBe('15:30');
+	});
+
+	it('flushPendingScroll commits both columns', () => {
+		vi.useFakeTimers();
+
+		const onSelectHour = vi.fn();
+		const onSelectMinute = vi.fn();
+		const { result } = renderHook(() => useScrollSnapPicker(false, '00', '00'));
+
+		const hourEl = document.createElement('div');
+		const minuteEl = document.createElement('div');
+		hourEl.scrollTop = ITEM_HEIGHT;
+		minuteEl.scrollTop = ITEM_HEIGHT;
+		hourEl.scrollTo = vi.fn();
+		minuteEl.scrollTo = vi.fn();
+
+		act(() => {
+			result.current.handleScroll(
+				{ currentTarget: hourEl } as React.UIEvent<HTMLDivElement>,
+				PICKER_HOURS,
+				onSelectHour,
+			);
+			result.current.handleScroll(
+				{ currentTarget: minuteEl } as React.UIEvent<HTMLDivElement>,
+				PICKER_MINUTES,
+				onSelectMinute,
+			);
+		});
+
+		act(() => {
+			result.current.flushPendingScroll();
+		});
+
+		expect(onSelectHour).toHaveBeenCalled();
+		expect(onSelectMinute).toHaveBeenCalled();
+	});
 });
