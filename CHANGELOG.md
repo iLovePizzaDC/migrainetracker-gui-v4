@@ -2,49 +2,43 @@
 
 ## [1.8.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.8.1...v1.8.2) (2026-08-12)
 
-
 ### Bug Fixes
 
-* critical bugs ([#163](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/163)) ([240eed2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/240eed25afa2d3532366d057b7ca5264e88d2bfc))
-* critical bugs ([#164](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/164)) ([13420b6](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/13420b6a670708ab6416e310905bbf9f9c39af54))
+- critical bugs ([#163](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/163)) ([240eed2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/240eed25afa2d3532366d057b7ca5264e88d2bfc))
+- critical bugs ([#164](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/164)) ([13420b6](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/13420b6a670708ab6416e310905bbf9f9c39af54))
 
 ## [1.8.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.8.0...v1.8.1) (2026-08-09)
 
-
 ### Bug Fixes
 
-* cards refreshing after remove ([#160](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/160)) ([6f6a142](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/6f6a1424436d4ab2463c6a4ea267ca053bf5d4f3))
-* cards refreshing after remove ([#160](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/160)) ([c01744e](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/c01744e0e18db095f864979803c72fad60c3d665))
+- cards refreshing after remove ([#160](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/160)) ([6f6a142](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/6f6a1424436d4ab2463c6a4ea267ca053bf5d4f3))
+- cards refreshing after remove ([#160](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/160)) ([c01744e](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/c01744e0e18db095f864979803c72fad60c3d665))
 
 ## [1.8.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.8...v1.8.0) (2026-08-07)
 
-
 ### Features
 
-* minimize standard filterform ([#157](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/157)) ([1f4e720](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/1f4e720086ebf5ef1ffb2ec227b10f8e84526380))
-* minimize standard filterform ([#157](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/157)) ([d73111c](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/d73111cbc64b704355922774584675228bb5f16f))
+- minimize standard filterform ([#157](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/157)) ([1f4e720](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/1f4e720086ebf5ef1ffb2ec227b10f8e84526380))
+- minimize standard filterform ([#157](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/157)) ([d73111c](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/d73111cbc64b704355922774584675228bb5f16f))
 
 ## [1.7.8](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.7...v1.7.8) (2026-08-05)
 
-
 ### Bug Fixes
 
-* prophylaxis recurrence calculation ([a86dd95](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/a86dd952454fc78d7e3e8edf37593dcc99efb8be))
-* prophylaxis recurrence calculation ([85dcd59](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/85dcd59b50559aecf592d11bae13996099c4bf70))
+- prophylaxis recurrence calculation ([a86dd95](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/a86dd952454fc78d7e3e8edf37593dcc99efb8be))
+- prophylaxis recurrence calculation ([85dcd59](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/85dcd59b50559aecf592d11bae13996099c4bf70))
 
 ## [1.7.7](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.6...v1.7.7) (2026-08-04)
 
-
 ### Bug Fixes
 
-* fast month switch disables skeleton in calendar ([#149](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/149)) ([46980e3](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/46980e34139bbf324d8aea222130359b7d5a7afa))
+- fast month switch disables skeleton in calendar ([#149](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/149)) ([46980e3](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/46980e34139bbf324d8aea222130359b7d5a7afa))
 
 ## [1.7.6](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.5...v1.7.6) (2026-08-04)
 
-
 ### Bug Fixes
 
-* does not highlight today for other months in calendar ([#145](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/145)) ([b5b9e35](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/b5b9e3537457da95a3bc58146b2ff84359bddf85))
+- does not highlight today for other months in calendar ([#145](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/145)) ([b5b9e35](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/b5b9e3537457da95a3bc58146b2ff84359bddf85))
 
 ## [1.7.5](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.7.4...v1.7.5) (2026-07-28)
 
