@@ -34,6 +34,7 @@ function TimePicker({
 		pickerRef,
 		hourRef,
 		minuteRef,
+		composeTime,
 		scrollToIndex,
 		handleScroll,
 		flushPendingScroll,
@@ -82,7 +83,7 @@ function TimePicker({
 						className='h-[160px] w-1/2 overflow-y-scroll scrollbar-none'
 						style={{ paddingTop: SECTION_PADDING, paddingBottom: SECTION_PADDING }}
 						onScroll={(e) =>
-							handleScroll(e, PICKER_HOURS, (h) => onChange(`${h}:${selectedMinute}`))
+							handleScroll(e, PICKER_HOURS, (hour) => onChange(composeTime({ hour })))
 						}
 					>
 						{PICKER_HOURS.map((hour, index) => (
@@ -90,7 +91,7 @@ function TimePicker({
 								key={hour}
 								onClick={() => {
 									scrollToIndex(hourRef, index);
-									onChange(`${hour}:${selectedMinute}`);
+									onChange(composeTime({ hour }));
 								}}
 								className={`h-8 flex items-center justify-center cursor-pointer ${
 									hour === selectedHour ? 'text-white font-medium' : 'text-white/40'
@@ -106,7 +107,7 @@ function TimePicker({
 						className='h-[160px] w-1/2 overflow-y-scroll scrollbar-none'
 						style={{ paddingTop: SECTION_PADDING, paddingBottom: SECTION_PADDING }}
 						onScroll={(e) =>
-							handleScroll(e, PICKER_MINUTES, (m) => onChange(`${selectedHour}:${m}`))
+							handleScroll(e, PICKER_MINUTES, (minute) => onChange(composeTime({ minute })))
 						}
 					>
 						{PICKER_MINUTES.map((minute, index) => (
@@ -114,7 +115,7 @@ function TimePicker({
 								key={minute}
 								onClick={() => {
 									scrollToIndex(minuteRef, index);
-									onChange(`${selectedHour}:${minute}`);
+									onChange(composeTime({ minute }));
 								}}
 								className={`h-8 flex items-center justify-center cursor-pointer ${
 									minute === selectedMinute ? 'text-white font-medium' : 'text-white/40'

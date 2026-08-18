@@ -4,30 +4,61 @@ import {
 	PICKER_MINUTES,
 } from '@/features/calendar/constants/time-picker';
 import { clamp } from '@/features/calendar/utils/scroll-snap-helper';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+
+type PendingScroll = {
+	timeoutId: number | null;
+	flush: (() => void) | null;
+};
 
 export function useScrollSnapPicker(open: boolean, selectedHour: string, selectedMinute: string) {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const pickerRef = useRef<HTMLDivElement>(null);
 	const hourRef = useRef<HTMLDivElement>(null);
 	const minuteRef = useRef<HTMLDivElement>(null);
-	const scrollTimeout = useRef<number | null>(null);
-	const pendingFlush = useRef<(() => void) | null>(null);
+	const pendingByColumn = useRef(new Map<HTMLElement, PendingScroll>());
+	const hourValueRef = useRef(selectedHour);
+	const minuteValueRef = useRef(selectedMinute);
+
+	useEffect(() => {
+		hourValueRef.current = selectedHour;
+		minuteValueRef.current = selectedMinute;
+	}, [selectedHour, selectedMinute]);
 
 	useEffect(() => {
 		if (!open) return;
 
 		const hIndex = PICKER_HOURS.indexOf(selectedHour);
 		const mIndex = PICKER_MINUTES.indexOf(selectedMinute);
+		const pending = pendingByColumn.current;
 
-		if (hourRef.current) {
+		if (hourRef.current && pending.get(hourRef.current)?.timeoutId == null) {
 			hourRef.current.scrollTop = hIndex * ITEM_HEIGHT;
 		}
 
-		if (minuteRef.current) {
+		if (minuteRef.current && pending.get(minuteRef.current)?.timeoutId == null) {
 			minuteRef.current.scrollTop = mIndex * ITEM_HEIGHT;
 		}
 	}, [open, selectedHour, selectedMinute]);
+
+	useEffect(() => {
+		const pending = pendingByColumn.current;
+
+		return () => {
+			for (const state of pending.values()) {
+				if (state.timeoutId != null) {
+					clearTimeout(state.timeoutId);
+				}
+			}
+			pending.clear();
+		};
+	}, []);
+
+	const composeTime = useCallback((patch: { hour?: string; minute?: string }) => {
+		if (patch.hour !== undefined) hourValueRef.current = patch.hour;
+		if (patch.minute !== undefined) minuteValueRef.current = patch.minute;
+		return `${hourValueRef.current}:${minuteValueRef.current}`;
+	}, []);
 
 	const scrollToIndex = (ref: React.RefObject<HTMLDivElement | null>, index: number) => {
 		ref.current?.scrollTo({
@@ -54,28 +85,36 @@ export function useScrollSnapPicker(open: boolean, selectedHour: string, selecte
 	) => {
 		inputRef.current?.blur();
 
-		if (scrollTimeout.current) {
-			clearTimeout(scrollTimeout.current);
+		const el = e.currentTarget;
+		const pending = pendingByColumn.current;
+		const state = pending.get(el) ?? { timeoutId: null, flush: null };
+
+		if (state.timeoutId != null) {
+			clearTimeout(state.timeoutId);
 		}
 
-		const el = e.currentTarget;
-
-		pendingFlush.current = () => handleScrollEnd(el, values, onSelect);
-
-		scrollTimeout.current = window.setTimeout(() => {
-			pendingFlush.current = null;
-			handleScrollEnd(el, values, onSelect);
+		state.flush = () => handleScrollEnd(el, values, onSelect);
+		state.timeoutId = window.setTimeout(() => {
+			state.timeoutId = null;
+			const flush = state.flush;
+			state.flush = null;
+			flush?.();
 		}, 80);
+
+		pending.set(el, state);
 	};
 
 	const flushPendingScroll = () => {
-		if (scrollTimeout.current) {
-			clearTimeout(scrollTimeout.current);
-			scrollTimeout.current = null;
-		}
-		if (pendingFlush.current) {
-			pendingFlush.current();
-			pendingFlush.current = null;
+		for (const state of pendingByColumn.current.values()) {
+			if (state.timeoutId != null) {
+				clearTimeout(state.timeoutId);
+				state.timeoutId = null;
+			}
+			if (state.flush) {
+				const flush = state.flush;
+				state.flush = null;
+				flush();
+			}
 		}
 	};
 
@@ -84,6 +123,7 @@ export function useScrollSnapPicker(open: boolean, selectedHour: string, selecte
 		pickerRef,
 		hourRef,
 		minuteRef,
+		composeTime,
 		scrollToIndex,
 		handleScroll,
 		flushPendingScroll,
