@@ -3,13 +3,9 @@ import {
 	PICKER_HOURS,
 	PICKER_MINUTES,
 } from '@/features/calendar/constants/time-picker';
+import type { PendingScroll } from '@/features/calendar/types/time-picker';
 import { clamp } from '@/features/calendar/utils/scroll-snap-helper';
 import { useCallback, useEffect, useRef } from 'react';
-
-type PendingScroll = {
-	timeoutId: number | null;
-	flush: (() => void) | null;
-};
 
 export function useScrollSnapPicker(open: boolean, selectedHour: string, selectedMinute: string) {
 	const inputRef = useRef<HTMLInputElement>(null);
