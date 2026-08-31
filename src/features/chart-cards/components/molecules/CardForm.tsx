@@ -71,7 +71,7 @@ function CardForm({
 
 	return (
 		<form
-			className='space-y-5'
+			className='space-y-5 text-left'
 			onSubmit={(e) => {
 				e.preventDefault();
 				onSubmit();

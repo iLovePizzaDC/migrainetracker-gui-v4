@@ -63,10 +63,10 @@ function ChartCard({
 
 	return (
 		<CardShell>
-			<div className='relative mb-4 flex w-full items-center'>
-				<div className='w-7 opacity-0 pointer-events-none' />
+			<div className='relative mb-4 grid min-w-0 grid-cols-[2.25rem_minmax(0,1fr)_2.25rem] items-center gap-1'>
+				<div aria-hidden='true' />
 
-				<h2 className='flex-1 text-center text-sm font-medium tracking-wide text-white/80'>
+				<h2 className='truncate text-center text-sm font-medium tracking-wide text-white/80'>
 					{title}
 				</h2>
 
@@ -74,7 +74,7 @@ function ChartCard({
 					ref={contextButtonRef}
 					data-testid='context-button'
 					onClick={toggleContext}
-					className='icon-btn'
+					className='icon-btn justify-self-end'
 					aria-label='Card options'
 				>
 					<EllipsisVerticalIcon />
@@ -93,12 +93,12 @@ function ChartCard({
 			<div
 				data-testid='chart-card-reveal'
 				className={`
-          grid overflow-hidden motion-reveal
+          grid min-w-0 overflow-hidden motion-reveal
           ${isEditing ? 'grid-rows-[0fr_1fr]' : 'grid-rows-[1fr_0fr]'}
 	      `}
 			>
-				<div className='overflow-hidden'>
-					<div className='flex h-72 w-full items-center justify-center'>
+				<div className='min-w-0 overflow-hidden'>
+					<div className='chart-area'>
 						{/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
 						{/* TODO add average line to areachart? */}
 						{isLoading ? (
