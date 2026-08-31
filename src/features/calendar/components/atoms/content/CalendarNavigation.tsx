@@ -5,25 +5,17 @@ function CalendarNavigation() {
 	const { month, year, prevMonth, nextMonth } = useCalendar();
 
 	return (
-		<div data-testid='calendar-navigation' className='flex items-center justify-between mb-4'>
-			<button
-				onClick={prevMonth}
-				aria-label='Previous month'
-				className='p-2 rounded-xl hover:opacity-80 transition-opacity'
-			>
-				<ChevronLeftIcon className='h-6 w-6' />
+		<div data-testid='calendar-navigation' className='mb-4 flex items-center justify-between'>
+			<button onClick={prevMonth} aria-label='Previous month' className='icon-btn'>
+				<ChevronLeftIcon />
 			</button>
 
-			<h2 className='text-lg font-semibold capitalize'>
+			<h2 className='text-sm font-medium capitalize tracking-wide text-white/90'>
 				{month} {year}
 			</h2>
 
-			<button
-				onClick={nextMonth}
-				aria-label='Next month'
-				className='p-2 rounded-xl hover:bopacity-80 transition-opacity'
-			>
-				<ChevronRightIcon className='h-6 w-6' />
+			<button onClick={nextMonth} aria-label='Next month' className='icon-btn'>
+				<ChevronRightIcon />
 			</button>
 		</div>
 	);

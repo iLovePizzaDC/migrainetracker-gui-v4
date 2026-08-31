@@ -73,13 +73,13 @@ describe('<MigrainePanelHeader />', () => {
 		expect(screen.queryByTestId('edit-button')).not.toBeInTheDocument();
 	});
 
-	it('renders edit button when prefilled is set', () => {
+	it('renders edit button when prefilled is set and inputs are disabled', () => {
 		render(
 			<MigrainePanelHeader
 				date={mockDate}
 				onClose={mockOnClose}
 				prefilled={{} as any}
-				areInputsDisabled={false}
+				areInputsDisabled
 				setAreInputsDisabled={mockSetAreInputsDisabled}
 				isLoading={false}
 			/>,
@@ -94,13 +94,33 @@ describe('<MigrainePanelHeader />', () => {
 				date={mockDate}
 				onClose={mockOnClose}
 				prefilled={{} as any}
-				areInputsDisabled={false}
+				areInputsDisabled
 				setAreInputsDisabled={mockSetAreInputsDisabled}
 				isLoading={false}
 			/>,
 		);
 
 		await user.click(screen.getByTestId('edit-button'));
+
+		expect(mockSetAreInputsDisabled).toHaveBeenCalledWith(false);
+	});
+
+	it('shows cancel button while editing and returns to view mode', async () => {
+		render(
+			<MigrainePanelHeader
+				date={mockDate}
+				onClose={mockOnClose}
+				prefilled={{} as any}
+				areInputsDisabled={false}
+				setAreInputsDisabled={mockSetAreInputsDisabled}
+				isLoading={false}
+			/>,
+		);
+
+		expect(screen.queryByTestId('edit-button')).not.toBeInTheDocument();
+		expect(screen.getByTestId('cancel-edit-button')).toHaveTextContent('Cancel');
+
+		await user.click(screen.getByTestId('cancel-edit-button'));
 
 		expect(mockSetAreInputsDisabled).toHaveBeenCalledWith(true);
 	});
@@ -111,7 +131,7 @@ describe('<MigrainePanelHeader />', () => {
 				date={mockDate}
 				onClose={mockOnClose}
 				prefilled={{} as any}
-				areInputsDisabled={false}
+				areInputsDisabled
 				setAreInputsDisabled={mockSetAreInputsDisabled}
 				isLoading
 			/>,

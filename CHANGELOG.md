@@ -2,11 +2,10 @@
 
 ## [1.8.3](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.8.2...v1.8.3) (2026-08-18)
 
-
 ### Bug Fixes
 
-* timepicker resets on both scroll ([#171](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/171)) ([f06e45f](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/f06e45f602124880c05ac3e6420a069dc3717078))
-* timepicker resets on both scroll ([#171](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/171)) ([c47a5d8](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/c47a5d8e5ea8b3348a374b0259490415bc2b4b94))
+- timepicker resets on both scroll ([#171](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/171)) ([f06e45f](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/f06e45f602124880c05ac3e6420a069dc3717078))
+- timepicker resets on both scroll ([#171](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/171)) ([c47a5d8](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/c47a5d8e5ea8b3348a374b0259490415bc2b4b94))
 
 ## [1.8.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.8.1...v1.8.2) (2026-08-12)
 

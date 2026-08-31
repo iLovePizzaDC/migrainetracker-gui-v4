@@ -11,10 +11,13 @@ interface ISlider {
 
 function Slider({ id, label, min, max, step = 1, value, onChange, disabled = false }: ISlider) {
 	return (
-		<div className='space-y-1'>
-			<label htmlFor={id} className='block text-sm font-medium'>
-				{label}: {value}
-			</label>
+		<div className='space-y-2'>
+			<div className='flex items-center justify-between'>
+				<label htmlFor={id} className='field-label !mb-0'>
+					{label}
+				</label>
+				<span className='text-xs font-medium tabular-nums text-white/50'>{value}</span>
+			</div>
 			<input
 				type='range'
 				id={id}
@@ -23,7 +26,6 @@ function Slider({ id, label, min, max, step = 1, value, onChange, disabled = fal
 				step={step}
 				value={value}
 				onChange={(e) => onChange(Number(e.target.value))}
-				className='w-full'
 				disabled={disabled}
 			/>
 		</div>

@@ -9,9 +9,8 @@ function MenuItem({ label, onClick, className }: IMenuItem) {
 		<button
 			onClick={onClick}
 			className={`
-                w-full text-left px-3 py-2 rounded-lg
-                text-sm transition
-                hover:bg-white/10
+                w-full rounded-lg px-3 py-2 text-left text-sm transition-colors
+                hover:bg-white/[0.06]
 				${className}
             `}
 		>

@@ -23,8 +23,8 @@ function SelectInput({
 	disabled = false,
 }: ISelectInput) {
 	return (
-		<div data-testid='select-input' className='space-y-1'>
-			{label && <label className='block text-sm font-medium mb-1'>{label}</label>}
+		<div data-testid='select-input' className='space-y-0.5'>
+			{label && <label className='field-label'>{label}</label>}
 
 			{options.map((option) => {
 				const inputId = `${id}-${option.value}`;
@@ -35,7 +35,13 @@ function SelectInput({
 						: Array.isArray(value) && value.includes(option.value);
 
 				return (
-					<div key={option.value} className='flex items-center gap-3 cursor-pointer'>
+					<label
+						key={option.value}
+						htmlFor={inputId}
+						className={`flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 transition-colors ${
+							isChecked ? 'bg-white/[0.06]' : 'hover:bg-white/[0.04]'
+						} ${disabled ? 'cursor-default opacity-60' : ''}`}
+					>
 						<input
 							id={inputId}
 							type={type}
@@ -43,13 +49,10 @@ function SelectInput({
 							checked={isChecked}
 							onChange={onChange}
 							required={required}
-							className='h-4 w-4 shrink-0'
 							disabled={disabled}
 						/>
-						<label htmlFor={inputId} className='text-sm w-full text-left py-2 cursor-pointer'>
-							{option.label}
-						</label>
-					</div>
+						<span className='w-full text-left text-sm text-white/80'>{option.label}</span>
+					</label>
 				);
 			})}
 		</div>

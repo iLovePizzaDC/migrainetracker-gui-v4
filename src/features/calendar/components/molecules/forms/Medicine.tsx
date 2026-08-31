@@ -1,7 +1,7 @@
 import MedicineCombobox from '@/features/calendar/components/molecules/MedicineCombobox';
 import { useCalendar } from '@/features/calendar/hooks/use-calendar';
 import type { AppendMedicine } from '@/shared/types/calendar';
-import { InformationCircleIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
+import { InformationCircleIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import Slider from '@/features/calendar/components/atoms/inputs/Slider';
 import AddMedicineForm from '@/features/calendar/components/molecules/forms/AddMedicineForm';
@@ -19,70 +19,69 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 	const [showMedicineForm, setShowMedicineForm] = useState(false);
 
 	return (
-		<div className='self-start p-4 rounded-xl bg-white/5 border border-white/10 space-y-3'>
-			<div className='flex w-full items-center justify-between'>
-				<div className='w-5'></div>
-				<h3 className='text-sm font-medium text-purple-300 text-center flex-1'>Medicines</h3>
+		<div className='form-section'>
+			<div className='flex items-center justify-between'>
+				<h3 className='section-title'>Medicines</h3>
 				<button
 					data-testid='add-medicine'
 					onClick={() => setShowMedicineForm((prev) => !prev)}
-					className='hover:opacity-80 transition-opacity w-4'
+					className={`icon-btn !h-8 !w-8 ${disabled ? 'invisible' : ''}`}
+					aria-label={showMedicineForm ? 'Close add medicine' : 'Add medicine'}
+					aria-expanded={showMedicineForm}
+					disabled={disabled}
+					tabIndex={disabled ? -1 : undefined}
 				>
-					<PlusCircleIcon
-						className={`w-5 h-5 transition-transform duration-300 ${
-							showMedicineForm ? 'rotate-45' : ''
-						}`}
-					/>
+					<PlusIcon className={`!h-4 !w-4 icon-spin ${showMedicineForm ? 'icon-spin-open' : ''}`} />
 				</button>
 			</div>
 
-			<div className='relative inline-flex w-fit items-center p-1 rounded-xl bg-black/10 gap-1 group'>
-				<Tooltip
-					content={
-						<div className='max-w-xs text-xs leading-relaxed'>
-							<p>
-								A “Med-Day” is any day on which you've taken acute medication (either medication of
-								type "migraine-painkiller" or "painkiller"). When this occurs on 10 or more days per
-								month (with mixed use), the risk of developing&nbsp;
-								<a
-									className='underline text-blue-500 hover:opacity-80 transition-opacity'
-									href='https://www.ncbi.nlm.nih.gov/books/NBK538150/'
-									target='_blank'
-								>
-									MOH
-								</a>
-								&nbsp; (Medication Overuse Headache) increases.
-							</p>
-						</div>
-					}
-				>
-					<div className='flex items-center gap-1'>
-						<p className='text-xs font-medium'>
-							<span
-								data-testid='med-days-count'
-								className={`${
-									medDaysCount === maxMedDaysCount
-										? 'text-yellow-500'
-										: medDaysCount > maxMedDaysCount
-											? 'text-red-500'
-											: 'text-green-500'
-								}`}
+			<Tooltip
+				content={
+					<div className='max-w-xs text-xs leading-relaxed'>
+						<p>
+							A “Med-Day” is any day on which you've taken acute medication (either medication of
+							type "migraine-painkiller" or "painkiller"). When this occurs on 10 or more days per
+							month (with mixed use), the risk of developing&nbsp;
+							<a
+								className='text-sky-300 underline transition-opacity hover:opacity-80'
+								href='https://www.ncbi.nlm.nih.gov/books/NBK538150/'
+								target='_blank'
 							>
-								{medDaysCount}
-							</span>
-							/{maxMedDaysCount} Med-Days this month
+								MOH
+							</a>
+							&nbsp; (Medication Overuse Headache) increases.
 						</p>
-
-						<InformationCircleIcon className='w-4 h-4' data-testid='info-toggle' />
 					</div>
-				</Tooltip>
-			</div>
+				}
+			>
+				<div className='inline-flex w-fit items-center gap-1.5 rounded-lg bg-white/[0.04] px-2 py-1'>
+					<p className='text-xs text-white/55'>
+						<span
+							data-testid='med-days-count'
+							className={`font-medium ${
+								medDaysCount === maxMedDaysCount
+									? 'text-yellow-400/90'
+									: medDaysCount > maxMedDaysCount
+										? 'text-red-400/90'
+										: 'text-emerald-400/90'
+							}`}
+						>
+							{medDaysCount}
+						</span>
+						/{maxMedDaysCount} Med-Days this month
+					</p>
+					<InformationCircleIcon className='h-3.5 w-3.5 text-white/40' data-testid='info-toggle' />
+				</div>
+			</Tooltip>
 
 			<MedicineCombobox medicines={medicines} onChange={onChange} disabled={disabled} />
 
 			{medicines.map((medicine, index) => (
-				<div key={index} className='p-3 rounded-lg bg-transparent border border-white/25 space-y-3'>
-					<p className='text-sm font-medium'>{medicine.medicine.label}</p>
+				<div
+					key={index}
+					className='space-y-3 rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/[0.06]'
+				>
+					<p className='text-sm font-medium text-white/85'>{medicine.medicine.label}</p>
 
 					<Slider
 						id={`taken-${index}`}

@@ -17,7 +17,7 @@ function CalendarContent({ openDate, onDayClick }: ICalendarContent) {
 							<div
 								key={index}
 								data-testid='day-skeleton'
-								className='h-14 flex flex-col items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm animate-pulse'
+								className='flex h-14 animate-pulse flex-col items-center justify-center rounded-lg bg-white/5'
 							>
 								<div className='w-4 h-4 rounded-full bg-white/20 mt-1' />
 							</div>

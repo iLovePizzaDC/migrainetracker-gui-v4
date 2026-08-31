@@ -49,11 +49,9 @@ function ContextMenu({
 			data-testid='context-menu'
 			ref={menuRef}
 			className='
-                absolute top-10 right-0 z-50
-                w-40 rounded-xl p-2
-                bg-white/5 backdrop-blur-xl
-                border border-white/20 shadow-xl shadow-black/30
-                animate-in fade-in zoom-in duration-150
+                glass-panel absolute top-10 right-0 z-50
+                w-40 p-1.5
+                animate-fade-up
                 sm:w-48
             '
 		>

@@ -52,9 +52,9 @@ describe('<Medicine />', () => {
 	});
 
 	const scenarios = [
-		{ days: 5, max: 10, color: 'text-green-500' },
-		{ days: 10, max: 10, color: 'text-yellow-500' },
-		{ days: 15, max: 10, color: 'text-red-500' },
+		{ days: 5, max: 10, color: 'text-emerald-400/90' },
+		{ days: 10, max: 10, color: 'text-yellow-400/90' },
+		{ days: 15, max: 10, color: 'text-red-400/90' },
 	];
 
 	it.each(scenarios)(

@@ -9,17 +9,16 @@ function Footer() {
 	};
 
 	return (
-		<footer className='left-0 w-full rounded-lg backdrop-blur-lg bg-transparent shadow-md mt-4'>
-			<div className='w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between'>
-				<span className='text-sm text-gray-300 sm:text-center'>MigraineTracker – Luna</span>
+		<footer className='mt-auto w-full border-t border-white/[0.06] bg-black/20 backdrop-blur-xl'>
+			<div className='mx-auto flex w-full max-w-screen-xl flex-col items-center justify-between gap-2 px-4 py-3 sm:flex-row sm:px-6'>
+				<span className='text-xs text-white/35'>MigraineTracker – Luna</span>
 				{user && (
-					<ul className='flex flex-wrap items-center mt-3 text-sm font-medium text-gray-300 sm:mt-0'>
-						<li>
-							<button onClick={logout} className='hover:opacity-80 transition-opacity'>
-								Logout
-							</button>
-						</li>
-					</ul>
+					<button
+						onClick={logout}
+						className='text-xs text-white/40 transition-colors hover:text-white/70'
+					>
+						Logout
+					</button>
 				)}
 			</div>
 		</footer>

@@ -12,8 +12,8 @@ interface IInput {
 
 function Input({ id, label, type, value, onChange, placeholder, required = false }: IInput) {
 	return (
-		<div>
-			<label htmlFor={id} className='block text-sm font-medium mb-1'>
+		<div className='input-field'>
+			<label htmlFor={id} className='field-label'>
 				{label}
 			</label>
 			<input
@@ -21,7 +21,7 @@ function Input({ id, label, type, value, onChange, placeholder, required = false
 				type={type}
 				value={value}
 				onChange={onChange}
-				className='w-full p-2 rounded-lg bg-transparent backdrop-blur-sm border border-white/25'
+				className='glass-input'
 				placeholder={placeholder}
 				required={required}
 			/>

@@ -18,7 +18,7 @@ describe('<Dot />', () => {
 	it('adds a ring when ring is true', () => {
 		render(<Dot testId='dot' ring />);
 
-		expect(screen.getByTestId('dot')).toHaveClass('ring-1', 'ring-red-500');
+		expect(screen.getByTestId('dot')).toHaveClass('ring-1', 'ring-red-400/70');
 	});
 
 	it('omits the ring by default', () => {

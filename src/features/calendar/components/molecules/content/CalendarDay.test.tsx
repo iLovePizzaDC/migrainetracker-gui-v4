@@ -63,7 +63,7 @@ describe('<CalendarDay />', () => {
 
 			render(<CalendarDay day={2} index={0} openDate={null} onDayClick={mockOnDayClick} />);
 
-			expect(screen.getByText('2')).not.toHaveClass('bg-white/5');
+			expect(screen.getByText('2')).not.toHaveClass('bg-white/[0.06]');
 		});
 
 		it('does not set background for today if month is not matching', () => {
@@ -71,7 +71,7 @@ describe('<CalendarDay />', () => {
 
 			render(<CalendarDay day={2} index={0} openDate={null} onDayClick={mockOnDayClick} />);
 
-			expect(screen.getByText('2')).toHaveClass('bg-white/5');
+			expect(screen.getByText('2')).toHaveClass('bg-white/[0.06]');
 		});
 
 		it('does not highlight today when viewing a month that only matches openDate, not the real current month', () => {
@@ -86,7 +86,7 @@ describe('<CalendarDay />', () => {
 				/>,
 			);
 
-			expect(screen.getByText('2')).not.toHaveClass('bg-white/5');
+			expect(screen.getByText('2')).not.toHaveClass('bg-white/[0.06]');
 			expect(screen.getByText('2')).not.toHaveClass('bg-white/10');
 		});
 
@@ -110,7 +110,7 @@ describe('<CalendarDay />', () => {
 
 			render(<CalendarDay day={3} index={0} openDate={mockOpenDate} onDayClick={mockOnDayClick} />);
 
-			expect(screen.getByText('3')).toHaveClass('border', 'border-white/30');
+			expect(screen.getByText('3')).toHaveClass('border', 'border-white/20');
 		});
 	});
 
@@ -141,7 +141,7 @@ describe('<CalendarDay />', () => {
 
 			render(<CalendarDay day={3} index={0} openDate={null} onDayClick={mockOnDayClick} />);
 
-			expect(screen.getByTestId('color-indicator-3')).toHaveClass('ring-1', 'ring-red-500');
+			expect(screen.getByTestId('color-indicator-3')).toHaveClass('ring-1', 'ring-red-400/70');
 		});
 
 		it('shows a prophylaxis dot when a prophylaxis event exists for the day', () => {

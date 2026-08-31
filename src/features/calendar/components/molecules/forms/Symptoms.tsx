@@ -10,12 +10,8 @@ interface ISymptoms {
 
 function Symptoms({ symptoms, onChange, disabled = false }: ISymptoms) {
 	return (
-		<div
-			data-testid='symptoms'
-			className='self-start p-4 rounded-xl bg-white/5 border border-white/10'
-		>
-			<h3 className='text-sm font-medium text-purple-300 mb-2'>Symptoms</h3>
-
+		<div data-testid='symptoms' className='form-section'>
+			<h3 className='section-title'>Symptoms</h3>
 			<SelectInput
 				id='symptoms'
 				type={SELECT_TYPES.CHECKBOX}

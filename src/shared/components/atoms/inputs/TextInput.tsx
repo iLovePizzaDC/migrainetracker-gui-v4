@@ -20,8 +20,8 @@ function TextInput({
 	required = false,
 }: ITextInput) {
 	return (
-		<div>
-			<label htmlFor={id} className='block text-sm font-medium mb-1'>
+		<div className='input-field'>
+			<label htmlFor={id} className='field-label'>
 				{label}
 			</label>
 			<input
@@ -29,7 +29,7 @@ function TextInput({
 				type={INPUT_TYPES.TEXT}
 				value={value}
 				onChange={onChange}
-				className='w-full p-2 rounded-lg bg-transparent backdrop-blur-sm border border-white/25'
+				className='glass-input'
 				placeholder={placeholder}
 				disabled={disabled}
 				required={required}

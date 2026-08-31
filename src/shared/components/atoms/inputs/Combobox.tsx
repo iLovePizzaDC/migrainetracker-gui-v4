@@ -48,9 +48,9 @@ function Combobox({
 				);
 
 	return (
-		<div ref={ref} className='w-full'>
+		<div ref={ref} className='input-field w-full'>
 			{label && (
-				<label htmlFor={id} className='block text-sm font-medium mb-1'>
+				<label htmlFor={id} className='field-label'>
 					{label}
 				</label>
 			)}
@@ -63,7 +63,7 @@ function Combobox({
 						<button
 							key={option.value}
 							type='button'
-							className={`px-2 py-0.5 bg-purple-700/50 rounded text-xs flex items-center gap-1 ${disabled ? '' : 'hover:opacity-80 transition-opacity'}`}
+							className={`chip ${disabled ? '' : 'motion-fade hover:opacity-80'}`}
 							onClick={() =>
 								onChange(selected.filter((selectedOption) => selectedOption.value !== option.value))
 							}
@@ -110,14 +110,14 @@ function Combobox({
 							ref={inputRef}
 							id={id}
 							required={required}
-							className='w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/20'
+							className='glass-input'
 							onChange={(event) => setQuery(event.target.value)}
 							displayValue={() => query}
 							placeholder={placeholder}
 							disabled={disabled}
 						/>
 
-						<ComboboxOptions className='absolute z-50 mt-1 w-full max-h-48 overflow-auto rounded-lg bg-black/30 backdrop-blur-md border border-white/20 text-white shadow-lg'>
+						<ComboboxOptions className='glass-menu absolute z-50 mt-1 max-h-48 w-full overflow-auto'>
 							{filtered.length === 0 && <div className='px-3 py-2 text-gray-400'>No results</div>}
 
 							{filtered.map((option) => {
@@ -132,7 +132,7 @@ function Combobox({
 										<ComboboxOption
 											as='span'
 											value={option}
-											className='flex-1 hover:opacity-80 transition-opacity'
+											className='flex-1 motion-fade hover:opacity-80'
 										>
 											{option.label}
 										</ComboboxOption>

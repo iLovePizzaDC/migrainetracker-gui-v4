@@ -9,12 +9,8 @@ function CardShell({ children, padded = true, className = '', ...rest }: ICardSh
 	return (
 		<div
 			className={`
-	      w-full self-start rounded-2xl
-	      bg-transparent backdrop-blur-md
-	      border border-white/20
-	      shadow-lg shadow-black/20
-	      transition hover:shadow-xl
-	      ${padded ? 'p-3 relative' : ''}
+	      glass-panel w-full self-start
+	      ${padded ? 'relative p-5 sm:p-6' : ''}
 	      ${className}
       `}
 			{...rest}

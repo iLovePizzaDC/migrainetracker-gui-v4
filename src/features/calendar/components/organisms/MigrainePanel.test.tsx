@@ -115,7 +115,7 @@ describe('<MigrainePanel />', () => {
 
 		render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
 
-		expect(screen.queryByTestId('actions')).not.toBeInTheDocument();
+		expect(screen.getByTestId('actions').parentElement).toHaveClass('invisible');
 	});
 
 	it('passes disabled=true to molecules when areInputsDisabled is true', () => {
@@ -181,13 +181,10 @@ describe('<MigrainePanel />', () => {
 		expect(baseHookReturn.submitNewEntry).toHaveBeenCalledOnce();
 	});
 
-	it('hides when isOpen is false', () => {
+	it('collapses when isOpen is false', () => {
 		render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen={false} />);
 
-		expect(screen.getByTestId('migraine-panel')).toHaveClass(
-			'opacity-0',
-			'translate-y-2',
-			'pointer-events-none',
-		);
+		expect(screen.getByTestId('migraine-panel-reveal')).toHaveClass('grid-rows-[0fr]');
+		expect(screen.getByTestId('migraine-panel')).toBeInTheDocument();
 	});
 });

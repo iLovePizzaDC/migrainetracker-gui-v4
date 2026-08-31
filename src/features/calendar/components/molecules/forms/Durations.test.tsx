@@ -67,7 +67,8 @@ describe('<Durations />', () => {
 	it('is disabled if prop is true', () => {
 		render(<Durations durations={mockDurations} onChange={mockOnChange} disabled />);
 
-		expect(screen.queryByTestId('add-button')).not.toBeInTheDocument();
+		expect(screen.getByTestId('add-button')).toBeDisabled();
+		expect(screen.getByTestId('add-button')).toHaveClass('invisible');
 		expect(screen.getByLabelText('Start')).toBeDisabled();
 		expect(screen.getByLabelText('End')).toBeDisabled();
 	});
