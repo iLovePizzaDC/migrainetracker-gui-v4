@@ -17,12 +17,12 @@ function MidasCard() {
 
 	const getColorIndicator = () => {
 		if (midasScore >= 21)
-			return { color: 'bg-gradient-to-r from-red-500/0 to to-red-500/70', label: 'severe' };
+			return { color: 'text-red-300/90', label: 'severe' };
 		if (midasScore >= 11)
-			return { color: 'bg-gradient-to-r from-orange-500/0 to-orange-500/70', label: 'moderate' };
+			return { color: 'text-orange-300/90', label: 'moderate' };
 		if (midasScore >= 6)
-			return { color: 'bg-gradient-to-r from-yellow-500/0 to-yellow-500/70', label: 'mild' };
-		return { color: 'bg-gradient-to-r from-gray-500/0 to-gray-500/70', label: 'not/little' };
+			return { color: 'text-yellow-200/90', label: 'mild' };
+		return { color: 'text-white/50', label: 'not/little' };
 	};
 
 	useEffect(() => {
@@ -49,23 +49,27 @@ function MidasCard() {
 
 	return (
 		<CardShell>
-			<div className='h-7 mb-2 flex justify-between items-start w-full'>
-				<div className='w-20 opacity-0 pointer-events-none'></div>
-				<h2 className='text-lg font-semibold text-center flex-1 leading-tight'>MIDAS Score</h2>
-				<p className={`w-20 px-1 text-sm font-medium text-right ${color}`}>{label}</p>
+			<div className='mb-4 flex w-full items-start justify-between'>
+				<div className='w-16 opacity-0 pointer-events-none' />
+				<h2 className='flex-1 text-center text-sm font-medium tracking-wide text-white/80'>
+					MIDAS Score
+				</h2>
+				<span className={`w-16 text-right text-[10px] font-semibold uppercase tracking-wider ${color}`}>
+					{label}
+				</span>
 			</div>
-			<div className='h-72 w-full flex items-center justify-center'>
+			<div className='flex h-72 w-full items-center justify-center'>
 				{isLoading ? (
-					<div className='w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse' />
+					<div className='h-full w-full animate-pulse rounded-xl bg-white/5' />
 				) : (
 					<PieChart outerData={pieData.current} innerData={pieData.previous} />
 				)}
 			</div>
-			<div className='text-center h-6'>
+			<div className='mt-1 h-6 text-center'>
 				{isLoading ? (
-					<div className='h-6 w-20 mx-auto bg-white/10 backdrop-blur-sm rounded-md animate-pulse' />
+					<div className='mx-auto h-6 w-20 animate-pulse rounded-md bg-white/5' />
 				) : (
-					<p className='text-lg font-medium'>{midasScore}/270</p>
+					<p className='text-sm font-medium tabular-nums text-white/70'>{midasScore}/270</p>
 				)}
 			</div>
 		</CardShell>

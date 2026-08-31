@@ -38,21 +38,22 @@ function CalendarDay({ day, index, openDate, onDayClick }: ICalendarDay) {
 		'rounded-lg',
 		'transition-colors',
 		'duration-200',
+		'ease-soft',
 	];
 
 	if (day) {
 		if (day === openDate?.getDate() && isViewingOpenDateMonth) {
-			baseClasses.push('bg-white/10', 'cursor-pointer');
+			baseClasses.push('bg-white/10', 'ring-1', 'ring-white/20', 'cursor-pointer');
 		} else if (day === today.getDate() && isViewingCurrentMonth) {
-			baseClasses.push('bg-white/5', 'hover:bg-white/10', 'cursor-pointer');
+			baseClasses.push('bg-white/[0.06]', 'ring-1', 'ring-white/10', 'hover:bg-white/10', 'cursor-pointer');
 		} else {
-			baseClasses.push('hover:bg-white/10', 'cursor-pointer');
+			baseClasses.push('hover:bg-white/[0.08]', 'cursor-pointer');
 		}
 	} else {
 		baseClasses.push('opacity-0');
 	}
 
-	if (filteredEvent) baseClasses.push('border', 'border-white/30');
+	if (filteredEvent) baseClasses.push('border', 'border-white/20');
 
 	return (
 		<div

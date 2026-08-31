@@ -3,6 +3,18 @@ import { FONT_FAMILY } from '@/shared/constants/style/font';
 import type { ChartData } from '@/shared/types/chart';
 import { Cell, Pie, PieChart as RePieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
+const CHART_TOOLTIP_STYLE = {
+	background: 'rgba(10, 10, 10, 0.85)',
+	backdropFilter: 'blur(12px)',
+	border: '1px solid rgba(255, 255, 255, 0.12)',
+	borderRadius: '12px',
+	color: 'rgba(255, 255, 255, 0.9)',
+	boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
+	fontFamily: FONT_FAMILY,
+	fontSize: 13,
+	padding: '8px 12px',
+};
+
 interface IPieChart {
 	outerData: ChartData;
 	innerData?: ChartData;
@@ -13,46 +25,37 @@ function PieChart({ outerData, innerData }: IPieChart) {
 		<ResponsiveContainer width='100%' height='100%'>
 			<RePieChart>
 				<Tooltip
-					contentStyle={{
-						background: 'rgba(255, 255, 255, 0.3)',
-						backdropFilter: 'blur(10px)',
-						border: '1px solid rgba(255, 255, 255, 0.25)',
-						borderRadius: '12px',
-						color: '#000',
-						boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
-						fontFamily: FONT_FAMILY,
-						fontSize: 14,
-					}}
-					itemStyle={{ color: '#000' }}
-					labelStyle={{ color: '#000' }}
+					contentStyle={CHART_TOOLTIP_STYLE}
+					itemStyle={{ color: 'rgba(255,255,255,0.85)' }}
+					labelStyle={{ color: 'rgba(255,255,255,0.5)' }}
 				/>
-				<div style={{ width: '100%', height: 200 }}>
+				<Pie
+					data={outerData}
+					dataKey='value'
+					innerRadius='62%'
+					outerRadius='78%'
+					paddingAngle={1}
+					stroke='transparent'
+				>
+					{outerData.map((_, index) => (
+						<Cell key={index} fill={PIE_COLORS[index]} />
+					))}
+				</Pie>
+				{innerData && (
 					<Pie
-						data={outerData}
+						data={innerData}
 						dataKey='value'
-						innerRadius='60%'
-						outerRadius='80%'
-						paddingAngle={2}
+						innerRadius='42%'
+						outerRadius='54%'
+						paddingAngle={1}
+						stroke='transparent'
+						isAnimationActive
 					>
-						{outerData.map((_, index) => (
+						{innerData.map((_, index) => (
 							<Cell key={index} fill={PIE_COLORS[index]} />
 						))}
 					</Pie>
-					{innerData && (
-						<Pie
-							data={innerData}
-							dataKey='value'
-							innerRadius='40%'
-							outerRadius='55%'
-							paddingAngle={2}
-							isAnimationActive
-						>
-							{innerData.map((_, index) => (
-								<Cell key={index} fill={PIE_COLORS[index]} />
-							))}
-						</Pie>
-					)}
-				</div>
+				)}
 			</RePieChart>
 		</ResponsiveContainer>
 	);

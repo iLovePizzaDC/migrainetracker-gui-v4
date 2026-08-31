@@ -6,7 +6,7 @@ describe('<LoadingBox />', () => {
 	it('renders the loading text', () => {
 		render(<LoadingBox />);
 
-		expect(screen.getByText('Logging in...')).toBeInTheDocument();
+		expect(screen.getByText('Signing in')).toBeInTheDocument();
 	});
 
 	it('renders the user circle icon', () => {
@@ -15,31 +15,16 @@ describe('<LoadingBox />', () => {
 		expect(document.querySelector('svg')).toBeInTheDocument();
 	});
 
-	it('renders the spinning ring elements', () => {
+	it('renders a single spinning ring', () => {
 		render(<LoadingBox />);
 
-		expect(document.querySelectorAll('.animate-spin')).toHaveLength(2);
+		expect(document.querySelectorAll('.animate-spin')).toHaveLength(1);
 	});
 
-	it('renders the shimmer progress bar', () => {
+	it('spinner has a smooth animation duration', () => {
 		render(<LoadingBox />);
 
-		expect(
-			document.querySelector('.animate-\\[shimmer_1\\.6s_ease-in-out_infinite\\]'),
-		).toBeInTheDocument();
-	});
-
-	it('outer spinner has correct animation duration', () => {
-		render(<LoadingBox />);
-
-		const [outerSpinner] = document.querySelectorAll('.animate-spin');
-		expect((outerSpinner as HTMLElement).style.animationDuration).toBe('1.6s');
-	});
-
-	it('inner spinner rotates in reverse', () => {
-		render(<LoadingBox />);
-
-		const [, innerSpinner] = document.querySelectorAll('.animate-spin');
-		expect((innerSpinner as HTMLElement).style.animationDirection).toBe('reverse');
+		const [spinner] = document.querySelectorAll('.animate-spin');
+		expect((spinner as HTMLElement).style.animationDuration).toBe('1.4s');
 	});
 });

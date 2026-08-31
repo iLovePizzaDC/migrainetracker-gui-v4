@@ -13,12 +13,18 @@ function Navigation() {
 	};
 
 	return (
-		// TODO style hello title
-		<header className='fixed min-h-12 top-0 left-0 w-full z-30 rounded-lg backdrop-blur-lg bg-transparent shadow-md px-4 py-2'>
-			<div className='max-w-7xl mx-auto flex items-center justify-between'>
-				<h3>Sorry to see you{user ? `, ${user.given_name}` : ''}</h3>
+		<header className='glass-chrome fixed left-0 top-0 z-30 w-full'>
+			<div className='mx-auto flex min-h-14 max-w-7xl items-center justify-between px-4 py-3 sm:px-6'>
+				<div className='flex min-w-0 flex-col items-start gap-0.5 text-left'>
+					<span className='text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35'>
+						MigraineTracker
+					</span>
+					<p className='truncate text-sm text-white/75'>
+						{user ? `Sorry to see you, ${user.given_name}` : 'Welcome back'}
+					</p>
+				</div>
 
-				<nav className='hidden lg:flex lg:space-x-6' data-testid='desktop-nav'>
+				<nav className='hidden lg:flex lg:items-center lg:gap-0.5' data-testid='desktop-nav'>
 					<NavigationLinks />
 				</nav>
 				<div className='lg:hidden'>
@@ -27,12 +33,12 @@ function Navigation() {
 			</div>
 
 			<div
-				className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+				className={`overflow-hidden transition-[max-height,opacity] duration-350 ease-smooth lg:hidden ${
 					isOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
 				}`}
 				data-testid='mobile-nav'
 			>
-				<nav className='rounded-lg backdrop-blur-lg bg-transparent shadow-md mt-2 p-3'>
+				<nav className='mx-4 mb-3 space-y-0.5 rounded-xl border border-white/[0.08] bg-black/30 p-1.5 backdrop-blur-xl'>
 					<MobileNavigationLinks toggleMenu={toggleMenu} />
 				</nav>
 			</div>

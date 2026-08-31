@@ -19,16 +19,17 @@ export default function MigrainePanelHeader({
 	isLoading,
 }: IMigrainePanelHeader) {
 	return (
-		<div className='flex justify-between items-center'>
+		<div className='flex items-center justify-between border-b border-white/[0.06] pb-4'>
 			<button
 				onClick={onClose}
-				className='text-sm text-gray-400 hover:opacity-80 disabled:opacity-80 transition-opacity'
+				className='icon-btn'
 				disabled={isLoading}
+				aria-label='Close'
 			>
-				Close
+				<XMarkIcon />
 			</button>
 
-			<h2 className='text-lg font-semibold'>
+			<h2 className='text-sm font-medium tracking-wide text-white/85'>
 				{date.toLocaleDateString('de-DE', {
 					day: '2-digit',
 					month: '2-digit',
@@ -36,20 +37,28 @@ export default function MigrainePanelHeader({
 			</h2>
 
 			{prefilled ? (
-				<button
-					data-testid='edit-button'
-					onClick={() => setAreInputsDisabled(!areInputsDisabled)}
-					className='text-sm text-gray-400 hover:opacity-80 disabled:opacity-80 transition-opacity'
-					disabled={isLoading}
-				>
-					{areInputsDisabled ? (
-						<PencilIcon className='h-5 w-5' />
-					) : (
-						<XMarkIcon className='h-5 w-5' />
-					)}
-				</button>
+				areInputsDisabled ? (
+					<button
+						data-testid='edit-button'
+						onClick={() => setAreInputsDisabled(false)}
+						className='icon-btn'
+						disabled={isLoading}
+						aria-label='Edit'
+					>
+						<PencilIcon />
+					</button>
+				) : (
+					<button
+						data-testid='cancel-edit-button'
+						onClick={() => setAreInputsDisabled(true)}
+						className='rounded-lg px-2 py-1 text-xs font-medium text-white/55 transition-colors duration-200 ease-soft hover:bg-white/[0.06] hover:text-white/85 disabled:opacity-40'
+						disabled={isLoading}
+					>
+						Cancel
+					</button>
+				)
 			) : (
-				<div className='h-5 w-5' />
+				<div className='h-9 w-9' />
 			)}
 		</div>
 	);

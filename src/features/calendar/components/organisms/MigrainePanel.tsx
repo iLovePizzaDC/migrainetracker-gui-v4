@@ -41,25 +41,16 @@ function MigrainePanel({
 	return (
 		<div
 			className={`
-				grid transition-[grid-template-rows] duration-300 ease-out
+				grid motion-reveal
 				${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}
 			`}
 		>
-			<div className='overflow-hidden'>
+			<div className='min-h-0 overflow-hidden'>
 				<div
 					data-testid='migraine-panel'
-					className={`
-						mx-auto mt-4 max-w-5xl
-						rounded-2xl border border-white/20
-						bg-transparent p-4 sm:p-6
-						shadow-lg shadow-black/30
-						backdrop-blur-xl
-						transition-[opacity,transform] duration-300 ease-out
-						will-change-[opacity,transform]
-						${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}
-					`}
+					className='glass-panel mx-auto max-w-5xl p-4 sm:p-6'
 				>
-					<div className='space-y-6'>
+					<div className='space-y-5'>
 						<MigrainePanelHeader
 							date={date}
 							onClose={onClose}
@@ -68,7 +59,7 @@ function MigrainePanel({
 							setAreInputsDisabled={setAreInputsDisabled}
 							isLoading={isLoading}
 						/>
-						<div className='grid gap-6 lg:grid-cols-2'>
+						<div className='grid items-start gap-x-8 gap-y-5 lg:grid-cols-2'>
 							<Durations
 								durations={form.durations}
 								onChange={(durations) => updateForm('durations', durations)}
@@ -97,7 +88,7 @@ function MigrainePanel({
 								disabled={inputsDisabled}
 							/>
 						</div>
-						{!areInputsDisabled && (
+						<div className={areInputsDisabled ? 'invisible pointer-events-none' : undefined}>
 							<MigrainePanelActions
 								cacheFeedback={cacheFeedback}
 								saveFeedback={saveFeedback}
@@ -105,7 +96,7 @@ function MigrainePanel({
 								saveNewEntry={saveNewEntry}
 								submitNewEntry={submitNewEntry}
 							/>
-						)}
+						</div>
 					</div>
 				</div>
 			</div>

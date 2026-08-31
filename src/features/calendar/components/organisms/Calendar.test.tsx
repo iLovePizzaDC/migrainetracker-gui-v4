@@ -254,7 +254,7 @@ describe('<Calendar />', () => {
 
 			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100');
 
-			await user.click(screen.getByText('Close'));
+			await user.click(screen.getByRole('button', { name: 'Close' }));
 
 			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-0');
 		});

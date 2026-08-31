@@ -34,7 +34,7 @@ describe('<Navigation />', () => {
 		it('renders greeting without name when user is null', () => {
 			render(<Navigation />);
 
-			expect(screen.getByText('Sorry to see you')).toBeInTheDocument();
+			expect(screen.getByText('Welcome back')).toBeInTheDocument();
 		});
 
 		it('renders greeting with name when user is set', () => {

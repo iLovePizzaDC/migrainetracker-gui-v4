@@ -59,7 +59,7 @@ describe('<MigrainePanelActions />', () => {
 		expect(screen.getByRole('button', { name: 'Submitting...' })).toBeDisabled();
 	});
 
-	it('applies success styling to Save on cacheFeedback success', () => {
+	it('keeps Save button styling on cacheFeedback success', () => {
 		render(
 			<MigrainePanelActions
 				cacheFeedback='success'
@@ -70,13 +70,12 @@ describe('<MigrainePanelActions />', () => {
 			/>,
 		);
 
-		expect(screen.getByRole('button', { name: 'Save' })).toHaveClass(
-			'border-green-500/50',
-			'text-green-800',
-		);
+		const saveButton = screen.getByRole('button', { name: 'Save' });
+		expect(saveButton).toHaveClass('btn-secondary', 'border-emerald-400/45');
+		expect(saveButton).toHaveTextContent('Save');
 	});
 
-	it('applies error styling to Save on cacheFeedback error', () => {
+	it('keeps Save button styling on cacheFeedback error', () => {
 		render(
 			<MigrainePanelActions
 				cacheFeedback='error'
@@ -87,13 +86,12 @@ describe('<MigrainePanelActions />', () => {
 			/>,
 		);
 
-		expect(screen.getByRole('button', { name: 'Save' })).toHaveClass(
-			'border-red-500/50',
-			'text-red-800',
-		);
+		const saveButton = screen.getByRole('button', { name: 'Save' });
+		expect(saveButton).toHaveClass('btn-secondary', 'border-red-400/45');
+		expect(saveButton).toHaveTextContent('Save');
 	});
 
-	it('applies success styling to Submit on saveFeedback success', () => {
+	it('keeps Submit button styling on saveFeedback success', () => {
 		render(
 			<MigrainePanelActions
 				cacheFeedback={null}
@@ -104,10 +102,9 @@ describe('<MigrainePanelActions />', () => {
 			/>,
 		);
 
-		expect(screen.getByRole('button', { name: 'Submit' })).toHaveClass(
-			'border-green-500/50',
-			'text-green-800',
-		);
+		const submitButton = screen.getByRole('button', { name: 'Submit' });
+		expect(submitButton).toHaveClass('btn-primary', 'border-emerald-400/45');
+		expect(submitButton).toHaveTextContent('Submit');
 	});
 
 	it('applies default styling when no feedback is set', () => {
@@ -121,7 +118,7 @@ describe('<MigrainePanelActions />', () => {
 			/>,
 		);
 
-		expect(screen.getByRole('button', { name: 'Save' })).toHaveClass('bg-gray-600/50');
-		expect(screen.getByRole('button', { name: 'Submit' })).toHaveClass('bg-purple-600/50');
+		expect(screen.getByRole('button', { name: 'Save' })).toHaveClass('btn-secondary');
+		expect(screen.getByRole('button', { name: 'Submit' })).toHaveClass('btn-primary');
 	});
 });

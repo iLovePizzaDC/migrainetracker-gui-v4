@@ -11,25 +11,27 @@ function AppendCard() {
 
 	return (
 		<CardShell padded={false} tabIndex={-1}>
-			<div
-				className='p-4 sm:p-6 flex items-center justify-between cursor-pointer'
+			<button
+				type='button'
+				className='flex h-14 w-full items-center justify-between px-4 sm:px-5'
 				onClick={() => setExpanded(!expanded)}
+				aria-expanded={expanded}
 			>
-				<h2 className='text-lg font-semibold'>Add more</h2>
+				<span className='inline-flex items-center text-sm font-medium tracking-wide text-white/80'>
+					Add more
+				</span>
 				<PlusIcon
-					className={`w-6 h-6 transition-transform duration-300 ${expanded ? 'rotate-45' : ''}`}
+					className={`h-5 w-5 shrink-0 text-white/50 icon-spin ${expanded ? 'icon-spin-open' : ''}`}
 				/>
-			</div>
+			</button>
 			<div
 				data-testid='card-form-wrapper'
-				className={`
-	        grid overflow-hidden
-	        transition-[grid-template-rows,opacity] duration-300 ease-out
-	        ${expanded ? 'grid-rows-[1fr] opacity-100 px-6 pb-6' : 'grid-rows-[0fr] opacity-0'}
-        `}
+				className={`grid motion-reveal ${expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
 			>
-				<div className='overflow-hidden'>
-					<CardForm onButtonClick={appendSetup} />
+				<div className='min-h-0 overflow-hidden'>
+					<div className='border-t border-white/[0.06] px-5 pb-5 pt-4 sm:px-6 sm:pb-6'>
+						<CardForm onButtonClick={appendSetup} />
+					</div>
 				</div>
 			</div>
 		</CardShell>

@@ -92,20 +92,21 @@ function Calendar() {
 
 	return (
 		<>
-			<div className='relative rounded-2xl p-6 bg-transparent backdrop-blur-xl border border-white/20 shadow-lg shadow-black/30 w-full max-w-md min-h-96 mx-auto flex flex-col'>
+			<div className='glass-panel relative mx-auto flex w-full max-w-md flex-col p-5 sm:p-6'>
 				<div className='flex-1 flex flex-col'>
 					<CalendarHeader />
 					<CalendarContent openDate={selectedDate} onDayClick={onDayClick} />
 				</div>
 
-				<div className='mt-2 flex justify-end'>
+				<div className='mt-3 flex justify-end border-t border-white/[0.06] pt-3'>
 					<button
 						data-testid='load-entry'
 						onClick={onLoadEntryClick}
-						className='flex items-center justify-center disabled:opacity-80 transition-opacity'
+						className='icon-btn'
 						disabled={isLoading}
+						aria-label='Load saved entry'
 					>
-						<ArrowDownTrayIcon className='h-5 w-5' />
+						<ArrowDownTrayIcon />
 					</button>
 				</div>
 			</div>

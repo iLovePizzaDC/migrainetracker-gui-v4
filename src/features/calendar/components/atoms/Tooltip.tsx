@@ -62,7 +62,7 @@ function Tooltip({ content, children, className = '' }: ITooltip) {
 						ref={popupRef}
 						role='tooltip'
 						style={popupStyle}
-						className='z-50 min-w-max rounded-md border border-white/10 bg-neutral-900 px-2 py-1 text-[10px] text-white/80 shadow-lg shadow-black/40'
+						className='z-50 min-w-max rounded-md border border-white/10 bg-neutral-900/95 px-2 py-1 text-[10px] text-white/80 shadow-md shadow-black/30'
 					>
 						{content}
 						<span className='absolute -top-1 left-1/2 -translate-x-1/2 block h-2 w-2 rotate-45 border-l border-t border-white/10 bg-neutral-900' />{' '}

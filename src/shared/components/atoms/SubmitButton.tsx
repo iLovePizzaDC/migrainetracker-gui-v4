@@ -1,24 +1,32 @@
 import type { ButtonType } from '@/shared/constants/input/button';
 
+type ButtonVariant = 'primary' | 'secondary';
+
 interface ISubmitButton {
 	type: ButtonType;
 	label: string;
 	onClick?: () => void;
 	disabled?: boolean;
 	className?: string;
+	variant?: ButtonVariant;
 }
 
-function SubmitButton({ type, label, onClick, disabled = false, className }: ISubmitButton) {
+function SubmitButton({
+	type,
+	label,
+	onClick,
+	disabled = false,
+	className = '',
+	variant = 'primary',
+}: ISubmitButton) {
+	const variantClass = variant === 'secondary' ? 'btn-secondary' : 'btn-primary';
+
 	return (
 		<button
 			type={type}
 			onClick={onClick}
 			disabled={disabled}
-			className={`
-                px-4 py-2 rounded-lg backdrop-blur-xl border shadow-sm shadow-black/30 text-sm font-medium transition-opacity
-                ${className}
-                hover:opacity-80 disabled:opacity-80
-            `}
+			className={`${variantClass} disabled:opacity-40 ${className}`.trim()}
 		>
 			{label}
 		</button>

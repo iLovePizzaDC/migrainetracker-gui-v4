@@ -73,8 +73,8 @@ function DropdownInput({
 	};
 
 	return (
-		<div className='w-full'>
-			<label htmlFor={id} className='block text-sm font-medium mb-1'>
+		<div className='input-field w-full'>
+			<label htmlFor={id} className='field-label'>
 				{label}
 			</label>
 
@@ -92,7 +92,7 @@ function DropdownInput({
 				data-testid='dropdown-menu-trigger'
 				ref={buttonRef}
 				type='button'
-				className='w-full p-2 rounded-lg bg-black/10 backdrop-blur-sm border border-white/20 text-left'
+				className='glass-input text-left'
 				onClick={() => (open ? setOpen(false) : openMenu())}
 				disabled={disabled}
 			>
@@ -105,7 +105,7 @@ function DropdownInput({
 					<ul
 						ref={menuRef}
 						style={menuStyle}
-						className='max-h-48 overflow-auto rounded-lg bg-black/30 backdrop-blur-md border border-white/20 text-white shadow-lg'
+						className='glass-menu max-h-48 overflow-auto'
 					>
 						{options.map((option) => (
 							<li
@@ -113,7 +113,7 @@ function DropdownInput({
 								key={option.value}
 								className={`px-3 py-2 cursor-pointer ${
 									option.value === value ? 'bg-white/20' : ''
-								} hover:opacity-80 transition-opacity`}
+								} motion-fade hover:opacity-80`}
 								onClick={() => handleSelect(option.value)}
 							>
 								{option.label}

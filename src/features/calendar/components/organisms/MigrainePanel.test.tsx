@@ -115,7 +115,7 @@ describe('<MigrainePanel />', () => {
 
 		render(<MigrainePanel date={mockDate} onClose={mockOnClose} isOpen />);
 
-		expect(screen.queryByTestId('actions')).not.toBeInTheDocument();
+		expect(screen.getByTestId('actions').parentElement).toHaveClass('invisible');
 	});
 
 	it('passes disabled=true to molecules when areInputsDisabled is true', () => {
