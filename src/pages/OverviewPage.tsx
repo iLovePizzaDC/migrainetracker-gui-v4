@@ -3,7 +3,7 @@ import { CardSetupsProvider } from '@/features/chart-cards/hooks/card-setups-pro
 
 function OverviewPage() {
 	return (
-		<div className='w-full'>
+		<div className='min-w-0 w-full'>
 			<header className='mb-6 text-left sm:mb-8'>
 				<h1 className='page-heading'>Overview</h1>
 				<p className='page-subheading'>Your migraine patterns at a glance.</p>
