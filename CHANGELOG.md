@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.8.3...v1.9.0) (2026-08-31)
+
+
+### Features
+
+* rework design ([#175](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/175)) ([1cc6150](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/1cc615070bea725aa986871c82b3cc4c867b9807))
+
 ## [1.8.3](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.8.2...v1.8.3) (2026-08-18)
 
 ### Bug Fixes
