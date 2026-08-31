@@ -14,11 +14,7 @@ export default function MobileNavigationOptions({ toggleMenu, isOpen }: IMobileN
 			aria-label={isOpen ? 'Close menu' : 'Open menu'}
 			aria-expanded={isOpen}
 		>
-			{isOpen ? (
-				<XMarkIcon data-testid='close-icon' />
-			) : (
-				<Bars3Icon data-testid='open-icon' />
-			)}
+			{isOpen ? <XMarkIcon data-testid='close-icon' /> : <Bars3Icon data-testid='open-icon' />}
 		</button>
 	);
 }

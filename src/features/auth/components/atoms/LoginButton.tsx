@@ -6,10 +6,7 @@ function LoginButton() {
 	};
 
 	return (
-		<button
-			onClick={redirectToLogin}
-			className='btn-primary w-full sm:w-auto'
-		>
+		<button onClick={redirectToLogin} className='btn-primary w-full sm:w-auto'>
 			Sign in with Google
 		</button>
 	);

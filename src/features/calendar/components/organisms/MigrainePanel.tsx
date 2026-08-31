@@ -47,10 +47,7 @@ function MigrainePanel({
 			`}
 		>
 			<div className='min-h-0 overflow-hidden'>
-				<div
-					data-testid='migraine-panel'
-					className='glass-panel mx-auto max-w-5xl p-4 sm:p-6'
-				>
+				<div data-testid='migraine-panel' className='glass-panel mx-auto max-w-5xl p-4 sm:p-6'>
 					<div className='space-y-5'>
 						<MigrainePanelHeader
 							date={date}

@@ -135,10 +135,7 @@ function ChartCard({
 						</div>
 					)}
 				</div>
-				<div
-					data-testid='card-form-wrapper'
-					className='min-h-0 overflow-hidden px-0.5 pb-0.5 pt-1'
-				>
+				<div data-testid='card-form-wrapper' className='min-h-0 overflow-hidden px-0.5 pb-0.5 pt-1'>
 					<CardForm
 						key={JSON.stringify({
 							index,

@@ -16,12 +16,9 @@ function MidasCard() {
 	const [isLoading, setIsLoading] = useState(true);
 
 	const getColorIndicator = () => {
-		if (midasScore >= 21)
-			return { color: 'text-red-300/90', label: 'severe' };
-		if (midasScore >= 11)
-			return { color: 'text-orange-300/90', label: 'moderate' };
-		if (midasScore >= 6)
-			return { color: 'text-yellow-200/90', label: 'mild' };
+		if (midasScore >= 21) return { color: 'text-red-300/90', label: 'severe' };
+		if (midasScore >= 11) return { color: 'text-orange-300/90', label: 'moderate' };
+		if (midasScore >= 6) return { color: 'text-yellow-200/90', label: 'mild' };
 		return { color: 'text-white/50', label: 'not/little' };
 	};
 
@@ -54,7 +51,9 @@ function MidasCard() {
 				<h2 className='flex-1 text-center text-sm font-medium tracking-wide text-white/80'>
 					MIDAS Score
 				</h2>
-				<span className={`w-16 text-right text-[10px] font-semibold uppercase tracking-wider ${color}`}>
+				<span
+					className={`w-16 text-right text-[10px] font-semibold uppercase tracking-wider ${color}`}
+				>
 					{label}
 				</span>
 			</div>

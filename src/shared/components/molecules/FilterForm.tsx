@@ -50,8 +50,7 @@ function FilterForm({
 					value: m.abbreviation,
 				}));
 
-	const baseClasses =
-		variant === FILTER_FORM_VARIANTS.COMPACT ? '' : 'glass-panel-soft';
+	const baseClasses = variant === FILTER_FORM_VARIANTS.COMPACT ? '' : 'glass-panel-soft';
 
 	return (
 		<div data-testid='filter-form' className={baseClasses || undefined}>
@@ -70,9 +69,7 @@ function FilterForm({
 
 			<div
 				className={`grid motion-reveal ${
-					variant === FILTER_FORM_VARIANTS.COMPACT || isOpen
-						? 'grid-rows-[1fr]'
-						: 'grid-rows-[0fr]'
+					variant === FILTER_FORM_VARIANTS.COMPACT || isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
 				}`}
 			>
 				<div className='min-h-0 overflow-hidden'>
@@ -155,7 +152,9 @@ function FilterForm({
 								selected={
 									filter.midas
 										.map((value) =>
-											[ANY_FILTER_OPTIONS, ...MIDAS_OPTIONS].find((option) => option.value === value),
+											[ANY_FILTER_OPTIONS, ...MIDAS_OPTIONS].find(
+												(option) => option.value === value,
+											),
 										)
 										.filter(Boolean) as DropdownOption[]
 								}

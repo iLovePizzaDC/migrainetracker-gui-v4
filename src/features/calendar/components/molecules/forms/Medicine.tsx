@@ -31,9 +31,7 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 					disabled={disabled}
 					tabIndex={disabled ? -1 : undefined}
 				>
-					<PlusIcon
-						className={`!h-4 !w-4 icon-spin ${showMedicineForm ? 'icon-spin-open' : ''}`}
-					/>
+					<PlusIcon className={`!h-4 !w-4 icon-spin ${showMedicineForm ? 'icon-spin-open' : ''}`} />
 				</button>
 			</div>
 
@@ -79,7 +77,10 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 			<MedicineCombobox medicines={medicines} onChange={onChange} disabled={disabled} />
 
 			{medicines.map((medicine, index) => (
-				<div key={index} className='space-y-3 rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/[0.06]'>
+				<div
+					key={index}
+					className='space-y-3 rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/[0.06]'
+				>
 					<p className='text-sm font-medium text-white/85'>{medicine.medicine.label}</p>
 
 					<Slider

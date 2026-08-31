@@ -102,11 +102,7 @@ function DropdownInput({
 			{open &&
 				menuStyle &&
 				createPortal(
-					<ul
-						ref={menuRef}
-						style={menuStyle}
-						className='glass-menu max-h-48 overflow-auto'
-					>
+					<ul ref={menuRef} style={menuStyle} className='glass-menu max-h-48 overflow-auto'>
 						{options.map((option) => (
 							<li
 								data-testid={option.value}

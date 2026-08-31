@@ -46,7 +46,10 @@ describe('<NavigationLink />', () => {
 		render(<NavigationLink {...defaultProps} to='/test' />);
 
 		await waitFor(() => {
-			expect(screen.getByTestId('navigation-link')).toHaveClass('nav-pill-active', 'cursor-default');
+			expect(screen.getByTestId('navigation-link')).toHaveClass(
+				'nav-pill-active',
+				'cursor-default',
+			);
 		});
 	});
 

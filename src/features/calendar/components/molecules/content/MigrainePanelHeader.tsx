@@ -20,12 +20,7 @@ export default function MigrainePanelHeader({
 }: IMigrainePanelHeader) {
 	return (
 		<div className='flex items-center justify-between border-b border-white/[0.06] pb-4'>
-			<button
-				onClick={onClose}
-				className='icon-btn'
-				disabled={isLoading}
-				aria-label='Close'
-			>
+			<button onClick={onClose} className='icon-btn' disabled={isLoading} aria-label='Close'>
 				<XMarkIcon />
 			</button>
 
