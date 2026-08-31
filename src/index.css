@@ -3,13 +3,20 @@
 @tailwind utilities;
 
 :root {
-	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	font-family:
+		'Inter',
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
+	letter-spacing: -0.01em;
 
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+	color-scheme: dark;
+	color: rgba(255, 255, 255, 0.92);
+	background-color: #141816;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -27,9 +34,123 @@ body {
 	@apply outline-none ring-0;
 }
 
-@media (prefers-color-scheme: light) {
-	:root {
-		color: #213547;
-		background-color: #ffffff;
+@layer components {
+	.glass-panel {
+		@apply rounded-2xl border border-white/[0.12] bg-white/[0.07] shadow-sm shadow-black/20 backdrop-blur-lg;
+	}
+
+	.glass-panel-soft {
+		@apply rounded-xl border border-white/[0.08] bg-white/[0.03];
+	}
+
+	.glass-chrome {
+		@apply border-b border-white/[0.08] bg-black/20 backdrop-blur-xl;
+	}
+
+	.glass-input {
+		@apply w-full rounded-xl border border-white/[0.12] bg-white/[0.05] px-3 py-2.5 text-sm text-white/90 backdrop-blur-sm transition-[border-color,background-color,box-shadow] duration-200 ease-soft placeholder:text-white/30 focus-visible:border-white/35 focus-visible:bg-white/[0.1] focus-visible:shadow-[0_0_0_1px_rgba(255,255,255,0.12)] focus-visible:outline-none focus-visible:ring-0;
+	}
+
+	.glass-menu {
+		@apply rounded-xl border border-white/[0.12] bg-neutral-950/80 text-white shadow-lg shadow-black/30 backdrop-blur-xl;
+	}
+
+	.form-section {
+		@apply w-full self-start space-y-3 border-b border-white/[0.06] pb-5 last:border-b-0 last:pb-0;
+	}
+
+	.input-field {
+		@apply w-full px-px py-0.5;
+	}
+
+	.section-title {
+		@apply text-xs font-semibold uppercase tracking-[0.12em] text-white/45;
+	}
+
+	.field-label {
+		@apply mb-1.5 block text-xs font-medium text-white/55;
+	}
+
+	.page-heading {
+		@apply text-xl font-medium tracking-tight text-white/95 sm:text-2xl;
+	}
+
+	.page-subheading {
+		@apply mt-1 text-sm text-white/45;
+	}
+
+	.chip {
+		@apply flex items-center gap-1 rounded-lg bg-white/10 px-2.5 py-1 text-xs text-white/80;
+	}
+
+	.btn-primary {
+		@apply rounded-xl border border-white/20 bg-white/15 px-5 py-2.5 text-sm font-medium text-white transition-[border-color,background-color,box-shadow] duration-200 ease-soft hover:bg-white/20 focus-visible:border-white/35 focus-visible:bg-white/[0.1] focus-visible:shadow-[0_0_0_1px_rgba(255,255,255,0.12)] focus-visible:outline-none focus-visible:ring-0;
+	}
+
+	.btn-secondary {
+		@apply rounded-xl border border-white/10 bg-white/[0.06] px-5 py-2.5 text-sm font-medium text-white/75 transition-[border-color,background-color,box-shadow] duration-200 ease-soft hover:bg-white/10 focus-visible:border-white/25 focus-visible:bg-white/[0.08] focus-visible:shadow-[0_0_0_1px_rgba(255,255,255,0.1)] focus-visible:outline-none focus-visible:ring-0;
+	}
+
+	.icon-btn {
+		@apply inline-flex h-9 w-9 items-center justify-center rounded-xl text-white/50 transition-colors duration-200 ease-soft hover:bg-white/[0.08] hover:text-white/85 focus-visible:bg-white/10 focus-visible:text-white/90 focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:opacity-40;
+	}
+
+	.icon-btn > svg {
+		@apply h-5 w-5 shrink-0;
+	}
+
+	.icon-spin {
+		@apply transition-transform duration-250 ease-smooth;
+	}
+
+	.icon-spin-open {
+		@apply rotate-45;
+	}
+
+	.motion-panel {
+		@apply transition-[opacity,transform,grid-template-rows] duration-350 ease-smooth;
+	}
+
+	.motion-reveal {
+		@apply overflow-hidden transition-[grid-template-rows] duration-350 ease-out;
+	}
+
+	.motion-fade {
+		@apply transition-opacity duration-200 ease-soft;
+	}
+
+	.nav-pill {
+		@apply rounded-lg px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-soft;
+	}
+
+	.nav-pill-active {
+		@apply bg-white/10 text-white;
+	}
+
+	.nav-pill-inactive {
+		@apply text-white/55 hover:bg-white/[0.06] hover:text-white/85;
+	}
+}
+
+@layer base {
+	input[type='range'] {
+		@apply h-1.5 w-full cursor-pointer appearance-none rounded-full bg-white/10;
+	}
+
+	input[type='range']::-webkit-slider-thumb {
+		@apply h-4 w-4 appearance-none rounded-full border border-white/20 bg-white/90 shadow-sm transition-transform duration-200 ease-soft hover:scale-105;
+	}
+
+	input[type='range']::-moz-range-thumb {
+		@apply h-4 w-4 rounded-full border border-white/20 bg-white/90 shadow-sm;
+	}
+
+	input[type='checkbox'],
+	input[type='radio'] {
+		@apply h-4 w-4 shrink-0 cursor-pointer rounded border-white/20 bg-white/[0.06] accent-white/80;
+	}
+
+	input[type='radio'] {
+		@apply rounded-full;
 	}
 }

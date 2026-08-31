@@ -26,7 +26,7 @@ describe('<LoginButton />', () => {
 
 	it('renders button with text', () => {
 		render(<LoginButton />);
-		expect(screen.getByText('Login')).toBeInTheDocument();
+		expect(screen.getByText('Sign in with Google')).toBeInTheDocument();
 		expect(screen.getByRole('button')).toBeInTheDocument();
 	});
 

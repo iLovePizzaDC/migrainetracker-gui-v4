@@ -8,7 +8,7 @@ function Dot({ color = 'bg-transparent', ring = false, testId }: IDot) {
 	return (
 		<div
 			data-testid={testId}
-			className={`w-2 h-2 rounded-full mt-1 ${color} ${ring ? 'ring-1 ring-red-500' : ''}`}
+			className={`mt-1 h-2 w-2 rounded-full ${color} ${ring ? 'ring-1 ring-red-400/70' : ''}`}
 		/>
 	);
 }

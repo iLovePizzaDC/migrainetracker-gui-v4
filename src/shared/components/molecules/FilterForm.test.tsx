@@ -130,12 +130,7 @@ describe('<FilterForm />', () => {
 		it('applies standard classes', () => {
 			render(<FilterForm {...defaultProps} variant={FILTER_FORM_VARIANTS.STANDARD} />);
 
-			expect(screen.getByTestId('filter-form')).toHaveClass(
-				'rounded-xl',
-				'border',
-				'border-white/10',
-				'bg-white/5',
-			);
+			expect(screen.getByTestId('filter-form')).toHaveClass('glass-panel-soft');
 		});
 	});
 

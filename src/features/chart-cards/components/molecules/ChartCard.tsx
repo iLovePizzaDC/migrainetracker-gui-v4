@@ -63,18 +63,21 @@ function ChartCard({
 
 	return (
 		<CardShell>
-			<div className='h-7 mb-2 flex items-center w-full relative'>
+			<div className='relative mb-4 flex w-full items-center'>
 				<div className='w-7 opacity-0 pointer-events-none' />
 
-				<h2 className='flex-1 text-lg font-semibold text-center'>{title}</h2>
+				<h2 className='flex-1 text-center text-sm font-medium tracking-wide text-white/80'>
+					{title}
+				</h2>
 
 				<button
 					ref={contextButtonRef}
 					data-testid='context-button'
 					onClick={toggleContext}
-					className='hover:opacity-80 transition-opacity'
+					className='icon-btn'
+					aria-label='Card options'
 				>
-					<EllipsisVerticalIcon className='h-7 w-7' />
+					<EllipsisVerticalIcon />
 				</button>
 
 				<ContextMenu
@@ -88,20 +91,20 @@ function ChartCard({
 			</div>
 
 			<div
+				data-testid='chart-card-reveal'
 				className={`
-          grid overflow-hidden
-          transition-[grid-template-rows] duration-300 ease-out
+          grid overflow-hidden motion-reveal
           ${isEditing ? 'grid-rows-[0fr_1fr]' : 'grid-rows-[1fr_0fr]'}
 	      `}
 			>
-				<div className='overflow-hidden transition-all duration-300'>
-					<div className='h-72 w-full flex items-center justify-center'>
+				<div className='overflow-hidden'>
+					<div className='flex h-72 w-full items-center justify-center'>
 						{/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
 						{/* TODO add average line to areachart? */}
 						{isLoading ? (
 							<div
 								data-testid='loading-skeleton'
-								className='w-full h-full bg-white/10 backdrop-blur-sm rounded-xl animate-pulse'
+								className='h-full w-full animate-pulse rounded-xl bg-white/5'
 							/>
 						) : chartType === CHART_TYPES.AREA ? (
 							<AreaChart
@@ -115,8 +118,8 @@ function ChartCard({
 					</div>
 
 					{!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 && (
-						<div className='text-center h-6'>
-							<p className='text-lg font-medium'>
+						<div className='mt-1 h-6 text-center'>
+							<p className='text-sm font-medium tabular-nums text-white/70'>
 								{cardType !== CARD_TYPES.MEDICINE ? (
 									<>
 										{currentPieValue.toLocaleString('en-US')}/
@@ -132,14 +135,7 @@ function ChartCard({
 						</div>
 					)}
 				</div>
-				<div
-					data-testid='card-form-wrapper'
-					className={`
-	          overflow-hidden
-	          transition-[opacity,max-height] duration-300 ease-out
-	          ${isEditing ? 'opacity-100 max-h-[1000px] visible pointer-events-auto' : 'opacity-0 max-h-0 invisible pointer-events-none'}
-          `}
-				>
+				<div data-testid='card-form-wrapper' className='min-h-0 overflow-hidden px-0.5 pb-0.5 pt-1'>
 					<CardForm
 						key={JSON.stringify({
 							index,

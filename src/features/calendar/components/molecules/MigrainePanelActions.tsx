@@ -10,6 +10,12 @@ interface IMigrainePanelActions {
 	submitNewEntry: () => void;
 }
 
+const feedbackClass = (feedback: FeedbackType) => {
+	if (feedback === 'success') return 'border-emerald-400/45';
+	if (feedback === 'error') return 'border-red-400/45';
+	return '';
+};
+
 export default function MigrainePanelActions({
 	cacheFeedback,
 	saveFeedback,
@@ -18,16 +24,13 @@ export default function MigrainePanelActions({
 	submitNewEntry,
 }: IMigrainePanelActions) {
 	return (
-		<div className='flex justify-between pt-2'>
+		<div className='flex justify-end gap-3 border-t border-white/[0.06] pt-5'>
 			<SubmitButton
 				type={BUTTON_TYPES.BUTTON}
 				label='Save'
 				onClick={saveNewEntry}
-				className={`
-                    ${cacheFeedback === 'success' ? 'border-green-500/50 text-green-800' : ''}
-                    ${cacheFeedback === 'error' ? 'border-red-500/50 text-red-800' : ''}
-                    ${!cacheFeedback ? 'bg-gray-600/50 border-gray-700/20 text-white' : ''}
-                `}
+				variant='secondary'
+				className={feedbackClass(cacheFeedback)}
 			/>
 
 			<SubmitButton
@@ -35,11 +38,8 @@ export default function MigrainePanelActions({
 				label={isLoading ? 'Submitting...' : 'Submit'}
 				onClick={submitNewEntry}
 				disabled={isLoading}
-				className={`
-                    ${saveFeedback === 'success' ? 'border-green-500/50 text-green-800' : ''}
-                    ${saveFeedback === 'error' ? 'border-red-500/50 text-red-800' : ''}
-                    ${!saveFeedback ? 'bg-purple-600/50 border-purple-700/20 text-white' : ''}
-                `}
+				variant='primary'
+				className={feedbackClass(saveFeedback)}
 			/>
 		</div>
 	);

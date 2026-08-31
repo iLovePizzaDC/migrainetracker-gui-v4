@@ -75,7 +75,7 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 	return (
 		<div
 			data-testid='add-medicine-form'
-			className='overflow-hidden transition-all duration-300 ease-in-out'
+			className='overflow-hidden transition-[height,opacity] duration-350 ease-smooth'
 			style={{ height }}
 		>
 			<div ref={ref} className='grid gap-3'>
@@ -112,7 +112,6 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 					label={isSubmitting ? 'Saving...' : 'Save'}
 					onClick={submitForm}
 					disabled={!isFormValid || isSubmitting}
-					className='bg-purple-600/50 border-purple-700/20 text-white'
 				/>
 			</div>
 		</div>

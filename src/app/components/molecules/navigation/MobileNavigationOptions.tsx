@@ -9,18 +9,12 @@ export default function MobileNavigationOptions({ toggleMenu, isOpen }: IMobileN
 	return (
 		<button
 			onClick={toggleMenu}
-			className='text-white hover:text-gray-200 pl-6'
+			className='icon-btn'
 			data-testid='mobile-nav-toggle'
+			aria-label={isOpen ? 'Close menu' : 'Open menu'}
+			aria-expanded={isOpen}
 		>
-			<span
-				className={`block transition-transform duration-300 ease-in-out ${isOpen ? 'rotate-90' : 'rotate-0'}`}
-			>
-				{isOpen ? (
-					<XMarkIcon data-testid='close-icon' className='h-6 w-6' />
-				) : (
-					<Bars3Icon data-testid='open-icon' className='h-6 w-6' />
-				)}
-			</span>
+			{isOpen ? <XMarkIcon data-testid='close-icon' /> : <Bars3Icon data-testid='open-icon' />}
 		</button>
 	);
 }

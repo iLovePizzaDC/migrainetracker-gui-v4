@@ -110,6 +110,7 @@ const mockUseCalendar = (overrides = {}) =>
 
 describe('<Calendar />', () => {
 	const user = userEvent.setup();
+	const migrainePanelReveal = () => screen.getByTestId('migraine-panel-reveal');
 
 	describe('rendering', () => {
 		it('renders CalendarHeader', () => {
@@ -136,16 +137,12 @@ describe('<Calendar />', () => {
 			expect(screen.getByText('Filter')).toBeInTheDocument();
 		});
 
-		it('renders MigrainePanel with isOpen false by default', () => {
+		it('renders MigrainePanel collapsed by default', () => {
 			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar());
 
 			render(<Calendar />);
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass(
-				'opacity-0',
-				'translate-y-2',
-				'pointer-events-none',
-			);
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[0fr]');
 		});
 
 		it('renders load entry button', () => {
@@ -173,7 +170,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('1'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[1fr]');
 		});
 
 		it('opens panel clicking a day with event', async () => {
@@ -183,7 +180,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[1fr]');
 		});
 
 		it('closes panel when clicking the same day twice', async () => {
@@ -193,15 +190,11 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[1fr]');
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass(
-				'opacity-0',
-				'translate-y-2',
-				'pointer-events-none',
-			);
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[0fr]');
 		});
 
 		it('loads entry from localStorage when clicking load entry button', async () => {
@@ -231,7 +224,7 @@ describe('<Calendar />', () => {
 			await user.click(screen.getByTestId('load-entry'));
 
 			expect(setMonthMock).toHaveBeenCalled();
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[1fr]');
 		});
 
 		it('does not change state when clicking load entry button if no entry in localStorage', async () => {
@@ -242,7 +235,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByTestId('load-entry'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-0', 'translate-y-2');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[0fr]');
 		});
 
 		it('closes panel and resets state when onClose is called', async () => {
@@ -252,11 +245,11 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[1fr]');
 
-			await user.click(screen.getByText('Close'));
+			await user.click(screen.getByRole('button', { name: 'Close' }));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-0');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[0fr]');
 		});
 	});
 
@@ -272,7 +265,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('1'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[1fr]');
 		});
 
 		it('keeps entry.medicines unchanged when userMedicineOptions is empty', async () => {
@@ -286,7 +279,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expect(migrainePanelReveal()).toHaveClass('grid-rows-[1fr]');
 		});
 	});
 

@@ -27,18 +27,10 @@ export default function NavigationLink({ label, to, onClick }: INavigationLink) 
 	return (
 		<Link
 			to={to}
-			className={`
-                rounded-xl p-2 bg-transparent backdrop-blur-md
-                w-full border-2 flex items-center
-                ${
-									isActive
-										? 'opacity-100 border-white/20 shadow-sm shadow-black/20 cursor-default'
-										: 'border-transparent hover:border-white/10 hover:opacity-80 transition-all'
-								}
-            `}
+			className={`nav-pill ${isActive ? 'nav-pill-active cursor-default' : 'nav-pill-inactive'}`}
 			onClick={onClick}
 		>
-			<span className='text-left w-full'>{label}</span>
+			{label}
 		</Link>
 	);
 }

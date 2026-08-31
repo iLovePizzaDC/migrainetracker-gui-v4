@@ -20,7 +20,7 @@ import {
 import { useUser } from '@/shared/hooks/use-user';
 import type { EventFilter } from '@/shared/types/event';
 import type { DropdownOption } from '@/shared/types/input';
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 interface IFilterForm {
@@ -50,124 +50,123 @@ function FilterForm({
 					value: m.abbreviation,
 				}));
 
-	const baseClasses =
-		variant === FILTER_FORM_VARIANTS.COMPACT ? '' : 'border border-white/10 bg-white/5';
+	const baseClasses = variant === FILTER_FORM_VARIANTS.COMPACT ? '' : 'glass-panel-soft';
 
 	return (
-		<div data-testid='filter-form' className={`rounded-xl ${baseClasses}`}>
+		<div data-testid='filter-form' className={baseClasses || undefined}>
 			{variant === FILTER_FORM_VARIANTS.STANDARD && (
 				<button
 					type='button'
 					onClick={() => setIsOpen((prev) => !prev)}
 					className='flex w-full items-center justify-between p-3 text-left'
 				>
-					<span className='font-medium'>Filters</span>
-					<PlusCircleIcon
-						className={`w-5 h-5 transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`}
+					<span className='text-sm font-medium text-white/80'>Filters</span>
+					<PlusIcon
+						className={`h-5 w-5 text-white/50 icon-spin ${isOpen ? 'icon-spin-open' : ''}`}
 					/>
 				</button>
 			)}
 
 			<div
-				className={`overflow-hidden transition-all duration-300 ${
-					variant === FILTER_FORM_VARIANTS.COMPACT
-						? ''
-						: isOpen
-							? 'max-h-[1000px] opacity-100'
-							: 'max-h-0 opacity-0'
+				className={`grid motion-reveal ${
+					variant === FILTER_FORM_VARIANTS.COMPACT || isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
 				}`}
 			>
-				<div className='space-y-3 p-3'>
-					<DropdownInput
-						id='filterIntensity'
-						label='Intensity'
-						value={filter.intensity ?? ANY_FILTER_TYPE.ANY}
-						options={[ANY_FILTER_OPTIONS, ...INTENSITY_OPTIONS]}
-						onChange={(value) => {
-							setFilter((prev) => ({
-								...prev,
-								intensity: value === ANY_FILTER_TYPE.ANY ? null : (value as IntensityType),
-							}));
-						}}
-					/>
-					<Combobox
-						id='filterSymptoms'
-						label='Symptoms'
-						options={[ANY_FILTER_OPTIONS, ...SYMPTOM_OPTIONS]}
-						selected={
-							filter.symptom
-								.map((symptom) =>
-									[ANY_FILTER_OPTIONS, ...SYMPTOM_OPTIONS].find(
-										(option) => option.value === symptom,
-									),
-								)
-								.filter(Boolean) as DropdownOption[]
-						}
-						onChange={(selectedSymptoms) => {
-							setFilter((prev) => ({
-								...prev,
-								symptom: selectedSymptoms.map(
-									(symptom) => symptom.value as SymptomType | AnyFilterType,
-								),
-							}));
-						}}
-					/>
-					{medicineInputVisible && (
-						<>
-							<Combobox
-								id='filterMedicine'
-								label='Medicine'
-								options={[ANY_FILTER_OPTIONS, ...medicineOptions]}
-								selected={filter.medicine.map((medicine) => ({
-									label: medicine.label,
-									value: medicine.abbreviation,
-								}))}
-								onChange={(selectedMedicine) => {
-									setFilter((prev) => ({
-										...prev,
-										medicine: selectedMedicine.map((medicine) => ({
-											label: medicine.label,
-											abbreviation: medicine.value,
-										})),
-									}));
-								}}
-							/>
-
-							<DropdownInput
-								id='filterEffectiveness'
-								label='Effectiveness'
-								value={filter.effectiveness ?? ANY_FILTER_TYPE.ANY}
-								options={[ANY_FILTER_OPTIONS, ...EFFECTIVENESS_OPTIONS]}
-								onChange={(value) => {
-									setFilter((prev) => ({
-										...prev,
-										effectiveness:
-											value === ANY_FILTER_TYPE.ANY ? null : (value as EffectivenessType),
-									}));
-								}}
-							/>
-						</>
-					)}
-					{midasInputVisible && (
-						<Combobox
-							id='filterMidas'
-							label='Midas'
-							options={[ANY_FILTER_OPTIONS, ...MIDAS_OPTIONS]}
-							selected={
-								filter.midas
-									.map((value) =>
-										[ANY_FILTER_OPTIONS, ...MIDAS_OPTIONS].find((option) => option.value === value),
-									)
-									.filter(Boolean) as DropdownOption[]
-							}
-							onChange={(selectedMidas) => {
+				<div className='min-h-0 overflow-hidden'>
+					<div className='space-y-3 p-3'>
+						<DropdownInput
+							id='filterIntensity'
+							label='Intensity'
+							value={filter.intensity ?? ANY_FILTER_TYPE.ANY}
+							options={[ANY_FILTER_OPTIONS, ...INTENSITY_OPTIONS]}
+							onChange={(value) => {
 								setFilter((prev) => ({
 									...prev,
-									midas: selectedMidas.map((midas) => midas.value as MidasType | AnyFilterType),
+									intensity: value === ANY_FILTER_TYPE.ANY ? null : (value as IntensityType),
 								}));
 							}}
 						/>
-					)}
+						<Combobox
+							id='filterSymptoms'
+							label='Symptoms'
+							options={[ANY_FILTER_OPTIONS, ...SYMPTOM_OPTIONS]}
+							selected={
+								filter.symptom
+									.map((symptom) =>
+										[ANY_FILTER_OPTIONS, ...SYMPTOM_OPTIONS].find(
+											(option) => option.value === symptom,
+										),
+									)
+									.filter(Boolean) as DropdownOption[]
+							}
+							onChange={(selectedSymptoms) => {
+								setFilter((prev) => ({
+									...prev,
+									symptom: selectedSymptoms.map(
+										(symptom) => symptom.value as SymptomType | AnyFilterType,
+									),
+								}));
+							}}
+						/>
+						{medicineInputVisible && (
+							<>
+								<Combobox
+									id='filterMedicine'
+									label='Medicine'
+									options={[ANY_FILTER_OPTIONS, ...medicineOptions]}
+									selected={filter.medicine.map((medicine) => ({
+										label: medicine.label,
+										value: medicine.abbreviation,
+									}))}
+									onChange={(selectedMedicine) => {
+										setFilter((prev) => ({
+											...prev,
+											medicine: selectedMedicine.map((medicine) => ({
+												label: medicine.label,
+												abbreviation: medicine.value,
+											})),
+										}));
+									}}
+								/>
+
+								<DropdownInput
+									id='filterEffectiveness'
+									label='Effectiveness'
+									value={filter.effectiveness ?? ANY_FILTER_TYPE.ANY}
+									options={[ANY_FILTER_OPTIONS, ...EFFECTIVENESS_OPTIONS]}
+									onChange={(value) => {
+										setFilter((prev) => ({
+											...prev,
+											effectiveness:
+												value === ANY_FILTER_TYPE.ANY ? null : (value as EffectivenessType),
+										}));
+									}}
+								/>
+							</>
+						)}
+						{midasInputVisible && (
+							<Combobox
+								id='filterMidas'
+								label='Midas'
+								options={[ANY_FILTER_OPTIONS, ...MIDAS_OPTIONS]}
+								selected={
+									filter.midas
+										.map((value) =>
+											[ANY_FILTER_OPTIONS, ...MIDAS_OPTIONS].find(
+												(option) => option.value === value,
+											),
+										)
+										.filter(Boolean) as DropdownOption[]
+								}
+								onChange={(selectedMidas) => {
+									setFilter((prev) => ({
+										...prev,
+										midas: selectedMidas.map((midas) => midas.value as MidasType | AnyFilterType),
+									}));
+								}}
+							/>
+						)}
+					</div>
 				</div>
 			</div>
 		</div>

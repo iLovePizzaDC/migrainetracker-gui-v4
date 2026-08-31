@@ -42,7 +42,7 @@ describe('<AppendCard />', () => {
 	it('is collapsed by default', () => {
 		render(<AppendCard />);
 
-		expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[0fr]', 'opacity-0');
+		expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[0fr]');
 	});
 
 	it('expands on click on "Add more"', async () => {
@@ -50,7 +50,8 @@ describe('<AppendCard />', () => {
 
 		await user.click(screen.getByText('Add more'));
 
-		expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[1fr]', 'opacity-100');
+		expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[1fr]');
+		expect(screen.getByLabelText('Title')).toBeInTheDocument();
 	});
 
 	it('collapses on second click', async () => {
@@ -59,6 +60,6 @@ describe('<AppendCard />', () => {
 		await user.click(screen.getByText('Add more'));
 		await user.click(screen.getByText('Add more'));
 
-		expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[0fr]', 'opacity-0');
+		expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[0fr]');
 	});
 });

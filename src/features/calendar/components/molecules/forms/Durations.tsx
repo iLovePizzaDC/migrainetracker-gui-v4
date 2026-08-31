@@ -1,5 +1,5 @@
 import type { AppendDuration } from '@/shared/types/calendar';
-import { PlusCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import TimePicker from '@/features/calendar/components/atoms/inputs/TimePicker';
 
 interface IDurations {
@@ -25,64 +25,54 @@ function Durations({ durations, onChange, disabled = false }: IDurations) {
 	};
 
 	return (
-		<div
-			data-testid='durations'
-			className='self-start p-4 rounded-xl bg-white/5 border border-white/10 space-y-3'
-		>
-			<div className='flex w-full items-center justify-between'>
-				<div className='w-5'></div>
-				<h3 className='text-sm font-medium text-purple-300 text-center flex-1'>Duration</h3>
-
-				{disabled ? (
-					<div className='w-5 h-5' />
-				) : (
-					<button
-						data-testid='add-button'
-						onClick={addDuration}
-						className='hover:opacity-80 transition-opacity w-4'
-					>
-						<PlusCircleIcon className='w-5 h-5 transition-transform duration-300' />
-					</button>
-				)}
+		<div data-testid='durations' className='form-section'>
+			<div className='flex items-center justify-between'>
+				<h3 className='section-title'>Duration</h3>
+				<button
+					data-testid='add-button'
+					onClick={addDuration}
+					className={`icon-btn !h-8 !w-8 ${disabled ? 'invisible' : ''}`}
+					aria-label='Add duration'
+					disabled={disabled}
+					tabIndex={disabled ? -1 : undefined}
+				>
+					<PlusIcon className='!h-4 !w-4' />
+				</button>
 			</div>
 
 			{durations.map((duration, index) => (
 				<div key={duration.id} className='space-y-2'>
-					<div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-						<div className='min-w-0'>
-							<TimePicker
-								id={`start-${index}`}
-								label='Start'
-								value={duration.startTime}
-								onChange={(value) => {
-									const updated = [...durations];
-									updated[index].startTime = value;
-									onChange(updated);
-								}}
-								disabled={disabled}
-							/>
-						</div>
-						<div className='min-w-0'>
-							<TimePicker
-								id={`end-${index}`}
-								label='End'
-								value={duration.endTime}
-								onChange={(value) => {
-									const updated = [...durations];
-									updated[index].endTime = value;
-									onChange(updated);
-								}}
-								disabled={disabled}
-							/>
-						</div>
+					<div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+						<TimePicker
+							id={`start-${index}`}
+							label='Start'
+							value={duration.startTime}
+							onChange={(value) => {
+								const updated = [...durations];
+								updated[index].startTime = value;
+								onChange(updated);
+							}}
+							disabled={disabled}
+						/>
+						<TimePicker
+							id={`end-${index}`}
+							label='End'
+							value={duration.endTime}
+							onChange={(value) => {
+								const updated = [...durations];
+								updated[index].endTime = value;
+								onChange(updated);
+							}}
+							disabled={disabled}
+						/>
 					</div>
 
 					{durations.length > 1 && !disabled && (
 						<button
 							onClick={() => removeDuration(duration.id)}
-							className='flex items-center gap-1 text-xs text-red-300 hover:opacity-80 transition-opacity'
+							className='motion-fade flex items-center gap-1 text-xs text-red-300/70 hover:text-red-300'
 						>
-							<XMarkIcon className='h-3 w-3' /> Remove
+							<XMarkIcon className='h-3.5 w-3.5' /> Remove
 						</button>
 					)}
 				</div>

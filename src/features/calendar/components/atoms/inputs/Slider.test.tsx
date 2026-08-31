@@ -14,16 +14,18 @@ describe('<Slider />', () => {
 			<Slider id='slider' label='Slider' min={0} max={10} value={5} onChange={mockOnChange} />,
 		);
 
-		expect(screen.getByLabelText('Slider: 5')).toBeInTheDocument();
-		expect(screen.getByRole('slider', { name: 'Slider: 5' })).toBeInTheDocument();
+		expect(screen.getByLabelText('Slider')).toBeInTheDocument();
+		expect(screen.getByRole('slider')).toBeInTheDocument();
+		expect(screen.getByText('5')).toBeInTheDocument();
 	});
 
-	it('displays current value in label', () => {
+	it('displays current value next to label', () => {
 		render(
 			<Slider id='slider' label='test label' min={0} max={10} value={3} onChange={mockOnChange} />,
 		);
 
-		expect(screen.getByLabelText('test label: 3')).toBeInTheDocument();
+		expect(screen.getByLabelText('test label')).toBeInTheDocument();
+		expect(screen.getByText('3')).toBeInTheDocument();
 	});
 
 	it('has correct min and max attributes', () => {

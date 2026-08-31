@@ -160,12 +160,7 @@ describe('<ChartCard /', () => {
 		it('does not render CardForm by default', () => {
 			render(<ChartCard {...defaultProps} />);
 
-			expect(screen.getByTestId('card-form-wrapper')).toHaveClass(
-				'opacity-0',
-				'max-h-0',
-				'invisible',
-				'pointer-events-none',
-			);
+			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[1fr_0fr]');
 		});
 	});
 
@@ -188,12 +183,8 @@ describe('<ChartCard /', () => {
 			await user.click(screen.getByTestId('context-button'));
 			await user.click(screen.getByText('Edit'));
 
-			expect(screen.getByTestId('card-form-wrapper')).toHaveClass(
-				'opacity-100',
-				'max-h-[1000px]',
-				'visible',
-				'pointer-events-auto',
-			);
+			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[0fr_1fr]');
+			expect(screen.getByLabelText('Title')).toBeVisible();
 		});
 
 		it('calls updateSetupByIndex when CardForm is submitted', async () => {

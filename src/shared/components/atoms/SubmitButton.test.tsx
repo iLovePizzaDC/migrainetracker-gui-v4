@@ -31,8 +31,21 @@ describe('<SubmitButton />', () => {
 	});
 
 	it('passes classNames down correctly', () => {
-		render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' className='testclass' />);
+		render(
+			<SubmitButton
+				type={BUTTON_TYPES.BUTTON}
+				label='Test label'
+				className='testclass'
+				variant='secondary'
+			/>,
+		);
 
-		expect(screen.getByText('Test label')).toHaveClass('testclass');
+		expect(screen.getByText('Test label')).toHaveClass('btn-secondary', 'testclass');
+	});
+
+	it('uses primary variant by default', () => {
+		render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' />);
+
+		expect(screen.getByText('Test label')).toHaveClass('btn-primary');
 	});
 });

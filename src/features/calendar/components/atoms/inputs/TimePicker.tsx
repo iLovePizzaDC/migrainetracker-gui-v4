@@ -46,10 +46,10 @@ function TimePicker({
 	});
 
 	return (
-		<div className='relative w-full space-y-1'>
+		<div className='input-field relative w-full'>
 			<label
 				htmlFor={id}
-				className='block text-sm font-medium cursor-pointer'
+				className='field-label cursor-pointer'
 				onClick={() => inputRef.current?.focus()}
 			>
 				{label}
@@ -69,13 +69,13 @@ function TimePicker({
 				onBlur={() => {
 					if (value) onChange(finalizeTime(value));
 				}}
-				className='w-full p-2 rounded-lg bg-black/10 border border-white/20 text-white text-sm'
+				className='glass-input text-sm text-white'
 			/>
 
 			{open && (
 				<div
 					ref={pickerRef}
-					className='absolute z-20 w-full mt-1 flex rounded-lg bg-black/30 border border-white/20 p-3'
+					className='glass-menu absolute z-20 mt-1 flex w-full p-3'
 					data-testid='picker-popup'
 				>
 					<div
@@ -126,7 +126,7 @@ function TimePicker({
 						))}
 					</div>
 
-					<div className='pointer-events-none absolute inset-x-3 top-1/2 h-8 -translate-y-1/2 border-y border-white/30' />
+					<div className='pointer-events-none absolute inset-x-3 top-1/2 h-8 -translate-y-1/2 border-y border-white/15' />
 				</div>
 			)}
 		</div>

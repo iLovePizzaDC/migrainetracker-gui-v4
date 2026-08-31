@@ -4,11 +4,13 @@ import { CalendarProvider } from '@/features/calendar/hooks/calendar-provider';
 function CalendarPage() {
 	return (
 		<div className='w-full'>
-			<div className='max-w-6xl mx-auto'>
-				<CalendarProvider>
-					<Calendar />
-				</CalendarProvider>
-			</div>
+			<header className='mb-6 text-left sm:mb-8'>
+				<h1 className='page-heading'>Calendar</h1>
+				<p className='page-subheading'>Log and review your migraine days.</p>
+			</header>
+			<CalendarProvider>
+				<Calendar />
+			</CalendarProvider>
 		</div>
 	);
 }

@@ -86,48 +86,36 @@ describe('<MidasCard />', () => {
 			vi.mocked(fetchMidasPieData).mockReturnValue(mockFetchMidasPieData(3));
 			render(<MidasCard />);
 
-			expect(await screen.findByText('not/little')).toBeInTheDocument();
-			expect(await screen.findByText('not/little')).toHaveClass(
-				'bg-gradient-to-r',
-				'from-gray-500/0',
-				'to-gray-500/70',
-			);
+			const label = await screen.findByText('not/little');
+			expect(label).toBeInTheDocument();
+			expect(label).toHaveClass('text-white/50');
 		});
 
 		it('shows "mild" label for score >= 6', async () => {
 			vi.mocked(fetchMidasPieData).mockReturnValue(mockFetchMidasPieData(6));
 			render(<MidasCard />);
 
-			expect(await screen.findByText('mild')).toBeInTheDocument();
-			expect(await screen.findByText('mild')).toHaveClass(
-				'bg-gradient-to-r',
-				'from-yellow-500/0',
-				'to-yellow-500/70',
-			);
+			const label = await screen.findByText('mild');
+			expect(label).toBeInTheDocument();
+			expect(label).toHaveClass('text-yellow-200/90');
 		});
 
 		it('shows "moderate" label for score >= 11', async () => {
 			vi.mocked(fetchMidasPieData).mockReturnValue(mockFetchMidasPieData(11));
 			render(<MidasCard />);
 
-			expect(await screen.findByText('moderate')).toBeInTheDocument();
-			expect(await screen.findByText('moderate')).toHaveClass(
-				'bg-gradient-to-r',
-				'from-orange-500/0',
-				'to-orange-500/70',
-			);
+			const label = await screen.findByText('moderate');
+			expect(label).toBeInTheDocument();
+			expect(label).toHaveClass('text-orange-300/90');
 		});
 
 		it('shows "severe" label for score >= 21', async () => {
 			vi.mocked(fetchMidasPieData).mockReturnValue(mockFetchMidasPieData(21));
 			render(<MidasCard />);
 
-			expect(await screen.findByText('severe')).toBeInTheDocument();
-			expect(await screen.findByText('severe')).toHaveClass(
-				'bg-gradient-to-r',
-				'from-red-500/0',
-				'to-red-500/70',
-			);
+			const label = await screen.findByText('severe');
+			expect(label).toBeInTheDocument();
+			expect(label).toHaveClass('text-red-300/90');
 		});
 	});
 });
