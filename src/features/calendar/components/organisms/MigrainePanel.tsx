@@ -40,6 +40,7 @@ function MigrainePanel({
 
 	return (
 		<div
+			data-testid='migraine-panel-reveal'
 			className={`
 				grid motion-reveal
 				${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}

@@ -73,13 +73,13 @@ describe('<MigrainePanelHeader />', () => {
 		expect(screen.queryByTestId('edit-button')).not.toBeInTheDocument();
 	});
 
-	it('renders edit button when prefilled is set', () => {
+	it('renders edit button when prefilled is set and inputs are disabled', () => {
 		render(
 			<MigrainePanelHeader
 				date={mockDate}
 				onClose={mockOnClose}
 				prefilled={{} as any}
-				areInputsDisabled={false}
+				areInputsDisabled
 				setAreInputsDisabled={mockSetAreInputsDisabled}
 				isLoading={false}
 			/>,

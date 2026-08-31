@@ -1,10 +1,12 @@
 import NavigationLink from '@/app/components/atoms/NavigationLink';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
+const mockUseLocation = vi.fn(() => ({ pathname: '/' }));
+
 vi.mock('react-router', () => ({
-	useLocation: () => ({ pathname: '/' }),
+	useLocation: () => mockUseLocation(),
 	Link: ({ children, to, className, onClick }: any) => (
 		<a
 			data-testid='navigation-link'
@@ -39,9 +41,22 @@ describe('<NavigationLink />', () => {
 		expect(screen.getByTestId('navigation-link')).toHaveAttribute('href', '/test');
 	});
 
-	it('applies active classes when pathname matches', () => {
+	it('applies active classes when pathname matches', async () => {
+		mockUseLocation.mockReturnValue({ pathname: '/test' });
 		render(<NavigationLink {...defaultProps} to='/test' />);
-		expect(screen.getByTestId('navigation-link')).toHaveClass('border-transparent');
+
+		await waitFor(() => {
+			expect(screen.getByTestId('navigation-link')).toHaveClass('nav-pill-active', 'cursor-default');
+		});
+	});
+
+	it('applies inactive classes when pathname does not match', async () => {
+		mockUseLocation.mockReturnValue({ pathname: '/' });
+		render(<NavigationLink {...defaultProps} to='/test' />);
+
+		await waitFor(() => {
+			expect(screen.getByTestId('navigation-link')).toHaveClass('nav-pill-inactive');
+		});
 	});
 
 	it('calls onClick when clicked', async () => {

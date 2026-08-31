@@ -111,6 +111,14 @@ const mockUseCalendar = (overrides = {}) =>
 describe('<Calendar />', () => {
 	const user = userEvent.setup();
 
+	const expectPanelClosed = () => {
+		expect(screen.getByTestId('migraine-panel-reveal')).toHaveClass('grid-rows-[0fr]');
+	};
+
+	const expectPanelOpen = () => {
+		expect(screen.getByTestId('migraine-panel-reveal')).toHaveClass('grid-rows-[1fr]');
+	};
+
 	describe('rendering', () => {
 		it('renders CalendarHeader', () => {
 			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar());
@@ -136,16 +144,12 @@ describe('<Calendar />', () => {
 			expect(screen.getByText('Filter')).toBeInTheDocument();
 		});
 
-		it('renders MigrainePanel with isOpen false by default', () => {
+		it('renders MigrainePanel collapsed by default', () => {
 			vi.mocked(useCalendar).mockReturnValue(mockUseCalendar());
 
 			render(<Calendar />);
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass(
-				'opacity-0',
-				'translate-y-2',
-				'pointer-events-none',
-			);
+			expectPanelClosed();
 		});
 
 		it('renders load entry button', () => {
@@ -173,7 +177,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('1'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expectPanelOpen();
 		});
 
 		it('opens panel clicking a day with event', async () => {
@@ -183,7 +187,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expectPanelOpen();
 		});
 
 		it('closes panel when clicking the same day twice', async () => {
@@ -193,15 +197,11 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expectPanelOpen();
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass(
-				'opacity-0',
-				'translate-y-2',
-				'pointer-events-none',
-			);
+			expectPanelClosed();
 		});
 
 		it('loads entry from localStorage when clicking load entry button', async () => {
@@ -231,7 +231,7 @@ describe('<Calendar />', () => {
 			await user.click(screen.getByTestId('load-entry'));
 
 			expect(setMonthMock).toHaveBeenCalled();
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expectPanelOpen();
 		});
 
 		it('does not change state when clicking load entry button if no entry in localStorage', async () => {
@@ -242,7 +242,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByTestId('load-entry'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-0', 'translate-y-2');
+			expectPanelClosed();
 		});
 
 		it('closes panel and resets state when onClose is called', async () => {
@@ -252,11 +252,11 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100');
+			expectPanelOpen();
 
 			await user.click(screen.getByRole('button', { name: 'Close' }));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-0');
+			expectPanelClosed();
 		});
 	});
 
@@ -272,7 +272,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('1'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expectPanelOpen();
 		});
 
 		it('keeps entry.medicines unchanged when userMedicineOptions is empty', async () => {
@@ -286,7 +286,7 @@ describe('<Calendar />', () => {
 
 			await user.click(screen.getByText('3'));
 
-			expect(screen.getByTestId('migraine-panel')).toHaveClass('opacity-100', 'translate-y-0');
+			expectPanelOpen();
 		});
 	});
 

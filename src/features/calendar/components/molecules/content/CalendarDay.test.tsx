@@ -141,7 +141,7 @@ describe('<CalendarDay />', () => {
 
 			render(<CalendarDay day={3} index={0} openDate={null} onDayClick={mockOnDayClick} />);
 
-			expect(screen.getByTestId('color-indicator-3')).toHaveClass('ring-1', 'ring-red-500');
+			expect(screen.getByTestId('color-indicator-3')).toHaveClass('ring-1', 'ring-red-400/70');
 		});
 
 		it('shows a prophylaxis dot when a prophylaxis event exists for the day', () => {

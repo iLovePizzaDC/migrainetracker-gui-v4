@@ -91,6 +91,7 @@ function ChartCard({
 			</div>
 
 			<div
+				data-testid='chart-card-reveal'
 				className={`
           grid overflow-hidden motion-reveal
           ${isEditing ? 'grid-rows-[0fr_1fr]' : 'grid-rows-[1fr_0fr]'}
