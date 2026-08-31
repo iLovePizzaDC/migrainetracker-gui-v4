@@ -46,18 +46,17 @@ function MidasCard() {
 
 	return (
 		<CardShell>
-			<div className='mb-4 flex w-full items-start justify-between'>
-				<div className='w-16 opacity-0 pointer-events-none' />
-				<h2 className='flex-1 text-center text-sm font-medium tracking-wide text-white/80'>
+			<div className='mb-4 flex min-w-0 items-center justify-between gap-2'>
+				<h2 className='min-w-0 flex-1 truncate text-sm font-medium tracking-wide text-white/80'>
 					MIDAS Score
 				</h2>
 				<span
-					className={`w-16 text-right text-[10px] font-semibold uppercase tracking-wider ${color}`}
+					className={`shrink-0 text-[10px] font-semibold uppercase tracking-wider ${color}`}
 				>
 					{label}
 				</span>
 			</div>
-			<div className='flex h-72 w-full items-center justify-center'>
+			<div className='chart-area'>
 				{isLoading ? (
 					<div className='h-full w-full animate-pulse rounded-xl bg-white/5' />
 				) : (

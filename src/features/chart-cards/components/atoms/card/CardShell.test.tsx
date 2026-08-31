@@ -20,7 +20,7 @@ describe('<CardShell />', () => {
 			</CardShell>,
 		);
 
-		expect(screen.getByTestId('card-shell')).toHaveClass('glass-panel', 'w-full', 'self-start');
+		expect(screen.getByTestId('card-shell')).toHaveClass('glass-panel', 'min-w-0', 'w-full', 'self-start');
 	});
 
 	it('applies padded classes by default', () => {
@@ -30,7 +30,7 @@ describe('<CardShell />', () => {
 			</CardShell>,
 		);
 
-		expect(screen.getByTestId('card-shell')).toHaveClass('relative', 'p-5');
+		expect(screen.getByTestId('card-shell')).toHaveClass('relative', 'p-4');
 	});
 
 	it('omits padded classes when padded is false', () => {
@@ -40,7 +40,7 @@ describe('<CardShell />', () => {
 			</CardShell>,
 		);
 
-		expect(screen.getByTestId('card-shell')).not.toHaveClass('relative', 'p-5');
+		expect(screen.getByTestId('card-shell')).not.toHaveClass('relative', 'p-4');
 	});
 
 	it('merges a custom className', () => {
