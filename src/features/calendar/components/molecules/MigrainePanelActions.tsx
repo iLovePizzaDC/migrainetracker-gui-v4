@@ -10,12 +10,6 @@ interface IMigrainePanelActions {
 	submitNewEntry: () => void;
 }
 
-const feedbackClass = (feedback: FeedbackType) => {
-	if (feedback === 'success') return 'border-emerald-400/45';
-	if (feedback === 'error') return 'border-red-400/45';
-	return '';
-};
-
 export default function MigrainePanelActions({
 	cacheFeedback,
 	saveFeedback,
@@ -30,16 +24,17 @@ export default function MigrainePanelActions({
 				label='Save'
 				onClick={saveNewEntry}
 				variant='secondary'
-				className={feedbackClass(cacheFeedback)}
+				feedback={cacheFeedback}
 			/>
 
 			<SubmitButton
 				type={BUTTON_TYPES.BUTTON}
-				label={isLoading ? 'Submitting...' : 'Submit'}
+				label='Submit'
+				loadingLabel='Submitting...'
+				loading={isLoading}
 				onClick={submitNewEntry}
-				disabled={isLoading}
 				variant='primary'
-				className={feedbackClass(saveFeedback)}
+				feedback={saveFeedback}
 			/>
 		</div>
 	);

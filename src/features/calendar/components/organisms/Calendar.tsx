@@ -92,7 +92,7 @@ function Calendar() {
 
 	return (
 		<>
-			<div className='glass-panel relative mx-auto flex w-full max-w-md flex-col p-5 sm:p-6'>
+			<div className='glass-panel relative mx-auto flex w-full max-w-md flex-col card-padding'>
 				<div className='flex-1 flex flex-col'>
 					<CalendarHeader />
 					<CalendarContent openDate={selectedDate} onDayClick={onDayClick} />

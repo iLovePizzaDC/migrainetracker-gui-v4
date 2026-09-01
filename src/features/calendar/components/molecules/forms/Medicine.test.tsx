@@ -126,7 +126,7 @@ describe('<Medicine />', () => {
 			await import('@/features/calendar/components/molecules/forms/Medicine');
 		render(<Medicine medicines={mockMedicines} onChange={mockOnChange} />);
 
-		expect(screen.queryByTestId('add-medicine-form')).toHaveStyle('height: 0');
+		expect(screen.queryByTestId('add-medicine-form')).toHaveClass('grid-rows-[0fr]');
 	});
 
 	it('renders add medicine form on first button click', async () => {
@@ -149,7 +149,7 @@ describe('<Medicine />', () => {
 		await user.click(screen.getByTestId('add-medicine'));
 		await user.click(screen.getByTestId('add-medicine'));
 
-		expect(screen.queryByTestId('add-medicine-form')).toHaveStyle('height: 0');
+		expect(screen.queryByTestId('add-medicine-form')).toHaveClass('grid-rows-[0fr]');
 	});
 
 	it('calls onChange with correct taken value on slider change', async () => {

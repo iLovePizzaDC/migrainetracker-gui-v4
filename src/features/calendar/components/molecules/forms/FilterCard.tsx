@@ -17,12 +17,13 @@ function FilterCard() {
 	});
 
 	return (
-		<div className='fixed bottom-5 right-5 z-50'>
+		<div className='fab-anchor'>
 			<div className='relative'>
 				<button
 					data-testid='toggle-button'
+					type='button'
 					onClick={() => setFilterOpen((prev) => !prev)}
-					className='flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/80 shadow-sm shadow-black/20 backdrop-blur-md transition-colors duration-200 ease-soft hover:bg-white/15 hover:text-white'
+					className='fab-btn'
 					aria-label={filterOpen ? 'Close filter' : 'Open filter'}
 					aria-expanded={filterOpen}
 				>
@@ -32,19 +33,15 @@ function FilterCard() {
 				<div
 					data-testid='filter-card'
 					ref={cardRef}
-					className={`
-						glass-panel absolute bottom-full right-0 mb-3 w-64 p-4
-						origin-bottom-right
-						transition-[opacity,transform] duration-350 ease-smooth
-						${filterOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-1.5 opacity-0'}
-					`}
+					className={`popover-panel ${filterOpen ? 'popover-panel--open' : 'popover-panel--closed'}`}
 				>
-					<div className='mb-3 flex items-center justify-between'>
-						<h3 className='text-sm font-medium text-white/80'>Filter</h3>
+					<div className='section-header mb-3'>
+						<h3 className='card-title'>Filter</h3>
 						<button
 							data-testid='close-button'
+							type='button'
 							onClick={() => setFilterOpen(false)}
-							className='icon-btn !h-8 !w-8'
+							className='section-header-action icon-btn !h-8 !w-8'
 							aria-label='Close filter'
 						>
 							<XMarkIcon className='!h-4 !w-4' />

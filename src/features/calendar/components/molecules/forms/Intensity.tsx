@@ -11,7 +11,9 @@ interface IIntensity {
 function Intensity({ intensity, onChange, disabled = false }: IIntensity) {
 	return (
 		<div data-testid='intensity' className='form-section'>
-			<h3 className='section-title'>Intensity</h3>
+			<div className='section-header'>
+				<h3 className='section-title'>Intensity</h3>
+			</div>
 			<SelectInput
 				id='intensity'
 				type={SELECT_TYPES.RADIO}

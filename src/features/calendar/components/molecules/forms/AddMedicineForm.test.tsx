@@ -49,10 +49,10 @@ describe('<AddMedicineForm />', () => {
 		expect(screen.getByText('Save')).toBeInTheDocument();
 	});
 
-	it('set height to 0 if show is false', () => {
+	it('collapses when show is false', () => {
 		render(<AddMedicineForm show={false} />);
 
-		expect(screen.getByTestId('add-medicine-form')).toHaveStyle('height: 0');
+		expect(screen.getByTestId('add-medicine-form')).toHaveClass('grid-rows-[0fr]');
 	});
 
 	it('enables submit button if form is valid', async () => {
@@ -117,6 +117,9 @@ describe('<AddMedicineForm />', () => {
 		await user.click(screen.getByRole('button', { name: 'Save' }));
 
 		expect(mockAddMedicine).not.toHaveBeenCalled();
+		expect(screen.getByRole('alert')).toHaveTextContent(
+			'Could not save medicine. Please try again.',
+		);
 		expect(screen.getByLabelText('Name')).toHaveValue('Test medicine');
 		expect(screen.getByLabelText('Abbreviation')).toHaveValue('tst_med');
 	});

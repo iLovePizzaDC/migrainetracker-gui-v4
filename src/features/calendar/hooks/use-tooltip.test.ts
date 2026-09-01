@@ -136,4 +136,31 @@ describe('useTooltip', () => {
 
 		expect(getBoundingClientRect).not.toHaveBeenCalled();
 	});
+
+	it('clamps tooltip coordinates near viewport edges', () => {
+		const anchor = document.createElement('span');
+
+		vi.spyOn(anchor, 'getBoundingClientRect').mockReturnValue({
+			top: 100,
+			bottom: 150,
+			left: 0,
+			width: 20,
+			height: 50,
+			right: 20,
+			x: 0,
+			y: 100,
+			toJSON: () => {},
+		});
+
+		Object.defineProperty(window, 'innerWidth', {
+			configurable: true,
+			value: 360,
+		});
+
+		const anchorRef = { current: anchor };
+
+		const { result } = renderHook(() => useTooltip(anchorRef, true));
+
+		expect(result.current.coords.left).toBe(176);
+	});
 });
