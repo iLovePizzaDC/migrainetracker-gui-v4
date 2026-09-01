@@ -131,27 +131,28 @@ function ChartCard({
 
 				<Reveal open={isEditing} data-testid='card-form-wrapper'>
 					<div className='min-h-0 overflow-hidden pt-1'>
-						<CardForm
-							key={JSON.stringify({
-								isEditing,
-								index,
-								title,
-								cardType,
-								chartType,
-								filter,
-								timeframeCount,
-								timeframeUnit,
-							})}
-							onButtonClick={onEdit}
-							setIsEditing={setIsEditing}
-							defaultIndex={index}
-							defaultTitle={title}
-							defaultCardType={cardType}
-							defaultChartType={chartType}
-							defaultFilter={filter}
-							defaultCount={timeframeCount}
-							defaultUnit={timeframeUnit}
-						/>
+						{isEditing ? (
+							<CardForm
+								key={JSON.stringify({
+									index,
+									title,
+									cardType,
+									chartType,
+									filter,
+									timeframeCount,
+									timeframeUnit,
+								})}
+								onButtonClick={onEdit}
+								setIsEditing={setIsEditing}
+								defaultIndex={index}
+								defaultTitle={title}
+								defaultCardType={cardType}
+								defaultChartType={chartType}
+								defaultFilter={filter}
+								defaultCount={timeframeCount}
+								defaultUnit={timeframeUnit}
+							/>
+						) : null}
 					</div>
 				</Reveal>
 			</div>
