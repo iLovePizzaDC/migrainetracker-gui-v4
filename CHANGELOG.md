@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.10.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.9.2...v1.10.0) (2026-09-01)
+
+
+### Features
+
+* change to sticky footer ([1c3f2e9](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/1c3f2e93e1bfb2351497aeb242c3a82cc7d49782))
+* change to sticky footer ([5c0ac77](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/5c0ac77a620f69757c913d604fc16ddc9b60d963))
+
+
+### Bug Fixes
+
+* also use reveal in chartcard ([#188](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/188)) ([1f8f2dc](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/1f8f2dc74d48a4c36d6b0de082eb5fd969ebbcfa))
+
 ## [1.9.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.9.1...v1.9.2) (2026-09-01)
 
 
