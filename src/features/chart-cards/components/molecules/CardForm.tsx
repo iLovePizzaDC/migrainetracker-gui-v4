@@ -3,22 +3,23 @@ import { CHART_OPTIONS } from '@/features/chart-cards/constants/chart';
 import { TIME_FRAME_UNIT_OPTIONS } from '@/features/chart-cards/constants/time-frame';
 import { useCardForm } from '@/features/chart-cards/hooks/use-card-form';
 import { useCardSetups } from '@/features/chart-cards/hooks/use-card-setups';
+import type { CardSetup } from '@/features/chart-cards/types/card';
 import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
 import TextInput from '@/shared/components/atoms/inputs/TextInput';
 import SubmitButton from '@/shared/components/atoms/SubmitButton';
 import FilterForm from '@/shared/components/molecules/FilterForm';
+import { CARD_TYPES, TIME_FRAME_UNITS } from '@/shared/constants/chart-cards/cards';
+import { CHART_TYPES } from '@/shared/constants/chart-cards/charts';
 import { BUTTON_TYPES } from '@/shared/constants/input/button';
 import { INPUT_TYPES } from '@/shared/constants/input/input';
 import { FILTER_FORM_VARIANTS } from '@/shared/constants/variants/filter-form';
-import type { EventFilter } from '@/shared/types/event';
-import type { CardSetup } from '@/features/chart-cards/types/card';
-import type { ChartType } from '@/shared/types/chart';
 import type { CardType, TimeFrameUnit } from '@/shared/types/card';
-import { CARD_TYPES, TIME_FRAME_UNITS } from '@/shared/constants/chart-cards/cards';
-import { CHART_TYPES } from '@/shared/constants/chart-cards/charts';
+import type { ChartType } from '@/shared/types/chart';
+import type { EventFilter } from '@/shared/types/event';
 
 interface ICardForm {
 	onButtonClick: (setup: CardSetup) => void;
+	setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 	defaultIndex?: number;
 	defaultTitle?: string;
 	defaultCardType?: CardType;
@@ -30,6 +31,7 @@ interface ICardForm {
 
 function CardForm({
 	onButtonClick,
+	setIsEditing,
 	defaultIndex,
 	defaultTitle = '',
 	defaultCardType = CARD_TYPES.MIGRAINE,
@@ -63,6 +65,10 @@ function CardForm({
 		count: defaultCount,
 		unit: defaultUnit,
 	});
+
+	const onEdit = () => {
+		setIsEditing(false);
+	};
 
 	const onSubmit = () => {
 		onButtonClick(buildSetup(defaultIndex ?? cardSetups.length));
@@ -135,7 +141,16 @@ function CardForm({
 				midasInputVisible={false}
 			/>
 
-			<SubmitButton type={BUTTON_TYPES.SUBMIT} label='Submit' />
+			<div className='flex justify-end gap-3 border-t border-white/[0.06] pt-5'>
+				<SubmitButton
+					type={BUTTON_TYPES.BUTTON}
+					label='Cancel'
+					onClick={onEdit}
+					variant='secondary'
+				/>
+
+				<SubmitButton type={BUTTON_TYPES.SUBMIT} label='Submit' />
+			</div>
 		</form>
 	);
 }

@@ -74,6 +74,7 @@ src/
 
 ![Dashboard](./docs/dashboard.png)
 ![Calendar view](./docs/calendar.png)
+![Calendar Migraine Panel](./docs/migraine-panel.png)
 
 ---
 

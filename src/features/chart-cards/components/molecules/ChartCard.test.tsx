@@ -3,7 +3,7 @@ import { useChartData } from '@/features/chart-cards/hooks/use-chart-data';
 import { CARD_TYPES, TIME_FRAME_UNITS } from '@/shared/constants/chart-cards/cards';
 import { CHART_TYPES } from '@/shared/constants/chart-cards/charts';
 import { MEDICINE_TYPES } from '@/shared/constants/user/medicine';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -157,10 +157,10 @@ describe('<ChartCard /', () => {
 			expect(screen.queryByText('5/8 days')).not.toBeInTheDocument();
 		});
 
-		it('does not render CardForm by default', () => {
+		it('does not show CardForm by default', () => {
 			render(<ChartCard {...defaultProps} />);
 
-			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[auto]');
+			expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[0fr]');
 			expect(screen.queryByLabelText('Title')).not.toBeInTheDocument();
 		});
 	});
@@ -184,7 +184,7 @@ describe('<ChartCard /', () => {
 			await user.click(screen.getByTestId('context-button'));
 			await user.click(screen.getByText('Edit'));
 
-			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[minmax(0,0fr)_auto]');
+			expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[1fr]');
 			expect(screen.getByLabelText('Title')).toBeVisible();
 		});
 
@@ -210,7 +210,7 @@ describe('<ChartCard /', () => {
 			expect(titleInput).toHaveValue('Changed title');
 
 			await user.click(screen.getByTestId('context-button'));
-			await user.click(screen.getByText('Cancel'));
+			await user.click(within(screen.getByTestId('context-menu')).getByText('Cancel'));
 
 			await user.click(screen.getByTestId('context-button'));
 			await user.click(screen.getByText('Edit'));

@@ -25,7 +25,7 @@ function AppendCard() {
 			</button>
 			<Reveal open={expanded} data-testid='card-form-wrapper'>
 				<div className='border-t border-white/[0.06] card-padding-x pb-3 pt-3 sm:pb-4 sm:pt-4 md:pb-6 md:pt-4'>
-					<CardForm onButtonClick={appendSetup} />
+					<CardForm onButtonClick={appendSetup} setIsEditing={setExpanded} />
 				</div>
 			</Reveal>
 		</CardShell>
