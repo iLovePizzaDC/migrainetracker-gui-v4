@@ -8,7 +8,7 @@ interface INavigationLink {
 	className?: string;
 }
 
-export default function NavigationLink({ label, to, onClick }: INavigationLink) {
+export default function NavigationLink({ label, to, onClick, className }: INavigationLink) {
 	const { pathname } = useLocation();
 
 	const [isActive, setIsActive] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export default function NavigationLink({ label, to, onClick }: INavigationLink) 
 	return (
 		<Link
 			to={to}
-			className={`nav-pill ${isActive ? 'nav-pill-active cursor-default' : 'nav-pill-inactive'}`}
+			className={`nav-pill ${isActive ? 'nav-pill-active cursor-default' : 'nav-pill-inactive'} ${className ?? ''}`}
 			onClick={onClick}
 		>
 			{label}

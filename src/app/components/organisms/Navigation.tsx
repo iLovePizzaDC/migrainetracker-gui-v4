@@ -1,9 +1,9 @@
+import MobileNavigationLinks from '@/app/components/molecules/navigation/MobileNavigationLinks';
+import MobileNavigationOptions from '@/app/components/molecules/navigation/MobileNavigationOptions';
+import NavigationLinks from '@/app/components/molecules/navigation/NavigationLinks';
+import Reveal from '@/shared/components/atoms/Reveal';
 import { useUser } from '@/shared/hooks/use-user';
 import { useState } from 'react';
-import MobileNavigationLinks from '@/app/components/molecules/navigation/MobileNavigationLinks';
-import NavigationLinks from '@/app/components/molecules/navigation/NavigationLinks';
-import MobileNavigationOptions from '@/app/components/molecules/navigation/MobileNavigationOptions';
-import Reveal from '@/shared/components/atoms/Reveal';
 
 function Navigation() {
 	const { user } = useUser();
@@ -34,7 +34,7 @@ function Navigation() {
 			</div>
 
 			<Reveal open={isOpen} className='lg:hidden' data-testid='mobile-nav'>
-				<nav className='mx-4 mb-3 space-y-0.5 rounded-xl border border-white/[0.08] bg-black/30 p-1.5 backdrop-blur-xl'>
+				<nav className='mx-4 mb-3 rounded-xl border border-white/[0.08] bg-black/30 p-2 backdrop-blur-xl'>
 					<MobileNavigationLinks toggleMenu={toggleMenu} />
 				</nav>
 			</Reveal>
