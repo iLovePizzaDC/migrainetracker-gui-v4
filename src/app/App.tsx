@@ -16,7 +16,7 @@ function App() {
 	const { authChecked } = useAuthCheck(setUser);
 
 	return (
-		<div className='relative flex min-h-screen flex-col'>
+		<div className='relative flex min-h-dvh flex-col'>
 			<div className='fixed inset-0 -z-10'>
 				<img
 					src={getSeasonBackground()}
@@ -28,9 +28,9 @@ function App() {
 				<div className='absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.04),transparent_60%)]' />
 			</div>
 			<Navigation />
-			<main className='flex-1'>
+			<main className='flex flex-1 flex-col'>
 				{authChecked ? (
-					<div className='mx-auto mt-16 min-w-0 max-w-6xl px-0 pb-[calc(2.5rem+env(safe-area-inset-bottom))]'>
+					<div className='mx-auto flex min-h-0 w-full min-w-0 max-w-6xl flex-1 flex-col px-0 pb-6 pt-16'>
 						<Routes>
 							<Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
 							<Route
