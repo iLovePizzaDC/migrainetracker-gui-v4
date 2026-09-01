@@ -1,5 +1,6 @@
 import Combobox from '@/shared/components/atoms/inputs/Combobox';
 import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
+import Reveal from '@/shared/components/atoms/Reveal';
 import {
 	ANY_FILTER_OPTIONS,
 	ANY_FILTER_TYPE,
@@ -60,20 +61,15 @@ function FilterForm({
 					onClick={() => setIsOpen((prev) => !prev)}
 					className='flex w-full items-center justify-between p-3 text-left'
 				>
-					<span className='text-sm font-medium text-white/80'>Filters</span>
+					<span className='card-title'>Filters</span>
 					<PlusIcon
 						className={`h-5 w-5 text-white/50 icon-spin ${isOpen ? 'icon-spin-open' : ''}`}
 					/>
 				</button>
 			)}
 
-			<div
-				className={`grid motion-reveal ${
-					variant === FILTER_FORM_VARIANTS.COMPACT || isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-				}`}
-			>
-				<div className='min-h-0 overflow-hidden'>
-					<div className='space-y-3 p-3'>
+			<Reveal open={variant === FILTER_FORM_VARIANTS.COMPACT || isOpen}>
+				<div className='space-y-3 p-3'>
 						<DropdownInput
 							id='filterIntensity'
 							label='Intensity'
@@ -167,8 +163,7 @@ function FilterForm({
 							/>
 						)}
 					</div>
-				</div>
-			</div>
+			</Reveal>
 		</div>
 	);
 }

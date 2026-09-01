@@ -7,7 +7,7 @@ function CardSection() {
 	const { cardSetups } = useCardSetups();
 
 	return (
-		<div className='grid min-w-0 grid-cols-1 justify-items-stretch gap-4 md:grid-cols-2 md:gap-5'>
+		<div className='grid min-w-0 grid-cols-1 justify-items-stretch gap-3 sm:gap-4 md:grid-cols-2 md:gap-5'>
 			{cardSetups
 				.sort((a, b) => a.index - b.index)
 				.map((cardSetup) => (

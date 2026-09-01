@@ -59,7 +59,7 @@ function ContextMenu({
 			<MenuItem
 				label={removalVerified ? 'Are you sure?' : 'Remove'}
 				onClick={onRemove}
-				className={`${removalVerified ? 'text-red-500' : 'text-white'}`}
+				className={`${removalVerified ? 'text-danger' : 'text-white'}`}
 			/>
 		</div>
 	);

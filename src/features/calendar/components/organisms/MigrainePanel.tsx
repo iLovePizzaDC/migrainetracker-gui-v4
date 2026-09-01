@@ -7,6 +7,7 @@ import Symptoms from '@/features/calendar/components/molecules/forms/Symptoms';
 import Medicine from '@/features/calendar/components/molecules/forms/Medicine';
 import Midas from '@/features/calendar/components/molecules/forms/Midas';
 import MigrainePanelActions from '@/features/calendar/components/molecules/MigrainePanelActions';
+import Reveal from '@/shared/components/atoms/Reveal';
 
 interface IMigrainePanel {
 	date: Date;
@@ -39,15 +40,8 @@ function MigrainePanel({
 	const inputsDisabled = areInputsDisabled || isLoading;
 
 	return (
-		<div
-			data-testid='migraine-panel-reveal'
-			className={`
-				grid motion-reveal
-				${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}
-			`}
-		>
-			<div className='min-h-0 overflow-hidden'>
-				<div data-testid='migraine-panel' className='glass-panel mx-auto max-w-5xl p-4 sm:p-6'>
+		<Reveal open={isOpen} data-testid='migraine-panel-reveal'>
+			<div data-testid='migraine-panel' className='glass-panel mx-auto max-w-5xl card-padding'>
 					<div className='space-y-5'>
 						<MigrainePanelHeader
 							date={date}
@@ -96,9 +90,8 @@ function MigrainePanel({
 							/>
 						</div>
 					</div>
-				</div>
 			</div>
-		</div>
+		</Reveal>
 	);
 }
 

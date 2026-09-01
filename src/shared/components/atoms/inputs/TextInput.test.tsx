@@ -1,4 +1,5 @@
 import TextInput from '@/shared/components/atoms/inputs/TextInput';
+import { INPUT_TYPES } from '@/shared/constants/input/input';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
@@ -29,6 +30,12 @@ describe('<TextInput />', () => {
 		render(<TextInput {...defaultProps} placeholder='Test placeholder' />);
 
 		expect(screen.getByRole('textbox')).toHaveAttribute('placeholder', 'Test placeholder');
+	});
+
+	it('renders with correct type when number is specified', () => {
+		render(<TextInput {...defaultProps} type={INPUT_TYPES.NUMBER} />);
+
+		expect(screen.getByLabelText('Test label')).toHaveAttribute('type', 'number');
 	});
 
 	it('calls onChange when value of input changes', async () => {

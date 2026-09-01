@@ -26,12 +26,12 @@ function Durations({ durations, onChange, disabled = false }: IDurations) {
 
 	return (
 		<div data-testid='durations' className='form-section'>
-			<div className='flex items-center justify-between'>
+			<div className='section-header'>
 				<h3 className='section-title'>Duration</h3>
 				<button
 					data-testid='add-button'
 					onClick={addDuration}
-					className={`icon-btn !h-8 !w-8 ${disabled ? 'invisible' : ''}`}
+					className={`section-header-action icon-btn !h-8 !w-8 ${disabled ? 'invisible' : ''}`}
 					aria-label='Add duration'
 					disabled={disabled}
 					tabIndex={disabled ? -1 : undefined}
@@ -69,8 +69,9 @@ function Durations({ durations, onChange, disabled = false }: IDurations) {
 
 					{durations.length > 1 && !disabled && (
 						<button
+							type='button'
 							onClick={() => removeDuration(duration.id)}
-							className='motion-fade flex items-center gap-1 text-xs text-red-300/70 hover:text-red-300'
+							className='link-danger motion-fade'
 						>
 							<XMarkIcon className='h-3.5 w-3.5' /> Remove
 						</button>

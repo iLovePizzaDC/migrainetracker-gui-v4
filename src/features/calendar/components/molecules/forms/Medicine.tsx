@@ -20,12 +20,12 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 
 	return (
 		<div className='form-section'>
-			<div className='flex items-center justify-between'>
+			<div className='section-header'>
 				<h3 className='section-title'>Medicines</h3>
 				<button
 					data-testid='add-medicine'
 					onClick={() => setShowMedicineForm((prev) => !prev)}
-					className={`icon-btn !h-8 !w-8 ${disabled ? 'invisible' : ''}`}
+					className={`section-header-action icon-btn !h-8 !w-8 ${disabled ? 'invisible' : ''}`}
 					aria-label={showMedicineForm ? 'Close add medicine' : 'Add medicine'}
 					aria-expanded={showMedicineForm}
 					disabled={disabled}
@@ -37,7 +37,7 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 
 			<Tooltip
 				content={
-					<div className='max-w-xs text-xs leading-relaxed'>
+					<>
 						<p>
 							A “Med-Day” is any day on which you've taken acute medication (either medication of
 							type "migraine-painkiller" or "painkiller"). When this occurs on 10 or more days per
@@ -46,15 +46,16 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 								className='text-sky-300 underline transition-opacity hover:opacity-80'
 								href='https://www.ncbi.nlm.nih.gov/books/NBK538150/'
 								target='_blank'
+								rel='noreferrer'
 							>
 								MOH
 							</a>
 							&nbsp; (Medication Overuse Headache) increases.
 						</p>
-					</div>
+					</>
 				}
 			>
-				<div className='inline-flex w-fit items-center gap-1.5 rounded-lg bg-white/[0.04] px-2 py-1'>
+				<div className='info-chip'>
 					<p className='text-xs text-white/55'>
 						<span
 							data-testid='med-days-count'
@@ -77,11 +78,8 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 			<MedicineCombobox medicines={medicines} onChange={onChange} disabled={disabled} />
 
 			{medicines.map((medicine, index) => (
-				<div
-					key={index}
-					className='space-y-3 rounded-xl bg-white/[0.03] p-3 ring-1 ring-white/[0.06]'
-				>
-					<p className='text-sm font-medium text-white/85'>{medicine.medicine.label}</p>
+				<div key={index} className='nested-card'>
+					<p className='text-sm font-medium text-white/80'>{medicine.medicine.label}</p>
 
 					<Slider
 						id={`taken-${index}`}

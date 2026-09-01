@@ -1,8 +1,9 @@
-import { INPUT_TYPES } from '@/shared/constants/input/input';
+import { INPUT_TYPES, type InputType } from '@/shared/constants/input/input';
 
 interface ITextInput {
 	id: string;
 	label: string;
+	type?: InputType;
 	value: string;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	placeholder?: string;
@@ -13,6 +14,7 @@ interface ITextInput {
 function TextInput({
 	id,
 	label,
+	type = INPUT_TYPES.TEXT,
 	value,
 	onChange,
 	placeholder,
@@ -26,7 +28,7 @@ function TextInput({
 			</label>
 			<input
 				id={id}
-				type={INPUT_TYPES.TEXT}
+				type={type}
 				value={value}
 				onChange={onChange}
 				className='glass-input'

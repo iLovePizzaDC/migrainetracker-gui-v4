@@ -30,7 +30,7 @@ describe('<CardShell />', () => {
 			</CardShell>,
 		);
 
-		expect(screen.getByTestId('card-shell')).toHaveClass('relative', 'p-4');
+		expect(screen.getByTestId('card-shell')).toHaveClass('relative', 'card-padding');
 	});
 
 	it('omits padded classes when padded is false', () => {
@@ -40,7 +40,7 @@ describe('<CardShell />', () => {
 			</CardShell>,
 		);
 
-		expect(screen.getByTestId('card-shell')).not.toHaveClass('relative', 'p-4');
+		expect(screen.getByTestId('card-shell')).not.toHaveClass('relative', 'card-padding');
 	});
 
 	it('merges a custom className', () => {

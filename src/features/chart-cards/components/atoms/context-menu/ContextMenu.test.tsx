@@ -57,7 +57,7 @@ describe('<ContextMenu />', () => {
 		const mockOnRemoveClick = vi.fn();
 		render(<ContextMenu {...defaultProps} onRemoveClick={mockOnRemoveClick} />);
 
-		expect(screen.getByText('Remove')).not.toHaveClass('text-red-500');
+		expect(screen.getByText('Remove')).not.toHaveClass('text-danger');
 		expect(screen.getByText('Remove')).toHaveClass('text-white');
 	});
 
@@ -67,7 +67,7 @@ describe('<ContextMenu />', () => {
 
 		await user.click(screen.getByText('Remove'));
 
-		expect(screen.getByText('Are you sure?')).toHaveClass('text-red-500');
+		expect(screen.getByText('Are you sure?')).toHaveClass('text-danger');
 		expect(screen.getByText('Are you sure?')).not.toHaveClass('text-white');
 	});
 

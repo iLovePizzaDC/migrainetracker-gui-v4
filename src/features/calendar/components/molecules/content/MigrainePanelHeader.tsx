@@ -24,7 +24,7 @@ export default function MigrainePanelHeader({
 				<XMarkIcon />
 			</button>
 
-			<h2 className='text-sm font-medium tracking-wide text-white/85'>
+			<h2 className='panel-header-title'>
 				{date.toLocaleDateString('de-DE', {
 					day: '2-digit',
 					month: '2-digit',
@@ -45,8 +45,9 @@ export default function MigrainePanelHeader({
 				) : (
 					<button
 						data-testid='cancel-edit-button'
+						type='button'
 						onClick={() => setAreInputsDisabled(true)}
-						className='rounded-lg px-2 py-1 text-xs font-medium text-white/55 transition-colors duration-200 ease-soft hover:bg-white/[0.06] hover:text-white/85 disabled:opacity-40'
+						className='btn-ghost'
 						disabled={isLoading}
 					>
 						Cancel

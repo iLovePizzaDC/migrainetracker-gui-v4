@@ -1,6 +1,8 @@
 import CardShell from '@/features/chart-cards/components/atoms/card/CardShell';
+import OverviewCardHeader from '@/features/chart-cards/components/atoms/card/OverviewCardHeader';
 import PieChart from '@/features/chart-cards/components/atoms/card/PieChart';
 import { fetchMidasPieData } from '@/features/chart-cards/utils/fetch-helper';
+import Skeleton from '@/shared/components/atoms/Skeleton';
 import { useUser } from '@/shared/hooks/use-user';
 import type { ChartData } from '@/shared/types/chart';
 import { useEffect, useState } from 'react';
@@ -46,28 +48,25 @@ function MidasCard() {
 
 	return (
 		<CardShell>
-			<div className='mb-4 flex min-w-0 items-center justify-between gap-2'>
-				<h2 className='min-w-0 flex-1 truncate text-sm font-medium tracking-wide text-white/80'>
-					MIDAS Score
-				</h2>
-				<span
-					className={`shrink-0 text-[10px] font-semibold uppercase tracking-wider ${color}`}
-				>
-					{label}
-				</span>
-			</div>
+			<OverviewCardHeader
+				title='MIDAS Score'
+				align='left'
+				trailing={
+					<span className={`card-badge ${color}`}>{label}</span>
+				}
+			/>
 			<div className='chart-area'>
 				{isLoading ? (
-					<div className='h-full w-full animate-pulse rounded-xl bg-white/5' />
+					<Skeleton className='h-full w-full' />
 				) : (
 					<PieChart outerData={pieData.current} innerData={pieData.previous} />
 				)}
 			</div>
-			<div className='mt-1 h-6 text-center'>
+			<div className='overview-card-footer'>
 				{isLoading ? (
-					<div className='mx-auto h-6 w-20 animate-pulse rounded-md bg-white/5' />
+					<Skeleton className='mx-auto h-5 w-20 sm:h-6' />
 				) : (
-					<p className='text-sm font-medium tabular-nums text-white/70'>{midasScore}/270</p>
+					<p className='card-footer-text'>{midasScore}/270</p>
 				)}
 			</div>
 		</CardShell>

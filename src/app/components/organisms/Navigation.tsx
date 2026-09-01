@@ -3,6 +3,7 @@ import { useState } from 'react';
 import MobileNavigationLinks from '@/app/components/molecules/navigation/MobileNavigationLinks';
 import NavigationLinks from '@/app/components/molecules/navigation/NavigationLinks';
 import MobileNavigationOptions from '@/app/components/molecules/navigation/MobileNavigationOptions';
+import Reveal from '@/shared/components/atoms/Reveal';
 
 function Navigation() {
 	const { user } = useUser();
@@ -32,16 +33,11 @@ function Navigation() {
 				</div>
 			</div>
 
-			<div
-				className={`overflow-hidden transition-[max-height,opacity] duration-350 ease-smooth lg:hidden ${
-					isOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
-				}`}
-				data-testid='mobile-nav'
-			>
+			<Reveal open={isOpen} className='lg:hidden' data-testid='mobile-nav'>
 				<nav className='mx-4 mb-3 space-y-0.5 rounded-xl border border-white/[0.08] bg-black/30 p-1.5 backdrop-blur-xl'>
 					<MobileNavigationLinks toggleMenu={toggleMenu} />
 				</nav>
-			</div>
+			</Reveal>
 		</header>
 	);
 }
