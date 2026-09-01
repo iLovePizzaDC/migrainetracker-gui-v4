@@ -2,7 +2,7 @@ import { UserCircleIcon } from '@heroicons/react/24/outline';
 
 function LoadingBox() {
 	return (
-		<div className='flex items-center justify-center py-28'>
+		<div className='flex flex-1 items-center justify-center py-16'>
 			<div className='glass-panel flex animate-fade-up flex-col items-center gap-4 px-10 py-9'>
 				<div className='relative flex h-14 w-14 items-center justify-center'>
 					<UserCircleIcon className='h-10 w-10 text-white/25' />
