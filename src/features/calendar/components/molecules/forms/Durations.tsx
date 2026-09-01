@@ -27,6 +27,7 @@ function Durations({ durations, onChange, disabled = false }: IDurations) {
 	return (
 		<div data-testid='durations' className='form-section'>
 			<div className='section-header'>
+				<div aria-hidden='true' />
 				<h3 className='section-title'>Duration</h3>
 				<button
 					data-testid='add-button'

@@ -64,15 +64,15 @@ body {
 	}
 
 	.section-header {
-		@apply flex items-start justify-between gap-2;
+		@apply grid min-w-0 grid-cols-[2rem_minmax(0,1fr)_2rem] items-center gap-1;
 	}
 
 	.section-title {
-		@apply text-xs font-semibold uppercase leading-none tracking-[0.12em] text-white/45;
+		@apply col-start-2 text-center text-xs font-semibold uppercase leading-none tracking-[0.12em] text-white/45;
 	}
 
 	.section-header-action {
-		@apply inline-flex h-8 w-8 shrink-0 items-center justify-center;
+		@apply col-start-3 inline-flex h-8 w-8 shrink-0 items-center justify-center justify-self-end;
 	}
 
 	.field-label {
