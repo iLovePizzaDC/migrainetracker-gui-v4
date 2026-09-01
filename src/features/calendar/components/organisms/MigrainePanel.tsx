@@ -42,54 +42,54 @@ function MigrainePanel({
 	return (
 		<Reveal open={isOpen} data-testid='migraine-panel-reveal'>
 			<div data-testid='migraine-panel' className='glass-panel mx-auto max-w-5xl card-padding'>
-					<div className='space-y-5'>
-						<MigrainePanelHeader
-							date={date}
-							onClose={onClose}
-							prefilled={prefilled}
-							areInputsDisabled={areInputsDisabled}
-							setAreInputsDisabled={setAreInputsDisabled}
-							isLoading={isLoading}
+				<div className='space-y-5'>
+					<MigrainePanelHeader
+						date={date}
+						onClose={onClose}
+						prefilled={prefilled}
+						areInputsDisabled={areInputsDisabled}
+						setAreInputsDisabled={setAreInputsDisabled}
+						isLoading={isLoading}
+					/>
+					<div className='grid items-start gap-x-8 gap-y-5 lg:grid-cols-2'>
+						<Durations
+							durations={form.durations}
+							onChange={(durations) => updateForm('durations', durations)}
+							disabled={inputsDisabled}
 						/>
-						<div className='grid items-start gap-x-8 gap-y-5 lg:grid-cols-2'>
-							<Durations
-								durations={form.durations}
-								onChange={(durations) => updateForm('durations', durations)}
+						<Intensity
+							intensity={form.intensity}
+							onChange={(intensity) => updateForm('intensity', intensity)}
+							disabled={inputsDisabled}
+						/>
+						<Symptoms
+							symptoms={form.symptoms}
+							onChange={(symptoms) => updateForm('symptoms', symptoms)}
+							disabled={inputsDisabled}
+						/>
+						{showMedicine && (
+							<Medicine
+								medicines={form.medicines}
+								onChange={(medicines) => updateForm('medicines', medicines)}
 								disabled={inputsDisabled}
 							/>
-							<Intensity
-								intensity={form.intensity}
-								onChange={(intensity) => updateForm('intensity', intensity)}
-								disabled={inputsDisabled}
-							/>
-							<Symptoms
-								symptoms={form.symptoms}
-								onChange={(symptoms) => updateForm('symptoms', symptoms)}
-								disabled={inputsDisabled}
-							/>
-							{showMedicine && (
-								<Medicine
-									medicines={form.medicines}
-									onChange={(medicines) => updateForm('medicines', medicines)}
-									disabled={inputsDisabled}
-								/>
-							)}
-							<Midas
-								midas={form.midas}
-								onChange={(midas) => updateForm('midas', midas)}
-								disabled={inputsDisabled}
-							/>
-						</div>
-						<div className={areInputsDisabled ? 'invisible pointer-events-none' : undefined}>
-							<MigrainePanelActions
-								cacheFeedback={cacheFeedback}
-								saveFeedback={saveFeedback}
-								isLoading={isLoading}
-								saveNewEntry={saveNewEntry}
-								submitNewEntry={submitNewEntry}
-							/>
-						</div>
+						)}
+						<Midas
+							midas={form.midas}
+							onChange={(midas) => updateForm('midas', midas)}
+							disabled={inputsDisabled}
+						/>
 					</div>
+					<div className={areInputsDisabled ? 'invisible pointer-events-none' : undefined}>
+						<MigrainePanelActions
+							cacheFeedback={cacheFeedback}
+							saveFeedback={saveFeedback}
+							isLoading={isLoading}
+							saveNewEntry={saveNewEntry}
+							submitNewEntry={submitNewEntry}
+						/>
+					</div>
+				</div>
 			</div>
 		</Reveal>
 	);

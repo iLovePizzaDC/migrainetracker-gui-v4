@@ -51,9 +51,7 @@ function MidasCard() {
 			<OverviewCardHeader
 				title='MIDAS Score'
 				align='left'
-				trailing={
-					<span className={`card-badge ${color}`}>{label}</span>
-				}
+				trailing={<span className={`card-badge ${color}`}>{label}</span>}
 			/>
 			<div className='chart-area'>
 				{isLoading ? (

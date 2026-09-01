@@ -20,7 +20,12 @@ describe('<CardShell />', () => {
 			</CardShell>,
 		);
 
-		expect(screen.getByTestId('card-shell')).toHaveClass('glass-panel', 'min-w-0', 'w-full', 'self-start');
+		expect(screen.getByTestId('card-shell')).toHaveClass(
+			'glass-panel',
+			'min-w-0',
+			'w-full',
+			'self-start',
+		);
 	});
 
 	it('applies padded classes by default', () => {

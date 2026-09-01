@@ -117,7 +117,9 @@ describe('<AddMedicineForm />', () => {
 		await user.click(screen.getByRole('button', { name: 'Save' }));
 
 		expect(mockAddMedicine).not.toHaveBeenCalled();
-		expect(screen.getByRole('alert')).toHaveTextContent('Could not save medicine. Please try again.');
+		expect(screen.getByRole('alert')).toHaveTextContent(
+			'Could not save medicine. Please try again.',
+		);
 		expect(screen.getByLabelText('Name')).toHaveValue('Test medicine');
 		expect(screen.getByLabelText('Abbreviation')).toHaveValue('tst_med');
 	});
