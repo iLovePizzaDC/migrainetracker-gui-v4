@@ -157,11 +157,11 @@ describe('<ChartCard /', () => {
 			expect(screen.queryByText('5/8 days')).not.toBeInTheDocument();
 		});
 
-		it('does not render CardForm by default', () => {
+		it('does not show CardForm by default', () => {
 			render(<ChartCard {...defaultProps} />);
 
-			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[auto]');
-			expect(screen.queryByLabelText('Title')).not.toBeInTheDocument();
+			expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[0fr]');
+			expect(screen.getByLabelText('Title')).not.toBeVisible();
 		});
 	});
 
@@ -184,7 +184,7 @@ describe('<ChartCard /', () => {
 			await user.click(screen.getByTestId('context-button'));
 			await user.click(screen.getByText('Edit'));
 
-			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[minmax(0,0fr)_auto]');
+			expect(screen.getByTestId('card-form-wrapper')).toHaveClass('grid-rows-[1fr]');
 			expect(screen.getByLabelText('Title')).toBeVisible();
 		});
 

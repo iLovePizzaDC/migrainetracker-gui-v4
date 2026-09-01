@@ -54,6 +54,7 @@ describe('<CardForm />', () => {
 	const user = userEvent.setup();
 	const defaultProps = {
 		onButtonClick: vi.fn(),
+		setIsEditing: vi.fn(),
 	};
 
 	it('renders input fields and filter form', () => {
@@ -65,6 +66,7 @@ describe('<CardForm />', () => {
 		expect(screen.getByTestId('filter-form')).toBeInTheDocument();
 		expect(screen.getByLabelText('Value')).toBeInTheDocument();
 		expect(screen.getByLabelText('Unit')).toBeInTheDocument();
+		expect(screen.getByText('Cancel')).toBeInTheDocument();
 		expect(screen.getByText('Submit')).toBeInTheDocument();
 	});
 
@@ -106,6 +108,15 @@ describe('<CardForm />', () => {
 				timeframe: { count: 2, unit: TIME_FRAME_UNITS.MONTHS },
 			}),
 		);
+	});
+
+	it('calls setIsEditing false on click on cancel', async () => {
+		const mockSetIsEditing = vi.fn();
+		render(<CardForm {...defaultProps} setIsEditing={mockSetIsEditing} />);
+
+		await user.click(screen.getByText('Cancel'));
+
+		expect(mockSetIsEditing).toHaveBeenCalledWith(false);
 	});
 
 	it('passes default props down to childs', async () => {

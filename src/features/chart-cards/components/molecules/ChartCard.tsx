@@ -6,15 +6,16 @@ import ContextMenu from '@/features/chart-cards/components/atoms/context-menu/Co
 import CardForm from '@/features/chart-cards/components/molecules/CardForm';
 import { useCardSetups } from '@/features/chart-cards/hooks/use-card-setups';
 import { useChartData } from '@/features/chart-cards/hooks/use-chart-data';
+import type { CardSetup } from '@/features/chart-cards/types/card';
+import Reveal from '@/shared/components/atoms/Reveal';
 import Skeleton from '@/shared/components/atoms/Skeleton';
+import { CARD_TYPES } from '@/shared/constants/chart-cards/cards';
+import { CHART_TYPES } from '@/shared/constants/chart-cards/charts';
 import type { CardType, TimeFrameUnit } from '@/shared/types/card';
 import type { ChartType } from '@/shared/types/chart';
 import type { EventFilter } from '@/shared/types/event';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { useCallback, useRef, useState } from 'react';
-import type { CardSetup } from '@/features/chart-cards/types/card';
-import { CHART_TYPES } from '@/shared/constants/chart-cards/charts';
-import { CARD_TYPES } from '@/shared/constants/chart-cards/cards';
 
 interface IChartCard {
 	index: number;
@@ -91,12 +92,7 @@ function ChartCard({
 				}
 			/>
 
-			<div
-				data-testid='chart-card-reveal'
-				className={`grid min-w-0 overflow-hidden motion-reveal ${
-					isEditing ? 'grid-rows-[minmax(0,0fr)_auto]' : 'grid-rows-[auto]'
-				}`}
-			>
+			<div className='min-w-0' data-testid='chart-card-reveal'>
 				<div className='min-h-0 overflow-hidden'>
 					<div className='chart-area'>
 						{/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
@@ -133,31 +129,31 @@ function ChartCard({
 					)}
 				</div>
 
-				{isEditing && (
-					<div data-testid='card-form-wrapper' className='min-h-0 overflow-hidden'>
-						<div className='min-h-0 overflow-hidden pt-1'>
-							<CardForm
-								key={JSON.stringify({
-									index,
-									title,
-									cardType,
-									chartType,
-									filter,
-									timeframeCount,
-									timeframeUnit,
-								})}
-								onButtonClick={onEdit}
-								defaultIndex={index}
-								defaultTitle={title}
-								defaultCardType={cardType}
-								defaultChartType={chartType}
-								defaultFilter={filter}
-								defaultCount={timeframeCount}
-								defaultUnit={timeframeUnit}
-							/>
-						</div>
+				<Reveal open={isEditing} data-testid='card-form-wrapper'>
+					<div className='min-h-0 overflow-hidden pt-1'>
+						<CardForm
+							key={JSON.stringify({
+								isEditing,
+								index,
+								title,
+								cardType,
+								chartType,
+								filter,
+								timeframeCount,
+								timeframeUnit,
+							})}
+							onButtonClick={onEdit}
+							setIsEditing={setIsEditing}
+							defaultIndex={index}
+							defaultTitle={title}
+							defaultCardType={cardType}
+							defaultChartType={chartType}
+							defaultFilter={filter}
+							defaultCount={timeframeCount}
+							defaultUnit={timeframeUnit}
+						/>
 					</div>
-				)}
+				</Reveal>
 			</div>
 		</CardShell>
 	);
