@@ -3,7 +3,7 @@ import { CalendarProvider } from '@/features/calendar/hooks/calendar-provider';
 
 function CalendarPage() {
 	return (
-		<div className='min-w-0 w-full'>
+		<div className='min-w-0 w-full fab-offset'>
 			<header className='page-header'>
 				<h1 className='page-heading'>Calendar</h1>
 				<p className='page-subheading'>Log and review your migraine days.</p>

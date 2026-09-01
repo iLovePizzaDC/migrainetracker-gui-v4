@@ -163,8 +163,12 @@ body {
 		@apply fixed bottom-5 right-5 z-50 pb-[env(safe-area-inset-bottom)] pr-[env(safe-area-inset-right)];
 	}
 
+	.fab-offset {
+		@apply pb-[calc(4.5rem+env(safe-area-inset-bottom))];
+	}
+
 	.popover-panel {
-		@apply glass-panel absolute bottom-full right-0 mb-3 w-72 origin-bottom-right p-4 transition-[opacity,transform] duration-350 ease-smooth;
+		@apply glass-panel absolute bottom-full right-0 mb-3 w-[min(18rem,calc(100vw-2.5rem))] max-w-[calc(100vw-2.5rem)] origin-bottom-right p-4 transition-[opacity,transform] duration-350 ease-smooth;
 	}
 
 	.popover-panel--open {
@@ -204,7 +208,7 @@ body {
 	}
 
 	.icon-btn {
-		@apply inline-flex h-9 w-9 items-center justify-center rounded-xl text-white/50 transition-colors duration-200 ease-soft hover:bg-white/[0.08] hover:text-white/85 focus-visible:bg-white/10 focus-visible:text-white/90 focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:opacity-40;
+		@apply inline-flex h-11 w-11 items-center justify-center rounded-xl text-white/50 transition-colors duration-200 ease-soft hover:bg-white/[0.08] hover:text-white/85 focus-visible:bg-white/10 focus-visible:text-white/90 focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:opacity-40 sm:h-9 sm:w-9;
 	}
 
 	.icon-btn > svg {
