@@ -118,7 +118,7 @@ function Combobox({
 						/>
 
 						<ComboboxOptions className='glass-menu absolute z-50 mt-1 max-h-48 w-full overflow-auto'>
-							{filtered.length === 0 && <div className='px-3 py-2 text-gray-400'>No results</div>}
+							{filtered.length === 0 && <div className='px-3 py-2 text-white/40'>No results</div>}
 
 							{filtered.map((option) => {
 								const active = selected.some((v) => v.value === option.value);

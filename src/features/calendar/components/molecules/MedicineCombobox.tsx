@@ -102,7 +102,7 @@ function MedicineCombobox({ medicines, onChange, disabled }: IMedicineCombobox) 
 							}
 						}}
 						disabled={isDeleting}
-						className='rounded-md p-1 text-white/40 transition-colors duration-200 ease-soft hover:text-red-400 disabled:opacity-50'
+						className='rounded-md p-1 text-white/40 transition-colors duration-200 ease-soft hover:text-red-400 disabled:opacity-40'
 					>
 						{isConfirming ? (
 							<CheckBadgeIcon data-testid='confirm-icon' className='h-4 w-4' />

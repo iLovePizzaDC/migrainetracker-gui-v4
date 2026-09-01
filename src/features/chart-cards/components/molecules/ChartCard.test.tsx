@@ -160,7 +160,8 @@ describe('<ChartCard /', () => {
 		it('does not render CardForm by default', () => {
 			render(<ChartCard {...defaultProps} />);
 
-			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[1fr_0fr]');
+			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[auto]');
+			expect(screen.queryByLabelText('Title')).not.toBeInTheDocument();
 		});
 	});
 
@@ -183,7 +184,7 @@ describe('<ChartCard /', () => {
 			await user.click(screen.getByTestId('context-button'));
 			await user.click(screen.getByText('Edit'));
 
-			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[0fr_1fr]');
+			expect(screen.getByTestId('chart-card-reveal')).toHaveClass('grid-rows-[minmax(0,0fr)_auto]');
 			expect(screen.getByLabelText('Title')).toBeVisible();
 		});
 

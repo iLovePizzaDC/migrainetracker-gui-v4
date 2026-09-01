@@ -10,7 +10,7 @@ function CardShell({ children, padded = true, className = '', ...rest }: ICardSh
 		<div
 			className={`
 	      glass-panel min-w-0 w-full self-start
-	      ${padded ? 'relative p-4 sm:p-5 md:p-6' : ''}
+	      ${padded ? 'relative card-padding' : ''}
 	      ${className}
       `}
 			{...rest}

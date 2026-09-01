@@ -48,4 +48,18 @@ describe('<SubmitButton />', () => {
 
 		expect(screen.getByText('Test label')).toHaveClass('btn-primary');
 	});
+
+	it('applies success feedback styling', () => {
+		render(<SubmitButton type={BUTTON_TYPES.BUTTON} label='Test label' feedback='success' />);
+
+		expect(screen.getByText('Test label')).toHaveClass('btn-feedback-success');
+	});
+
+	it('shows loading label when loading', () => {
+		render(
+			<SubmitButton type={BUTTON_TYPES.BUTTON} label='Save' loadingLabel='Saving...' loading />,
+		);
+
+		expect(screen.getByText('Saving...')).toBeDisabled();
+	});
 });

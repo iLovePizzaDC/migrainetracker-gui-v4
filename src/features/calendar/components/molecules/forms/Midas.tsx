@@ -12,7 +12,9 @@ interface IMidas {
 function Midas({ midas, onChange, disabled = false }: IMidas) {
 	return (
 		<div data-testid='midas' className='form-section'>
-			<h3 className='section-title'>MIDAS</h3>
+			<div className='section-header'>
+				<h3 className='section-title'>MIDAS</h3>
+			</div>
 			<SelectInput
 				id='midas'
 				type={SELECT_TYPES.CHECKBOX}

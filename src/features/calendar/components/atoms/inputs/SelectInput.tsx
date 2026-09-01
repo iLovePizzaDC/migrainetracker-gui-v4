@@ -40,7 +40,7 @@ function SelectInput({
 						htmlFor={inputId}
 						className={`flex cursor-pointer items-center gap-3 rounded-lg px-2 py-2 transition-colors ${
 							isChecked ? 'bg-white/[0.06]' : 'hover:bg-white/[0.04]'
-						} ${disabled ? 'cursor-default opacity-60' : ''}`}
+						} ${disabled ? 'is-disabled' : ''}`}
 					>
 						<input
 							id={inputId}

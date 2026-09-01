@@ -61,7 +61,7 @@ describe('<Navigation />', () => {
 		it('renders mobile nav closed by default', () => {
 			render(<Navigation />);
 
-			expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-0', 'opacity-0');
+			expect(screen.getByTestId('mobile-nav')).toHaveClass('grid-rows-[0fr]');
 		});
 
 		it('renders menu toggle when user is set', () => {
@@ -87,7 +87,7 @@ describe('<Navigation />', () => {
 
 			await user.click(screen.getByTestId('mobile-nav-toggle'));
 
-			expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-60', 'opacity-100');
+			expect(screen.getByTestId('mobile-nav')).toHaveClass('grid-rows-[1fr]');
 		});
 
 		it('closes mobile nav on second toggle click', async () => {
@@ -96,7 +96,7 @@ describe('<Navigation />', () => {
 			await user.click(screen.getByTestId('mobile-nav-toggle'));
 			await user.click(screen.getByTestId('mobile-nav-toggle'));
 
-			expect(screen.getByTestId('mobile-nav')).toHaveClass('max-h-0', 'opacity-0');
+			expect(screen.getByTestId('mobile-nav')).toHaveClass('grid-rows-[0fr]');
 		});
 	});
 });

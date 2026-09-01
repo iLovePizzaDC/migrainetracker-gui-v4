@@ -7,6 +7,7 @@ import Symptoms from '@/features/calendar/components/molecules/forms/Symptoms';
 import Medicine from '@/features/calendar/components/molecules/forms/Medicine';
 import Midas from '@/features/calendar/components/molecules/forms/Midas';
 import MigrainePanelActions from '@/features/calendar/components/molecules/MigrainePanelActions';
+import Reveal from '@/shared/components/atoms/Reveal';
 
 interface IMigrainePanel {
 	date: Date;
@@ -39,66 +40,58 @@ function MigrainePanel({
 	const inputsDisabled = areInputsDisabled || isLoading;
 
 	return (
-		<div
-			data-testid='migraine-panel-reveal'
-			className={`
-				grid motion-reveal
-				${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}
-			`}
-		>
-			<div className='min-h-0 overflow-hidden'>
-				<div data-testid='migraine-panel' className='glass-panel mx-auto max-w-5xl p-4 sm:p-6'>
-					<div className='space-y-5'>
-						<MigrainePanelHeader
-							date={date}
-							onClose={onClose}
-							prefilled={prefilled}
-							areInputsDisabled={areInputsDisabled}
-							setAreInputsDisabled={setAreInputsDisabled}
-							isLoading={isLoading}
+		<Reveal open={isOpen} data-testid='migraine-panel-reveal'>
+			<div data-testid='migraine-panel' className='glass-panel mx-auto max-w-5xl card-padding'>
+				<div className='space-y-5'>
+					<MigrainePanelHeader
+						date={date}
+						onClose={onClose}
+						prefilled={prefilled}
+						areInputsDisabled={areInputsDisabled}
+						setAreInputsDisabled={setAreInputsDisabled}
+						isLoading={isLoading}
+					/>
+					<div className='grid items-start gap-x-8 gap-y-5 lg:grid-cols-2'>
+						<Durations
+							durations={form.durations}
+							onChange={(durations) => updateForm('durations', durations)}
+							disabled={inputsDisabled}
 						/>
-						<div className='grid items-start gap-x-8 gap-y-5 lg:grid-cols-2'>
-							<Durations
-								durations={form.durations}
-								onChange={(durations) => updateForm('durations', durations)}
+						<Intensity
+							intensity={form.intensity}
+							onChange={(intensity) => updateForm('intensity', intensity)}
+							disabled={inputsDisabled}
+						/>
+						<Symptoms
+							symptoms={form.symptoms}
+							onChange={(symptoms) => updateForm('symptoms', symptoms)}
+							disabled={inputsDisabled}
+						/>
+						{showMedicine && (
+							<Medicine
+								medicines={form.medicines}
+								onChange={(medicines) => updateForm('medicines', medicines)}
 								disabled={inputsDisabled}
 							/>
-							<Intensity
-								intensity={form.intensity}
-								onChange={(intensity) => updateForm('intensity', intensity)}
-								disabled={inputsDisabled}
-							/>
-							<Symptoms
-								symptoms={form.symptoms}
-								onChange={(symptoms) => updateForm('symptoms', symptoms)}
-								disabled={inputsDisabled}
-							/>
-							{showMedicine && (
-								<Medicine
-									medicines={form.medicines}
-									onChange={(medicines) => updateForm('medicines', medicines)}
-									disabled={inputsDisabled}
-								/>
-							)}
-							<Midas
-								midas={form.midas}
-								onChange={(midas) => updateForm('midas', midas)}
-								disabled={inputsDisabled}
-							/>
-						</div>
-						<div className={areInputsDisabled ? 'invisible pointer-events-none' : undefined}>
-							<MigrainePanelActions
-								cacheFeedback={cacheFeedback}
-								saveFeedback={saveFeedback}
-								isLoading={isLoading}
-								saveNewEntry={saveNewEntry}
-								submitNewEntry={submitNewEntry}
-							/>
-						</div>
+						)}
+						<Midas
+							midas={form.midas}
+							onChange={(midas) => updateForm('midas', midas)}
+							disabled={inputsDisabled}
+						/>
+					</div>
+					<div className={areInputsDisabled ? 'invisible pointer-events-none' : undefined}>
+						<MigrainePanelActions
+							cacheFeedback={cacheFeedback}
+							saveFeedback={saveFeedback}
+							isLoading={isLoading}
+							saveNewEntry={saveNewEntry}
+							submitNewEntry={submitNewEntry}
+						/>
 					</div>
 				</div>
 			</div>
-		</div>
+		</Reveal>
 	);
 }
 

@@ -1,10 +1,12 @@
 import AreaChart from '@/features/chart-cards/components/atoms/card/AreaChart';
 import CardShell from '@/features/chart-cards/components/atoms/card/CardShell';
+import OverviewCardHeader from '@/features/chart-cards/components/atoms/card/OverviewCardHeader';
 import PieChart from '@/features/chart-cards/components/atoms/card/PieChart';
 import ContextMenu from '@/features/chart-cards/components/atoms/context-menu/ContextMenu';
 import CardForm from '@/features/chart-cards/components/molecules/CardForm';
 import { useCardSetups } from '@/features/chart-cards/hooks/use-card-setups';
 import { useChartData } from '@/features/chart-cards/hooks/use-chart-data';
+import Skeleton from '@/shared/components/atoms/Skeleton';
 import type { CardType, TimeFrameUnit } from '@/shared/types/card';
 import type { ChartType } from '@/shared/types/chart';
 import type { EventFilter } from '@/shared/types/event';
@@ -63,49 +65,44 @@ function ChartCard({
 
 	return (
 		<CardShell>
-			<div className='relative mb-4 grid min-w-0 grid-cols-[2.25rem_minmax(0,1fr)_2.25rem] items-center gap-1'>
-				<div aria-hidden='true' />
+			<OverviewCardHeader
+				title={title}
+				trailing={
+					<>
+						<button
+							ref={contextButtonRef}
+							data-testid='context-button'
+							onClick={toggleContext}
+							className='icon-btn'
+							aria-label='Card options'
+						>
+							<EllipsisVerticalIcon />
+						</button>
 
-				<h2 className='truncate text-center text-sm font-medium tracking-wide text-white/80'>
-					{title}
-				</h2>
-
-				<button
-					ref={contextButtonRef}
-					data-testid='context-button'
-					onClick={toggleContext}
-					className='icon-btn justify-self-end'
-					aria-label='Card options'
-				>
-					<EllipsisVerticalIcon />
-				</button>
-
-				<ContextMenu
-					contextButtonRef={contextButtonRef}
-					open={contextOpen}
-					setOpen={setContextOpen}
-					isEditing={isEditing}
-					setIsEditing={setIsEditing}
-					onRemoveClick={onRemove}
-				/>
-			</div>
+						<ContextMenu
+							contextButtonRef={contextButtonRef}
+							open={contextOpen}
+							setOpen={setContextOpen}
+							isEditing={isEditing}
+							setIsEditing={setIsEditing}
+							onRemoveClick={onRemove}
+						/>
+					</>
+				}
+			/>
 
 			<div
 				data-testid='chart-card-reveal'
-				className={`
-          grid min-w-0 overflow-hidden motion-reveal
-          ${isEditing ? 'grid-rows-[0fr_1fr]' : 'grid-rows-[1fr_0fr]'}
-	      `}
+				className={`grid min-w-0 overflow-hidden motion-reveal ${
+					isEditing ? 'grid-rows-[minmax(0,0fr)_auto]' : 'grid-rows-[auto]'
+				}`}
 			>
-				<div className='min-w-0 overflow-hidden'>
+				<div className='min-h-0 overflow-hidden'>
 					<div className='chart-area'>
 						{/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
 						{/* TODO add average line to areachart? */}
 						{isLoading ? (
-							<div
-								data-testid='loading-skeleton'
-								className='h-full w-full animate-pulse rounded-xl bg-white/5'
-							/>
+							<Skeleton data-testid='loading-skeleton' className='h-full w-full' />
 						) : chartType === CHART_TYPES.AREA ? (
 							<AreaChart
 								data={areaData}
@@ -118,8 +115,8 @@ function ChartCard({
 					</div>
 
 					{!isLoading && chartType === CHART_TYPES.PIE && totalPieValue > 0 && (
-						<div className='mt-1 h-6 text-center'>
-							<p className='text-sm font-medium tabular-nums text-white/70'>
+						<div className='overview-card-footer'>
+							<p className='card-footer-text'>
 								{cardType !== CARD_TYPES.MEDICINE ? (
 									<>
 										{currentPieValue.toLocaleString('en-US')}/
@@ -135,28 +132,32 @@ function ChartCard({
 						</div>
 					)}
 				</div>
-				<div data-testid='card-form-wrapper' className='min-h-0 overflow-hidden px-0.5 pb-0.5 pt-1'>
-					<CardForm
-						key={JSON.stringify({
-							index,
-							title,
-							cardType,
-							chartType,
-							filter,
-							timeframeCount,
-							timeframeUnit,
-							isEditing,
-						})}
-						onButtonClick={onEdit}
-						defaultIndex={index}
-						defaultTitle={title}
-						defaultCardType={cardType}
-						defaultChartType={chartType}
-						defaultFilter={filter}
-						defaultCount={timeframeCount}
-						defaultUnit={timeframeUnit}
-					/>
-				</div>
+
+				{isEditing && (
+					<div data-testid='card-form-wrapper' className='min-h-0 overflow-hidden'>
+						<div className='min-h-0 overflow-hidden pt-1'>
+							<CardForm
+								key={JSON.stringify({
+									index,
+									title,
+									cardType,
+									chartType,
+									filter,
+									timeframeCount,
+									timeframeUnit,
+								})}
+								onButtonClick={onEdit}
+								defaultIndex={index}
+								defaultTitle={title}
+								defaultCardType={cardType}
+								defaultChartType={chartType}
+								defaultFilter={filter}
+								defaultCount={timeframeCount}
+								defaultUnit={timeframeUnit}
+							/>
+						</div>
+					</div>
+				)}
 			</div>
 		</CardShell>
 	);

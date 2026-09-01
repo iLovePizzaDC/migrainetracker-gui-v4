@@ -1,10 +1,10 @@
-import Input from '@/features/chart-cards/components/atoms/Input';
 import { CARD_OPTIONS } from '@/features/chart-cards/constants/card';
 import { CHART_OPTIONS } from '@/features/chart-cards/constants/chart';
 import { TIME_FRAME_UNIT_OPTIONS } from '@/features/chart-cards/constants/time-frame';
 import { useCardForm } from '@/features/chart-cards/hooks/use-card-form';
 import { useCardSetups } from '@/features/chart-cards/hooks/use-card-setups';
 import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
+import TextInput from '@/shared/components/atoms/inputs/TextInput';
 import SubmitButton from '@/shared/components/atoms/SubmitButton';
 import FilterForm from '@/shared/components/molecules/FilterForm';
 import { BUTTON_TYPES } from '@/shared/constants/input/button';
@@ -77,7 +77,7 @@ function CardForm({
 				onSubmit();
 			}}
 		>
-			<Input
+			<TextInput
 				id='appendTitle'
 				label='Title'
 				type={INPUT_TYPES.TEXT}
@@ -106,7 +106,7 @@ function CardForm({
 				/>
 
 				<div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-					<Input
+					<TextInput
 						id='appendValue'
 						label='Value'
 						type={INPUT_TYPES.NUMBER}

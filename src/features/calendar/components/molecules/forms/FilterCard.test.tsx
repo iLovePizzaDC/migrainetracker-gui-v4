@@ -48,7 +48,7 @@ describe('<FilterCard />', () => {
 
 		expect(screen.getByTestId('toggle-button')).toBeInTheDocument();
 		expect(screen.getByTestId('close-button')).toBeInTheDocument();
-		expect(screen.getByTestId('filter-card')).toHaveClass('opacity-0', 'pointer-events-none');
+		expect(screen.getByTestId('filter-card')).toHaveClass('popover-panel--closed');
 	});
 
 	it('renders the filter card on first toggle button click', async () => {
@@ -56,7 +56,7 @@ describe('<FilterCard />', () => {
 
 		await user.click(screen.getByTestId('toggle-button'));
 
-		expect(screen.getByTestId('filter-card')).toHaveClass('opacity-100');
+		expect(screen.getByTestId('filter-card')).toHaveClass('popover-panel--open');
 	});
 
 	it('closes the filter card on second toggle button click', async () => {
@@ -65,7 +65,7 @@ describe('<FilterCard />', () => {
 		await user.click(screen.getByTestId('toggle-button'));
 		await user.click(screen.getByTestId('toggle-button'));
 
-		expect(screen.getByTestId('filter-card')).toHaveClass('opacity-0');
+		expect(screen.getByTestId('filter-card')).toHaveClass('popover-panel--closed');
 	});
 
 	it('closes the filter card on close button click', async () => {
@@ -73,6 +73,6 @@ describe('<FilterCard />', () => {
 
 		await user.click(screen.getByTestId('close-button'));
 
-		expect(screen.getByTestId('filter-card')).toHaveClass('opacity-0');
+		expect(screen.getByTestId('filter-card')).toHaveClass('popover-panel--closed');
 	});
 });

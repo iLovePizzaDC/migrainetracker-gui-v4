@@ -1,4 +1,5 @@
 import { fetchUserMedicinesPost } from '@/shared/api/medicine.api';
+import Reveal from '@/shared/components/atoms/Reveal';
 import DropdownInput from '@/shared/components/atoms/inputs/DropdownInput';
 import SubmitButton from '@/shared/components/atoms/SubmitButton';
 import TextInput from '@/shared/components/atoms/inputs/TextInput';
@@ -9,22 +10,20 @@ import {
 	type MedicineType,
 } from '@/shared/constants/user/medicine';
 import { useUser } from '@/shared/hooks/use-user';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 interface IAddMedicineForm {
 	show: boolean;
 }
 
 function AddMedicineForm({ show }: IAddMedicineForm) {
-	const ref = useRef<HTMLDivElement>(null);
-
 	const { addMedicine } = useUser();
 
 	const [name, setName] = useState('');
 	const [abbreviation, setAbbreviation] = useState('');
 	const [type, setType] = useState<MedicineType>(MEDICINE_TYPES.MIGRAINE_PAINKILLER);
-	const [height, setHeight] = useState(0);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 	const isFormValid = useMemo(
 		() => name.length > 0 && abbreviation.length > 0,
@@ -43,21 +42,12 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 		[],
 	);
 
-	useEffect(() => {
-		const updateHeight = () => {
-			if (ref.current) {
-				setHeight(show ? ref.current.scrollHeight : 0);
-			}
-		};
-
-		updateHeight();
-	}, [show]);
-
 	const submitForm = useCallback(async () => {
 		if (!isFormValid || isSubmitting) return;
 
 		try {
 			setIsSubmitting(true);
+			setError(null);
 
 			await fetchUserMedicinesPost(name, abbreviation, type);
 			addMedicine({ name, abbreviation, type });
@@ -65,20 +55,16 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 			setName('');
 			setAbbreviation('');
 			setType(MEDICINE_TYPES.MIGRAINE_PAINKILLER);
-		} catch (error) {
-			console.error('Failed to add medicine:', error);
+		} catch {
+			setError('Could not save medicine. Please try again.');
 		} finally {
 			setIsSubmitting(false);
 		}
 	}, [isFormValid, isSubmitting, addMedicine, name, abbreviation, type]);
 
 	return (
-		<div
-			data-testid='add-medicine-form'
-			className='overflow-hidden transition-[height,opacity] duration-350 ease-smooth'
-			style={{ height }}
-		>
-			<div ref={ref} className='grid gap-3'>
+		<Reveal open={show} data-testid='add-medicine-form'>
+			<div className='grid gap-3 pt-3'>
 				<DropdownInput
 					id='medicineType'
 					label='Type'
@@ -107,14 +93,22 @@ function AddMedicineForm({ show }: IAddMedicineForm) {
 					required
 				/>
 
+				{error && (
+					<p className='form-error' role='alert'>
+						{error}
+					</p>
+				)}
+
 				<SubmitButton
 					type={BUTTON_TYPES.BUTTON}
-					label={isSubmitting ? 'Saving...' : 'Save'}
+					label='Save'
+					loadingLabel='Saving...'
+					loading={isSubmitting}
 					onClick={submitForm}
-					disabled={!isFormValid || isSubmitting}
+					disabled={!isFormValid}
 				/>
 			</div>
-		</div>
+		</Reveal>
 	);
 }
 

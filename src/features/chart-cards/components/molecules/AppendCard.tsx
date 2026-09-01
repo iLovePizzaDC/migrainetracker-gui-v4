@@ -1,6 +1,7 @@
 import CardShell from '@/features/chart-cards/components/atoms/card/CardShell';
 import CardForm from '@/features/chart-cards/components/molecules/CardForm';
 import { useCardSetups } from '@/features/chart-cards/hooks/use-card-setups';
+import Reveal from '@/shared/components/atoms/Reveal';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
@@ -13,27 +14,20 @@ function AppendCard() {
 		<CardShell padded={false} tabIndex={-1}>
 			<button
 				type='button'
-				className='flex h-14 w-full items-center justify-between px-4 sm:px-5'
+				className='flex h-12 w-full items-center justify-between card-padding-x sm:h-14'
 				onClick={() => setExpanded(!expanded)}
 				aria-expanded={expanded}
 			>
-				<span className='inline-flex items-center text-sm font-medium tracking-wide text-white/80'>
-					Add more
-				</span>
+				<span className='card-title'>Add more</span>
 				<PlusIcon
 					className={`h-5 w-5 shrink-0 text-white/50 icon-spin ${expanded ? 'icon-spin-open' : ''}`}
 				/>
 			</button>
-			<div
-				data-testid='card-form-wrapper'
-				className={`grid motion-reveal ${expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
-			>
-				<div className='min-h-0 overflow-hidden'>
-					<div className='border-t border-white/[0.06] px-4 pb-4 pt-4 sm:px-5 sm:pb-5 md:px-6 md:pb-6'>
-						<CardForm onButtonClick={appendSetup} />
-					</div>
+			<Reveal open={expanded} data-testid='card-form-wrapper'>
+				<div className='border-t border-white/[0.06] card-padding-x pb-3 pt-3 sm:pb-4 sm:pt-4 md:pb-6 md:pt-4'>
+					<CardForm onButtonClick={appendSetup} />
 				</div>
-			</div>
+			</Reveal>
 		</CardShell>
 	);
 }

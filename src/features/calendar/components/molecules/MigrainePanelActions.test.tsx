@@ -71,7 +71,7 @@ describe('<MigrainePanelActions />', () => {
 		);
 
 		const saveButton = screen.getByRole('button', { name: 'Save' });
-		expect(saveButton).toHaveClass('btn-secondary', 'border-emerald-400/45');
+		expect(saveButton).toHaveClass('btn-secondary', 'btn-feedback-success');
 		expect(saveButton).toHaveTextContent('Save');
 	});
 
@@ -87,7 +87,7 @@ describe('<MigrainePanelActions />', () => {
 		);
 
 		const saveButton = screen.getByRole('button', { name: 'Save' });
-		expect(saveButton).toHaveClass('btn-secondary', 'border-red-400/45');
+		expect(saveButton).toHaveClass('btn-secondary', 'btn-feedback-error');
 		expect(saveButton).toHaveTextContent('Save');
 	});
 
@@ -103,7 +103,7 @@ describe('<MigrainePanelActions />', () => {
 		);
 
 		const submitButton = screen.getByRole('button', { name: 'Submit' });
-		expect(submitButton).toHaveClass('btn-primary', 'border-emerald-400/45');
+		expect(submitButton).toHaveClass('btn-primary', 'btn-feedback-success');
 		expect(submitButton).toHaveTextContent('Submit');
 	});
 
