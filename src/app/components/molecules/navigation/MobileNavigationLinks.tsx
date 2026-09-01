@@ -10,17 +10,16 @@ export default function MobileNavigationLinks({ toggleMenu }: IMobileNavigationL
 	const { user } = useUser();
 
 	return (
-		<div className='space-y-3'>
+		<div className='flex flex-col gap-1'>
 			{NAVIGATION_LINKS.filter(({ allowAnonymous }) => allowAnonymous || user !== null).map(
 				(navigationLink) => (
-					<div key={`mobilenavigationlink-${navigationLink.to}`}>
-						<NavigationLink
-							label={navigationLink.label}
-							to={navigationLink.to}
-							onClick={toggleMenu}
-							className='block text-sm pl-4 p-2 rounded-full'
-						/>
-					</div>
+					<NavigationLink
+						key={`mobilenavigationlink-${navigationLink.to}`}
+						label={navigationLink.label}
+						to={navigationLink.to}
+						onClick={toggleMenu}
+						className='block w-full rounded-lg py-2.5 text-center text-sm'
+					/>
 				),
 			)}
 		</div>

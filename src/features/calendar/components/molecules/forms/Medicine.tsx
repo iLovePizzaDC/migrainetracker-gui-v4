@@ -21,6 +21,7 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 	return (
 		<div className='form-section'>
 			<div className='section-header'>
+				<div aria-hidden='true' />
 				<h3 className='section-title'>Medicines</h3>
 				<button
 					data-testid='add-medicine'
@@ -36,6 +37,7 @@ function Medicine({ medicines, onChange, disabled }: IMedicine) {
 			</div>
 
 			<Tooltip
+				className='flex w-full justify-center'
 				content={
 					<>
 						<p>

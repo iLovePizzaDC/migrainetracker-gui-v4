@@ -36,7 +36,8 @@ function FilterCard() {
 					className={`popover-panel ${filterOpen ? 'popover-panel--open' : 'popover-panel--closed'}`}
 				>
 					<div className='section-header mb-3'>
-						<h3 className='card-title'>Filter</h3>
+						<div aria-hidden='true' />
+						<h3 className='card-title col-start-2 text-center'>Filter</h3>
 						<button
 							data-testid='close-button'
 							type='button'
