@@ -92,7 +92,7 @@ function ChartCard({
 				}
 			/>
 
-			<div className='min-w-0' data-testid='chart-card-reveal'>
+			<div className='w-full min-w-0' data-testid='chart-card-reveal'>
 				<div className='min-h-0 overflow-hidden'>
 					<div className='chart-area'>
 						{/* TODO set thresholdY danimcally based on mixed use (10) or without (15) */}
