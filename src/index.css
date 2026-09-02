@@ -262,7 +262,11 @@ body {
 	}
 
 	.chart-area {
-		@apply flex h-56 w-full min-w-0 items-center justify-center sm:h-64 md:h-72;
+		@apply h-56 w-full min-w-0 sm:h-64 md:h-72;
+	}
+
+	.chart-area > * {
+		@apply h-full w-full min-w-0;
 	}
 
 	.overview-card-header {
