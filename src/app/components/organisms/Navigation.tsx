@@ -15,7 +15,7 @@ function Navigation() {
 
 	return (
 		<header className='glass-chrome fixed left-0 top-0 z-30 w-full'>
-			<div className='mx-auto flex min-h-14 max-w-7xl items-center justify-between px-4 py-3 sm:px-6'>
+			<div className='page-padding-x mx-auto flex min-h-14 max-w-7xl items-center justify-between py-3'>
 				<div className='flex min-w-0 flex-col items-start gap-0.5 text-left'>
 					<span className='text-[10px] font-semibold uppercase tracking-[0.18em] text-white/35'>
 						MigraineTracker
@@ -34,8 +34,10 @@ function Navigation() {
 			</div>
 
 			<Reveal open={isOpen} className='lg:hidden' data-testid='mobile-nav'>
-				<nav className='mx-4 mb-3 rounded-xl border border-white/[0.08] bg-black/30 p-2 backdrop-blur-xl'>
-					<MobileNavigationLinks toggleMenu={toggleMenu} />
+				<nav className='page-padding-x mb-3'>
+					<div className='rounded-xl border border-white/[0.08] bg-black/30 p-2 backdrop-blur-xl'>
+						<MobileNavigationLinks toggleMenu={toggleMenu} />
+					</div>
 				</nav>
 			</Reveal>
 		</header>
