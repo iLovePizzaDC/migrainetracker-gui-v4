@@ -30,7 +30,7 @@ function App() {
 			<Navigation />
 			<main className='flex flex-1 flex-col'>
 				{authChecked ? (
-					<div className='mx-auto flex min-h-0 w-full min-w-0 max-w-6xl flex-1 flex-col px-0 pb-6 pt-16'>
+					<div className='page-content'>
 						<Routes>
 							<Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
 							<Route
