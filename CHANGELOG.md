@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.10.1...v1.10.2) (2026-09-02)
+
+
+### Bug Fixes
+
+* center chart in card ([#194](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/194)) ([#195](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/195)) ([e02dec6](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/e02dec658c1bebb73a6e8a549825c7d54ec26d64))
+
 ## [1.10.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.10.0...v1.10.1) (2026-09-02)
 
 
