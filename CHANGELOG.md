@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.1](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.10.0...v1.10.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* adjust title spacing ([#191](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/191)) ([0b5f25c](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/0b5f25cdf01130584e6cd1da01fb53f4fbe9f283))
+* adjust title spacing ([#191](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/191)) ([f38786e](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/f38786e517a37e3ecdd9ff82c89ebea97ab3b004))
+
 ## [1.10.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.9.2...v1.10.0) (2026-09-01)
 
 
