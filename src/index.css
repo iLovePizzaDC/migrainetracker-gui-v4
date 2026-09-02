@@ -88,7 +88,31 @@ body {
 	}
 
 	.page-header {
-		@apply mb-4 text-left sm:mb-6 md:mb-8;
+		@apply mb-5 mt-2 text-left sm:mb-6 sm:mt-3 md:mb-8 md:mt-4;
+	}
+
+	.page-padding-x {
+		padding-left: max(1rem, env(safe-area-inset-left));
+		padding-right: max(1rem, env(safe-area-inset-right));
+	}
+
+	@screen sm {
+		.page-padding-x {
+			padding-left: max(1.5rem, env(safe-area-inset-left));
+			padding-right: max(1.5rem, env(safe-area-inset-right));
+		}
+	}
+
+	.page-content {
+		@apply page-padding-x mx-auto flex min-h-0 w-full min-w-0 max-w-6xl flex-1 flex-col pb-6;
+		padding-top: calc(5.5rem + env(safe-area-inset-top));
+		padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+	}
+
+	@screen sm {
+		.page-content {
+			padding-top: calc(5.75rem + env(safe-area-inset-top));
+		}
 	}
 
 	.card-padding {
@@ -160,7 +184,9 @@ body {
 	}
 
 	.fab-anchor {
-		@apply fixed bottom-5 right-5 z-50 pb-[env(safe-area-inset-bottom)] pr-[env(safe-area-inset-right)];
+		@apply fixed bottom-5 right-4 z-50 sm:right-6;
+		padding-bottom: env(safe-area-inset-bottom);
+		padding-right: max(0px, env(safe-area-inset-right));
 	}
 
 	.fab-offset {
@@ -168,7 +194,7 @@ body {
 	}
 
 	.popover-panel {
-		@apply glass-panel absolute bottom-full right-0 mb-3 w-[min(18rem,calc(100vw-2.5rem))] max-w-[calc(100vw-2.5rem)] origin-bottom-right p-4 transition-[opacity,transform] duration-350 ease-smooth;
+		@apply glass-panel absolute bottom-full right-0 mb-3 w-[min(18rem,calc(100vw-2rem-env(safe-area-inset-left)-env(safe-area-inset-right)))] max-w-[calc(100vw-2rem-env(safe-area-inset-left)-env(safe-area-inset-right))] origin-bottom-right p-4 transition-[opacity,transform] duration-350 ease-smooth sm:w-[min(18rem,calc(100vw-3rem-env(safe-area-inset-left)-env(safe-area-inset-right)))] sm:max-w-[calc(100vw-3rem-env(safe-area-inset-left)-env(safe-area-inset-right))];
 	}
 
 	.popover-panel--open {
