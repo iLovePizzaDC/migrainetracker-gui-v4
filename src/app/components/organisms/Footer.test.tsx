@@ -35,6 +35,20 @@ describe('<Footer />', () => {
 		expect(screen.getByText(/MigraineTracker – Luna/)).toBeInTheDocument();
 	});
 
+	it('links impressum, privacy notice, and the English privacy policy', () => {
+		render(<Footer />);
+
+		expect(screen.getByRole('link', { name: 'Impressum' })).toHaveAttribute('href', '/impressum');
+		expect(screen.getByRole('link', { name: 'Datenschutz' })).toHaveAttribute(
+			'href',
+			'/datenschutz',
+		);
+		expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute(
+			'href',
+			'/privacy',
+		);
+	});
+
 	it('renders logout button', () => {
 		render(<Footer />);
 		expect(screen.getByRole('button', { name: 'Logout' })).toBeInTheDocument();

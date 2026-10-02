@@ -115,6 +115,31 @@ body {
 		}
 	}
 
+	.legal-panel {
+		@apply glass-panel px-5 py-8 sm:px-8 sm:py-10;
+		background-color: rgb(10 10 10 / 0.8);
+	}
+
+	.legal-prose {
+		@apply mt-6 space-y-4 text-sm leading-relaxed text-white/75;
+	}
+
+	.legal-prose h2 {
+		@apply pt-4 text-base font-medium text-white/90;
+	}
+
+	.legal-prose a {
+		@apply text-white/90 underline decoration-white/30 underline-offset-2 transition-colors duration-200 ease-soft hover:decoration-white/70;
+	}
+
+	.legal-prose ul {
+		@apply space-y-1;
+	}
+
+	.legal-prose li {
+		@apply ml-4 list-disc;
+	}
+
 	.card-padding {
 		@apply p-3 sm:p-4 md:p-5 lg:p-6;
 	}

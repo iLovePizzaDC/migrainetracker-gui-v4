@@ -6,10 +6,12 @@ import { getSeasonBackground } from '@/app/utils/season-background';
 import CalendarPage from '@/pages/CalendarPage';
 import OverviewPage from '@/pages/OverviewPage';
 import LandingPage from '@/pages/LandingPage';
+import ImpressumPage from '@/pages/legal/ImpressumPage';
+import PrivacyPage from '@/pages/legal/PrivacyPage';
 import { useAuthCheck } from '@/app/hooks/use-auth-check';
 import { useUser } from '@/shared/hooks/use-user';
 import ProtectedRoute from '@/shared/routing/protected-route';
-import { Navigate, Route, Routes } from 'react-router';
+import { Navigate, Outlet, Route, Routes } from 'react-router';
 
 function App() {
 	const { user, setUser } = useUser();
@@ -29,9 +31,13 @@ function App() {
 			</div>
 			<Navigation />
 			<main className='flex flex-1 flex-col'>
-				{authChecked ? (
-					<div className='page-content'>
-						<Routes>
+				<div className='page-content'>
+					<Routes>
+						<Route path='/impressum' element={<ImpressumPage lang='de' />} />
+						<Route path='/imprint' element={<ImpressumPage lang='en' />} />
+						<Route path='/datenschutz' element={<PrivacyPage lang='de' />} />
+						<Route path='/privacy' element={<PrivacyPage lang='en' />} />
+						<Route element={authChecked ? <Outlet /> : <LoadingBox />}>
 							<Route path='/' element={user ? <Navigate to='/home' replace /> : <LandingPage />} />
 							<Route
 								path='/home'
@@ -49,11 +55,9 @@ function App() {
 									</ProtectedRoute>
 								}
 							/>
-						</Routes>
-					</div>
-				) : (
-					<LoadingBox />
-				)}
+						</Route>
+					</Routes>
+				</div>
 			</main>
 			<Footer />
 		</div>
