@@ -12,6 +12,15 @@ function LandingPage() {
 				<div className='mt-8'>
 					<LoginButton />
 				</div>
+				<p className='mx-auto mt-4 max-w-sm text-xs leading-relaxed text-white/40'>
+					Signing in saves migraine entries, including health details, in your Google Calendar.{' '}
+					<a
+						href='/privacy'
+						className='link-subtle underline decoration-white/20 underline-offset-2'
+					>
+						Privacy Policy
+					</a>
+				</p>
 			</div>
 		</div>
 	);
