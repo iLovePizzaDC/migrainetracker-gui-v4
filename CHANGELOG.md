@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.11.0](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.10.2...v1.11.0) (2026-10-02)
+
+
+### Features
+
+* add landing page ([#199](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/199)) ([08ac2da](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/08ac2da82c66bed267ffb75b899cb2a93e872b8b))
+* add landing page ([#199](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/issues/199)) ([c658252](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/commit/c658252902b6dd9c6095cdf634c036661efa224d))
+
 ## [1.10.2](https://github.com/iLovePizzaDC/migrainetracker-gui-v4/compare/v1.10.1...v1.10.2) (2026-09-02)
 
 
