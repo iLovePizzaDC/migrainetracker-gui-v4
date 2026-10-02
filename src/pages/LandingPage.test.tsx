@@ -12,6 +12,18 @@ describe('<LandingPage />', () => {
 		expect(screen.getByText(/Not a diagnosis or a treatment/)).toBeInTheDocument();
 	});
 
+	it('explains that sign-in stores health details and links the privacy policy', () => {
+		render(<LandingPage />);
+
+		expect(
+			screen.getByText(/including health details, in your Google Calendar/),
+		).toBeInTheDocument();
+		expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute(
+			'href',
+			'/privacy',
+		);
+	});
+
 	it('names the calendar, the overview, and where entries are kept', () => {
 		render(<LandingPage />);
 

@@ -39,6 +39,15 @@ function LandingPage() {
 					<LoginButton />
 				</div>
 				<p className='mt-3 max-w-md text-xs leading-relaxed text-white/35'>
+					Signing in saves migraine entries, including health details, in your Google Calendar.{' '}
+					<a
+						href='/privacy'
+						className='link-subtle underline decoration-white/20 underline-offset-2'
+					>
+						Privacy Policy
+					</a>
+				</p>
+				<p className='mt-2 max-w-md text-xs leading-relaxed text-white/35'>
 					A private record. Not a diagnosis or a treatment.
 				</p>
 			</header>
