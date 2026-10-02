@@ -12,6 +12,15 @@ const mockUser = {
 	given_name: 'John',
 	family_name: 'Doe',
 };
+
+const loggedOutUserState = {
+	user: null,
+	medicines: [],
+	setUser: vi.fn(),
+	addMedicine: vi.fn(),
+	removeMedicine: vi.fn(),
+};
+
 vi.mock('@/shared/hooks/use-user');
 vi.mock('@/shared/api/user.api');
 
@@ -32,26 +41,52 @@ describe('<Footer />', () => {
 
 	it('renders copyright text', () => {
 		render(<Footer />);
+
 		expect(screen.getByText(/MigraineTracker – Luna/)).toBeInTheDocument();
+	});
+
+	it('links impressum, privacy notice, and the English privacy policy', () => {
+		render(<Footer />);
+
+		expect(screen.getByRole('link', { name: 'Impressum' })).toHaveAttribute('href', '/impressum');
+		expect(screen.getByRole('link', { name: 'Datenschutz' })).toHaveAttribute(
+			'href',
+			'/datenschutz',
+		);
+		expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute(
+			'href',
+			'/privacy',
+		);
 	});
 
 	it('renders logout button', () => {
 		render(<Footer />);
+
 		expect(screen.getByRole('button', { name: 'Logout' })).toBeInTheDocument();
 	});
 
 	it('does not render logout button when user is null', () => {
-		vi.mocked(useUserHook.useUser).mockReturnValue({
-			user: null,
-			medicines: [],
-			setUser: vi.fn(),
-			addMedicine: vi.fn(),
-			removeMedicine: vi.fn(),
-		});
+		vi.mocked(useUserHook.useUser).mockReturnValue(loggedOutUserState);
 
 		render(<Footer />);
 
 		expect(screen.queryByRole('button', { name: 'Logout' })).not.toBeInTheDocument();
+	});
+
+	it('keeps the legal links when nobody is signed in', () => {
+		vi.mocked(useUserHook.useUser).mockReturnValue(loggedOutUserState);
+
+		render(<Footer />);
+
+		expect(screen.getByRole('link', { name: 'Impressum' })).toHaveAttribute('href', '/impressum');
+		expect(screen.getByRole('link', { name: 'Datenschutz' })).toHaveAttribute(
+			'href',
+			'/datenschutz',
+		);
+		expect(screen.getByRole('link', { name: 'Privacy Policy' })).toHaveAttribute(
+			'href',
+			'/privacy',
+		);
 	});
 
 	it('calls fetchUserLogout on logout click', async () => {
